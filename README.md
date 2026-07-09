@@ -31,7 +31,7 @@ Une seule fois : **Settings → Pages → Build and deployment → Source : « G
 
 Le workflow `.github/workflows/deploy-pages.yml` publie ensuite le site à chaque
 push sur `main`. L'adresse publique apparaît dans **Settings → Pages** :
-`https://reptile-new.github.io/la-clauderie/`.
+`https://reptile-new.github.io/La-Clauderie/` (attention à la casse du nom).
 
 ## Liens
 
