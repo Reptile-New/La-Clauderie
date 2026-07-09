@@ -1,13 +1,6 @@
 {
   "events": [
     {
-      "date": "2026-07-14",
-      "heure": "20h30",
-      "type": "Héroïque",
-      "titre": "Donjons Héroïques — soirée farm",
-      "desc": "Les 4 donjons niv. 22 pour du stuff et des Heroic Marks."
-    },
-    {
       "date": "2026-07-16",
       "heure": "21h30",
       "type": "PvP",
