@@ -3,35 +3,45 @@
 Site de la guilde francophone **La Clauderie** sur
 [World of ClaudeCraft](https://worldofclaudecraft.com/).
 
-Site statique (aucune dépendance, aucun build) : nouveautés du jeu, roster,
-calendrier des events et recrutement.
+Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés du jeu.
 
 ## Pages
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Accueil : hero, nouveautés, roster, calendrier, recrutement |
+| `index.html` | Accueil : calendrier des events, Discord, recrutement, lien nouveautés |
+| `admin.html` | Espace officiers : gérer le calendrier (ajout/suppression d'events) |
 | `patch-notes.html` | Notes de version complètes du jeu (briefing maître de guilde) |
+| `events.json` | Les données du calendrier (modifiées via l'espace officiers) |
 
-## Gérer le contenu (roster, events, recrutement)
+## Gérer le calendrier (pour les officiers)
 
-Tout se modifie **sans coder**, directement depuis GitHub :
+Tout se fait depuis **`admin.html`** (lien « Espace officiers » en bas du site),
+avec un formulaire simple — **aucun code à toucher**.
 
-1. Ouvre `index.html` sur GitHub et clique sur le crayon ✏️ (*Edit*).
-2. Descends jusqu'au bloc balisé **« ZONE À MODIFIER »** (vers la fin du fichier).
-3. Édite les listes `MEMBRES`, `EVENEMENTS` et `RECRUTEMENT` :
-   - **Membres** — `role` : `"Tank"`, `"Heal"` ou `"DPS"` ; `rang` : `"Maître de guilde"`,
-     `"Officier"`, `"Vétéran"`, `"Membre"` ou `"Recrue"`.
-   - **Events** — `type` : `"Raid"`, `"Héroïque"`, `"PvP"` ou `"Social"`.
-4. **Commit changes**. Le site se redéploie tout seul en ~1 min.
+### Créer sa clé d'accès (une fois, ~2 min)
+
+L'espace officiers demande un **jeton GitHub fine-grained** pour pouvoir
+enregistrer les changements :
+
+1. [github.com → Fine-grained token](https://github.com/settings/personal-access-tokens/new)
+   (connecté au compte qui a accès au repo).
+2. **Repository access** → *Only select repositories* → **La-Clauderie**.
+3. **Permissions** → *Repository* → **Contents** → **Read and write**.
+4. Générer, copier le jeton, le coller dans l'espace officiers.
+
+La clé est mémorisée sur l'appareil (option « rester connecté »). Chaque ajout ou
+suppression est enregistré dans `events.json` et **le site se met à jour tout seul
+en ~1 min**.
+
+> Les events passés disparaissent automatiquement de l'accueil (seuls les events
+> à venir sont affichés).
 
 ## Mise en ligne (GitHub Pages)
 
-Une seule fois : **Settings → Pages → Build and deployment → Source : « GitHub Actions »**.
-
-Le workflow `.github/workflows/deploy-pages.yml` publie ensuite le site à chaque
-push sur `main`. L'adresse publique apparaît dans **Settings → Pages** :
-`https://reptile-new.github.io/La-Clauderie/` (attention à la casse du nom).
+Déjà configuré. Le workflow `.github/workflows/deploy-pages.yml` publie le site à
+chaque push sur `main`. Adresse publique :
+`https://reptile-new.github.io/La-Clauderie/`.
 
 ## Liens
 

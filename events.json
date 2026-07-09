@@ -1,0 +1,9 @@
+{
+  "events": [
+    { "date": "2026-07-12", "heure": "21h00", "type": "Raid", "titre": "Raid — Nythraxis, Fléau de Thornpeak", "desc": "Premier pull guilde. Compo full, flasks obligatoires." },
+    { "date": "2026-07-14", "heure": "20h30", "type": "Héroïque", "titre": "Donjons Héroïques — soirée farm", "desc": "Les 4 donjons niv. 22 pour du stuff et des Heroic Marks." },
+    { "date": "2026-07-16", "heure": "21h30", "type": "PvP", "titre": "Protect Yumi — soirée 5v5", "desc": "On défend le chat. Ambiance détente, tout le monde bienvenu." },
+    { "date": "2026-07-19", "heure": "21h00", "type": "Raid", "titre": "World Boss — Thunzharr, Waking Peak", "desc": "RDV massé à Waking Peak. Il spawn toutes les heures." },
+    { "date": "2026-07-21", "heure": "20h00", "type": "Social", "titre": "Vale Cup — tournoi de boarball", "desc": "Le foot du dimanche façon Clauderie. Paris ouverts !" }
+  ]
+}

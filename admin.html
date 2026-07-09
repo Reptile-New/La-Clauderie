@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<title>Espace officiers — La Clauderie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-input: #10131b;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-epic: #a335ee; --q-legendary: #ff8000; --q-rare: #2f8bff;
+    --dps: #e5544a; --heal: #58c46a;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px clamp(16px,5vw,28px) 60px; }
+  a { color: var(--gold); }
+
+  .head { display: flex; align-items: center; gap: 12px; padding: 18px 0 24px; border-bottom: 1px solid var(--line-soft); margin-bottom: 24px; }
+  .sigil { width: 30px; height: 34px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; }
+  .head b { font-family: var(--font-display); font-size: 1.2rem; }
+  .head .tag { margin-left: auto; font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); border: 1px solid var(--line); padding: 3px 9px; border-radius: 20px; }
+
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; margin: 0 0 6px; }
+  .sub { color: var(--dim); font-size: 0.92rem; margin: 0 0 22px; }
+
+  label { display: block; font-size: 0.8rem; color: var(--dim); margin: 0 0 6px; font-weight: 600; }
+  input, select, textarea, button { font-family: inherit; font-size: 0.95rem; }
+  input, select, textarea {
+    width: 100%; background: var(--bg-input); border: 1px solid var(--line); color: var(--text);
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;
+  }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--gold); }
+  textarea { resize: vertical; min-height: 60px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; padding: 11px 20px; border-radius: 9px; cursor: pointer; border: 1px solid transparent; }
+  .btn-primary { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); color: #17120a; }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:disabled { opacity: 0.5; cursor: default; filter: none; }
+  .btn-ghost { background: var(--bg-card); border-color: var(--line); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--gold); }
+  .btn-danger { background: transparent; border-color: color-mix(in srgb, var(--dps) 50%, transparent); color: var(--dps); padding: 6px 12px; font-size: 0.82rem; }
+  .btn-danger:hover { background: color-mix(in srgb, var(--dps) 12%, transparent); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+  .card h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; margin: 0 0 16px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  @media (max-width: 520px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .ev { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+  .ev:last-child { border-bottom: none; }
+  .ev .d { font-family: var(--font-mono); font-size: 0.82rem; color: var(--gold-bright); white-space: nowrap; }
+  .ev .t { font-weight: 600; }
+  .ev .meta { font-size: 0.8rem; color: var(--faint); }
+  .type { display: inline-block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+  .t-raid { color: var(--q-legendary); border: 1px solid color-mix(in srgb, var(--q-legendary) 45%, transparent); }
+  .t-hero { color: var(--q-epic); border: 1px solid color-mix(in srgb, var(--q-epic) 45%, transparent); }
+  .t-pvp { color: var(--dps); border: 1px solid color-mix(in srgb, var(--dps) 45%, transparent); }
+  .t-social { color: var(--q-rare); border: 1px solid color-mix(in srgb, var(--q-rare) 45%, transparent); }
+
+  .msg { padding: 11px 14px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 16px; display: none; }
+  .msg.show { display: block; }
+  .msg.ok { background: color-mix(in srgb, var(--heal) 14%, transparent); border: 1px solid color-mix(in srgb, var(--heal) 45%, transparent); color: var(--heal); }
+  .msg.err { background: color-mix(in srgb, var(--dps) 14%, transparent); border: 1px solid color-mix(in srgb, var(--dps) 45%, transparent); color: var(--dps); }
+  .hidden { display: none; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .help { font-size: 0.82rem; color: var(--faint); margin: 4px 0 16px; }
+  .help ol { margin: 8px 0 0; padding-left: 20px; }
+  .help li { margin: 4px 0; }
+  .topline { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .foot { text-align: center; margin-top: 30px; }
+  .foot a { color: var(--dim); font-size: 0.85rem; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <span class="sigil">C</span><b>La Clauderie</b>
+    <span class="tag">Espace officiers</span>
+  </div>
+
+  <!-- ÉCRAN DE CONNEXION -->
+  <div id="login">
+    <h1>Connexion officier</h1>
+    <p class="sub">Cet espace permet de gérer le calendrier de la guilde. Il faut une clé d'accès personnelle (jeton GitHub).</p>
+    <div id="loginMsg" class="msg err"></div>
+    <div class="card">
+      <label for="token">Ta clé d'accès (jeton GitHub)</label>
+      <input id="token" type="password" placeholder="github_pat_..." autocomplete="off">
+      <label class="row" style="font-weight:400;color:var(--dim);cursor:pointer">
+        <input type="checkbox" id="remember" style="width:auto;margin:0 8px 0 0" checked> Rester connecté sur cet appareil
+      </label>
+      <button class="btn btn-primary" id="loginBtn" style="width:100%;margin-top:6px">Se connecter</button>
+      <div class="help">
+        <b>Première fois ? Crée ta clé (2 min) :</b>
+        <ol>
+          <li>Ouvre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → Fine-grained token</a> (connecte-toi au compte qui a accès au repo).</li>
+          <li><b>Repository access</b> → <i>Only select repositories</i> → choisis <b>La-Clauderie</b>.</li>
+          <li><b>Permissions</b> → <i>Repository permissions</i> → <b>Contents</b> → <b>Read and write</b>.</li>
+          <li>Génère le jeton, copie-le et colle-le ci-dessus.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLEAU DE BORD -->
+  <div id="dash" class="hidden">
+    <div class="topline">
+      <div>
+        <h1 style="margin:0">Calendrier de guilde</h1>
+        <p class="sub" style="margin:2px 0 0" id="who"></p>
+      </div>
+      <button class="btn btn-ghost" id="logoutBtn">Déconnexion</button>
+    </div>
+
+    <div id="dashMsg" class="msg"></div>
+
+    <div class="card">
+      <h2>Ajouter un event</h2>
+      <div class="grid2">
+        <div>
+          <label for="fDate">Date</label>
+          <input id="fDate" type="date">
+        </div>
+        <div>
+          <label for="fHeure">Heure</label>
+          <input id="fHeure" type="text" placeholder="21h00">
+        </div>
+      </div>
+      <label for="fType">Type</label>
+      <select id="fType">
+        <option>Raid</option>
+        <option>Héroïque</option>
+        <option>PvP</option>
+        <option>Social</option>
+      </select>
+      <label for="fTitre">Titre</label>
+      <input id="fTitre" type="text" placeholder="Raid — Nythraxis, Fléau de Thornpeak">
+      <label for="fDesc">Description</label>
+      <textarea id="fDesc" placeholder="Compo full, flasks obligatoires."></textarea>
+      <button class="btn btn-primary" id="addBtn">+ Ajouter au calendrier</button>
+    </div>
+
+    <div class="card">
+      <h2>Events programmés</h2>
+      <div id="evList"><p class="sub">Chargement…</p></div>
+    </div>
+  </div>
+
+  <div class="foot"><a href="index.html">← Retour au site</a></div>
+</div>
+
+<script>
+  const OWNER = "Reptile-New";
+  const REPO = "La-Clauderie";
+  const PATH = "events.json";
+  const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+
+  let token = null;
+  let events = [];
+  let fileSha = null;
+
+  const $ = id => document.getElementById(id);
+
+  // ---- base64 <-> UTF-8 ----
+  function encodeB64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = "";
+    bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin);
+  }
+  function decodeB64(b64) {
+    const bin = atob(b64.replace(/\s/g, ""));
+    const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
+  function msg(el, text, kind) {
+    el.textContent = text;
+    el.className = "msg show " + kind;
+  }
+  function clearMsg(el) { el.className = "msg"; }
+
+  // ---- Connexion ----
+  async function login(tok) {
+    const res = await fetch(API + "?_=" + Date.now(), {
+      headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json" }
+    });
+    if (res.status === 401) throw new Error("Clé refusée. Vérifie que tu as bien copié le jeton en entier.");
+    if (res.status === 404) throw new Error("Accès au fichier impossible. Vérifie que le jeton a la permission Contents et l'accès au repo La-Clauderie.");
+    if (!res.ok) throw new Error("Erreur GitHub (" + res.status + ").");
+    const data = await res.json();
+    fileSha = data.sha;
+    const json = JSON.parse(decodeB64(data.content));
+    events = Array.isArray(json.events) ? json.events : [];
+    return true;
+  }
+
+  async function save(commitMsg) {
+    const body = {
+      message: commitMsg,
+      content: encodeB64(JSON.stringify({ events }, null, 2) + "\n"),
+      sha: fileSha,
+      branch: "main"
+    };
+    const res = await fetch(API, {
+      method: "PUT",
+      headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" },
+      body: JSON.stringify(body)
+    });
+    if (res.status === 409) throw new Error("Le calendrier a changé entre-temps. Recharge la page et réessaie.");
+    if (!res.ok) throw new Error("Échec de l'enregistrement (" + res.status + ").");
+    const data = await res.json();
+    fileSha = data.content.sha; // pour le prochain enregistrement
+  }
+
+  const TYPE_CLASS = { "Raid": "t-raid", "Héroïque": "t-hero", "PvP": "t-pvp", "Social": "t-social" };
+  const MOIS = ["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+  function humanDate(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return d + " " + (MOIS[m - 1] || "") + " " + y;
+  }
+
+  function render() {
+    const box = $("evList");
+    const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+    if (!sorted.length) { box.innerHTML = '<p class="sub">Aucun event. Ajoute-en un ci-dessus.</p>'; return; }
+    box.innerHTML = sorted.map(e => {
+      const cls = TYPE_CLASS[e.type] || "t-social";
+      const i = events.indexOf(e);
+      return `<div class="ev">
+        <span class="d">${humanDate(e.date)}<br>${e.heure || ""}</span>
+        <span><span class="t">${escapeHtml(e.titre || "")}</span><span class="type ${cls}">${e.type || ""}</span><br><span class="meta">${escapeHtml(e.desc || "")}</span></span>
+        <button class="btn btn-danger" data-i="${i}">Supprimer</button>
+      </div>`;
+    }).join("");
+    box.querySelectorAll("button[data-i]").forEach(b => {
+      b.addEventListener("click", () => removeEvent(parseInt(b.dataset.i, 10)));
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  async function addEvent() {
+    clearMsg($("dashMsg"));
+    const date = $("fDate").value;
+    const heure = $("fHeure").value.trim();
+    const type = $("fType").value;
+    const titre = $("fTitre").value.trim();
+    const desc = $("fDesc").value.trim();
+    if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre.", "err"); return; }
+    $("addBtn").disabled = true; $("addBtn").textContent = "Enregistrement…";
+    events.push({ date, heure, type, titre, desc });
+    try {
+      await save("calendrier : ajout « " + titre + " »");
+      msg($("dashMsg"), "Event ajouté ✓ Le site se met à jour dans ~1 min.", "ok");
+      $("fHeure").value = ""; $("fTitre").value = ""; $("fDesc").value = "";
+      render();
+    } catch (err) {
+      events.pop();
+      msg($("dashMsg"), err.message, "err");
+    } finally {
+      $("addBtn").disabled = false; $("addBtn").textContent = "+ Ajouter au calendrier";
+    }
+  }
+
+  async function removeEvent(i) {
+    if (i < 0 || i >= events.length) return;
+    const removed = events[i];
+    if (!confirm("Supprimer « " + removed.titre + " » ?")) return;
+    clearMsg($("dashMsg"));
+    events.splice(i, 1);
+    try {
+      await save("calendrier : suppression « " + removed.titre + " »");
+      msg($("dashMsg"), "Event supprimé ✓ Le site se met à jour dans ~1 min.", "ok");
+      render();
+    } catch (err) {
+      events.splice(i, 0, removed);
+      msg($("dashMsg"), err.message, "err");
+      render();
+    }
+  }
+
+  function showDash() {
+    $("login").classList.add("hidden");
+    $("dash").classList.remove("hidden");
+    $("fDate").value = new Date().toISOString().slice(0, 10);
+    render();
+  }
+
+  async function doLogin(tok, remember) {
+    clearMsg($("loginMsg"));
+    $("loginBtn").disabled = true; $("loginBtn").textContent = "Connexion…";
+    try {
+      await login(tok);
+      token = tok;
+      if (remember) localStorage.setItem("clauderie_token", tok);
+      showDash();
+    } catch (err) {
+      msg($("loginMsg"), err.message, "err");
+    } finally {
+      $("loginBtn").disabled = false; $("loginBtn").textContent = "Se connecter";
+    }
+  }
+
+  // events UI
+  $("loginBtn").addEventListener("click", () => doLogin($("token").value.trim(), $("remember").checked));
+  $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("loginBtn").click(); });
+  $("addBtn").addEventListener("click", addEvent);
+  $("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("clauderie_token");
+    location.reload();
+  });
+
+  // auto-login si jeton mémorisé
+  (function () {
+    const saved = localStorage.getItem("clauderie_token");
+    if (saved) doLogin(saved, true);
+  })();
+</script>
+</body>
+</html>
