@@ -1,13 +1,6 @@
 {
   "events": [
     {
-      "date": "2026-07-16",
-      "heure": "21h30",
-      "type": "PvP",
-      "titre": "Protect Yumi — soirée 5v5",
-      "desc": "On défend le chat. Ambiance détente, tout le monde bienvenu."
-    },
-    {
       "date": "2026-07-19",
       "heure": "21h00",
       "type": "Raid",
