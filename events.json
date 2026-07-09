@@ -1,13 +1,6 @@
 {
   "events": [
     {
-      "date": "2026-07-19",
-      "heure": "21h00",
-      "type": "Raid",
-      "titre": "World Boss — Thunzharr, Waking Peak",
-      "desc": "RDV massé à Waking Peak. Il spawn toutes les heures."
-    },
-    {
       "date": "2026-07-21",
       "heure": "20h00",
       "type": "Social",
