@@ -80,7 +80,7 @@
     border: 2px solid var(--line);
     position: relative;
   }
-  .icon svg { width: 34px; height: 34px; }
+  .icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; display: block; image-rendering: auto; }
   .icon.q-epic { border-color: var(--q-epic); box-shadow: 0 0 10px color-mix(in srgb, var(--q-epic) 45%, transparent), inset 0 0 12px color-mix(in srgb, var(--q-epic) 18%, transparent); }
   .icon.q-legendary { border-color: var(--q-legendary); box-shadow: 0 0 12px color-mix(in srgb, var(--q-legendary) 55%, transparent), inset 0 0 12px color-mix(in srgb, var(--q-legendary) 20%, transparent); }
   .icon.q-rare { border-color: var(--q-rare); box-shadow: 0 0 8px color-mix(in srgb, var(--q-rare) 40%, transparent); }
@@ -4438,30 +4438,92 @@ const NOTES = {
   dps:  "Priorité à la <b>stat d'attaque de ta classe</b> (Force, Agilité ou Intelligence)."
 };
 
-// Icônes vectorielles par emplacement (dessinées dans l'esprit du jeu : pas d'assets, que du code)
-const GOLD = "#e6c37a", STEEL = "#aab4c4", DARK = "#6b7686", WOOD = "#b08850", GEM = "#63bccf";
-const ICONS = {
-  sword: `<svg viewBox="0 0 34 34" fill="none"><path d="M8 26 24 8l3-1-1 3L10 28z" fill="${STEEL}"/><path d="M24 8l3-1-1 3-8.5 9.5-1.5-2z" fill="#d7dee8"/><path d="M7 22l5 5-2 2-5-5z" fill="${WOOD}"/><circle cx="5.5" cy="28.5" r="2" fill="${GOLD}"/><path d="M11 21l2 2" stroke="${GOLD}" stroke-width="2" stroke-linecap="round"/></svg>`,
-  staff: `<svg viewBox="0 0 34 34" fill="none"><path d="M12 30 26 8" stroke="${WOOD}" stroke-width="3" stroke-linecap="round"/><circle cx="26" cy="7" r="4.5" fill="${GEM}"/><circle cx="26" cy="7" r="7" stroke="${GEM}" stroke-opacity=".45" stroke-width="1.5"/><circle cx="24.6" cy="5.6" r="1.4" fill="#eafcff"/></svg>`,
-  dagger: `<svg viewBox="0 0 34 34" fill="none"><path d="M13 21 24 7l2-1-.5 2.5L15 23z" fill="${STEEL}"/><path d="M24 7l2-1-.5 2.5-5 6.5-1.5-1.5z" fill="#d7dee8"/><path d="M11 20l3 3-4 4-3-3z" fill="${WOOD}"/><path d="M14 19l2 2" stroke="${GOLD}" stroke-width="2" stroke-linecap="round"/></svg>`,
-  helmet: `<svg viewBox="0 0 34 34" fill="none"><path d="M7 20c0-7 4.5-11 10-11s10 4 10 11v5h-4v-4h-3v4h-6v-4h-3v4H7z" fill="${STEEL}"/><path d="M17 9c-3 0-5.6 1.2-7.5 3.4L17 15l7.5-2.6C22.6 10.2 20 9 17 9z" fill="#d7dee8"/><path d="M15 5h4v4h-4z" fill="${GOLD}"/></svg>`,
-  shoulder: `<svg viewBox="0 0 34 34" fill="none"><path d="M4 18c0-5 3.5-8 7.5-8S19 13 19 18l-2 3H6z" fill="${STEEL}"/><path d="M15 18c0-5 3.5-8 7.5-8S30 13 30 18l-2 3h-11z" fill="#8f9aab"/><path d="M6 14h11M17 14h11" stroke="${GOLD}" stroke-width="1.6"/></svg>`,
-  chest: `<svg viewBox="0 0 34 34" fill="none"><path d="M9 6 6 10v16h22V10l-3-4-5 3h-6z" fill="${STEEL}"/><path d="M17 9v17M9 14h16" stroke="${DARK}" stroke-width="1.6"/><path d="M9 6l5 3M25 6l-5 3" stroke="#d7dee8" stroke-width="1.6"/><circle cx="17" cy="14" r="2.2" fill="${GOLD}"/></svg>`,
-  waist: `<svg viewBox="0 0 34 34" fill="none"><path d="M4 14h26v7H4z" fill="${WOOD}"/><path d="M4 14h26v2H4z" fill="#c9a06a"/><rect x="13" y="12" width="8" height="11" rx="1.5" fill="${GOLD}"/><rect x="15.5" y="14.5" width="3" height="6" rx="1" fill="#10141c"/></svg>`,
-  legs: `<svg viewBox="0 0 34 34" fill="none"><path d="M10 6h14l-1 8-3 14h-4l.5-12h-1L15 28h-4L8 14z" fill="${STEEL}"/><path d="M10 6h14l-.5 4H10.3z" fill="#d7dee8"/><path d="M12 12h10" stroke="${GOLD}" stroke-width="1.6"/></svg>`,
-  gloves: `<svg viewBox="0 0 34 34" fill="none"><path d="M11 6h12v10l3 4-4 8H12l-3-7 2-5z" fill="${STEEL}"/><path d="M11 6h12v4H11z" fill="${GOLD}"/><path d="M14 14v6M18 14v6M22 14v5" stroke="${DARK}" stroke-width="1.6" stroke-linecap="round"/></svg>`,
-  feet: `<svg viewBox="0 0 34 34" fill="none"><path d="M9 6h10v10c4 1 9 4 9 9v3H6v-9z" fill="${STEEL}"/><path d="M9 6h10v4H9z" fill="#d7dee8"/><path d="M6 25h22v3H6z" fill="${DARK}"/><path d="M12 14h6" stroke="${GOLD}" stroke-width="1.6"/></svg>`,
-  neck: `<svg viewBox="0 0 34 34" fill="none"><path d="M8 5c0 8 4 12 9 12s9-4 9-12" stroke="${GOLD}" stroke-width="2.2" fill="none"/><path d="M17 17l4 5-4 7-4-7z" fill="${GEM}"/><path d="M17 17l4 5h-8z" fill="#8fe0ef"/></svg>`,
-  ring: `<svg viewBox="0 0 34 34" fill="none"><circle cx="17" cy="20" r="8.5" stroke="${GOLD}" stroke-width="3.4" fill="none"/><path d="M13 8h8l-2.5 4h-3z" fill="${GEM}"/><path d="M13 8h8l-1.2 2H14.2z" fill="#8fe0ef"/></svg>`
+// Icônes officielles du jeu (extraites de World of ClaudeCraft, tag v0.23.0) :
+// art peint (public/ui/items), miniatures de modèles d'armes (public/ui/weapons)
+// et icônes procédurales rendues par le moteur d'icônes du jeu lui-même.
+const ITEM_IMG = {
+  "Barrowlord Legguards": "deathlord_legguards.webp",
+  "Barrowlord Sabatons": "deathlord_sabatons.webp",
+  "Barrowlord Warplate": "deathlord_warplate.webp",
+  "Bonechill Cord": "bonechill_cord.png",
+  "Bonechill Striders": "bonechill_striders.png",
+  "Bonewrought Dreadhelm": "crownforged_dreadhelm.webp",
+  "Bonewrought Gauntlets": "crownforged_gauntlets.webp",
+  "Bonewrought Girdle": "crownforged_girdle.webp",
+  "Bonewrought Warspaulders": "crownforged_warspaulders.png",
+  "Boundstone Helm": "boundstone_helm.webp",
+  "Choir-Blessed Spaulders": "choir_blessed_spaulders.png",
+  "Choirmother's Casque": "choirmothers_casque.png",
+  "Cragmaw Prowlboots": "cragmaw_prowlboots.webp",
+  "Cryptplate Helm": "cryptplate_helm.png",
+  "Deathless Greatblade": "deathless_greatblade.png",
+  "Deathless Warguard Legmail": "deathless_warguard_legmail.png",
+  "Direfang Crown": "nighttalon_crown.webp",
+  "Direfang Grips": "nighttalon_grips.webp",
+  "Direfang Shoulderguards": "nighttalon_shoulderguards.png",
+  "Direfang Waistband": "nighttalon_waistband.webp",
+  "Galecall Crown": "stormcallers_crown.webp",
+  "Galecall Handguards": "stormcallers_handguards.webp",
+  "Galecall Spaulders": "stormcallers_spaulders.png",
+  "Galecall Waistguard": "stormcallers_waistguard.webp",
+  "Gravecaller's Broadblade": "gravecaller_blade.jpg",
+  "Gravescale Girdle": "gravescale_girdle.png",
+  "Gravewyrm Claws": "gravewyrm_claws.png",
+  "Heartwood of the Deathless Crown": "deathless_heartwood.jpg",
+  "Highwatch Breastplate": "highwatch_breastplate.webp",
+  "Korgath's Chainwraps": "korgaths_chainwraps.webp",
+  "Lunar Choir Leggings": "lunar_choir_leggings.png",
+  "Lunar Tide Greatstaff": "lunar_tide_greatstaff.png",
+  "Medallion of Endless Profit": "medallion_of_endless_profit.png",
+  "Mistcaller's Fang": "mistcallers_fang.png",
+  "Mistforged Pauldrons": "mistforged_pauldrons.png",
+  "Morthen's Cryptforged Hauberk": "morthens_cryptforged_hauberk.png",
+  "Mournweave Legwraps": "necromancers_legwraps.webp",
+  "Mournweave Soulspire Mantle": "necromancers_soulspire_mantle.png",
+  "Mournweave Soulsteps": "necromancers_soulsteps.webp",
+  "Mournweave Starshroud": "necromancers_starshroud.webp",
+  "Niela's Coldlight Band": "nielas_coldlight_band.png",
+  "Nightfang Harness": "wyrmshadow_harness.webp",
+  "Nightfang Legguards": "wyrmshadow_legguards.webp",
+  "Nightfang Talongrips": "wyrmshadow_talongrips.webp",
+  "Nightfang Treads": "wyrmshadow_treads.webp",
+  "Oath of the Round Table": "oath_of_the_round_table.png",
+  "Sanctum Prowler's Grips": "sanctum_prowlers_grips.png",
+  "Sash of the Sunken Court": "sash_of_the_sunken_court.png",
+  "Scourgehide Carapace": "scourgehide_carapace.png",
+  "Seal of the Nine Oaths": "seal_of_the_nine_oaths.png",
+  "Selthe's Sea-Striders": "selthes_seastriders.webp",
+  "Shadowpulse Handwraps": "shadowpulse_handwraps.png",
+  "Shadowpulse Slippers": "shadowpulse_slippers.png",
+  "Shroud of the Gravewyrm": "shroud_of_the_gravewyrm.png",
+  "Soulforged Warplate": "soulforged_warplate.png",
+  "Soulrend Diadem": "soulrend_diadem.png",
+  "Stormcaller's Focus": "stormcallers_focus.png",
+  "Sunken Court Mantle": "sunken_court_mantle.png",
+  "Sutil's Gambit": "sutils_gambit.png",
+  "Swiftfang Talisman": "swiftfang_talisman.png",
+  "The Architect's Cornerstone": "architects_cornerstone.png",
+  "Thronebane, Last Oath of Thornpeak": "kingsbane_last_oath.jpg",
+  "Tidebound Spaulders": "tidebound_spaulders.png",
+  "Tideguard Faceguard": "tideguard_faceguard.png",
+  "Tidescale Vest": "tidescale_vest.webp",
+  "Tideworn Warboots": "tideworn_warboots.png",
+  "Tidewoven Trousers": "tidewoven_trousers.png",
+  "Widowfang Dirk": "widowfang_dirk.jpg",
+  "Wraithfire Cord": "soulflame_cord.webp",
+  "Wraithfire Cowl": "soulflame_cowl.webp",
+  "Wraithfire Gloves": "soulflame_gloves.webp",
+  "Wraithfire Mantle": "soulflame_mantle.png",
+  "Wyrmchoir Handwraps": "wyrmchoir_handwraps.png",
+  "Ysolei's Pearl Greaves": "ysols_pearl_greaves.webp",
+  "Yumi's Keepsake Locket": "yumis_keepsake_locket.png",
+  "Zense Meridian": "zense_meridian.png",
+  "Zyzz's Deathless Signet": "zyzzs_deathless_signet.png",
 };
-function iconFor(slot, item) {
-  if (slot === "mainhand") {
-    const st = item.stats || {};
-    if (st.int || st.spi) return ICONS.staff;
-    if (item.w && item.w.speed <= 2.0) return ICONS.dagger;
-    return ICONS.sword;
-  }
-  return ICONS[slot] || ICONS.chest;
+
+function iconFor(item) {
+  const f = ITEM_IMG[item.name];
+  return f ? `<img src="assets/items/${f}" alt="" loading="lazy" width="128" height="128">` : "";
 }
 
 let curCls = Object.keys(BIS)[0];
@@ -4500,7 +4562,7 @@ function render() {
     const p = picks[s];
     const b = p.best;
     let html = `<div class="slot-row">
-      <div class="icon q-${b.q}" aria-hidden="true">${iconFor(s, b)}</div>
+      <div class="icon q-${b.q}" aria-hidden="true">${iconFor(b)}</div>
       <div class="slot-name">${SLOT_FR[s]}</div>
       <div class="item q-${b.q}">
         <div class="nm">${b.name}</div>
