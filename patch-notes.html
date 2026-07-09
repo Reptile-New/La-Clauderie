@@ -257,8 +257,8 @@
     <div class="grid cols-2">
       <div class="card more" data-detail="metiers" tabindex="0" role="button" aria-label="Détails : Métiers">
         <h3>Métiers — système finalisé <span class="chip c-new">Système</span></h3>
-        <p>L'archétype limite la puissance de craft ; spécialisations, matériaux signés, focus de ville, recettes combo.</p>
-        <span class="more-link">Tout le fonctionnement</span>
+        <p>Récolte, fabrication, archétype : le guide pas à pas pour s'y mettre, avec les premières recettes à faire.</p>
+        <span class="more-link">Le guide complet</span>
       </div>
       <div class="card more" data-detail="banque" tabindex="0" role="button" aria-label="Détails : Banque">
         <h3>The Gilded Strongbox <span class="chip c-new">Banque</span></h3>
@@ -512,39 +512,55 @@
         <p>L'Auto Shot <b>scale désormais avec les dégâts et la vitesse de l'arme équipée</b>, au lieu d'un profil fixe. Pensez à ré-optimiser vos arcs / fusils.</p>`
     },
     metiers: {
-      title: "Métiers — système finalisé",
-      summary: "Ton archétype détermine désormais ta vraie puissance de craft, avec spécialisations et traçabilité.",
+      title: "Métiers — le guide pour s'y mettre",
+      summary: "Deux activités : la récolte (libre pour tous) et la fabrication (là où on se spécialise). Voici quoi faire, dans l'ordre.",
       body: `
-        <h4>Plafond de puissance par archétype</h4>
+        <h4>L'essentiel en 30 secondes</h4>
         <ul>
-          <li>L'archétype actif <b>détermine ta puissance de craft</b> (ce n'est plus un simple badge).</li>
-          <li>Les <b>2 crafts majeurs adjacents</b> progressent <b>sans limite</b>.</li>
-          <li>Le craft <b>opposé</b> sur l'anneau devient ton « hobby » (cap qualité <b>rare</b>).</li>
-          <li>Tous les autres sont cappés à <b>commun</b>. Sans archétype : tout cappé à <b>rare</b>.</li>
+          <li><b>La récolte</b> (minage, bûcheronnage, herboristerie) : tout le monde peut tout récolter, sans restriction. Elle progresse en pratiquant, et se spécialiser dans une ressource n'affaiblit jamais les autres.</li>
+          <li><b>La fabrication</b> (10 métiers) : c'est là qu'on se spécialise. Tu peux apprendre tous les métiers et rien ne se perd, mais seuls <b>2 métiers voisins</b> — tes « majeurs » — peuvent monter jusqu'au légendaire.</li>
         </ul>
-        <h4>Contraintes de craft</h4>
+
+        <h4>Par où commencer, concrètement</h4>
+        <ol>
+          <li><b>Récolte des matériaux.</b> Des points de récolte brillent dans <b>Eastbrook Vale</b> (3 filons de minerai, 3 arbres, 3 herbes) et <b>Mirefen Marsh</b> (2 de chaque). Ils donnent aujourd'hui : minerai → <b>Bone Fragments</b>, bois → <b>Linen Scrap</b>, herbe → <b>Twitching Spider Leg</b>. Chaque point réapparaît pour toi au bout de <b>2 minutes</b>. Tu peux aussi <b>dépecer certains cadavres</b> (sangliers, loups, araignées…) pour des peaux, crocs et venins.</li>
+          <li><b>Fabrique tes premières recettes.</b> Les recettes communes ne demandent <b>aucune compétence</b>, juste les matériaux. Par exemple : <b>Eastbrook Arming Sword</b> (forge d'armes) = 2 Bone Fragments + 1 Linen Scrap ; <b>Eastbrook Chainmail Vest</b> (forge d'armures) = 3 Bone Fragments.</li>
+          <li><b>Monte en compétence.</b> Chaque fabrication réussie donne <b>+1 point</b> dans le métier utilisé. Tous les <b>25 points</b>, tu débloques un palier de qualité de plus (25 → rare possible, 50 → épique…, selon ton plafond, voir plus bas).</li>
+          <li><b>Choisis ton archétype.</b> Une <b>quête d'acceptation en zone 1</b> te fait choisir un métier : lui et son <b>voisin sur l'anneau</b> deviennent tes 2 majeurs (progression illimitée). Avant ce choix, tous les métiers sont plafonnés à <b>rare</b> — tu peux donc tester tranquillement avant de t'engager.</li>
+        </ol>
+
+        <h4>L'anneau des 10 métiers</h4>
+        <p>Forge d'armures → Forge d'armes → Joaillerie → Alchimie → Ingénierie → Cuisine → Inscription → Enchantement → Couture → Travail du cuir → (retour à la Forge d'armures). « Voisins » et « opposé » se lisent sur cet anneau.</p>
+
+        <h4>Les plafonds de qualité, selon ton archétype</h4>
         <ul>
-          <li>Coût en or : <b>2 cuivre</b> par point de budget d'item-level de la recette.</li>
-          <li>Cadence : <b>10 crafts / 60 s</b>.</li>
-          <li>Le craft à l'établi passe par le <b>hub de craft niveau 20 à Highwatch</b>.</li>
+          <li>Tes <b>2 majeurs</b> (le métier choisi + son voisin) : <b>aucune limite</b>, jusqu'au légendaire.</li>
+          <li>Le métier <b>à l'opposé</b> de l'anneau : ton « hobby », plafonné à <b>rare</b>.</li>
+          <li>Tous les autres : plafonnés à <b>commun</b> (tu peux toujours crafter les recettes de base).</li>
+          <li>Sans archétype choisi : tout est plafonné à <b>rare</b>.</li>
+          <li>Changer d'archétype ? Possible via une quête répétable de « rachat », dont le coût <b>augmente à chaque changement</b>. On ne perd jamais les points acquis : les métiers hors majeurs sont juste « en sommeil ».</li>
         </ul>
-        <h4>Spécialisation (à skill 75)</h4>
+
+        <h4>Bonus à connaître</h4>
         <ul>
-          <li><b>−20 %</b> de coût en matériaux sur les recettes de ce craft.</li>
-          <li><b>−25 %</b> en plus pour recharger un outil que tu as toi-même fabriqué.</li>
+          <li><b>Spécialisation (75 points dans un métier)</b> : <b>−20 %</b> de matériaux sur ses recettes, et <b>−25 %</b> en plus pour recharger un outil que tu as toi-même fabriqué.</li>
+          <li><b>Matériaux signés</b> : les matériaux <b>rares ou mieux</b> dépecés sur les cadavres portent ton nom. Crafter avec un matériau signé <b>par toi</b> = <b>1 unité de moins</b> requise. Les objets rares+ que tu fabriques sont signés aussi, et les utiliser toi-même donne un filet d'XP.</li>
+          <li><b>Focus de ville</b> : dans ta ville-hub (Eastbrook, Fenbridge ou Highwatch), répartis <b>10 points</b> entre types de ressources : <b>+10 % de rendement</b> par point, et tous les 5 points le palier de récolte monte d'un cran (max 2).</li>
+          <li><b>Outils</b> : les enchanteurs fabriquent des effets à sertir sur les outils de récolte — <b>Gatherer's Cache</b> (+ quantité), <b>Artisan's Eye</b> (+ qualité), <b>Quickening Charm</b> (réapparition plus rapide).</li>
         </ul>
-        <h4>Matériaux signés</h4>
+
+        <h4>Recettes combo (les 2 métiers de la paire au palier 1, soit 25 points chacun)</h4>
         <ul>
-          <li>Les matériaux <b>rares ou mieux</b> récoltés sur les cadavres portent le <b>nom du récolteur</b>.</li>
-          <li>Crafter avec un matériau que tu as <b>signé toi-même</b> → <b>1 unité de moins</b> requise.</li>
-          <li>L'output rare+ est signé du crafter ; utiliser un objet que tu as crafté donne un petit filet d'XP (limité à ta spécialité active).</li>
+          <li><b>Boundstone Helm</b> — forge d'armures + forge d'armes ; 4 Bone Fragments + 2 Linen Scrap.</li>
+          <li><b>Gravewyrm Gauntlets</b> — forge d'armures + forge d'armes ; 3 Bone Fragments + 3 Linen Scrap.</li>
+          <li><b>Elixir of the Bear</b> — alchimie + ingénierie ; 2 Linen Scrap + 2 Twitching Spider Leg.</li>
         </ul>
-        <h4>Focus de ville</h4>
-        <p>Dans ta ville-hub (Eastbrook, Fenbridge ou Highwatch), une fenêtre <b>Town Focus</b> répartit un budget persistant de <b>10 points</b> entre types de composants de récolte : <b>+10 % de rendement</b> par point, et tous les <b>5 points</b> le palier de récolte monte d'un cran (cap 2).</p>
-        <h4>Recettes combo (3 en tier 1)</h4>
+
+        <h4>Les limites techniques</h4>
         <ul>
-          <li><b>Ironbound Warplate Helm</b> et <b>Forgeguard Bulwark Gauntlets</b> (forge d'armures + d'armes).</li>
-          <li><b>Volatile Flux Elixir</b> (alchimie + ingénierie).</li>
+          <li>Coût en or : <b>2 cuivres</b> par point de budget d'item-level de la recette (les recettes de départ coûtent ~20 cuivres).</li>
+          <li>Cadence maximale : <b>10 fabrications par minute</b>.</li>
+          <li>Les recettes d'outils avancées (paliers 75 et 150) se font à l'<b>établi du hub de craft niveau 20, à Highwatch</b>.</li>
         </ul>`
     },
     banque: {

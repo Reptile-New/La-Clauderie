@@ -57,6 +57,10 @@
 
   .ev { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
   .ev:last-child { border-bottom: none; }
+  @media (max-width: 560px) {
+    .ev { grid-template-columns: auto 1fr; }
+    .ev > span:last-child { grid-column: 1 / -1; justify-content: flex-end; }
+  }
   .ev .d { font-family: var(--font-mono); font-size: 0.82rem; color: var(--gold-bright); white-space: nowrap; }
   .ev .t { font-weight: 600; }
   .ev .meta { font-size: 0.8rem; color: var(--faint); }
@@ -90,7 +94,7 @@
   <!-- ÉCRAN DE CONNEXION -->
   <div id="login">
     <h1>Connexion officier</h1>
-    <p class="sub">Cet espace permet de gérer le calendrier de la guilde. Il faut une clé d'accès personnelle (jeton GitHub).</p>
+    <p class="sub">Cet espace permet de gérer le calendrier et les faits d'armes de la guilde. Il faut une clé d'accès personnelle (jeton GitHub).</p>
     <div id="loginMsg" class="msg err"></div>
     <div class="card">
       <label for="token">Ta clé d'accès (jeton GitHub)</label>
@@ -115,7 +119,7 @@
   <div id="dash" class="hidden">
     <div class="topline">
       <div>
-        <h1 style="margin:0">Calendrier de guilde</h1>
+        <h1 style="margin:0">Gestion du site</h1>
         <p class="sub" style="margin:2px 0 0" id="who"></p>
       </div>
       <button class="btn btn-ghost" id="logoutBtn">Déconnexion</button>
@@ -124,7 +128,7 @@
     <div id="dashMsg" class="msg"></div>
 
     <div class="card">
-      <h2>Ajouter un event</h2>
+      <h2 id="evFormTitle">Ajouter un event</h2>
       <div class="grid2">
         <div>
           <label for="fDate">Date</label>
@@ -146,12 +150,48 @@
       <input id="fTitre" type="text" placeholder="Raid — Nythraxis, Fléau de Thornpeak">
       <label for="fDesc">Description</label>
       <textarea id="fDesc" placeholder="Compo full, flasks obligatoires."></textarea>
-      <button class="btn btn-primary" id="addBtn">+ Ajouter au calendrier</button>
+      <div class="row">
+        <button class="btn btn-primary" id="addBtn">+ Ajouter au calendrier</button>
+        <button class="btn btn-ghost hidden" id="cancelEditBtn">Annuler la modification</button>
+      </div>
     </div>
 
     <div class="card">
       <h2>Events programmés</h2>
       <div id="evList"><p class="sub">Chargement…</p></div>
+    </div>
+
+    <div class="card">
+      <h2 id="faFormTitle">Ajouter un fait d'armes</h2>
+      <p class="help" style="margin-top:-8px">Les faits d'armes s'affichent sur la page d'accueil, du plus récent au plus ancien. Exemple : « Nythraxis, Fléau de Thornpeak — vaincu à 5 joueurs en mode normal ».</p>
+      <div class="grid2">
+        <div>
+          <label for="gDate">Date</label>
+          <input id="gDate" type="date">
+        </div>
+        <div>
+          <label for="gType">Type</label>
+          <select id="gType">
+            <option>Boss</option>
+            <option>Donjon</option>
+            <option>PvP</option>
+            <option>Autre</option>
+          </select>
+        </div>
+      </div>
+      <label for="gTitre">Titre</label>
+      <input id="gTitre" type="text" placeholder="Nythraxis, Fléau de Thornpeak">
+      <label for="gDesc">Détail</label>
+      <textarea id="gDesc" placeholder="Vaincu à 5 joueurs en mode normal."></textarea>
+      <div class="row">
+        <button class="btn btn-primary" id="faAddBtn">+ Ajouter aux faits d'armes</button>
+        <button class="btn btn-ghost hidden" id="faCancelEditBtn">Annuler la modification</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Faits d'armes</h2>
+      <div id="faList"><p class="sub">Chargement…</p></div>
     </div>
   </div>
 
@@ -161,12 +201,16 @@
 <script>
   const OWNER = "Reptile-New";
   const REPO = "La-Clauderie";
-  const PATH = "events.json";
-  const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+  const apiFor = path => `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
 
   let token = null;
-  let events = [];
-  let fileSha = null;
+  // Deux fichiers gérés avec le même mécanisme : calendrier et faits d'armes.
+  const FILES = {
+    events: { path: "events.json", key: "events", sha: null, list: [] },
+    faits:  { path: "achievements.json", key: "achievements", sha: null, list: [] },
+  };
+  const events = () => FILES.events.list;
+  const faits = () => FILES.faits.list;
 
   const $ = id => document.getElementById(id);
 
@@ -189,37 +233,42 @@
   }
   function clearMsg(el) { el.className = "msg"; }
 
-  // ---- Connexion ----
-  async function login(tok) {
-    const res = await fetch(API + "?_=" + Date.now(), {
+  // ---- Connexion / chargement ----
+  async function loadFile(f, tok) {
+    const res = await fetch(apiFor(f.path) + "?_=" + Date.now(), {
       headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json" }
     });
     if (res.status === 401) throw new Error("Clé refusée. Vérifie que tu as bien copié le jeton en entier.");
-    if (res.status === 404) throw new Error("Accès au fichier impossible. Vérifie que le jeton a la permission Contents et l'accès au repo La-Clauderie.");
+    if (res.status === 404) throw new Error("Accès à " + f.path + " impossible. Vérifie que le jeton a la permission Contents et l'accès au repo La-Clauderie.");
     if (!res.ok) throw new Error("Erreur GitHub (" + res.status + ").");
     const data = await res.json();
-    fileSha = data.sha;
+    f.sha = data.sha;
     const json = JSON.parse(decodeB64(data.content));
-    events = Array.isArray(json.events) ? json.events : [];
+    f.list = Array.isArray(json[f.key]) ? json[f.key] : [];
+  }
+
+  async function login(tok) {
+    await loadFile(FILES.events, tok);
+    await loadFile(FILES.faits, tok);
     return true;
   }
 
-  async function save(commitMsg) {
+  async function save(f, commitMsg) {
     const body = {
       message: commitMsg,
-      content: encodeB64(JSON.stringify({ events }, null, 2) + "\n"),
-      sha: fileSha,
+      content: encodeB64(JSON.stringify({ [f.key]: f.list }, null, 2) + "\n"),
+      sha: f.sha,
       branch: "main"
     };
-    const res = await fetch(API, {
+    const res = await fetch(apiFor(f.path), {
       method: "PUT",
       headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" },
       body: JSON.stringify(body)
     });
-    if (res.status === 409) throw new Error("Le calendrier a changé entre-temps. Recharge la page et réessaie.");
+    if (res.status === 409) throw new Error("Le fichier a changé entre-temps. Recharge la page et réessaie.");
     if (!res.ok) throw new Error("Échec de l'enregistrement (" + res.status + ").");
     const data = await res.json();
-    fileSha = data.content.sha; // pour le prochain enregistrement
+    f.sha = data.content.sha; // pour le prochain enregistrement
   }
 
   const TYPE_CLASS = { "Raid": "t-raid", "Héroïque": "t-hero", "PvP": "t-pvp", "Social": "t-social" };
@@ -229,29 +278,86 @@
     return d + " " + (MOIS[m - 1] || "") + " " + y;
   }
 
-  function render() {
-    const box = $("evList");
-    const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
-    if (!sorted.length) { box.innerHTML = '<p class="sub">Aucun event. Ajoute-en un ci-dessus.</p>'; return; }
-    box.innerHTML = sorted.map(e => {
-      const cls = TYPE_CLASS[e.type] || "t-social";
-      const i = events.indexOf(e);
-      return `<div class="ev">
-        <span class="d">${humanDate(e.date)}<br>${e.heure || ""}</span>
-        <span><span class="t">${escapeHtml(e.titre || "")}</span><span class="type ${cls}">${e.type || ""}</span><br><span class="meta">${escapeHtml(e.desc || "")}</span></span>
-        <button class="btn btn-danger" data-i="${i}">Supprimer</button>
-      </div>`;
-    }).join("");
-    box.querySelectorAll("button[data-i]").forEach(b => {
-      b.addEventListener("click", () => removeEvent(parseInt(b.dataset.i, 10)));
-    });
-  }
-
   function escapeHtml(s) {
     return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   }
 
-  async function addEvent() {
+  // Index de l'élément en cours de modification (null = mode ajout)
+  let evEditIndex = null;
+  let faEditIndex = null;
+
+  function render() {
+    // --- calendrier ---
+    const box = $("evList");
+    const sorted = [...events()].sort((a, b) => a.date.localeCompare(b.date));
+    if (!sorted.length) { box.innerHTML = '<p class="sub">Aucun event. Ajoute-en un ci-dessus.</p>'; }
+    else {
+      box.innerHTML = sorted.map(e => {
+        const cls = TYPE_CLASS[e.type] || "t-social";
+        const i = events().indexOf(e);
+        return `<div class="ev">
+          <span class="d">${humanDate(e.date)}<br>${e.heure || ""}</span>
+          <span><span class="t">${escapeHtml(e.titre || "")}</span><span class="type ${cls}">${e.type || ""}</span><br><span class="meta">${escapeHtml(e.desc || "")}</span></span>
+          <span class="row" style="flex-wrap:nowrap">
+            <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-edit="${i}">Modifier</button>
+            <button class="btn btn-danger" data-i="${i}">Supprimer</button>
+          </span>
+        </div>`;
+      }).join("");
+      box.querySelectorAll("button[data-i]").forEach(b => b.addEventListener("click", () => removeEvent(parseInt(b.dataset.i, 10))));
+      box.querySelectorAll("button[data-edit]").forEach(b => b.addEventListener("click", () => startEditEvent(parseInt(b.dataset.edit, 10))));
+    }
+    // --- faits d'armes ---
+    const fbox = $("faList");
+    const fsorted = [...faits()].sort((a, b) => b.date.localeCompare(a.date));
+    if (!fsorted.length) { fbox.innerHTML = '<p class="sub">Aucun fait d\'armes pour l\'instant. Ajoute le premier ci-dessus !</p>'; }
+    else {
+      fbox.innerHTML = fsorted.map(g => {
+        const cls = FA_TYPE_CLASS[g.type] || "t-social";
+        const i = faits().indexOf(g);
+        return `<div class="ev">
+          <span class="d">${humanDate(g.date)}</span>
+          <span><span class="t">${escapeHtml(g.titre || "")}</span><span class="type ${cls}">${g.type || ""}</span><br><span class="meta">${escapeHtml(g.desc || "")}</span></span>
+          <span class="row" style="flex-wrap:nowrap">
+            <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-faedit="${i}">Modifier</button>
+            <button class="btn btn-danger" data-fai="${i}">Supprimer</button>
+          </span>
+        </div>`;
+      }).join("");
+      fbox.querySelectorAll("button[data-fai]").forEach(b => b.addEventListener("click", () => removeFait(parseInt(b.dataset.fai, 10))));
+      fbox.querySelectorAll("button[data-faedit]").forEach(b => b.addEventListener("click", () => startEditFait(parseInt(b.dataset.faedit, 10))));
+    }
+  }
+
+  // ---- Calendrier : ajout / modification / suppression ----
+  function setEvFormMode() {
+    const editing = evEditIndex !== null;
+    $("evFormTitle").textContent = editing ? "Modifier l'event" : "Ajouter un event";
+    $("addBtn").textContent = editing ? "Enregistrer les modifications" : "+ Ajouter au calendrier";
+    $("cancelEditBtn").classList.toggle("hidden", !editing);
+  }
+
+  function startEditEvent(i) {
+    const e = events()[i];
+    if (!e) return;
+    evEditIndex = i;
+    $("fDate").value = e.date || "";
+    $("fHeure").value = e.heure || "";
+    $("fType").value = e.type || "Social";
+    $("fTitre").value = e.titre || "";
+    $("fDesc").value = e.desc || "";
+    setEvFormMode();
+    $("evFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function cancelEditEvent() {
+    evEditIndex = null;
+    $("fHeure").value = ""; $("fTitre").value = ""; $("fDesc").value = "";
+    $("fDate").value = new Date().toISOString().slice(0, 10);
+    setEvFormMode();
+  }
+
+  async function submitEvent() {
     clearMsg($("dashMsg"));
     const date = $("fDate").value;
     const heure = $("fHeure").value.trim();
@@ -259,33 +365,113 @@
     const titre = $("fTitre").value.trim();
     const desc = $("fDesc").value.trim();
     if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre.", "err"); return; }
+    const editing = evEditIndex !== null;
+    const backup = editing ? events()[evEditIndex] : null;
     $("addBtn").disabled = true; $("addBtn").textContent = "Enregistrement…";
-    events.push({ date, heure, type, titre, desc });
+    if (editing) events()[evEditIndex] = { date, heure, type, titre, desc };
+    else events().push({ date, heure, type, titre, desc });
     try {
-      await save("calendrier : ajout « " + titre + " »");
-      msg($("dashMsg"), "Event ajouté ✓ Le site se met à jour dans ~1 min.", "ok");
-      $("fHeure").value = ""; $("fTitre").value = ""; $("fDesc").value = "";
+      await save(FILES.events, "calendrier : " + (editing ? "modification" : "ajout") + " « " + titre + " »");
+      msg($("dashMsg"), (editing ? "Event modifié" : "Event ajouté") + " ✓ Le site se met à jour dans ~1 min.", "ok");
+      cancelEditEvent();
       render();
     } catch (err) {
-      events.pop();
+      if (editing) events()[evEditIndex] = backup;
+      else events().pop();
       msg($("dashMsg"), err.message, "err");
     } finally {
-      $("addBtn").disabled = false; $("addBtn").textContent = "+ Ajouter au calendrier";
+      $("addBtn").disabled = false;
+      setEvFormMode();
     }
   }
 
   async function removeEvent(i) {
-    if (i < 0 || i >= events.length) return;
-    const removed = events[i];
+    if (i < 0 || i >= events().length) return;
+    const removed = events()[i];
     if (!confirm("Supprimer « " + removed.titre + " » ?")) return;
     clearMsg($("dashMsg"));
-    events.splice(i, 1);
+    if (evEditIndex !== null) cancelEditEvent();
+    events().splice(i, 1);
     try {
-      await save("calendrier : suppression « " + removed.titre + " »");
+      await save(FILES.events, "calendrier : suppression « " + removed.titre + " »");
       msg($("dashMsg"), "Event supprimé ✓ Le site se met à jour dans ~1 min.", "ok");
       render();
     } catch (err) {
-      events.splice(i, 0, removed);
+      events().splice(i, 0, removed);
+      msg($("dashMsg"), err.message, "err");
+      render();
+    }
+  }
+
+  // ---- Faits d'armes : ajout / modification / suppression ----
+  const FA_TYPE_CLASS = { "Boss": "t-raid", "Donjon": "t-hero", "PvP": "t-pvp", "Autre": "t-social" };
+
+  function setFaFormMode() {
+    const editing = faEditIndex !== null;
+    $("faFormTitle").textContent = editing ? "Modifier le fait d'armes" : "Ajouter un fait d'armes";
+    $("faAddBtn").textContent = editing ? "Enregistrer les modifications" : "+ Ajouter aux faits d'armes";
+    $("faCancelEditBtn").classList.toggle("hidden", !editing);
+  }
+
+  function startEditFait(i) {
+    const g = faits()[i];
+    if (!g) return;
+    faEditIndex = i;
+    $("gDate").value = g.date || "";
+    $("gType").value = g.type || "Autre";
+    $("gTitre").value = g.titre || "";
+    $("gDesc").value = g.desc || "";
+    setFaFormMode();
+    $("faFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function cancelEditFait() {
+    faEditIndex = null;
+    $("gTitre").value = ""; $("gDesc").value = "";
+    $("gDate").value = new Date().toISOString().slice(0, 10);
+    setFaFormMode();
+  }
+
+  async function submitFait() {
+    clearMsg($("dashMsg"));
+    const date = $("gDate").value;
+    const type = $("gType").value;
+    const titre = $("gTitre").value.trim();
+    const desc = $("gDesc").value.trim();
+    if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre.", "err"); return; }
+    const editing = faEditIndex !== null;
+    const backup = editing ? faits()[faEditIndex] : null;
+    $("faAddBtn").disabled = true; $("faAddBtn").textContent = "Enregistrement…";
+    if (editing) faits()[faEditIndex] = { date, type, titre, desc };
+    else faits().push({ date, type, titre, desc });
+    try {
+      await save(FILES.faits, "faits d'armes : " + (editing ? "modification" : "ajout") + " « " + titre + " »");
+      msg($("dashMsg"), (editing ? "Fait d'armes modifié" : "Fait d'armes ajouté") + " ✓ Le site se met à jour dans ~1 min.", "ok");
+      cancelEditFait();
+      render();
+    } catch (err) {
+      if (editing) faits()[faEditIndex] = backup;
+      else faits().pop();
+      msg($("dashMsg"), err.message, "err");
+    } finally {
+      $("faAddBtn").disabled = false;
+      setFaFormMode();
+    }
+  }
+
+  async function removeFait(i) {
+    if (i < 0 || i >= faits().length) return;
+    const removed = faits()[i];
+    if (!confirm("Supprimer « " + removed.titre + " » ?")) return;
+    clearMsg($("dashMsg"));
+    if (faEditIndex !== null) cancelEditFait();
+    faits().splice(i, 1);
+    try {
+      await save(FILES.faits, "faits d'armes : suppression « " + removed.titre + " »");
+      msg($("dashMsg"), "Fait d'armes supprimé ✓ Le site se met à jour dans ~1 min.", "ok");
+      render();
+    } catch (err) {
+      faits().splice(i, 0, removed);
       msg($("dashMsg"), err.message, "err");
       render();
     }
@@ -295,6 +481,9 @@
     $("login").classList.add("hidden");
     $("dash").classList.remove("hidden");
     $("fDate").value = new Date().toISOString().slice(0, 10);
+    $("gDate").value = new Date().toISOString().slice(0, 10);
+    setEvFormMode();
+    setFaFormMode();
     render();
   }
 
@@ -316,7 +505,10 @@
   // events UI
   $("loginBtn").addEventListener("click", () => doLogin($("token").value.trim(), $("remember").checked));
   $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("loginBtn").click(); });
-  $("addBtn").addEventListener("click", addEvent);
+  $("addBtn").addEventListener("click", submitEvent);
+  $("cancelEditBtn").addEventListener("click", cancelEditEvent);
+  $("faAddBtn").addEventListener("click", submitFait);
+  $("faCancelEditBtn").addEventListener("click", cancelEditFait);
   $("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("clauderie_token");
     location.reload();

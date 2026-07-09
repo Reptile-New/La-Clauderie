@@ -83,6 +83,21 @@
   .empty { color: var(--faint); text-align: center; padding: 30px; border: 1px dashed var(--line); border-radius: 11px; }
   @media (max-width: 560px) { .event { grid-template-columns: 56px 1fr; } .event .when { grid-column: 2; text-align: left; margin-top: 2px; } }
 
+  /* Faits d'armes */
+  .feats { display: grid; gap: 10px; }
+  .feat {
+    display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 16px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 7%, var(--bg-card)), var(--bg-card) 55%);
+    border: 1px solid color-mix(in srgb, var(--gold) 26%, var(--line-soft));
+    border-radius: 11px; padding: 14px 18px;
+  }
+  .feat .trophy { font-size: 1.6rem; text-align: center; filter: drop-shadow(0 0 8px rgba(200,160,75,0.35)); }
+  .feat .info h3 { margin: 0 0 3px; font-size: 1.02rem; font-family: var(--font); font-weight: 600; }
+  .feat .info p { margin: 0; color: var(--dim); font-size: 0.88rem; }
+  .feat .when { text-align: right; font-family: var(--font-mono); font-size: 0.78rem; color: var(--faint); white-space: nowrap; }
+  .t-boss { color: var(--q-legendary); border: 1px solid color-mix(in srgb, var(--q-legendary) 45%, transparent); }
+  @media (max-width: 560px) { .feat { grid-template-columns: 40px 1fr; } .feat .when { grid-column: 2; text-align: left; margin-top: 2px; } }
+
   /* Cartes de navigation */
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .navcard {
@@ -123,6 +138,15 @@
       <span class="count" id="evCount"></span>
     </div>
     <div class="events" id="events"><div class="empty">Chargement…</div></div>
+  </section>
+
+  <!-- FAITS D'ARMES -->
+  <section id="faits-darmes" class="hidden-if-empty" style="display:none">
+    <div class="sec-title">
+      <h2>🏆 Faits d'armes</h2>
+      <span class="count" id="faCount"></span>
+    </div>
+    <div class="feats" id="feats"></div>
   </section>
 
   <!-- NAVIGATION -->
@@ -189,6 +213,33 @@
       document.getElementById("events").innerHTML =
         '<div class="empty">Impossible de charger le calendrier.</div>';
     });
+
+  // Faits d'armes (la section reste masquée s'il n'y en a aucun)
+  const FA_TYPE_CLASS = { "Boss": "t-boss", "Donjon": "t-hero", "PvP": "t-pvp", "Autre": "t-social" };
+  const FA_ICON = { "Boss": "🏆", "Donjon": "⚔️", "PvP": "🛡️", "Autre": "✨" };
+  fetch("achievements.json?_=" + Date.now())
+    .then(r => r.ok ? r.json() : { achievements: [] })
+    .then(data => {
+      const list = (data.achievements || []).sort((a, b) => b.date.localeCompare(a.date));
+      if (!list.length) return;
+      document.getElementById("faits-darmes").style.display = "";
+      document.getElementById("faCount").textContent =
+        list.length + (list.length > 1 ? " hauts faits" : " haut fait");
+      document.getElementById("feats").innerHTML = list.map(g => {
+        const dt = fmtDate(g.date);
+        const cls = FA_TYPE_CLASS[g.type] || "t-social";
+        return `<div class="feat">
+          <div class="trophy">${FA_ICON[g.type] || "🏆"}</div>
+          <div class="info">
+            <span class="type ${cls}">${g.type || ""}</span>
+            <h3>${g.titre || ""}</h3>
+            <p>${g.desc || ""}</p>
+          </div>
+          <div class="when">${dt.d} ${dt.m}</div>
+        </div>`;
+      }).join("");
+    })
+    .catch(() => {});
 </script>
 </body>
 </html>
