@@ -1,11 +1,3 @@
 {
-  "events": [
-    {
-      "date": "2026-07-21",
-      "heure": "20h00",
-      "type": "Social",
-      "titre": "Vale Cup — tournoi de boarball",
-      "desc": "Le foot du dimanche façon Clauderie. Paris ouverts !"
-    }
-  ]
+  "events": []
 }
