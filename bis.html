@@ -1,0 +1,4474 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Stuff BiS — La Clauderie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-uncommon: #1eff00; --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --tank: #4a90d9; --heal: #58c46a; --dps: #e5544a;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(163,53,238,0.05), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 880px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .back { margin-left: auto; color: var(--dim); text-decoration: none; font-size: 0.88rem; }
+  .back:hover { color: var(--gold-bright); }
+
+  header.page { padding: clamp(36px, 6vw, 60px) 0 clamp(20px, 3vw, 30px); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 12px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.1rem, 6vw, 3.2rem); line-height: 1.05; margin: 0 0 10px; }
+  .lede { color: var(--dim); max-width: 60ch; margin: 0; font-size: 0.98rem; }
+
+  /* Onglets classes */
+  .classes { display: flex; gap: 7px; flex-wrap: wrap; padding: 20px 0 14px; }
+  .cls-btn {
+    border: 1px solid var(--line); background: var(--bg-card); color: var(--dim);
+    padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.88rem;
+    font-family: inherit; transition: border-color .12s, color .12s;
+  }
+  .cls-btn:hover { border-color: currentColor; }
+  .cls-btn.on { color: #10131b; border-color: transparent; }
+  .cls-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Onglets rôles */
+  .roles { display: flex; gap: 8px; padding: 4px 0 22px; }
+  .role-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid var(--line); background: var(--bg-card); color: var(--dim);
+    padding: 8px 18px; border-radius: 9px; cursor: pointer; font-weight: 700; font-size: 0.9rem; font-family: inherit;
+  }
+  .role-btn.on.r-tank { border-color: var(--tank); color: var(--tank); background: color-mix(in srgb, var(--tank) 12%, transparent); }
+  .role-btn.on.r-heal { border-color: var(--heal); color: var(--heal); background: color-mix(in srgb, var(--heal) 12%, transparent); }
+  .role-btn.on.r-dps { border-color: var(--dps); color: var(--dps); background: color-mix(in srgb, var(--dps) 12%, transparent); }
+  .role-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Liste BiS */
+  .bis { display: grid; gap: 9px; padding-bottom: 20px; }
+  .slot-row {
+    display: grid; grid-template-columns: 92px 1fr; gap: 16px; align-items: start;
+    background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 10px; padding: 13px 16px;
+  }
+  .slot-name { font-family: var(--font-mono); font-size: 0.76rem; color: var(--faint); text-transform: uppercase; letter-spacing: 0.06em; padding-top: 3px; }
+  .item .nm { font-weight: 700; font-size: 0.98rem; }
+  .q-epic .nm { color: var(--q-epic); } .q-legendary .nm { color: var(--q-legendary); }
+  .q-rare .nm { color: var(--q-rare); } .q-uncommon .nm { color: var(--q-uncommon); }
+  .item .meta { font-size: 0.82rem; color: var(--dim); margin-top: 2px; }
+  .item .meta .set { color: var(--gold-bright); }
+  .item .alt { margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--line-soft); font-size: 0.82rem; color: var(--faint); }
+  .item .alt b { font-weight: 600; }
+  .alt.q-epic b { color: var(--q-epic); } .alt.q-legendary b { color: var(--q-legendary); }
+  .alt.q-rare b { color: var(--q-rare); } .alt.q-uncommon b { color: var(--q-uncommon); }
+  @media (max-width: 480px) { .slot-row { grid-template-columns: 1fr; gap: 4px; } }
+
+  .note { background: color-mix(in srgb, var(--gold) 8%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); border-radius: 10px; padding: 13px 16px; font-size: 0.85rem; color: var(--dim); margin-bottom: 22px; }
+  .note b { color: var(--gold-bright); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 26px 0 50px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <a href="index.html" class="back">← Accueil</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="page">
+    <p class="eyebrow">Guide d'équipement · Patch v0.23.0</p>
+    <h1>Le meilleur stuff (BiS)</h1>
+    <p class="lede">Choisis ta classe puis ton rôle : la liste montre le meilleur objet du jeu pour chaque emplacement, calculé à partir des vraies statistiques des 435 objets du patch.</p>
+  </header>
+
+  <div class="classes" id="clsTabs" role="tablist" aria-label="Classes"></div>
+  <div class="roles" id="roleTabs" role="tablist" aria-label="Rôles"></div>
+
+  <div class="note" id="note"></div>
+  <div class="bis" id="bisList"></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Classement calculé sur les données réelles du jeu (tag v0.23.0) selon les statistiques prioritaires du rôle. <b style="color:var(--dim)">Alt.</b> = seconde meilleure option.</p>
+    <p style="margin-top:8px"><a href="index.html">← Retour au site</a></p>
+  </div>
+</footer>
+
+<script>
+const BIS = {
+ "warrior": {
+  "fr": "Guerrier",
+  "roles": {
+   "tank": {
+    "mainhand": {
+     "best": {
+      "name": "Thronebane, Last Oath of Thornpeak",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "str": 15,
+       "agi": 15,
+       "sta": 14
+      },
+      "w": {
+       "min": 46,
+       "max": 74,
+       "speed": 2.8
+      },
+      "score": 219.1
+     },
+     "alt": {
+      "name": "Deathless Greatblade",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 13,
+       "sta": 9
+      },
+      "w": {
+       "min": 40,
+       "max": 62,
+       "speed": 3.4
+      },
+      "score": 133.5
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Bonewrought Dreadhelm",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 310,
+       "str": 8,
+       "sta": 9
+      },
+      "w": null,
+      "score": 406
+     },
+     "alt": {
+      "name": "Cryptplate Helm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "str": 10,
+       "sta": 8
+      },
+      "w": null,
+      "score": 386
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Bonewrought Warspaulders",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 260,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 345
+     },
+     "alt": {
+      "name": "Mistforged Pauldrons",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "str": 9,
+       "sta": 7
+      },
+      "w": null,
+      "score": 323
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 451
+     },
+     "alt": {
+      "name": "Barrowlord Warplate",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 270,
+       "str": 8,
+       "sta": 10
+      },
+      "w": null,
+      "score": 374
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 299
+     },
+     "alt": {
+      "name": "Bonewrought Girdle",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 150,
+       "str": 7,
+       "sta": 6
+      },
+      "w": null,
+      "score": 219
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 420
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 328
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Gravewyrm Claws",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 299
+     },
+     "alt": {
+      "name": "Bonewrought Gauntlets",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 180,
+       "str": 6,
+       "sta": 7
+      },
+      "w": null,
+      "score": 254
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 290
+     },
+     "alt": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 284
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Medallion of Endless Profit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 61
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 54
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Oath of the Round Table",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 63
+     },
+     "alt": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 53
+     }
+    }
+   },
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Thronebane, Last Oath of Thornpeak",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "str": 15,
+       "agi": 15,
+       "sta": 14
+      },
+      "w": {
+       "min": 46,
+       "max": 74,
+       "speed": 2.8
+      },
+      "score": 246.6
+     },
+     "alt": {
+      "name": "Deathless Greatblade",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 13,
+       "sta": 9
+      },
+      "w": {
+       "min": 40,
+       "max": 62,
+       "speed": 3.4
+      },
+      "score": 159.5
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Cryptplate Helm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "str": 10,
+       "sta": 8
+      },
+      "w": null,
+      "score": 139.8
+     },
+     "alt": {
+      "name": "Bonewrought Dreadhelm",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 310,
+       "str": 8,
+       "sta": 9
+      },
+      "w": null,
+      "score": 128.5
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Mistforged Pauldrons",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "str": 9,
+       "sta": 7
+      },
+      "w": null,
+      "score": 122
+     },
+     "alt": {
+      "name": "Bonewrought Warspaulders",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 260,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 111
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 166.3
+     },
+     "alt": {
+      "name": "Barrowlord Warplate",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 270,
+       "str": 8,
+       "sta": 10
+      },
+      "w": null,
+      "score": 124.5
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 117.6
+     },
+     "alt": {
+      "name": "Bonewrought Girdle",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 150,
+       "str": 7,
+       "sta": 6
+      },
+      "w": null,
+      "score": 90.5
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 153.3
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 116
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Gravewyrm Claws",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 117.6
+     },
+     "alt": {
+      "name": "Bonewrought Gauntlets",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 180,
+       "str": 6,
+       "sta": 7
+      },
+      "w": null,
+      "score": 89
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 107.8
+     },
+     "alt": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 102.8
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Swiftfang Talisman",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 6,
+       "agi": 6
+      },
+      "w": null,
+      "score": 66
+     },
+     "alt": {
+      "name": "Medallion of Endless Profit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 66
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "Oath of the Round Table",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 52
+     }
+    }
+   }
+  }
+ },
+ "paladin": {
+  "fr": "Paladin",
+  "roles": {
+   "tank": {
+    "mainhand": {
+     "best": {
+      "name": "Thronebane, Last Oath of Thornpeak",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "str": 15,
+       "agi": 15,
+       "sta": 14
+      },
+      "w": {
+       "min": 46,
+       "max": 74,
+       "speed": 2.8
+      },
+      "score": 219.1
+     },
+     "alt": {
+      "name": "Deathless Greatblade",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 13,
+       "sta": 9
+      },
+      "w": {
+       "min": 40,
+       "max": 62,
+       "speed": 3.4
+      },
+      "score": 133.5
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Bonewrought Dreadhelm",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 310,
+       "str": 8,
+       "sta": 9
+      },
+      "w": null,
+      "score": 406
+     },
+     "alt": {
+      "name": "Cryptplate Helm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "str": 10,
+       "sta": 8
+      },
+      "w": null,
+      "score": 386
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Bonewrought Warspaulders",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 260,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 345
+     },
+     "alt": {
+      "name": "Mistforged Pauldrons",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "str": 9,
+       "sta": 7
+      },
+      "w": null,
+      "score": 323
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 451
+     },
+     "alt": {
+      "name": "Barrowlord Warplate",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 270,
+       "str": 8,
+       "sta": 10
+      },
+      "w": null,
+      "score": 374
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 299
+     },
+     "alt": {
+      "name": "Bonewrought Girdle",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 150,
+       "str": 7,
+       "sta": 6
+      },
+      "w": null,
+      "score": 219
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 420
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 328
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Gravewyrm Claws",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 299
+     },
+     "alt": {
+      "name": "Bonewrought Gauntlets",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 180,
+       "str": 6,
+       "sta": 7
+      },
+      "w": null,
+      "score": 254
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 290
+     },
+     "alt": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 284
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Medallion of Endless Profit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 61
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 54
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Oath of the Round Table",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 63
+     },
+     "alt": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 53
+     }
+    }
+   },
+   "heal": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 283
+     },
+     "alt": {
+      "name": "Stormcaller's Focus",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 20,
+       "max": 36,
+       "speed": 2.5
+      },
+      "score": 186
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Choirmother's Casque",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 201
+     },
+     "alt": {
+      "name": "Bonewrought Dreadhelm",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 310,
+       "str": 8,
+       "sta": 9
+      },
+      "w": null,
+      "score": 95.5
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Choir-Blessed Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 174
+     },
+     "alt": {
+      "name": "Bonewrought Warspaulders",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 260,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 81
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Soulforged Warplate",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 239.8
+     },
+     "alt": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 103.8
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 68
+     },
+     "alt": {
+      "name": "Bonewrought Girdle",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 150,
+       "str": 7,
+       "sta": 6
+      },
+      "w": null,
+      "score": 49.5
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 96.8
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 76
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Wyrmchoir Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 164
+     },
+     "alt": {
+      "name": "Gravewyrm Claws",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 68
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 67.3
+     },
+     "alt": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 65
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 78
+     },
+     "alt": {
+      "name": "Zyzz's Deathless Signet",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "spi": 6,
+       "int": 5
+      },
+      "w": null,
+      "score": 76
+     }
+    }
+   },
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Thronebane, Last Oath of Thornpeak",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "str": 15,
+       "agi": 15,
+       "sta": 14
+      },
+      "w": {
+       "min": 46,
+       "max": 74,
+       "speed": 2.8
+      },
+      "score": 246.6
+     },
+     "alt": {
+      "name": "Deathless Greatblade",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 13,
+       "sta": 9
+      },
+      "w": {
+       "min": 40,
+       "max": 62,
+       "speed": 3.4
+      },
+      "score": 159.5
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Cryptplate Helm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "str": 10,
+       "sta": 8
+      },
+      "w": null,
+      "score": 139.8
+     },
+     "alt": {
+      "name": "Bonewrought Dreadhelm",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 310,
+       "str": 8,
+       "sta": 9
+      },
+      "w": null,
+      "score": 128.5
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Mistforged Pauldrons",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "str": 9,
+       "sta": 7
+      },
+      "w": null,
+      "score": 122
+     },
+     "alt": {
+      "name": "Bonewrought Warspaulders",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 260,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 111
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 166.3
+     },
+     "alt": {
+      "name": "Barrowlord Warplate",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 270,
+       "str": 8,
+       "sta": 10
+      },
+      "w": null,
+      "score": 124.5
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 117.6
+     },
+     "alt": {
+      "name": "Bonewrought Girdle",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 150,
+       "str": 7,
+       "sta": 6
+      },
+      "w": null,
+      "score": 90.5
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 153.3
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 116
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Gravewyrm Claws",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 117.6
+     },
+     "alt": {
+      "name": "Bonewrought Gauntlets",
+      "q": "epic",
+      "set": "Bonewrought Regalia",
+      "stats": {
+       "armor": 180,
+       "str": 6,
+       "sta": 7
+      },
+      "w": null,
+      "score": 89
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 107.8
+     },
+     "alt": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 102.8
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Swiftfang Talisman",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 6,
+       "agi": 6
+      },
+      "w": null,
+      "score": 66
+     },
+     "alt": {
+      "name": "Medallion of Endless Profit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 66
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "Oath of the Round Table",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 52
+     }
+    }
+   }
+  }
+ },
+ "shaman": {
+  "fr": "Chaman",
+  "roles": {
+   "heal": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 283
+     },
+     "alt": {
+      "name": "Stormcaller's Focus",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 20,
+       "max": 36,
+       "speed": 2.5
+      },
+      "score": 186
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Choirmother's Casque",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 201
+     },
+     "alt": {
+      "name": "Galecall Crown",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 225,
+       "int": 10,
+       "sta": 7
+      },
+      "w": null,
+      "score": 150.3
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Choir-Blessed Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 174
+     },
+     "alt": {
+      "name": "Galecall Spaulders",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 190,
+       "int": 8,
+       "sta": 7
+      },
+      "w": null,
+      "score": 125.5
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Soulforged Warplate",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 239.8
+     },
+     "alt": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 103.8
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Galecall Waistguard",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 110,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 101.5
+     },
+     "alt": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 68
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 96.8
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 76
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Wyrmchoir Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 164
+     },
+     "alt": {
+      "name": "Galecall Handguards",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 130,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 106.5
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 67.3
+     },
+     "alt": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 65
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 78
+     },
+     "alt": {
+      "name": "Zyzz's Deathless Signet",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "spi": 6,
+       "int": 5
+      },
+      "w": null,
+      "score": 76
+     }
+    }
+   },
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 232
+     },
+     "alt": {
+      "name": "Stormcaller's Focus",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 20,
+       "max": 36,
+       "speed": 2.5
+      },
+      "score": 159
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Choirmother's Casque",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 292,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 147.8
+     },
+     "alt": {
+      "name": "Galecall Crown",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 225,
+       "int": 10,
+       "sta": 7
+      },
+      "w": null,
+      "score": 127.8
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Choir-Blessed Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 240,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 129
+     },
+     "alt": {
+      "name": "Galecall Spaulders",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 190,
+       "int": 8,
+       "sta": 7
+      },
+      "w": null,
+      "score": 106.5
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Soulforged Warplate",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 176.3
+     },
+     "alt": {
+      "name": "Morthen's Cryptforged Hauberk",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 335,
+       "str": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 70.3
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Galecall Waistguard",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 110,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 90.5
+     },
+     "alt": {
+      "name": "Gravescale Girdle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "str": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 45.6
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Deathless Warguard Legmail",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 315,
+       "str": 11,
+       "sta": 9
+      },
+      "w": null,
+      "score": 65.3
+     },
+     "alt": {
+      "name": "Barrowlord Legguards",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 240,
+       "str": 8,
+       "sta": 8
+      },
+      "w": null,
+      "score": 52
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Wyrmchoir Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 224,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 123.6
+     },
+     "alt": {
+      "name": "Galecall Handguards",
+      "q": "epic",
+      "set": "Galecall Vestments",
+      "stats": {
+       "armor": 130,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 93.5
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Barrowlord Sabatons",
+      "q": "epic",
+      "set": "Barrowlord Battlegear",
+      "stats": {
+       "armor": 205,
+       "str": 7,
+       "sta": 8
+      },
+      "w": null,
+      "score": 46.8
+     },
+     "alt": {
+      "name": "Tideworn Warboots",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 212,
+       "str": 8,
+       "sta": 6
+      },
+      "w": null,
+      "score": 43.8
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 71
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Niela's Coldlight Band",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 63
+     }
+    }
+   }
+  }
+ },
+ "druid": {
+  "fr": "Druide",
+  "roles": {
+   "tank": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 129.8
+     },
+     "alt": {
+      "name": "Gravecaller's Broadblade",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "str": 4,
+       "sta": 3
+      },
+      "w": {
+       "min": 9,
+       "max": 16,
+       "speed": 2.4
+      },
+      "score": 43.8
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Direfang Crown",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 190,
+       "agi": 10,
+       "sta": 7
+      },
+      "w": null,
+      "score": 266
+     },
+     "alt": {
+      "name": "Boundstone Helm",
+      "q": "rare",
+      "set": "Boundstone Vanguard",
+      "stats": {
+       "armor": 105,
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 168
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Direfang Shoulderguards",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 165,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 231
+     },
+     "alt": {
+      "name": "Tidebound Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 148,
+       "agi": 10,
+       "sta": 6
+      },
+      "w": null,
+      "score": 216
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Scourgehide Carapace",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 172,
+       "agi": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 276
+     },
+     "alt": {
+      "name": "Highwatch Breastplate",
+      "q": "common",
+      "set": null,
+      "stats": {
+       "armor": 160
+      },
+      "w": null,
+      "score": 160
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Bonechill Cord",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 100,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 166
+     },
+     "alt": {
+      "name": "Direfang Waistband",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 95,
+       "agi": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 151
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Korgath's Chainwraps",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 125,
+       "sta": 12
+      },
+      "w": null,
+      "score": 221
+     },
+     "alt": {
+      "name": "Ysolei's Pearl Greaves",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 130,
+       "sta": 6,
+       "spi": 3
+      },
+      "w": null,
+      "score": 178
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Sanctum Prowler's Grips",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 104,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 170
+     },
+     "alt": {
+      "name": "Direfang Grips",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 110,
+       "agi": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 166
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Selthe's Sea-Striders",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 75,
+       "agi": 4,
+       "sta": 3
+      },
+      "w": null,
+      "score": 107
+     },
+     "alt": {
+      "name": "Cragmaw Prowlboots",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 58,
+       "agi": 5,
+       "sta": 3
+      },
+      "w": null,
+      "score": 92
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Medallion of Endless Profit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 61
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 54
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Oath of the Round Table",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 63
+     },
+     "alt": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 53
+     }
+    }
+   },
+   "heal": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 283
+     },
+     "alt": {
+      "name": "Lunar Tide Greatstaff",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 30,
+       "max": 50,
+       "speed": 3
+      },
+      "score": 191.3
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Soulrend Diadem",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 76,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 147
+     },
+     "alt": {
+      "name": "Wraithfire Cowl",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 105,
+       "int": 11,
+       "sta": 6
+      },
+      "w": null,
+      "score": 126.3
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Sunken Court Mantle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 56,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 128
+     },
+     "alt": {
+      "name": "Mournweave Soulspire Mantle",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 70,
+       "int": 9,
+       "spi": 5
+      },
+      "w": null,
+      "score": 119.5
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Shroud of the Gravewyrm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 90,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 178.5
+     },
+     "alt": {
+      "name": "Mournweave Starshroud",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 92,
+       "int": 11,
+       "spi": 7
+      },
+      "w": null,
+      "score": 153
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Wraithfire Cord",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 50,
+       "int": 8,
+       "spi": 5
+      },
+      "w": null,
+      "score": 106.5
+     },
+     "alt": {
+      "name": "Sash of the Sunken Court",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 48,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 96
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Mournweave Legwraps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 86,
+       "int": 13,
+       "spi": 7
+      },
+      "w": null,
+      "score": 167.5
+     },
+     "alt": {
+      "name": "Lunar Choir Leggings",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 72,
+       "int": 12,
+       "spi": 8
+      },
+      "w": null,
+      "score": 162
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Shadowpulse Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 52,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 121
+     },
+     "alt": {
+      "name": "Wraithfire Gloves",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 60,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 89
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Shadowpulse Slippers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 44,
+       "int": 8,
+       "spi": 6
+      },
+      "w": null,
+      "score": 111
+     },
+     "alt": {
+      "name": "Mournweave Soulsteps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 80,
+       "int": 8,
+       "spi": 4
+      },
+      "w": null,
+      "score": 108
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 78
+     },
+     "alt": {
+      "name": "Zyzz's Deathless Signet",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "spi": 6,
+       "int": 5
+      },
+      "w": null,
+      "score": 76
+     }
+    }
+   },
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 69
+     },
+     "alt": {
+      "name": "Widowfang Dirk",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "agi": 4,
+       "sta": 3
+      },
+      "w": {
+       "min": 6,
+       "max": 10,
+       "speed": 1.7,
+       "dagger": true
+      },
+      "score": 49.8
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Direfang Crown",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 190,
+       "agi": 10,
+       "sta": 7
+      },
+      "w": null,
+      "score": 122.5
+     },
+     "alt": {
+      "name": "Boundstone Helm",
+      "q": "rare",
+      "set": "Boundstone Vanguard",
+      "stats": {
+       "armor": 105,
+       "sta": 6,
+       "str": 5
+      },
+      "w": null,
+      "score": 37.8
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Tidebound Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 148,
+       "agi": 10,
+       "sta": 6
+      },
+      "w": null,
+      "score": 114.2
+     },
+     "alt": {
+      "name": "Direfang Shoulderguards",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 165,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 108.8
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Scourgehide Carapace",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 172,
+       "agi": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 141.8
+     },
+     "alt": {
+      "name": "Tidescale Vest",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 90,
+       "sta": 3,
+       "agi": 2
+      },
+      "w": null,
+      "score": 35.5
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Bonechill Cord",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 100,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 99
+     },
+     "alt": {
+      "name": "Direfang Waistband",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 95,
+       "agi": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 88.3
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Korgath's Chainwraps",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 125,
+       "sta": 12
+      },
+      "w": null,
+      "score": 42.8
+     },
+     "alt": {
+      "name": "Ysolei's Pearl Greaves",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 130,
+       "sta": 6,
+       "spi": 3
+      },
+      "w": null,
+      "score": 31.5
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Sanctum Prowler's Grips",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 104,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 99.6
+     },
+     "alt": {
+      "name": "Direfang Grips",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 110,
+       "agi": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 90.5
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Cragmaw Prowlboots",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 58,
+       "agi": 5,
+       "sta": 3
+      },
+      "w": null,
+      "score": 54.7
+     },
+     "alt": {
+      "name": "Selthe's Sea-Striders",
+      "q": "rare",
+      "set": null,
+      "stats": {
+       "armor": 75,
+       "agi": 4,
+       "sta": 3
+      },
+      "w": null,
+      "score": 49.3
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 66
+     },
+     "alt": {
+      "name": "Swiftfang Talisman",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 6,
+       "agi": 6
+      },
+      "w": null,
+      "score": 60
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Sutil's Gambit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 22
+     }
+    }
+   }
+  }
+ },
+ "priest": {
+  "fr": "Prêtre",
+  "roles": {
+   "heal": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 283
+     },
+     "alt": {
+      "name": "Lunar Tide Greatstaff",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 30,
+       "max": 50,
+       "speed": 3
+      },
+      "score": 191.3
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Soulrend Diadem",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 76,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 147
+     },
+     "alt": {
+      "name": "Wraithfire Cowl",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 105,
+       "int": 11,
+       "sta": 6
+      },
+      "w": null,
+      "score": 126.3
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Sunken Court Mantle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 56,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 128
+     },
+     "alt": {
+      "name": "Mournweave Soulspire Mantle",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 70,
+       "int": 9,
+       "spi": 5
+      },
+      "w": null,
+      "score": 119.5
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Shroud of the Gravewyrm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 90,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 178.5
+     },
+     "alt": {
+      "name": "Mournweave Starshroud",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 92,
+       "int": 11,
+       "spi": 7
+      },
+      "w": null,
+      "score": 153
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Wraithfire Cord",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 50,
+       "int": 8,
+       "spi": 5
+      },
+      "w": null,
+      "score": 106.5
+     },
+     "alt": {
+      "name": "Sash of the Sunken Court",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 48,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 96
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Mournweave Legwraps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 86,
+       "int": 13,
+       "spi": 7
+      },
+      "w": null,
+      "score": 167.5
+     },
+     "alt": {
+      "name": "Lunar Choir Leggings",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 72,
+       "int": 12,
+       "spi": 8
+      },
+      "w": null,
+      "score": 162
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Shadowpulse Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 52,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 121
+     },
+     "alt": {
+      "name": "Wraithfire Gloves",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 60,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 89
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Shadowpulse Slippers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 44,
+       "int": 8,
+       "spi": 6
+      },
+      "w": null,
+      "score": 111
+     },
+     "alt": {
+      "name": "Mournweave Soulsteps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 80,
+       "int": 8,
+       "spi": 4
+      },
+      "w": null,
+      "score": 108
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 78
+     },
+     "alt": {
+      "name": "Zyzz's Deathless Signet",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "spi": 6,
+       "int": 5
+      },
+      "w": null,
+      "score": 76
+     }
+    }
+   },
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 232
+     },
+     "alt": {
+      "name": "Lunar Tide Greatstaff",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 30,
+       "max": 50,
+       "speed": 3
+      },
+      "score": 164.3
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Wraithfire Cowl",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 105,
+       "int": 11,
+       "sta": 6
+      },
+      "w": null,
+      "score": 115.8
+     },
+     "alt": {
+      "name": "Soulrend Diadem",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 76,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 115.4
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Sunken Court Mantle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 56,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 101.4
+     },
+     "alt": {
+      "name": "Wraithfire Mantle",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 92,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 97.8
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Shroud of the Gravewyrm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 90,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 139.5
+     },
+     "alt": {
+      "name": "Mournweave Starshroud",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 92,
+       "int": 11,
+       "spi": 7
+      },
+      "w": null,
+      "score": 122.8
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Sash of the Sunken Court",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 48,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 91.2
+     },
+     "alt": {
+      "name": "Wraithfire Cord",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 50,
+       "int": 8,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86.5
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Mournweave Legwraps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 86,
+       "int": 13,
+       "spi": 7
+      },
+      "w": null,
+      "score": 137.9
+     },
+     "alt": {
+      "name": "Lunar Choir Leggings",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 72,
+       "int": 12,
+       "spi": 8
+      },
+      "w": null,
+      "score": 130.8
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Shadowpulse Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 52,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 97.8
+     },
+     "alt": {
+      "name": "Wraithfire Gloves",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 60,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 83
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Shadowpulse Slippers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 44,
+       "int": 8,
+       "spi": 6
+      },
+      "w": null,
+      "score": 88.6
+     },
+     "alt": {
+      "name": "Mournweave Soulsteps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 80,
+       "int": 8,
+       "spi": 4
+      },
+      "w": null,
+      "score": 88
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 71
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Niela's Coldlight Band",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 63
+     }
+    }
+   }
+  }
+ },
+ "mage": {
+  "fr": "Mage",
+  "roles": {
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 232
+     },
+     "alt": {
+      "name": "Lunar Tide Greatstaff",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 30,
+       "max": 50,
+       "speed": 3
+      },
+      "score": 164.3
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Wraithfire Cowl",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 105,
+       "int": 11,
+       "sta": 6
+      },
+      "w": null,
+      "score": 115.8
+     },
+     "alt": {
+      "name": "Soulrend Diadem",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 76,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 115.4
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Sunken Court Mantle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 56,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 101.4
+     },
+     "alt": {
+      "name": "Wraithfire Mantle",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 92,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 97.8
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Shroud of the Gravewyrm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 90,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 139.5
+     },
+     "alt": {
+      "name": "Mournweave Starshroud",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 92,
+       "int": 11,
+       "spi": 7
+      },
+      "w": null,
+      "score": 122.8
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Sash of the Sunken Court",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 48,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 91.2
+     },
+     "alt": {
+      "name": "Wraithfire Cord",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 50,
+       "int": 8,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86.5
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Mournweave Legwraps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 86,
+       "int": 13,
+       "spi": 7
+      },
+      "w": null,
+      "score": 137.9
+     },
+     "alt": {
+      "name": "Lunar Choir Leggings",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 72,
+       "int": 12,
+       "spi": 8
+      },
+      "w": null,
+      "score": 130.8
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Shadowpulse Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 52,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 97.8
+     },
+     "alt": {
+      "name": "Wraithfire Gloves",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 60,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 83
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Shadowpulse Slippers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 44,
+       "int": 8,
+       "spi": 6
+      },
+      "w": null,
+      "score": 88.6
+     },
+     "alt": {
+      "name": "Mournweave Soulsteps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 80,
+       "int": 8,
+       "spi": 4
+      },
+      "w": null,
+      "score": 88
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 71
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Niela's Coldlight Band",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 63
+     }
+    }
+   }
+  }
+ },
+ "warlock": {
+  "fr": "Démoniste",
+  "roles": {
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Heartwood of the Deathless Crown",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "spi": 17,
+       "sta": 13,
+       "int": 14
+      },
+      "w": {
+       "min": 42,
+       "max": 68,
+       "speed": 3.2
+      },
+      "score": 232
+     },
+     "alt": {
+      "name": "Lunar Tide Greatstaff",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 13,
+       "spi": 9
+      },
+      "w": {
+       "min": 30,
+       "max": 50,
+       "speed": 3
+      },
+      "score": 164.3
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Wraithfire Cowl",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 105,
+       "int": 11,
+       "sta": 6
+      },
+      "w": null,
+      "score": 115.8
+     },
+     "alt": {
+      "name": "Soulrend Diadem",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 76,
+       "int": 10,
+       "spi": 8
+      },
+      "w": null,
+      "score": 115.4
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Sunken Court Mantle",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 56,
+       "int": 9,
+       "spi": 7
+      },
+      "w": null,
+      "score": 101.4
+     },
+     "alt": {
+      "name": "Wraithfire Mantle",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 92,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 97.8
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Shroud of the Gravewyrm",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 90,
+       "int": 12,
+       "spi": 10
+      },
+      "w": null,
+      "score": 139.5
+     },
+     "alt": {
+      "name": "Mournweave Starshroud",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 92,
+       "int": 11,
+       "spi": 7
+      },
+      "w": null,
+      "score": 122.8
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Sash of the Sunken Court",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 48,
+       "int": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 91.2
+     },
+     "alt": {
+      "name": "Wraithfire Cord",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 50,
+       "int": 8,
+       "spi": 5
+      },
+      "w": null,
+      "score": 86.5
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Mournweave Legwraps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 86,
+       "int": 13,
+       "spi": 7
+      },
+      "w": null,
+      "score": 137.9
+     },
+     "alt": {
+      "name": "Lunar Choir Leggings",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 72,
+       "int": 12,
+       "spi": 8
+      },
+      "w": null,
+      "score": 130.8
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Shadowpulse Handwraps",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 52,
+       "int": 9,
+       "spi": 6
+      },
+      "w": null,
+      "score": 97.8
+     },
+     "alt": {
+      "name": "Wraithfire Gloves",
+      "q": "epic",
+      "set": "Wraithfire Regalia",
+      "stats": {
+       "armor": 60,
+       "int": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 83
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Shadowpulse Slippers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 44,
+       "int": 8,
+       "spi": 6
+      },
+      "w": null,
+      "score": 88.6
+     },
+     "alt": {
+      "name": "Mournweave Soulsteps",
+      "q": "epic",
+      "set": "Mournweave Raiment",
+      "stats": {
+       "armor": 80,
+       "int": 8,
+       "spi": 4
+      },
+      "w": null,
+      "score": 88
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Zense Meridian",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "spi": 5
+      },
+      "w": null,
+      "score": 71
+     },
+     "alt": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 10
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Niela's Coldlight Band",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "The Architect's Cornerstone",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "int": 6,
+       "spi": 5
+      },
+      "w": null,
+      "score": 63
+     }
+    }
+   }
+  }
+ },
+ "rogue": {
+  "fr": "Voleur",
+  "roles": {
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Thronebane, Last Oath of Thornpeak",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "str": 15,
+       "agi": 15,
+       "sta": 14
+      },
+      "w": {
+       "min": 46,
+       "max": 74,
+       "speed": 2.8
+      },
+      "score": 231.6
+     },
+     "alt": {
+      "name": "Mistcaller's Fang",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 13,
+       "sta": 9
+      },
+      "w": {
+       "min": 24,
+       "max": 40,
+       "speed": 1.8
+      },
+      "score": 166.4
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Direfang Crown",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 190,
+       "agi": 10,
+       "sta": 7
+      },
+      "w": null,
+      "score": 122.5
+     },
+     "alt": {
+      "name": "Tideguard Faceguard",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 168,
+       "agi": 10,
+       "sta": 8
+      },
+      "w": null,
+      "score": 121.2
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Tidebound Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 148,
+       "agi": 10,
+       "sta": 6
+      },
+      "w": null,
+      "score": 114.2
+     },
+     "alt": {
+      "name": "Direfang Shoulderguards",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 165,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 108.8
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Scourgehide Carapace",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 172,
+       "agi": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 141.8
+     },
+     "alt": {
+      "name": "Nightfang Harness",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 170,
+       "agi": 12,
+       "sta": 6
+      },
+      "w": null,
+      "score": 133.5
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Bonechill Cord",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 100,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 99
+     },
+     "alt": {
+      "name": "Direfang Waistband",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 95,
+       "agi": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 88.3
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Tidewoven Trousers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 132,
+       "agi": 12,
+       "sta": 8
+      },
+      "w": null,
+      "score": 131.8
+     },
+     "alt": {
+      "name": "Nightfang Legguards",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 155,
+       "agi": 10,
+       "sta": 6
+      },
+      "w": null,
+      "score": 115.3
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Sanctum Prowler's Grips",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 104,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 99.6
+     },
+     "alt": {
+      "name": "Nightfang Talongrips",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 110,
+       "agi": 9,
+       "sta": 4
+      },
+      "w": null,
+      "score": 96.5
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Bonechill Striders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 96,
+       "agi": 9,
+       "sta": 5
+      },
+      "w": null,
+      "score": 96.4
+     },
+     "alt": {
+      "name": "Nightfang Treads",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 145,
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 87.8
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 66
+     },
+     "alt": {
+      "name": "Swiftfang Talisman",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 6,
+       "agi": 6
+      },
+      "w": null,
+      "score": 60
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Sutil's Gambit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 22
+     }
+    }
+   }
+  }
+ },
+ "hunter": {
+  "fr": "Chasseur",
+  "roles": {
+   "dps": {
+    "mainhand": {
+     "best": {
+      "name": "Thronebane, Last Oath of Thornpeak",
+      "q": "legendary",
+      "set": null,
+      "stats": {
+       "str": 15,
+       "agi": 15,
+       "sta": 14
+      },
+      "w": {
+       "min": 46,
+       "max": 74,
+       "speed": 2.8
+      },
+      "score": 231.6
+     },
+     "alt": {
+      "name": "Mistcaller's Fang",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 13,
+       "sta": 9
+      },
+      "w": {
+       "min": 24,
+       "max": 40,
+       "speed": 1.8
+      },
+      "score": 166.4
+     }
+    },
+    "helmet": {
+     "best": {
+      "name": "Direfang Crown",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 190,
+       "agi": 10,
+       "sta": 7
+      },
+      "w": null,
+      "score": 122.5
+     },
+     "alt": {
+      "name": "Tideguard Faceguard",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 168,
+       "agi": 10,
+       "sta": 8
+      },
+      "w": null,
+      "score": 121.2
+     }
+    },
+    "shoulder": {
+     "best": {
+      "name": "Tidebound Spaulders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 148,
+       "agi": 10,
+       "sta": 6
+      },
+      "w": null,
+      "score": 114.2
+     },
+     "alt": {
+      "name": "Direfang Shoulderguards",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 165,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 108.8
+     }
+    },
+    "chest": {
+     "best": {
+      "name": "Scourgehide Carapace",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 172,
+       "agi": 12,
+       "sta": 10
+      },
+      "w": null,
+      "score": 141.8
+     },
+     "alt": {
+      "name": "Nightfang Harness",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 170,
+       "agi": 12,
+       "sta": 6
+      },
+      "w": null,
+      "score": 133.5
+     }
+    },
+    "waist": {
+     "best": {
+      "name": "Bonechill Cord",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 100,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 99
+     },
+     "alt": {
+      "name": "Direfang Waistband",
+      "q": "epic",
+      "set": "Direfang Pelt",
+      "stats": {
+       "armor": 95,
+       "agi": 8,
+       "sta": 5
+      },
+      "w": null,
+      "score": 88.3
+     }
+    },
+    "legs": {
+     "best": {
+      "name": "Tidewoven Trousers",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 132,
+       "agi": 12,
+       "sta": 8
+      },
+      "w": null,
+      "score": 131.8
+     },
+     "alt": {
+      "name": "Nightfang Legguards",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 155,
+       "agi": 10,
+       "sta": 6
+      },
+      "w": null,
+      "score": 115.3
+     }
+    },
+    "gloves": {
+     "best": {
+      "name": "Sanctum Prowler's Grips",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 104,
+       "agi": 9,
+       "sta": 6
+      },
+      "w": null,
+      "score": 99.6
+     },
+     "alt": {
+      "name": "Nightfang Talongrips",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 110,
+       "agi": 9,
+       "sta": 4
+      },
+      "w": null,
+      "score": 96.5
+     }
+    },
+    "feet": {
+     "best": {
+      "name": "Bonechill Striders",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "armor": 96,
+       "agi": 9,
+       "sta": 5
+      },
+      "w": null,
+      "score": 96.4
+     },
+     "alt": {
+      "name": "Nightfang Treads",
+      "q": "epic",
+      "set": "Nightfang Vestments",
+      "stats": {
+       "armor": 145,
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 87.8
+     }
+    },
+    "neck": {
+     "best": {
+      "name": "Yumi's Keepsake Locket",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 5
+      },
+      "w": null,
+      "score": 66
+     },
+     "alt": {
+      "name": "Swiftfang Talisman",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 6,
+       "agi": 6
+      },
+      "w": null,
+      "score": 60
+     }
+    },
+    "ring": {
+     "best": {
+      "name": "Sutil's Gambit",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "agi": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 64
+     },
+     "alt": {
+      "name": "Seal of the Nine Oaths",
+      "q": "epic",
+      "set": null,
+      "stats": {
+       "str": 7,
+       "sta": 4
+      },
+      "w": null,
+      "score": 22
+     }
+    }
+   }
+  }
+ }
+};
+
+const CLS_COLOR = {
+  warrior:"#c79c6e", paladin:"#f58cba", shaman:"#2f8bff", druid:"#ff7d0a",
+  priest:"#eef1f5", mage:"#69ccf0", warlock:"#9482c9", rogue:"#fff569", hunter:"#abd473"
+};
+const ROLE_META = { tank:{fr:"Tank",ico:"🛡️"}, heal:{fr:"Heal",ico:"✚"}, dps:{fr:"DPS",ico:"⚔️"} };
+const SLOT_FR = { mainhand:"Arme", helmet:"Tête", shoulder:"Épaules", chest:"Torse", waist:"Ceinture", legs:"Jambes", gloves:"Mains", feet:"Pieds", neck:"Cou", ring:"Anneau" };
+const SLOT_ORDER = ["mainhand","helmet","shoulder","chest","waist","legs","gloves","feet","neck","ring"];
+const STAT_FR = { str:"For", agi:"Agi", int:"Int", spi:"Esp", sta:"End", armor:"Armure" };
+const NOTES = {
+  tank: "Priorité <b>Endurance + Armure</b> — encaisser et tenir l'aggro.",
+  heal: "Priorité <b>Intelligence + Esprit</b> — mana et régénération.",
+  dps:  "Priorité à la <b>stat d'attaque de ta classe</b> (Force, Agilité ou Intelligence)."
+};
+
+let curCls = Object.keys(BIS)[0];
+let curRole = null;
+
+function fmtStats(it) {
+  const parts = Object.entries(it.stats).map(([k,v]) => "+" + v + " " + (STAT_FR[k]||k));
+  if (it.w) parts.unshift(((it.w.min+it.w.max)/2/it.w.speed).toFixed(1) + " DPS");
+  return parts.join(" · ");
+}
+
+function render() {
+  const cls = BIS[curCls];
+  const roles = Object.keys(cls.roles);
+  if (!curRole || !roles.includes(curRole)) curRole = roles[0];
+
+  // onglets classes
+  document.getElementById("clsTabs").innerHTML = Object.entries(BIS).map(([id,c]) => {
+    const on = id===curCls;
+    const col = CLS_COLOR[id];
+    return `<button class="cls-btn${on?" on":""}" data-cls="${id}" role="tab" aria-selected="${on}"
+      style="${on ? "background:"+col : "color:"+col}">${c.fr}</button>`;
+  }).join("");
+
+  // onglets rôles
+  document.getElementById("roleTabs").innerHTML = roles.map(r => {
+    const on = r===curRole;
+    return `<button class="role-btn r-${r}${on?" on":""}" data-role="${r}" role="tab" aria-selected="${on}">${ROLE_META[r].ico} ${ROLE_META[r].fr}</button>`;
+  }).join("");
+
+  document.getElementById("note").innerHTML = NOTES[curRole];
+
+  // liste
+  const picks = cls.roles[curRole];
+  document.getElementById("bisList").innerHTML = SLOT_ORDER.filter(s => picks[s]).map(s => {
+    const p = picks[s];
+    const b = p.best;
+    let html = `<div class="slot-row">
+      <div class="slot-name">${SLOT_FR[s]}</div>
+      <div class="item q-${b.q}">
+        <div class="nm">${b.name}</div>
+        <div class="meta">${fmtStats(b)}${b.set ? ` · <span class="set">Set : ${b.set}</span>` : ""}</div>`;
+    if (p.alt) html += `<div class="alt q-${p.alt.q}">Alt. : <b>${p.alt.name}</b> — ${fmtStats(p.alt)}</div>`;
+    html += `</div></div>`;
+    return html;
+  }).join("");
+
+  document.querySelectorAll("[data-cls]").forEach(b => b.addEventListener("click", () => { curCls = b.dataset.cls; render(); }));
+  document.querySelectorAll("[data-role]").forEach(b => b.addEventListener("click", () => { curRole = b.dataset.role; render(); }));
+}
+render();
+</script>
+</body>
+</html>
