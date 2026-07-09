@@ -29,10 +29,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Assembler le site (pages HTML uniquement)
+      - name: Assembler le site
         run: |
           mkdir -p _site
-          cp index.html patch-notes.html _site/
+          cp index.html patch-notes.html admin.html events.json _site/
 
       - name: Configurer Pages
         uses: actions/configure-pages@v5
