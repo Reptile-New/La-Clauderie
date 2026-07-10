@@ -47,6 +47,11 @@
   .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
   .back { margin-left: auto; color: var(--dim); text-decoration: none; font-size: 0.88rem; }
   .back:hover { color: var(--gold-bright); }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
 
   header.page { padding: clamp(36px, 6vw, 60px) 0 clamp(20px, 3vw, 30px); }
   .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 12px; }
@@ -128,7 +133,12 @@
 <div class="topbar">
   <div class="row">
     <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
-    <a href="index.html" class="back">← Accueil</a>
+    <nav class="topnav" aria-label="Navigation du site">
+      <a href="index.html">Accueil</a>
+      <a href="bis.html" class="cur">⚔️ BiS</a>
+      <a href="patch-notes.html">📜 Nouveautés</a>
+      <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
+    </nav>
   </div>
 </div>
 
