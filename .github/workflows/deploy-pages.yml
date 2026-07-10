@@ -32,7 +32,7 @@ jobs:
       - name: Assembler le site
         run: |
           mkdir -p _site
-          cp index.html patch-notes.html admin.html bis.html events.json achievements.json patch-notes.json _site/
+          cp index.html patch-notes.html admin.html bis.html events.json achievements.json members.json patch-notes.json _site/
           cp -r assets _site/assets
           cp -r notes _site/notes
 

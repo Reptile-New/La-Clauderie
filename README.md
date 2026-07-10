@@ -9,12 +9,14 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Accueil : calendrier des events, Discord, recrutement, lien nouveautés |
-| `admin.html` | Espace officiers : gérer le calendrier (ajout/suppression d'events) |
+| `index.html` | Accueil : Discord, guides, puis 3 onglets — Calendrier (à venir + passés), Membres, Faits d'armes |
+| `admin.html` | Espace officiers : gérer le calendrier, les membres et les faits d'armes |
 | `patch-notes.html` | Historique de **toutes** les mises à jour du jeu, la plus récente en premier |
 | `notes/vX.Y.Z.html` | Les nouveautés détaillées d'une version (une page par mise à jour) |
 | `patch-notes.json` | La liste des mises à jour (alimente l'historique **et** la carte de l'accueil) |
 | `events.json` | Les données du calendrier (modifiées via l'espace officiers) |
+| `members.json` | Les membres de la guilde : pseudo, rôle, classe (modifiés via l'espace officiers) |
+| `achievements.json` | Les faits d'armes, avec les membres participants (modifiés via l'espace officiers) |
 
 ## Ajouter les nouveautés d'une mise à jour
 
@@ -30,10 +32,15 @@ aux versions précédentes** — l'historique se construit au fil du temps :
 C'est tout : la page « Nouveautés du jeu » et la carte de l'accueil (qui affiche
 toujours la dernière version) se mettent à jour automatiquement.
 
-## Gérer le calendrier (pour les officiers)
+## Gérer le calendrier, les membres et les faits d'armes (pour les officiers)
 
 Tout se fait depuis **`admin.html`** (lien « Espace officiers » en bas du site),
-avec un formulaire simple — **aucun code à toucher**.
+avec des formulaires simples — **aucun code à toucher** : ajouter/modifier les
+events du calendrier, la liste des membres (pseudo, rôle, classe), et les faits
+d'armes en cochant les membres qui y ont participé.
+
+> Les events passés ne disparaissent plus : ils restent visibles sur l'accueil
+> dans la section « Événements passés », pour montrer l'activité de la guilde.
 
 ### Créer sa clé d'accès (une fois, ~2 min)
 
@@ -46,12 +53,10 @@ enregistrer les changements :
 3. **Permissions** → *Repository* → **Contents** → **Read and write**.
 4. Générer, copier le jeton, le coller dans l'espace officiers.
 
-La clé est mémorisée sur l'appareil (option « rester connecté »). Chaque ajout ou
-suppression est enregistré dans `events.json` et **le site se met à jour tout seul
-en ~1 min**.
-
-> Les events passés disparaissent automatiquement de l'accueil (seuls les events
-> à venir sont affichés).
+La clé est mémorisée sur l'appareil (option « rester connecté »). Chaque
+modification est enregistrée dans le fichier JSON correspondant (`events.json`,
+`members.json` ou `achievements.json`) et **le site se met à jour tout seul en
+~1 min**.
 
 ## Mise en ligne (GitHub Pages)
 

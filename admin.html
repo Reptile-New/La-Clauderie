@@ -71,6 +71,11 @@
   .t-pvp { color: var(--dps); border: 1px solid color-mix(in srgb, var(--dps) 45%, transparent); }
   .t-social { color: var(--q-rare); border: 1px solid color-mix(in srgb, var(--q-rare) 45%, transparent); }
 
+  .chkgrid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chk { display: inline-flex; align-items: center; gap: 7px; background: var(--bg-input); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer; font-size: 0.88rem; color: var(--dim); user-select: none; }
+  .chk input { width: auto; margin: 0; accent-color: var(--gold); }
+  .chk:has(input:checked) { border-color: var(--gold); color: var(--gold-bright); background: color-mix(in srgb, var(--gold) 10%, var(--bg-input)); }
+
   .msg { padding: 11px 14px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 16px; display: none; }
   .msg.show { display: block; }
   .msg.ok { background: color-mix(in srgb, var(--heal) 14%, transparent); border: 1px solid color-mix(in srgb, var(--heal) 45%, transparent); color: var(--heal); }
@@ -95,7 +100,7 @@
   <!-- ÉCRAN DE CONNEXION -->
   <div id="login">
     <h1>Connexion officier</h1>
-    <p class="sub">Cet espace permet de gérer le calendrier et les faits d'armes de la guilde. Il faut une clé d'accès personnelle (jeton GitHub).</p>
+    <p class="sub">Cet espace permet de gérer le calendrier, les membres et les faits d'armes de la guilde. Il faut une clé d'accès personnelle (jeton GitHub).</p>
     <div id="loginMsg" class="msg err"></div>
     <div class="card">
       <label for="token">Ta clé d'accès (jeton GitHub)</label>
@@ -163,6 +168,36 @@
     </div>
 
     <div class="card">
+      <h2 id="mbFormTitle">Ajouter un membre</h2>
+      <p class="help" style="margin-top:-8px">La liste des membres s'affiche sur la page d'accueil (onglet Membres), et sert à marquer qui a participé à chaque fait d'armes.</p>
+      <div class="grid2">
+        <div>
+          <label for="mPseudo">Pseudo</label>
+          <input id="mPseudo" type="text" placeholder="Reptile">
+        </div>
+        <div>
+          <label for="mRole">Rôle</label>
+          <select id="mRole">
+            <option>Membre</option>
+            <option>Officier</option>
+            <option>Maître de guilde</option>
+          </select>
+        </div>
+      </div>
+      <label for="mClasse">Classe <span style="font-weight:400;color:var(--faint)">(facultatif)</span></label>
+      <input id="mClasse" type="text" placeholder="Chaman, Chasseur, Mage…">
+      <div class="row">
+        <button class="btn btn-primary" id="mbAddBtn">+ Ajouter le membre</button>
+        <button class="btn btn-ghost hidden" id="mbCancelEditBtn">Annuler la modification</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Membres de la guilde</h2>
+      <div id="mbList"><p class="sub">Chargement…</p></div>
+    </div>
+
+    <div class="card">
       <h2 id="faFormTitle">Ajouter un fait d'armes</h2>
       <p class="help" style="margin-top:-8px">Les faits d'armes s'affichent sur la page d'accueil, du plus récent au plus ancien. Exemple : « Nythraxis, Fléau de Thornpeak — vaincu à 5 joueurs en mode normal ».</p>
       <div class="grid2">
@@ -184,6 +219,8 @@
       <input id="gTitre" type="text" placeholder="Nythraxis, Fléau de Thornpeak">
       <label for="gDesc">Détail</label>
       <textarea id="gDesc" placeholder="Vaincu à 5 joueurs en mode normal."></textarea>
+      <label>Membres qui y ont participé</label>
+      <div id="gMembres" class="chkgrid"><p class="sub" style="margin:0">Ajoute d'abord des membres pour pouvoir les cocher ici.</p></div>
       <div class="row">
         <button class="btn btn-primary" id="faAddBtn">+ Ajouter aux faits d'armes</button>
         <button class="btn btn-ghost hidden" id="faCancelEditBtn">Annuler la modification</button>
@@ -205,12 +242,14 @@
   const apiFor = path => `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
 
   let token = null;
-  // Deux fichiers gérés avec le même mécanisme : calendrier et faits d'armes.
+  // Trois fichiers gérés avec le même mécanisme : calendrier, membres et faits d'armes.
   const FILES = {
-    events: { path: "events.json", key: "events", sha: null, list: [] },
-    faits:  { path: "achievements.json", key: "achievements", sha: null, list: [] },
+    events:  { path: "events.json", key: "events", sha: null, list: [] },
+    membres: { path: "members.json", key: "members", sha: null, list: [] },
+    faits:   { path: "achievements.json", key: "achievements", sha: null, list: [] },
   };
   const events = () => FILES.events.list;
+  const membres = () => FILES.membres.list;
   const faits = () => FILES.faits.list;
 
   const $ = id => document.getElementById(id);
@@ -250,6 +289,7 @@
 
   async function login(tok) {
     await loadFile(FILES.events, tok);
+    await loadFile(FILES.membres, tok);
     await loadFile(FILES.faits, tok);
     return true;
   }
@@ -285,7 +325,28 @@
 
   // Index de l'élément en cours de modification (null = mode ajout)
   let evEditIndex = null;
+  let mbEditIndex = null;
   let faEditIndex = null;
+
+  const ROLE_CLASS = { "Maître de guilde": "t-raid", "Officier": "t-hero", "Membre": "t-social" };
+  const ROLE_RANK = { "Maître de guilde": 0, "Officier": 1, "Membre": 2 };
+
+  // Cases à cocher « membres du fait d'armes » (conserve la sélection en cours)
+  function renderMemberChecks(selected) {
+    const box = $("gMembres");
+    if (!membres().length) {
+      box.innerHTML = '<p class="sub" style="margin:0">Ajoute d\'abord des membres pour pouvoir les cocher ici.</p>';
+      return;
+    }
+    const sel = new Set(selected || []);
+    box.innerHTML = [...membres()]
+      .sort((a, b) => (a.pseudo || "").localeCompare(b.pseudo || "", "fr"))
+      .map(m => `<label class="chk"><input type="checkbox" value="${escapeHtml(m.pseudo || "")}"${sel.has(m.pseudo) ? " checked" : ""}> ${escapeHtml(m.pseudo || "")}</label>`)
+      .join("");
+  }
+  function checkedMembers() {
+    return [...document.querySelectorAll("#gMembres input:checked")].map(c => c.value);
+  }
 
   function render() {
     // --- calendrier ---
@@ -308,6 +369,30 @@
       box.querySelectorAll("button[data-i]").forEach(b => b.addEventListener("click", () => removeEvent(parseInt(b.dataset.i, 10))));
       box.querySelectorAll("button[data-edit]").forEach(b => b.addEventListener("click", () => startEditEvent(parseInt(b.dataset.edit, 10))));
     }
+    // --- membres ---
+    const mbox = $("mbList");
+    const msorted = [...membres()].sort((a, b) =>
+      (ROLE_RANK[a.role] ?? 9) - (ROLE_RANK[b.role] ?? 9) ||
+      (a.pseudo || "").localeCompare(b.pseudo || "", "fr"));
+    if (!msorted.length) { mbox.innerHTML = '<p class="sub">Aucun membre pour l\'instant. Ajoute le premier ci-dessus !</p>'; }
+    else {
+      mbox.innerHTML = msorted.map(m => {
+        const cls = ROLE_CLASS[m.role] || "t-social";
+        const i = membres().indexOf(m);
+        return `<div class="ev">
+          <span class="d">${escapeHtml(m.classe || "")}</span>
+          <span><span class="t">${escapeHtml(m.pseudo || "")}</span><span class="type ${cls}">${m.role || ""}</span></span>
+          <span class="row" style="flex-wrap:nowrap">
+            <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-mbedit="${i}">Modifier</button>
+            <button class="btn btn-danger" data-mbi="${i}">Supprimer</button>
+          </span>
+        </div>`;
+      }).join("");
+      mbox.querySelectorAll("button[data-mbi]").forEach(b => b.addEventListener("click", () => removeMember(parseInt(b.dataset.mbi, 10))));
+      mbox.querySelectorAll("button[data-mbedit]").forEach(b => b.addEventListener("click", () => startEditMember(parseInt(b.dataset.mbedit, 10))));
+    }
+    // les cases à cocher du formulaire fait d'armes suivent la liste des membres
+    renderMemberChecks(checkedMembers());
     // --- faits d'armes ---
     const fbox = $("faList");
     const fsorted = [...faits()].sort((a, b) => b.date.localeCompare(a.date));
@@ -316,9 +401,11 @@
       fbox.innerHTML = fsorted.map(g => {
         const cls = FA_TYPE_CLASS[g.type] || "t-social";
         const i = faits().indexOf(g);
+        const who = (g.membres || []).length
+          ? `<br><span class="meta">👥 ${g.membres.map(escapeHtml).join(", ")}</span>` : "";
         return `<div class="ev">
           <span class="d">${humanDate(g.date)}</span>
-          <span><span class="t">${escapeHtml(g.titre || "")}</span><span class="type ${cls}">${g.type || ""}</span><br><span class="meta">${escapeHtml(g.desc || "")}</span></span>
+          <span><span class="t">${escapeHtml(g.titre || "")}</span><span class="type ${cls}">${g.type || ""}</span><br><span class="meta">${escapeHtml(g.desc || "")}</span>${who}</span>
           <span class="row" style="flex-wrap:nowrap">
             <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-faedit="${i}">Modifier</button>
             <button class="btn btn-danger" data-fai="${i}">Supprimer</button>
@@ -404,6 +491,88 @@
     }
   }
 
+  // ---- Membres : ajout / modification / suppression ----
+  function setMbFormMode() {
+    const editing = mbEditIndex !== null;
+    $("mbFormTitle").textContent = editing ? "Modifier le membre" : "Ajouter un membre";
+    $("mbAddBtn").textContent = editing ? "Enregistrer les modifications" : "+ Ajouter le membre";
+    $("mbCancelEditBtn").classList.toggle("hidden", !editing);
+  }
+
+  function startEditMember(i) {
+    const m = membres()[i];
+    if (!m) return;
+    mbEditIndex = i;
+    $("mPseudo").value = m.pseudo || "";
+    $("mRole").value = m.role || "Membre";
+    $("mClasse").value = m.classe || "";
+    setMbFormMode();
+    $("mbFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function cancelEditMember() {
+    mbEditIndex = null;
+    $("mPseudo").value = ""; $("mClasse").value = "";
+    $("mRole").value = "Membre";
+    setMbFormMode();
+  }
+
+  async function submitMember() {
+    clearMsg($("dashMsg"));
+    const pseudo = $("mPseudo").value.trim();
+    const role = $("mRole").value;
+    const classe = $("mClasse").value.trim();
+    if (!pseudo) { msg($("dashMsg"), "Il faut au moins un pseudo.", "err"); return; }
+    const editing = mbEditIndex !== null;
+    const dup = membres().findIndex((m, i) =>
+      (m.pseudo || "").toLowerCase() === pseudo.toLowerCase() && (!editing || i !== mbEditIndex));
+    if (dup !== -1) { msg($("dashMsg"), "« " + pseudo + " » est déjà dans la liste.", "err"); return; }
+    const backup = editing ? membres()[mbEditIndex] : null;
+    const oldPseudo = backup ? backup.pseudo : null;
+    $("mbAddBtn").disabled = true; $("mbAddBtn").textContent = "Enregistrement…";
+    if (editing) membres()[mbEditIndex] = { pseudo, role, classe };
+    else membres().push({ pseudo, role, classe });
+    try {
+      await save(FILES.membres, "membres : " + (editing ? "modification" : "ajout") + " « " + pseudo + " »");
+      // si le pseudo a changé, on le répercute dans les faits d'armes qui le citent
+      if (editing && oldPseudo && oldPseudo !== pseudo &&
+          faits().some(g => (g.membres || []).includes(oldPseudo))) {
+        faits().forEach(g => {
+          if (g.membres) g.membres = g.membres.map(p => p === oldPseudo ? pseudo : p);
+        });
+        await save(FILES.faits, "faits d'armes : « " + oldPseudo + " » renommé en « " + pseudo + " »");
+      }
+      msg($("dashMsg"), (editing ? "Membre modifié" : "Membre ajouté") + " ✓ Le site se met à jour dans ~1 min.", "ok");
+      cancelEditMember();
+      render();
+    } catch (err) {
+      if (editing) membres()[mbEditIndex] = backup;
+      else membres().pop();
+      msg($("dashMsg"), err.message, "err");
+    } finally {
+      $("mbAddBtn").disabled = false;
+      setMbFormMode();
+    }
+  }
+
+  async function removeMember(i) {
+    if (i < 0 || i >= membres().length) return;
+    const removed = membres()[i];
+    if (!confirm("Retirer « " + removed.pseudo + " » de la liste des membres ?")) return;
+    clearMsg($("dashMsg"));
+    if (mbEditIndex !== null) cancelEditMember();
+    membres().splice(i, 1);
+    try {
+      await save(FILES.membres, "membres : retrait « " + removed.pseudo + " »");
+      msg($("dashMsg"), "Membre retiré ✓ Le site se met à jour dans ~1 min. (Son nom reste sur les faits d'armes déjà enregistrés.)", "ok");
+      render();
+    } catch (err) {
+      membres().splice(i, 0, removed);
+      msg($("dashMsg"), err.message, "err");
+      render();
+    }
+  }
+
   // ---- Faits d'armes : ajout / modification / suppression ----
   const FA_TYPE_CLASS = { "Boss": "t-raid", "Donjon": "t-hero", "PvP": "t-pvp", "Autre": "t-social" };
 
@@ -422,6 +591,7 @@
     $("gType").value = g.type || "Autre";
     $("gTitre").value = g.titre || "";
     $("gDesc").value = g.desc || "";
+    renderMemberChecks(g.membres || []);
     setFaFormMode();
     $("faFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -430,6 +600,7 @@
     faEditIndex = null;
     $("gTitre").value = ""; $("gDesc").value = "";
     $("gDate").value = new Date().toISOString().slice(0, 10);
+    renderMemberChecks([]);
     setFaFormMode();
   }
 
@@ -440,11 +611,12 @@
     const titre = $("gTitre").value.trim();
     const desc = $("gDesc").value.trim();
     if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre.", "err"); return; }
+    const membresFait = checkedMembers();
     const editing = faEditIndex !== null;
     const backup = editing ? faits()[faEditIndex] : null;
     $("faAddBtn").disabled = true; $("faAddBtn").textContent = "Enregistrement…";
-    if (editing) faits()[faEditIndex] = { date, type, titre, desc };
-    else faits().push({ date, type, titre, desc });
+    if (editing) faits()[faEditIndex] = { date, type, titre, desc, membres: membresFait };
+    else faits().push({ date, type, titre, desc, membres: membresFait });
     try {
       await save(FILES.faits, "faits d'armes : " + (editing ? "modification" : "ajout") + " « " + titre + " »");
       msg($("dashMsg"), (editing ? "Fait d'armes modifié" : "Fait d'armes ajouté") + " ✓ Le site se met à jour dans ~1 min.", "ok");
@@ -484,6 +656,7 @@
     $("fDate").value = new Date().toISOString().slice(0, 10);
     $("gDate").value = new Date().toISOString().slice(0, 10);
     setEvFormMode();
+    setMbFormMode();
     setFaFormMode();
     render();
   }
@@ -508,6 +681,8 @@
   $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("loginBtn").click(); });
   $("addBtn").addEventListener("click", submitEvent);
   $("cancelEditBtn").addEventListener("click", cancelEditEvent);
+  $("mbAddBtn").addEventListener("click", submitMember);
+  $("mbCancelEditBtn").addEventListener("click", cancelEditMember);
   $("faAddBtn").addEventListener("click", submitFait);
   $("faCancelEditBtn").addEventListener("click", cancelEditFait);
   $("logoutBtn").addEventListener("click", () => {

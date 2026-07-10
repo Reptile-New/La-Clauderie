@@ -22,6 +22,7 @@
     --q-legendary: #ff8000;
     --q-rare: #2f8bff;
     --dps: #e5544a;
+    --heal: #58c46a;
     --discord: #5865f2;
     --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
@@ -45,7 +46,7 @@
   .wrap { max-width: 820px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 28px); }
 
   /* Hero */
-  .hero { text-align: center; padding: clamp(48px, 9vw, 84px) 0 clamp(30px, 5vw, 46px); }
+  .hero { text-align: center; padding: clamp(44px, 8vw, 72px) 0 clamp(26px, 4vw, 38px); }
   .crest { width: 78px; height: 88px; margin: 0 auto 22px; background: linear-gradient(165deg, #1c2130, #12151d); border: 2px solid var(--gold); clip-path: polygon(50% 0,100% 14%,100% 60%,50% 100%,0 60%,0 14%); display: grid; place-items: center; box-shadow: 0 0 36px rgba(200,160,75,0.25), inset 0 0 26px rgba(0,0,0,0.6); }
   .crest span { font-family: var(--font-display); font-weight: 700; font-size: 2.6rem; color: var(--gold-bright); }
   h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 8vw, 3.8rem); line-height: 1; margin: 0 0 14px; background: linear-gradient(180deg, #fbf3e0, var(--gold-bright) 60%, var(--gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
@@ -60,11 +61,39 @@
   .btn-discord svg { width: 20px; height: 20px; fill: currentColor; }
   .hero .sub { display: block; margin-top: 12px; font-size: 0.82rem; color: var(--faint); }
 
-  /* Sections */
-  section { padding: clamp(28px, 5vw, 44px) 0; border-top: 1px solid var(--line-soft); }
-  .sec-title { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
-  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 4vw, 2rem); margin: 0; }
-  .sec-title .count { font-family: var(--font-mono); font-size: 0.85rem; color: var(--faint); }
+  /* Cartes de navigation (les guides) */
+  .guides { padding: 0 0 clamp(26px, 4vw, 38px); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .navcard {
+    display: block; text-decoration: none;
+    background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 12px; padding: 20px 22px;
+    transition: border-color .15s, transform .15s, background .15s;
+  }
+  .navcard:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .navcard h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; display: flex; align-items: center; gap: 9px; }
+  .navcard p { color: var(--dim); font-size: 0.92rem; margin: 0 0 12px; }
+  .navcard .go { color: var(--gold-bright); font-size: 0.85rem; font-weight: 600; }
+  .navcard .go::after { content: " →"; }
+  @media (max-width: 560px) { .two { grid-template-columns: 1fr; } }
+
+  /* Onglets — la vie de la guilde */
+  .guild { border-top: 1px solid var(--line-soft); padding: clamp(24px, 4vw, 36px) 0 clamp(36px, 6vw, 56px); }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tab {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg-card); border: 1px solid var(--line-soft); color: var(--dim);
+    font-family: inherit; font-size: 0.95rem; font-weight: 600;
+    padding: 10px 18px; border-radius: 999px; cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .tab:hover { border-color: var(--gold); color: var(--text); }
+  .tab[aria-selected="true"] { background: color-mix(in srgb, var(--gold) 14%, var(--bg-card)); border-color: var(--gold); color: var(--gold-bright); }
+  .tab .n { font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); font-weight: 400; }
+  .tab[aria-selected="true"] .n { color: color-mix(in srgb, var(--gold-bright) 70%, var(--faint)); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.3rem, 3.4vw, 1.7rem); margin: 0 0 16px; }
+  .panel h2.later { margin-top: 30px; color: var(--dim); }
 
   /* Events */
   .events { display: grid; gap: 10px; }
@@ -76,13 +105,29 @@
   .event .info p { margin: 0; color: var(--dim); font-size: 0.88rem; }
   .event .when { text-align: right; }
   .event .when .h { font-family: var(--font-mono); font-size: 1rem; }
+  .event.past { opacity: 0.6; }
+  .event.past .date .d { color: var(--dim); }
   .type { display: inline-block; font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 5px; margin-bottom: 5px; }
   .t-raid { color: var(--q-legendary); border: 1px solid color-mix(in srgb, var(--q-legendary) 45%, transparent); }
   .t-hero { color: var(--q-epic); border: 1px solid color-mix(in srgb, var(--q-epic) 45%, transparent); }
   .t-pvp { color: var(--dps); border: 1px solid color-mix(in srgb, var(--dps) 45%, transparent); }
   .t-social { color: var(--q-rare); border: 1px solid color-mix(in srgb, var(--q-rare) 45%, transparent); }
+  .t-boss { color: var(--q-legendary); border: 1px solid color-mix(in srgb, var(--q-legendary) 45%, transparent); }
   .empty { color: var(--faint); text-align: center; padding: 30px; border: 1px dashed var(--line); border-radius: 11px; }
+  .empty a { color: var(--dim); }
   @media (max-width: 560px) { .event { grid-template-columns: 56px 1fr; } .event .when { grid-column: 2; text-align: left; margin-top: 2px; } }
+
+  /* Membres */
+  .role-group { margin: 0 0 22px; }
+  .role-group:last-child { margin-bottom: 0; }
+  .role-title { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--faint); margin: 0 0 10px; }
+  .members { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .member { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 12px 15px; }
+  .member .avatar { width: 38px; height: 38px; flex: none; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; background: linear-gradient(160deg, #1c2130, #12151d); border: 1px solid var(--line); color: var(--gold-bright); }
+  .member.r-gm .avatar { border-color: var(--q-legendary); color: var(--q-legendary); }
+  .member.r-off .avatar { border-color: var(--q-epic); color: var(--q-epic); }
+  .member .who b { display: block; font-size: 0.98rem; line-height: 1.25; }
+  .member .who span { font-size: 0.78rem; color: var(--faint); }
 
   /* Faits d'armes */
   .feats { display: grid; gap: 10px; }
@@ -95,23 +140,10 @@
   .feat .trophy { font-size: 1.6rem; text-align: center; filter: drop-shadow(0 0 8px rgba(200,160,75,0.35)); }
   .feat .info h3 { margin: 0 0 3px; font-size: 1.02rem; font-family: var(--font); font-weight: 600; }
   .feat .info p { margin: 0; color: var(--dim); font-size: 0.88rem; }
+  .feat .heroes { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .feat .heroes span { font-family: var(--font-mono); font-size: 0.72rem; color: var(--gold-bright); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent); border-radius: 999px; padding: 2px 9px; }
   .feat .when { text-align: right; font-family: var(--font-mono); font-size: 0.78rem; color: var(--faint); white-space: nowrap; }
-  .t-boss { color: var(--q-legendary); border: 1px solid color-mix(in srgb, var(--q-legendary) 45%, transparent); }
   @media (max-width: 560px) { .feat { grid-template-columns: 40px 1fr; } .feat .when { grid-column: 2; text-align: left; margin-top: 2px; } }
-
-  /* Cartes de navigation */
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .navcard {
-    display: block; text-decoration: none;
-    background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 12px; padding: 22px;
-    transition: border-color .15s, transform .15s, background .15s;
-  }
-  .navcard:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
-  .navcard h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; display: flex; align-items: center; gap: 9px; }
-  .navcard p { color: var(--dim); font-size: 0.92rem; margin: 0 0 12px; }
-  .navcard .go { color: var(--gold-bright); font-size: 0.85rem; font-weight: 600; }
-  .navcard .go::after { content: " →"; }
-  @media (max-width: 560px) { .two { grid-template-columns: 1fr; } }
 
   footer { border-top: 1px solid var(--line-soft); padding: 26px 0 46px; text-align: center; color: var(--faint); font-size: 0.8rem; }
   footer a { color: var(--faint); text-decoration: none; }
@@ -121,6 +153,7 @@
 <body>
 
 <div class="wrap">
+  <!-- 1. Qui on est + comment nous rejoindre -->
   <header class="hero">
     <div class="crest"><span>C</span></div>
     <h1>La Clauderie</h1>
@@ -132,26 +165,8 @@
     <span class="sub">Salon #france · mentionne « La Clauderie » pour nous rejoindre</span>
   </header>
 
-  <!-- CALENDRIER -->
-  <section id="calendrier">
-    <div class="sec-title">
-      <h2>Calendrier</h2>
-      <span class="count" id="evCount"></span>
-    </div>
-    <div class="events" id="events"><div class="empty">Chargement…</div></div>
-  </section>
-
-  <!-- FAITS D'ARMES -->
-  <section id="faits-darmes" class="hidden-if-empty" style="display:none">
-    <div class="sec-title">
-      <h2>🏆 Faits d'armes</h2>
-      <span class="count" id="faCount"></span>
-    </div>
-    <div class="feats" id="feats"></div>
-  </section>
-
-  <!-- NAVIGATION -->
-  <section>
+  <!-- 2. Les guides (pages du site) -->
+  <section class="guides">
     <div class="two">
       <a class="navcard" href="bis.html">
         <h3>⚔️ Stuff BiS</h3>
@@ -165,6 +180,37 @@
       </a>
     </div>
   </section>
+
+  <!-- 3. La vie de la guilde, en onglets -->
+  <section class="guild">
+    <div class="tabs" role="tablist" aria-label="La vie de la guilde">
+      <button class="tab" role="tab" id="tabBtn-calendrier" aria-selected="true" aria-controls="tab-calendrier">📅 Calendrier <span class="n" id="nEvents"></span></button>
+      <button class="tab" role="tab" id="tabBtn-membres" aria-selected="false" aria-controls="tab-membres">👥 Membres <span class="n" id="nMembers"></span></button>
+      <button class="tab" role="tab" id="tabBtn-faits-darmes" aria-selected="false" aria-controls="tab-faits-darmes">🏆 Faits d'armes <span class="n" id="nFeats"></span></button>
+    </div>
+
+    <!-- Calendrier -->
+    <div class="panel active" role="tabpanel" id="tab-calendrier" aria-labelledby="tabBtn-calendrier">
+      <h2>Prochains événements</h2>
+      <div class="events" id="events"><div class="empty">Chargement…</div></div>
+      <div id="pastWrap" style="display:none">
+        <h2 class="later">Événements passés</h2>
+        <div class="events" id="pastEvents"></div>
+      </div>
+    </div>
+
+    <!-- Membres -->
+    <div class="panel" role="tabpanel" id="tab-membres" aria-labelledby="tabBtn-membres">
+      <h2>Les membres de la guilde</h2>
+      <div id="membersBox"><div class="empty">Chargement…</div></div>
+    </div>
+
+    <!-- Faits d'armes -->
+    <div class="panel" role="tabpanel" id="tab-faits-darmes" aria-labelledby="tabBtn-faits-darmes">
+      <h2>Les hauts faits de la guilde</h2>
+      <div class="feats" id="feats"><div class="empty">Chargement…</div></div>
+    </div>
+  </section>
 </div>
 
 <footer>
@@ -174,48 +220,147 @@
 </footer>
 
 <script>
-  const TYPE_CLASS = { "Raid": "t-raid", "Héroïque": "t-hero", "PvP": "t-pvp", "Social": "t-social" };
+  const $ = id => document.getElementById(id);
   const MOIS = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+  const TYPE_CLASS = { "Raid": "t-raid", "Héroïque": "t-hero", "PvP": "t-pvp", "Social": "t-social" };
 
+  function esc(s) {
+    return String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
   function fmtDate(iso) {
-    const [y, m, d] = iso.split("-").map(Number);
-    return { d: String(d), m: MOIS[m - 1] || "" };
+    const [y, m, d] = (iso || "").split("-").map(Number);
+    return { d: String(d || ""), m: MOIS[(m || 1) - 1] || "" };
+  }
+
+  // ---- Onglets ----
+  const TAB_IDS = ["calendrier", "membres", "faits-darmes"];
+  function showTab(name) {
+    if (!TAB_IDS.includes(name)) name = TAB_IDS[0];
+    TAB_IDS.forEach(t => {
+      $("tabBtn-" + t).setAttribute("aria-selected", String(t === name));
+      $("tab-" + t).classList.toggle("active", t === name);
+    });
+  }
+  TAB_IDS.forEach(t => $("tabBtn-" + t).addEventListener("click", () => {
+    history.replaceState(null, "", "#" + t);
+    showTab(t);
+  }));
+  // #calendrier / #membres / #faits-darmes dans l'URL ouvrent le bon onglet
+  showTab((location.hash || "").slice(1));
+  window.addEventListener("hashchange", () => showTab(location.hash.slice(1)));
+
+  // ---- Calendrier : à venir + passés ----
+  function eventCard(e, past) {
+    const dt = fmtDate(e.date);
+    const cls = TYPE_CLASS[e.type] || "t-social";
+    return `<div class="event${past ? " past" : ""}">
+      <div class="date"><div class="d">${dt.d}</div><div class="m">${dt.m}</div></div>
+      <div class="info">
+        <span class="type ${cls}">${esc(e.type)}</span>
+        <h3>${esc(e.titre)}</h3>
+        <p>${esc(e.desc)}</p>
+      </div>
+      <div class="when"><div class="h">${esc(e.heure)}</div></div>
+    </div>`;
   }
 
   fetch("events.json?_=" + Date.now())
     .then(r => r.ok ? r.json() : { events: [] })
     .then(data => {
       const today = new Date().toISOString().slice(0, 10);
-      const list = (data.events || [])
-        .filter(e => e.date >= today)
-        .sort((a, b) => a.date.localeCompare(b.date));
-      const box = document.getElementById("events");
-      document.getElementById("evCount").textContent =
-        list.length ? list.length + (list.length > 1 ? " events à venir" : " event à venir") : "";
+      const all = data.events || [];
+      const upcoming = all.filter(e => e.date >= today).sort((a, b) => a.date.localeCompare(b.date));
+      const past = all.filter(e => e.date < today).sort((a, b) => b.date.localeCompare(a.date));
+
+      $("nEvents").textContent = upcoming.length || "";
+      $("events").innerHTML = upcoming.length
+        ? upcoming.map(e => eventCard(e, false)).join("")
+        : '<div class="empty">Aucun event prévu pour le moment. Reviens bientôt !</div>';
+
+      if (past.length) {
+        $("pastWrap").style.display = "";
+        $("pastEvents").innerHTML = past.map(e => eventCard(e, true)).join("");
+      }
+    })
+    .catch(() => {
+      $("events").innerHTML = '<div class="empty">Impossible de charger le calendrier.</div>';
+    });
+
+  // ---- Membres ----
+  const ROLE_ORDER = ["Maître de guilde", "Officier", "Membre"];
+  const ROLE_CLASS = { "Maître de guilde": "r-gm", "Officier": "r-off", "Membre": "r-mem" };
+  const ROLE_LABEL_PLURIEL = { "Maître de guilde": "Maître de guilde", "Officier": "Officiers", "Membre": "Membres" };
+
+  fetch("members.json?_=" + Date.now())
+    .then(r => r.ok ? r.json() : { members: [] })
+    .then(data => {
+      const list = data.members || [];
       if (!list.length) {
-        box.innerHTML = '<div class="empty">Aucun event prévu pour le moment. Reviens bientôt !</div>';
+        $("membersBox").innerHTML =
+          '<div class="empty">La liste des membres arrive bientôt — les officiers la remplissent depuis l\'<a href="admin.html">espace officiers</a>.</div>';
         return;
       }
-      box.innerHTML = list.map(e => {
-        const dt = fmtDate(e.date);
-        const cls = TYPE_CLASS[e.type] || "t-social";
-        return `<div class="event">
-          <div class="date"><div class="d">${dt.d}</div><div class="m">${dt.m}</div></div>
-          <div class="info">
-            <span class="type ${cls}">${e.type || ""}</span>
-            <h3>${e.titre || ""}</h3>
-            <p>${e.desc || ""}</p>
-          </div>
-          <div class="when"><div class="h">${e.heure || ""}</div></div>
+      $("nMembers").textContent = list.length;
+      const groups = new Map();
+      list.forEach(m => {
+        const role = ROLE_ORDER.includes(m.role) ? m.role : "Membre";
+        if (!groups.has(role)) groups.set(role, []);
+        groups.get(role).push(m);
+      });
+      $("membersBox").innerHTML = ROLE_ORDER.filter(r => groups.has(r)).map(role => {
+        const rows = groups.get(role)
+          .slice()
+          .sort((a, b) => (a.pseudo || "").localeCompare(b.pseudo || "", "fr"))
+          .map(m => `<div class="member ${ROLE_CLASS[role] || ""}">
+            <div class="avatar">${esc((m.pseudo || "?").trim().charAt(0).toUpperCase())}</div>
+            <div class="who"><b>${esc(m.pseudo)}</b><span>${esc(m.classe || role)}</span></div>
+          </div>`).join("");
+        return `<div class="role-group">
+          <p class="role-title">${esc(ROLE_LABEL_PLURIEL[role] || role)} · ${groups.get(role).length}</p>
+          <div class="members">${rows}</div>
         </div>`;
       }).join("");
     })
     .catch(() => {
-      document.getElementById("events").innerHTML =
-        '<div class="empty">Impossible de charger le calendrier.</div>';
+      $("membersBox").innerHTML = '<div class="empty">Impossible de charger la liste des membres.</div>';
     });
 
-  // Nouveautés : affiche la dernière version sur la carte (piloté par patch-notes.json)
+  // ---- Faits d'armes ----
+  const FA_TYPE_CLASS = { "Boss": "t-boss", "Donjon": "t-hero", "PvP": "t-pvp", "Autre": "t-social" };
+  const FA_ICON = { "Boss": "🏆", "Donjon": "⚔️", "PvP": "🛡️", "Autre": "✨" };
+
+  fetch("achievements.json?_=" + Date.now())
+    .then(r => r.ok ? r.json() : { achievements: [] })
+    .then(data => {
+      const list = (data.achievements || []).sort((a, b) => b.date.localeCompare(a.date));
+      if (!list.length) {
+        $("feats").innerHTML = '<div class="empty">Aucun haut fait pour l\'instant — le premier arrive bientôt !</div>';
+        return;
+      }
+      $("nFeats").textContent = list.length;
+      $("feats").innerHTML = list.map(g => {
+        const dt = fmtDate(g.date);
+        const cls = FA_TYPE_CLASS[g.type] || "t-social";
+        const heroes = (g.membres || []).length
+          ? `<div class="heroes">${g.membres.map(p => `<span>${esc(p)}</span>`).join("")}</div>`
+          : "";
+        return `<div class="feat">
+          <div class="trophy">${FA_ICON[g.type] || "🏆"}</div>
+          <div class="info">
+            <span class="type ${cls}">${esc(g.type)}</span>
+            <h3>${esc(g.titre)}</h3>
+            <p>${esc(g.desc)}</p>
+            ${heroes}
+          </div>
+          <div class="when">${dt.d} ${dt.m}</div>
+        </div>`;
+      }).join("");
+    })
+    .catch(() => {
+      $("feats").innerHTML = '<div class="empty">Impossible de charger les faits d\'armes.</div>';
+    });
+
+  // ---- Carte Nouveautés : affiche la dernière version (piloté par patch-notes.json) ----
   fetch("patch-notes.json?_=" + Date.now())
     .then(r => r.ok ? r.json() : { versions: [] })
     .then(data => {
@@ -224,38 +369,11 @@
         .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
       if (!list.length) return;
       const last = list[0];
-      document.getElementById("pnTitle").textContent = "📜 Nouveautés — " + last.version;
+      $("pnTitle").textContent = "📜 Nouveautés — " + last.version;
       if (last.titre) {
-        document.getElementById("pnDesc").textContent =
+        $("pnDesc").textContent =
           last.titre + " — et toutes les mises à jour précédentes, expliquées en détail.";
       }
-    })
-    .catch(() => {});
-
-  // Faits d'armes (la section reste masquée s'il n'y en a aucun)
-  const FA_TYPE_CLASS = { "Boss": "t-boss", "Donjon": "t-hero", "PvP": "t-pvp", "Autre": "t-social" };
-  const FA_ICON = { "Boss": "🏆", "Donjon": "⚔️", "PvP": "🛡️", "Autre": "✨" };
-  fetch("achievements.json?_=" + Date.now())
-    .then(r => r.ok ? r.json() : { achievements: [] })
-    .then(data => {
-      const list = (data.achievements || []).sort((a, b) => b.date.localeCompare(a.date));
-      if (!list.length) return;
-      document.getElementById("faits-darmes").style.display = "";
-      document.getElementById("faCount").textContent =
-        list.length + (list.length > 1 ? " hauts faits" : " haut fait");
-      document.getElementById("feats").innerHTML = list.map(g => {
-        const dt = fmtDate(g.date);
-        const cls = FA_TYPE_CLASS[g.type] || "t-social";
-        return `<div class="feat">
-          <div class="trophy">${FA_ICON[g.type] || "🏆"}</div>
-          <div class="info">
-            <span class="type ${cls}">${g.type || ""}</span>
-            <h3>${g.titre || ""}</h3>
-            <p>${g.desc || ""}</p>
-          </div>
-          <div class="when">${dt.d} ${dt.m}</div>
-        </div>`;
-      }).join("");
     })
     .catch(() => {});
 </script>
