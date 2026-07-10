@@ -11,6 +11,12 @@
       "type": "Boss",
       "titre": "Nythraxis first world",
       "desc": "Summus\nPr Reptile"
+    },
+    {
+      "date": "2026-07-09",
+      "type": "Boss",
+      "titre": "Heroic Nythraxis First World",
+      "desc": "Faho"
     }
   ]
 }
