@@ -194,6 +194,25 @@ def candidates(cls, role):
 def evaluate(cls, role, equip):
     return objective(cls, role, sheet(cls, role, equip))
 
+# Départage des ex æquo : la puissance des sorts étant arrondie (0.5×Int),
+# deux objets peuvent donner un objectif strictement identique (ex. bâtons à
+# 12 et 13 Int). À objectif égal, on préfère l'objet aux meilleures stats
+# brutes (itemScore du jeu) plutôt que l'ordre d'itération des données.
+def iscore(iid):
+    it=ITEMS[iid]
+    sc=sum(v for k,v in (it.get('stats') or {}).items() if k!='armor')
+    sc+=(it.get('stats') or {}).get('armor',0)/12
+    if it.get('weapon'):
+        w=it['weapon']; sc+=(w['min']+w['max'])/2/w['speed']*0.5
+    return sc
+
+def better(v, iid, bs):
+    # bs = (valeur, iid) courant ; True si (v, iid) est strictement meilleur
+    if bs is None: return True
+    if v > bs[0] + 1e-9: return True
+    if abs(v - bs[0]) <= 1e-9 and iscore(iid) > iscore(bs[1]) + 1e-9: return True
+    return False
+
 def optimize(cls, role):
     pool = candidates(cls, role)
     # pièces de sets pertinentes pour la classe
@@ -230,7 +249,7 @@ def optimize(cls, role):
             for iid in pool[sl]:
                 equip[sl]=iid
                 v=evaluate(cls,role,equip)
-                if bs is None or v>bs[0]: bs=(v,iid)
+                if better(v,iid,bs): bs=(v,iid)
             equip[sl]=bs[1] if bs else None
         for _ in range(4):  # passes de raffinement (slots libres uniquement)
             changed=False
@@ -241,7 +260,7 @@ def optimize(cls, role):
                     if iid==cur: continue
                     equip[sl]=iid
                     v=evaluate(cls,role,equip)
-                    if v>bs[0]+1e-9: bs=(v,iid)
+                    if better(v,iid,bs): bs=(v,iid)
                 equip[sl]=bs[1]  # TOUJOURS restaurer le meilleur (bug: le slot restait sur le dernier essayé)
                 if bs[1]!=cur: changed=True
             if not changed: break
@@ -258,7 +277,7 @@ def optimize(cls, role):
             if sl in ('ring1','ring2') and iid in (equip['ring1'],equip['ring2']): continue
             e2=dict(equip); e2[sl]=iid
             v=evaluate(cls,role,e2)
-            if bs is None or v>bs[0]: bs=(v,iid)
+            if better(v,iid,bs): bs=(v,iid)
         if bs: alts[sl]=bs[1]
     return score, equip, alts
 
