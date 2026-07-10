@@ -11,8 +11,24 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 |---|---|
 | `index.html` | Accueil : calendrier des events, Discord, recrutement, lien nouveautés |
 | `admin.html` | Espace officiers : gérer le calendrier (ajout/suppression d'events) |
-| `patch-notes.html` | Notes de version complètes du jeu (briefing maître de guilde) |
+| `patch-notes.html` | Historique de **toutes** les mises à jour du jeu, la plus récente en premier |
+| `notes/vX.Y.Z.html` | Les nouveautés détaillées d'une version (une page par mise à jour) |
+| `patch-notes.json` | La liste des mises à jour (alimente l'historique **et** la carte de l'accueil) |
 | `events.json` | Les données du calendrier (modifiées via l'espace officiers) |
+
+## Ajouter les nouveautés d'une mise à jour
+
+À chaque nouvelle version du jeu, on ajoute ses nouveautés au site **sans toucher
+aux versions précédentes** — l'historique se construit au fil du temps :
+
+1. **Créer `notes/vX.Y.Z.html`** sur le modèle de la version la plus récente du
+   dossier `notes/` : mêmes sections (bulles résumées + fiches détaillées au
+   clic), avec le contenu de la nouvelle mise à jour.
+2. **Ajouter une entrée en tête de `patch-notes.json`** : version, date, titre,
+   résumé, temps forts, et le chemin `notes/vX.Y.Z.html`.
+
+C'est tout : la page « Nouveautés du jeu » et la carte de l'accueil (qui affiche
+toujours la dernière version) se mettent à jour automatiquement.
 
 ## Gérer le calendrier (pour les officiers)
 

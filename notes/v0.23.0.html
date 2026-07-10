@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Nouveautés v0.23.0 — La Clauderie</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .back { margin-left: auto; color: var(--dim); text-decoration: none; font-size: 0.88rem; }
+  .back:hover { color: var(--gold-bright); }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  /* Sets */
+  .set h3 { font-size: 1.05rem; }
+  .set .role { font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); margin: 2px 0 12px; }
+  dl.bonus { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 7px 11px; }
+  dl.bonus dt { font-family: var(--font-mono); font-weight: 700; font-size: 0.74rem; color: var(--gold-bright); padding-top: 1px; }
+  dl.bonus dd { margin: 0; font-size: 0.87rem; color: var(--dim); }
+  dl.bonus dd .proc { color: var(--arcane); font-weight: 600; }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <a href="../patch-notes.html" class="back">← Toutes les mises à jour</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Notes de version</p>
+    <h1>Nouveautés <span class="v">v0.23.0</span></h1>
+    <p class="lede">Toutes les nouveautés de la mise à jour, avec les règles exactes. Chaque bulle est un résumé — clique dessus pour voir comment ça marche en détail.</p>
+    <div class="meta">
+      <span><b>Publiée</b> le 9 juil. 2026</span>
+      <span><b>680</b> commits</span>
+      <span><b>820</b> fichiers</span>
+    </div>
+    <div class="hint">💡 Clique sur une nouveauté pour ouvrir ses règles détaillées.</div>
+  </header>
+
+  <!-- 1 MODES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Nouveaux modes de jeu</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="valecup" tabindex="0" role="button" aria-label="Détails : The Vale Cup">
+        <h3>The Vale Cup <span class="chip c-pvp">Mini-jeu</span></h3>
+        <p>Un mini-jeu de <strong class="hl">boarball</strong> (football) au stade de Sowfield.</p>
+        <ul><li>Files 1v1 à 5v5</li><li>Kits de rôles sportifs</li><li>Paris des spectateurs</li></ul>
+        <span class="more-link">Comment jouer & règles</span>
+      </div>
+      <div class="card more" data-detail="yumi" tabindex="0" role="button" aria-label="Détails : Protect Yumi">
+        <h3>Protect Yumi <span class="chip c-pvp">PvP</span></h3>
+        <p>Défends une chatte familière dans un labyrinthe, en <strong class="hl">3v3 / 5v5</strong>.</p>
+        <ul><li>Objectif : détruire la chatte adverse</li><li>Téléports toutes les 60 s</li><li>Mort subite à 10 min</li></ul>
+        <span class="more-link">Comment jouer & règles</span>
+      </div>
+      <div class="card more" data-detail="dummy" tabindex="0" role="button" aria-label="Détails : Training Dummy">
+        <h3>Training Dummy <span class="chip c-new">Utilitaire</span></h3>
+        <p>Un mannequin d'entraînement à Highwatch pour tester ses rotations.</p>
+        <ul><li>999 999 PV, 0 armure</li><li>Ne riposte jamais</li></ul>
+        <span class="more-link">Détails</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 DONJONS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Donjons, Raid & Boss</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="heroic" tabindex="0" role="button" aria-label="Détails : Difficulté Héroïque">
+        <h3>Difficulté Héroïque <span class="chip c-raid">Endgame</span></h3>
+        <p>Les 4 donjons 5 joueurs passent en Héroïque. Mobs niveau 22, dégâts recalibrés par donjon.</p>
+        <span class="more-link">Difficulté, mobs & multiplicateurs</span>
+      </div>
+      <div class="card more" data-detail="marks" tabindex="0" role="button" aria-label="Détails : Heroic Marks">
+        <h3>Heroic Marks <span class="chip c-new">Monnaie</span></h3>
+        <p>La nouvelle monnaie de fin de donjon, échangeable contre des bijoux épiques.</p>
+        <span class="more-link">Comment les gagner & le vendeur</span>
+      </div>
+      <div class="card more" data-detail="nythraxis" tabindex="0" role="button" aria-label="Détails : Raid Nythraxis">
+        <h3>Raid — Nythraxis <span class="chip c-raid">Raid</span></h3>
+        <p>L'arène de raid de Thornpeak, en version héroïque niveau 22.</p>
+        <span class="more-link">Détails du raid</span>
+      </div>
+      <div class="card more" data-detail="thunzharr" tabindex="0" role="button" aria-label="Détails : Thunzharr">
+        <h3>World Boss — Thunzharr <span class="chip c-raid">World Boss</span></h3>
+        <p>Retuné : vitesse doublée, fenêtre de loot allongée. PV qui montent avec le nombre de joueurs.</p>
+        <span class="more-link">Chiffres & spawn</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 ITEMISATION -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Itemisation</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="stats" tabindex="0" role="button" aria-label="Détails : Crit et Haste">
+        <h3>Crit & Haste <span class="chip c-new">Stats</span></h3>
+        <p>Deux nouvelles stats de stuff : Crit Rating et Haste Rating.</p>
+        <span class="more-link">Conversion & fonctionnement</span>
+      </div>
+      <div class="card more" data-detail="procs" tabindex="0" role="button" aria-label="Détails : Procs légendaires">
+        <h3>Procs légendaires <span class="chip c-raid">Légendaire</span></h3>
+        <p>Effets de signature sur les armes légendaires + changement de l'Auto Shot du Chasseur.</p>
+        <span class="more-link">Détails des procs</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SETS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Les 10 sets épiques</h2></div>
+    <p class="sec-sub"><span class="proc" style="color:var(--arcane)">ICD</span> = temps de recharge interne du proc. Les crits d'arme / lancers de sort déclenchent l'effet à la probabilité indiquée.</p>
+
+    <p class="grp-title">⚔️ Mêlée Force · Plaque</p>
+    <div class="grid cols-2">
+      <div class="card set"><h3>Barrowlord Battlegear <span class="chip c-plate">Plaque</span></h3><p class="role">Force / Endurance</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Puissance d'attaque.</dd><dt>3P</dt><dd>+15 Force et +15 Endurance.</dd><dt>4P</dt><dd>Crits d'arme : 50 % → <span class="proc">Gravemight</span>, +60 PA pendant 10 s (ICD 15 s).</dd></dl></div>
+      <div class="card set"><h3>Bonewrought Regalia <span class="chip c-plate">Plaque</span></h3><p class="role">Force / vitesse</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Puissance d'attaque.</dd><dt>3P</dt><dd>+15 Force, +15 Endurance, +15 % vitesse.</dd><dt>4P</dt><dd>Crits d'arme : <span class="proc">Bonesplinter</span>, saignement 8 dmg/2s pendant 12 s, cumulable ×3.</dd></dl></div>
+    </div>
+
+    <p class="grp-title">🗡️ Agilité · Cuir</p>
+    <div class="grid cols-2">
+      <div class="card set"><h3>Nightfang Vestments <span class="chip c-leather">Cuir</span></h3><p class="role">Agilité / Crit</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Puissance d'attaque.</dd><dt>3P</dt><dd>+15 Agilité et +2 % crit.</dd><dt>4P</dt><dd>Crits d'arme : 50 % → <span class="proc">Fangrush</span>, +25 % vitesse d'attaque pendant 8 s.</dd></dl></div>
+      <div class="card set"><h3>Direfang Pelt <span class="chip c-leather">Cuir</span></h3><p class="role">Agilité / vitesse</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Puissance d'attaque.</dd><dt>3P</dt><dd>+15 Agilité, +2 % crit, +15 % vitesse.</dd><dt>4P</dt><dd>Crits d'arme : <span class="proc">Ragged Gash</span>, saignement 6 dmg/2s pendant 12 s, cumulable ×3.</dd></dl></div>
+    </div>
+
+    <p class="grp-title">✨ Lanceurs de sorts · Tissu</p>
+    <div class="grid cols-3">
+      <div class="card set"><h3>Mournweave Raiment <span class="chip c-cloth">Tissu</span></h3><p class="role">Intelligence</p>
+        <dl class="bonus"><dt>2P</dt><dd>+20 Puissance des sorts. Immunité au knockback.</dd><dt>3P</dt><dd>+10 Int, +10 Endurance.</dd><dt>4P</dt><dd>Sorts : 10 % → <span class="proc">Clearcasting</span>, prochain sort gratuit.</dd></dl></div>
+      <div class="card set"><h3>Wraithfire Regalia <span class="chip c-cloth">Tissu</span></h3><p class="role">Int / Esprit</p>
+        <dl class="bonus"><dt>2P</dt><dd>+20 Puissance des sorts. Immunité au knockback.</dd><dt>3P</dt><dd>+15 Int, +15 Esprit, +15 % vitesse.</dd><dt>4P</dt><dd>Sorts : 10 % → <span class="proc">Soulblaze</span>, +40 SP pendant 10 s.</dd></dl></div>
+      <div class="card set"><h3>Galecall Vestments <span class="chip c-cloth">Tissu</span></h3><p class="role">Int / Esprit</p>
+        <dl class="bonus"><dt>2P</dt><dd>+20 Puissance des sorts. Immunité au knockback.</dd><dt>3P</dt><dd>+15 Int, +15 Esprit, +15 % vitesse.</dd><dt>4P</dt><dd>Sorts : 10 % → <span class="proc">Soulblaze</span>, +40 SP pendant 10 s.</dd></dl></div>
+    </div>
+
+    <p class="grp-title">🏹 Sets utilitaires (bonus 3 pièces)</p>
+    <div class="grid cols-3">
+      <div class="card set"><h3>Vale Arcanist's Regalia <span class="chip c-util">Utilitaire</span></h3><dl class="bonus"><dt>3P</dt><dd>+15 % vitesse d'attaque et d'incantation.</dd></dl></div>
+      <div class="card set"><h3>Boundstone Vanguard <span class="chip c-util">Utilitaire</span></h3><dl class="bonus"><dt>3P</dt><dd>+15 % vitesse d'attaque et d'incantation.</dd></dl></div>
+      <div class="card set"><h3>Greyjaw Stalker's Kit <span class="chip c-util">Utilitaire</span></h3><dl class="bonus"><dt>3P</dt><dd>+15 % vitesse d'attaque et d'incantation.</dd></dl></div>
+    </div>
+  </section>
+
+  <!-- 5 SYSTÈMES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Métiers & Banque</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="metiers" tabindex="0" role="button" aria-label="Détails : Métiers">
+        <h3>Métiers — système finalisé <span class="chip c-new">Système</span></h3>
+        <p>Récolte, fabrication, archétype : le guide pas à pas pour s'y mettre, avec les premières recettes à faire.</p>
+        <span class="more-link">Le guide complet</span>
+      </div>
+      <div class="card more" data-detail="banque" tabindex="0" role="button" aria-label="Détails : Banque">
+        <h3>The Gilded Strongbox <span class="chip c-new">Banque</span></h3>
+        <p>Une banque personnelle par perso, de 24 à 112 emplacements, avec registre d'audit.</p>
+        <span class="more-link">Slots, prix & sécurité</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 COMBAT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Combat & Équilibrage</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="buffs" tabindex="0" role="button" aria-label="Détails : Buffs de raid">
+        <h3>Buffs de raid en % <span class="chip c-bal">Équilibrage</span></h3>
+        <p>Les buffs de groupe passent en pourcentage, appliqués à tout le raid.</p>
+        <span class="more-link">La liste exacte</span>
+      </div>
+      <div class="card more" data-detail="armor" tabindex="0" role="button" aria-label="Détails : Armor Shear">
+        <h3>Réductions d'armure <span class="chip c-bal">Équilibrage</span></h3>
+        <p>Armor Shear devient un pourcentage. Nouveaux débuffs Witchlight et Armor Breach.</p>
+        <span class="more-link">Les chiffres</span>
+      </div>
+      <div class="card more" data-detail="hitrun" tabindex="0" role="button" aria-label="Détails : IA des mobs">
+        <h3>Hit-and-run des mobs <span class="chip c-bal">IA</span></h3>
+        <p>Les mobs de mêlée frappent en avançant. Le kiting change.</p>
+        <span class="more-link">Ce qui change</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 RESTE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>Le reste de la mise à jour</h2></div>
+    <div class="grid cols-2">
+      <div class="card"><h3>Mobile <span class="chip c-mob">4 vagues</span></h3><ul><li>Refonte de l'action ring (joystick + consommables).</li><li>Layout adaptatif paysage/portrait.</li><li>Parité complète des fenêtres, minimap compacte.</li></ul></div>
+      <div class="card"><h3>Jeu en ligne & netcode</h3><ul><li>Prédiction de mouvement (réactif à la touche, plafond 350 ms).</li><li>Fin des strobes de collision à haut ping.</li><li>Jets de loot need/greed visibles en temps réel.</li></ul></div>
+      <div class="card"><h3>Monde & rendu</h3><ul><li>Coutures LOD du terrain fermées (trous jusqu'à 3,3 yards).</li><li>Modèles de loups bakés (mobs, druide, familiers).</li><li>Base d'un moteur de terrain voxel (futurs tunnels).</li></ul></div>
+      <div class="card"><h3>Localisation & audit</h3><ul><li>Tchèque : 22ᵉ langue (6 045 chaînes), 0 en attente sur les 22.</li><li>Audit d'exactitude des 157 tooltips de compétences.</li><li>Launchers desktop signés (Linux, macOS), download Linux réactivé.</li></ul></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compilé pour <strong>La Clauderie</strong> — données et règles issues des notes de version et du codex WoCC (tag v0.23.0).</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← Toutes les mises à jour</a> · <a href="../index.html">Accueil</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    valecup: {
+      title: "The Vale Cup — le boarball (football)",
+      summary: "Un mini-jeu de football au stade de Sowfield, à Eastbrook Vale. Aucun dégât : c'est du sport pur.",
+      body: `
+        <h4>Où et comment jouer</h4>
+        <ul>
+          <li>Rendez-vous au <b>stade de Sowfield</b>, à Eastbrook Vale.</li>
+          <li>Tu peux te mettre en file depuis n'importe où via la fenêtre Vale Cup (<span class="kbd">Y</span> par défaut), ou auprès de <b>Groundskeeper Bram</b> à l'entrée du stade.</li>
+        </ul>
+        <h4>Format d'un match</h4>
+        <ul>
+          <li>Files de <b>1v1 à 5v5</b>. À partir du 3v3, chaque équipe reçoit un <b>gardien automatique</b>.</li>
+          <li><b>Une seule période de 6:00.</b> Premier à <b>5 buts</b> → le match s'arrête. En cas d'égalité à la fin du temps → <b>but en or</b> (golden goal).</li>
+        </ul>
+        <h4>Les rôles (kits sportifs)</h4>
+        <ul>
+          <li>Ton kit de classe est remplacé par un <b>kit de rôle</b> : Attaquant (Striker), Libéro (Sweeper), Gardien (Keeper), ou un kit polyvalent dans les petits formats.</li>
+          <li>Chaque kit donne : <b>Tir chargé</b>, <b>Passe</b>, et un <b>Tacle épaule</b> (Slide).</li>
+          <li>Règle de « trêve de récolte » : <b>rien n'inflige de dégâts</b>, personne ne peut tuer personne.</li>
+        </ul>
+        <h4>Possession du ballon</h4>
+        <p>Pour tirer, il faut la <b>possession</b> : être à moins de <b>4 yards</b> du ballon libre, ou le tenir en tant que gardien.</p>
+        <h4>Matchmaking & bots</h4>
+        <ul>
+          <li>File d'attente FIFO ; les places vides sont comblées par des <b>bots après 60 s</b>.</li>
+          <li>Un match rempli par des bots <b>n'est pas classé</b>. Les matchs d'entraînement privés se jouent sur des terrains isolés.</li>
+        </ul>
+        <h4>Paris des spectateurs (parimutuel)</h4>
+        <ul>
+          <li>Pendant le briefing d'avant-match, les spectateurs parient <b>en cuivre</b>.</li>
+          <li>Les gagnants se partagent la cagnotte des perdants <b>au prorata</b> de leur mise.</li>
+          <li>Match nul, ou vainqueur sur lequel personne n'a parié → <b>tous les paris sont remboursés</b>.</li>
+          <li>Système géré par le serveur ; les bots ne parient jamais.</li>
+        </ul>
+        <h4>Récompenses</h4>
+        <ul>
+          <li>Les <b>victoires classées</b> donnent des points de récompense quotidienne, un bilan V/D, et alimentent les <b>classements joueur et guilde</b>.</li>
+          <li>Les victoires contre des bots ou en entraînement ne rapportent que <b>20 %</b> de la valeur normale.</li>
+        </ul>
+        <h4>Pénalité & ambiance</h4>
+        <ul>
+          <li>Déserter un match en cours bloque ta place et te <b>verrouille la file pendant 5 minutes</b>.</li>
+          <li>Gradins praticables avec poses assises (<span class="kbd">/sit</span>, <span class="kbd">/stand</span>), traînée lumineuse sur le ballon, deux nouvelles musiques.</li>
+        </ul>`
+    },
+    yumi: {
+      title: "Protect Yumi",
+      summary: "Du PvP d'équipe non classé où chaque camp protège sa chatte familière dans un labyrinthe.",
+      body: `
+        <h4>Accès</h4>
+        <p>PvP d'équipe <b>non classé</b>, en <b>3v3</b> et <b>5v5</b>, avec mise en file depuis le <b>Colisée</b>.</p>
+        <h4>Objectif</h4>
+        <ul>
+          <li>Chaque équipe protège <b>Yumi</b>, une chatte familière passive de <b>5000 PV</b>, dans un labyrinthe éclairé aux torches.</li>
+          <li>Toutes les <b>60 secondes</b>, les deux chattes se <b>téléportent en même temps</b> vers des points éloignés du labyrinthe.</li>
+          <li>La <b>première équipe à détruire la chatte adverse</b> gagne.</li>
+        </ul>
+        <h4>Joueurs à terre</h4>
+        <p>Un joueur mis à terre reste sur le banc <b>10 secondes fixes</b>, puis réapparaît <b>à côté de sa chatte</b>.</p>
+        <h4>Mort subite</h4>
+        <p>À <b>10 minutes</b>, la mort subite s'enclenche : les téléportations se <b>figent</b> et une <b>montée de dégâts croissante</b> garantit un vainqueur — <b>jamais de match nul</b>.</p>
+        <h4>Yumi</h4>
+        <ul>
+          <li>N'attaque <b>jamais</b> et ne bouge pas d'elle-même.</li>
+          <li><b>Immunisée</b> aux CC et aux ralentissements.</li>
+          <li>Peut être <b>soignée et bouclée</b> par sa propre équipe.</li>
+        </ul>
+        <h4>Le labyrinthe</h4>
+        <p>Une grille tressée <b>13×13</b> à graine fixe (donc identique à chaque partie), à symétrie de rotation, <b>zéro cul-de-sac</b>, avec <b>cinq places</b> ouvertes.</p>
+        <h4>Bon à savoir</h4>
+        <ul>
+          <li>Le HUD affiche les barres de vie des deux chattes, le chrono de mort subite et le compte à rebours de téléportation (pensé aussi pour le mobile en portrait).</li>
+          <li>Les victoires Yumi <b>ne comptent pas</b> dans la tâche de récompense quotidienne d'arène.</li>
+        </ul>`
+    },
+    dummy: {
+      title: "Training Dummy",
+      summary: "Un mannequin d'entraînement pour mesurer et roder ses rotations de DPS ou de heal.",
+      body: `
+        <h4>Où</h4>
+        <p>Sur la colline <b>au-dessus de Highwatch</b>.</p>
+        <h4>Caractéristiques</h4>
+        <ul>
+          <li><b>Niveau max</b> et <b>0 armure</b> → tu lis ton <b>DPS pur non mitigé</b>.</li>
+          <li><b>999 999 PV.</b></li>
+          <li>Ne bouge jamais, ne riposte jamais.</li>
+          <li>Quitte le combat et <b>se soigne à fond 5 s</b> après ton dernier coup.</li>
+          <li><b>Réapparaît 10 s</b> après sa mort.</li>
+        </ul>`
+    },
+    heroic: {
+      title: "Difficulté Héroïque",
+      summary: "Une version corsée des 4 donjons 5 joueurs, à débloquer avant l'entrée.",
+      body: `
+        <h4>Choisir la difficulté</h4>
+        <ul>
+          <li>Le <b>chef de groupe</b> (ou le solo) choisit <b>avant d'entrer</b> : commande <span class="kbd">/dungeon normal|heroic</span> ou <b>clic droit sur son propre portrait</b>.</li>
+          <li>La difficulté est <b>figée</b> pour toute la durée de l'instance réclamée.</li>
+        </ul>
+        <h4>Les mobs héroïques</h4>
+        <ul>
+          <li>Multiplicateurs de <b>PV, dégâts et armure</b> propres à chaque donjon. Les mécaniques de boss (aoePulse, bigCast, stomp, mendAlly, wardAllies, stoneskin) scalent avec les mêmes multiplicateurs.</li>
+          <li><b>Niveau 22.</b> En repère : un coup de trash élite tape ~<b>300 après mitigation</b> (soit ~20 % des PV max d'un chaman de référence stuffé) ; les boss finaux montent à 22–24 %.</li>
+        </ul>
+        <h4>Multiplicateurs par donjon</h4>
+        <ul>
+          <li>The Hollow Crypt : <b>×6,8</b></li>
+          <li>The Sunken Bastion : <b>×6,2</b></li>
+          <li>The Drowned Temple : <b>×5,7</b></li>
+          <li>Gravewyrm Sanctum : <b>×5,4</b></li>
+        </ul>`
+    },
+    marks: {
+      title: "Heroic Marks",
+      summary: "La monnaie de fin de donjon héroïque, à échanger contre des bijoux épiques.",
+      body: `
+        <h4>Comment les gagner</h4>
+        <ul>
+          <li>Tuer le <b>boss final</b> lâche des Heroic Marks <b>personnelles</b> pour chaque participant éligible — <b>même ceux à terre</b>.</li>
+          <li><b>1 mark</b> par clear d'un donjon 5 joueurs ; <b>3 marks</b> pour l'arène de raid Nythraxis héroïque.</li>
+          <li>Chaque kill te <b>verrouille</b> sur ce donjon héroïque jusqu'au reset quotidien.</li>
+          <li>Plafond : <b>1 mark par donjon par jour UTC</b> → au maximum <b>7 marks/jour</b>.</li>
+        </ul>
+        <h4>Le vendeur</h4>
+        <p><b>Quartermaster Vex</b>, à Highwatch, vend les bijoux épiques :</p>
+        <ul>
+          <li><b>Anneau</b> épique — 12 marks</li>
+          <li><b>Collier</b> épique — 16 marks</li>
+          <li>C'est la <b>seule source</b> du jeu pour ces deux emplacements.</li>
+        </ul>`
+    },
+    nythraxis: {
+      title: "Raid — Nythraxis, Fléau de Thornpeak",
+      summary: "L'arène de raid de Thornpeak Heights, aussi disponible en version héroïque.",
+      body: `
+        <h4>L'essentiel</h4>
+        <ul>
+          <li>Arène de raid située à <b>Thornpeak Heights</b> (zone niv. 13–20).</li>
+          <li>En <b>héroïque</b> : les mobs spawnent au <b>niveau 22</b> et appliquent les <b>mêmes multiplicateurs de dégâts</b> que les donjons héroïques.</li>
+          <li>Le clear héroïque rapporte <b>3 Heroic Marks</b> par participant.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">C'est le rendez-vous idéal pour un event de guilde à plus grand effectif.</p>`
+    },
+    thunzharr: {
+      title: "World Boss — Thunzharr, the Waking Peak",
+      summary: "Un boss de monde qui grossit avec le nombre de joueurs présents.",
+      body: `
+        <h4>Apparition</h4>
+        <ul>
+          <li>Spawn à <b>Waking Peak</b>.</li>
+          <li>Réapparaît <b>toutes les 3600 s (1 heure)</b>.</li>
+        </ul>
+        <h4>Points de vie</h4>
+        <ul>
+          <li><b>40 000 PV</b> de base</li>
+          <li><b>+5 000 PV</b> par joueur présent</li>
+          <li>Plafonné à <b>1 000 000 PV</b></li>
+        </ul>
+        <h4>Retuning v0.23.0</h4>
+        <ul>
+          <li>Vitesse de déplacement <b>doublée</b>.</li>
+          <li><b>Fenêtre de loot allongée</b> après sa mort.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Plus vous êtes nombreux, plus il est costaud : à masser en raid ouvert avec toute la guilde.</p>`
+    },
+    stats: {
+      title: "Crit Rating & Haste Rating",
+      summary: "Deux nouvelles statistiques d'équipement qui remplacent d'anciens bonus fixes.",
+      body: `
+        <h4>Fonctionnement</h4>
+        <ul>
+          <li>Deux nouvelles stats sur le stuff : <b>Crit Rating</b> (chance de coup critique) et <b>Haste Rating</b> (vitesse d'attaque / d'incantation).</li>
+          <li>Conversion : <b>10 rating = 1 %</b>.</li>
+          <li>Elles apparaissent sur la <b>fiche de personnage</b> avec un texte explicatif au survol.</li>
+          <li>Les anciens bonus de set fixes ont été <b>convertis à valeur identique</b> — pas de perte.</li>
+        </ul>`
+    },
+    procs: {
+      title: "Procs légendaires & Auto Shot",
+      summary: "Effets de signature sur les armes légendaires, et refonte de l'Auto Shot du Chasseur.",
+      body: `
+        <h4>Thronebane, Dernier Serment de Thornpeak (épée)</h4>
+        <p><b>Chain Arc</b> — 10 % de chance au coup : dégâts de nature qui <b>rebondissent</b> entre les ennemis, plus un <b>ralentissement de vitesse d'attaque</b>.</p>
+        <h4>Heartwood of the Deathless Crown (bâton)</h4>
+        <ul>
+          <li><b>Deathbloom</b> — DoT de nature sur les sorts de dégâts.</li>
+          <li><b>Lifebloom</b> — HoT de nature sur les soins.</li>
+        </ul>
+        <h4>Chasseur — Auto Shot</h4>
+        <p>L'Auto Shot <b>scale désormais avec les dégâts et la vitesse de l'arme équipée</b>, au lieu d'un profil fixe. Pensez à ré-optimiser vos arcs / fusils.</p>`
+    },
+    metiers: {
+      title: "Métiers — le guide pour s'y mettre",
+      summary: "Deux activités : la récolte (libre pour tous) et la fabrication (là où on se spécialise). Voici quoi faire, dans l'ordre.",
+      body: `
+        <h4>L'essentiel en 30 secondes</h4>
+        <ul>
+          <li><b>Les matériaux</b> : aujourd'hui ils se lootent sur les monstres (et en dépeçant les bêtes) ; la récolte de minerai/bois/herbe arrive dans une prochaine version. Tout le monde pourra tout récolter, sans restriction.</li>
+          <li><b>La fabrication</b> (10 métiers) : c'est là qu'on se spécialise. Tu peux apprendre tous les métiers et rien ne se perd, mais seuls <b>2 métiers voisins</b> — tes « majeurs » — peuvent monter jusqu'au légendaire.</li>
+        </ul>
+
+        <h4>Par où commencer, concrètement</h4>
+        <ol>
+          <li><b>Récupère des matériaux en tuant des monstres.</b> Les trois matériaux de base sont des butins : <b>Bone Fragments</b> sur les morts-vivants (Restless Bones…), <b>Linen Scrap</b> sur les humanoïdes (Moggers, Vale Bandits, cultistes…), <b>Twitching Spider Leg</b> sur les araignées (Sableweb Lurkers…). Tu peux aussi <b>dépecer le cadavre</b> des bêtes marquées (loups, sangliers, araignées) pour des peaux, crocs, venins — les matériaux rares+ ainsi récoltés sont signés à ton nom.</li>
+          <li><b>Ouvre la fenêtre de fabrication</b> (le raccourci « Crafting » — visible dans les options / raccourcis clavier) et lance une recette. Les recettes communes ne demandent <b>aucune compétence</b>, juste les matériaux et quelques cuivres. Par exemple : <b>Eastbrook Arming Sword</b> (forge d'armes) = 2 Bone Fragments + 1 Linen Scrap ; <b>Eastbrook Chainmail Vest</b> (forge d'armures) = 3 Bone Fragments.</li>
+          <li><b>Monte en compétence.</b> Chaque fabrication réussie donne <b>+1 point</b> dans le métier utilisé. Tous les <b>25 points</b>, un palier de plus — à 25 dans deux métiers voisins, les <b>recettes combo</b> s'ouvrent (voir plus bas).</li>
+        </ol>
+
+        <h4>⚠️ Pas encore actif dans cette version</h4>
+        <ul>
+          <li><b>Les points de minerai / bois / herbe ne sont pas encore récoltables.</b> Tu les vois sur la minimap (Eastbrook Vale, Mirefen Marsh) et cliquer dessus ne fait rien : l'interaction n'est pas encore branchée dans le jeu. Ça arrivera dans une prochaine version — les outils vendus par <b>Trader Wilkes</b> à Eastbrook (pioche, hache, faucille, 20 cuivres) servent à s'y préparer.</li>
+          <li><b>Le choix d'archétype n'est pas encore activé</b> (la quête « A Craft to Call Your Own » est désactivée dans cette version). En attendant, tout le monde est plafonné à <b>rare</b> — ce qui suffit largement pour toutes les recettes actuelles.</li>
+        </ul>
+
+        <h4>L'anneau des 10 métiers</h4>
+        <p>Forge d'armures → Forge d'armes → Joaillerie → Alchimie → Ingénierie → Cuisine → Inscription → Enchantement → Couture → Travail du cuir → (retour à la Forge d'armures). « Voisins » et « opposé » se lisent sur cet anneau.</p>
+
+        <h4>Les plafonds de qualité (quand les archétypes seront activés)</h4>
+        <ul>
+          <li>Tes <b>2 majeurs</b> (le métier choisi + son voisin sur l'anneau) : <b>aucune limite</b>, jusqu'au légendaire.</li>
+          <li>Le métier <b>à l'opposé</b> de l'anneau : ton « hobby », plafonné à <b>rare</b>.</li>
+          <li>Tous les autres : plafonnés à <b>commun</b> (les recettes de base restent faisables).</li>
+          <li>Sans archétype choisi — la situation de tout le monde aujourd'hui : tout est plafonné à <b>rare</b>.</li>
+          <li>Changer d'archétype ? Via une quête répétable de « rachat », dont le coût <b>augmente à chaque changement</b>. On ne perd jamais les points acquis : les métiers hors majeurs sont juste « en sommeil ».</li>
+        </ul>
+
+        <h4>Bonus à connaître</h4>
+        <ul>
+          <li><b>Spécialisation (75 points dans un métier)</b> : <b>−20 %</b> de matériaux sur ses recettes, et <b>−25 %</b> en plus pour recharger un outil que tu as toi-même fabriqué.</li>
+          <li><b>Matériaux signés</b> : les matériaux <b>rares ou mieux</b> dépecés sur les cadavres portent ton nom. Crafter avec un matériau signé <b>par toi</b> = <b>1 unité de moins</b> requise. Les objets rares+ que tu fabriques sont signés aussi, et les utiliser toi-même donne un filet d'XP.</li>
+          <li><b>Focus de ville</b> : dans ta ville-hub (Eastbrook, Fenbridge ou Highwatch), répartis <b>10 points</b> entre types de ressources : <b>+10 % de rendement</b> par point, et tous les 5 points le palier de récolte monte d'un cran (max 2).</li>
+          <li><b>Outils</b> : les enchanteurs fabriquent des effets à sertir sur les outils de récolte — <b>Gatherer's Cache</b> (+ quantité), <b>Artisan's Eye</b> (+ qualité), <b>Quickening Charm</b> (réapparition plus rapide).</li>
+        </ul>
+
+        <h4>Recettes combo (les 2 métiers de la paire au palier 1, soit 25 points chacun)</h4>
+        <ul>
+          <li><b>Boundstone Helm</b> — forge d'armures + forge d'armes ; 4 Bone Fragments + 2 Linen Scrap.</li>
+          <li><b>Gravewyrm Gauntlets</b> — forge d'armures + forge d'armes ; 3 Bone Fragments + 3 Linen Scrap.</li>
+          <li><b>Elixir of the Bear</b> — alchimie + ingénierie ; 2 Linen Scrap + 2 Twitching Spider Leg.</li>
+        </ul>
+
+        <h4>Les limites techniques</h4>
+        <ul>
+          <li>Coût en or : <b>2 cuivres</b> par point de budget d'item-level de la recette (les recettes de départ coûtent ~20 cuivres).</li>
+          <li>Cadence maximale : <b>10 fabrications par minute</b>.</li>
+          <li>Les recettes d'outils avancées (paliers 75 et 150) se font à l'<b>établi du hub de craft niveau 20, à Highwatch</b>.</li>
+        </ul>`
+    },
+    banque: {
+      title: "The Gilded Strongbox — banque personnelle",
+      summary: "Un coffre par personnage, extensible et entièrement auditable.",
+      body: `
+        <h4>Accès</h4>
+        <p>Chaque personnage a un coffre en plus de ses sacs, ouvert chez un <b>bursar</b> dans chaque ville-hub :</p>
+        <ul>
+          <li>Bursar <b>Fernando</b> — Eastbrook</li>
+          <li>Bursar <b>Petra Vell</b> — Fenbridge</li>
+          <li>Bursar <b>Aldous Crane</b> — Highwatch</li>
+        </ul>
+        <h4>Extensions</h4>
+        <ul>
+          <li><b>24 slots</b> de base.</li>
+          <li>Jusqu'à <b>12 extensions de 6 slots</b>, achetées en pièces à prix croissant (<b>500 cuivre</b> la première, jusqu'à <b>1 200 000</b> la douzième) → <b>96 slots</b> achetés.</li>
+          <li>Comptes en ligne : jusqu'à <b>16 slots bonus</b> (+2 email vérifié, +2 Discord lié, +2 wallet lié, +2 par parrainage qualifié jusqu'à 5).</li>
+          <li><b>Maximum absolu : 112 slots.</b></li>
+        </ul>
+        <h4>Sécurité</h4>
+        <p>Persistance côté serveur avec une table d'audit <b>append-only</b> (<span class="kbd">bank_ledger</span>) et une table <span class="kbd">character_leases</span> qui empêche les doublons de personnage. Un script opérateur rejoue le registre contre l'état réel du coffre.</p>`
+    },
+    buffs: {
+      title: "Buffs de raid en pourcentage",
+      summary: "Les buffs de groupe deviennent des pourcentages appliqués à tout le raid, sans limite de portée.",
+      body: `
+        <h4>Ce qui change</h4>
+        <p>Ces buffs s'appliquent désormais au <b>lanceur et à tout le groupe/raid</b>, quelle que soit la distance (et aussi aux <b>familiers contrôlés</b>) :</p>
+        <ul>
+          <li><b>Aether Insight</b> — +5 % Intelligence</li>
+          <li><b>Wildward</b> — +5 % à toutes les caractéristiques</li>
+          <li><b>Litany of Resolve</b> — +5 % Endurance</li>
+          <li><b>Iron Bellow</b> et <b>Oath of Iron</b> — +10 % Puissance d'attaque</li>
+          <li><b>Steadfast Aura</b> — +10 % Armure</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Conséquence pour la guilde : la valeur d'un buff dépend maintenant de la composition du raid, plus d'une valeur fixe.</p>`
+    },
+    armor: {
+      title: "Réductions d'armure",
+      summary: "Armor Shear passe en pourcentage, avec deux nouveaux débuffs.",
+      body: `
+        <h4>Les chiffres</h4>
+        <ul>
+          <li><b>Armor Shear</b> : réduction en pourcentage — <b>2 % par stack</b>, soit <b>10 % à 5 stacks</b>.</li>
+          <li><b>Witchlight</b> (nouveau) : <b>10 % fixe</b>, ne se cumule pas avec Armor Shear.</li>
+          <li><b>Armor Breach</b> : applique les <b>10 % complets en un seul cast</b>.</li>
+        </ul>`
+    },
+    hitrun: {
+      title: "Hit-and-run des mobs de mêlée",
+      summary: "Les mobs hostiles frappent depuis leur portée tout en continuant d'avancer.",
+      body: `
+        <h4>Ce qui change</h4>
+        <ul>
+          <li>Chaque mob de mêlée hostile <b>frappe depuis sa portée effective</b> tout en <b>continuant de se rapprocher</b>.</li>
+          <li>Il <b>frappe dès qu'il entre en portée</b>.</li>
+          <li>Il vérifie sa <b>laisse</b> même en pleine mêlée.</li>
+          <li>Résultat : fin du cycle « stop-and-go » à la limite de portée — la <b>poursuite est plus fluide</b>, et le kiting devient plus exigeant.</li>
+        </ul>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); }); // clic sur le fond
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); }); // Échap
+</script>
+</body>
+</html>

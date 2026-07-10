@@ -1,0 +1,18 @@
+{
+  "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls.",
+  "versions": [
+    {
+      "version": "v0.23.0",
+      "date": "2026-07-09",
+      "titre": "La Vale Cup, les donjons héroïques et les 10 sets épiques",
+      "resume": "Grosse mise à jour endgame : deux nouveaux modes de jeu, la difficulté Héroïque avec sa monnaie Heroic Marks, dix sets épiques, les stats Crit & Haste, les métiers finalisés et la banque personnelle.",
+      "temps_forts": [
+        "The Vale Cup (boarball) et Protect Yumi, deux nouveaux modes",
+        "Difficulté Héroïque des 4 donjons + Heroic Marks",
+        "10 sets épiques, stats Crit Rating & Haste Rating",
+        "Métiers finalisés et banque The Gilded Strongbox"
+      ],
+      "page": "notes/v0.23.0.html"
+    }
+  ]
+}
