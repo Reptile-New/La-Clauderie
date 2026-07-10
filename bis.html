@@ -137,7 +137,7 @@
 
 <footer>
   <div class="wrap">
-    <p>Panoplies optimisées sur les données réelles du jeu (tag v0.23.0) avec les formules de combat du patch : la valeur de chaque objet est mesurée dans la panoplie complète, bonus de sets et procs compris — c'est pour ça que certaines pièces de set battent des objets « meilleurs » pris isolément. <b style="color:var(--dim)">Alt.</b> = meilleur remplaçant si la pièce te manque. <b style="color:var(--dim)">équipable*</b> = le tooltip cite d'autres classes, mais le jeu ne restreint les armures que par type (tissu/cuir/mailles).</p>
+    <p>Panoplies optimisées sur les données réelles du jeu (tag v0.23.0) avec les formules de combat du patch : la valeur de chaque objet est mesurée dans la panoplie complète, bonus de sets et procs compris — c'est pour ça que certaines pièces de set battent des objets « meilleurs » pris isolément. <b style="color:var(--dim)">Alt.</b> = meilleur remplaçant si la pièce te manque. <b style="color:var(--dim)">équipable*</b> = le tooltip cite d'autres classes, mais le jeu ne restreint les armures que par type (tissu/cuir/mailles). Le jeu n'a pas d'objets « uniques » : porter <b style="color:var(--dim)">deux exemplaires du même anneau</b> est autorisé (vérifié dans le code d'équipement) — d'où les anneaux doublés.</p>
     <p style="margin-top:8px"><a href="index.html">← Retour au site</a></p>
   </div>
 </footer>
@@ -458,22 +458,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Seal of the Nine Oaths",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "seal_of_the_nine_oaths",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
@@ -486,18 +470,34 @@ const BIS = {
        "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Seal of the Nine Oaths",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Sutil's Gambit",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false
       }
@@ -515,7 +515,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4305.1
+    "score": 4336.0
    },
    "dps": {
     "picks": {
@@ -828,22 +828,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Sutil's Gambit",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "agi": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "sutils_gambit",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
@@ -856,18 +840,34 @@ const BIS = {
        "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Sutil's Gambit",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 7,
+        "str": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "sutils_gambit",
+       "id": "seal_of_the_nine_oaths",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Oath of the Round Table",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
       }
@@ -885,7 +885,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 68.8
+    "score": 69.1
    }
   }
  },
@@ -1204,22 +1204,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Seal of the Nine Oaths",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "seal_of_the_nine_oaths",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
@@ -1232,18 +1216,34 @@ const BIS = {
        "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Seal of the Nine Oaths",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Sutil's Gambit",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false
       }
@@ -1261,7 +1261,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4265.2
+    "score": 4296.1
    },
    "heal": {
     "picks": {
@@ -1574,22 +1574,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Zyzz's Deathless Signet",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "spi": 6,
-        "int": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "zyzzs_deathless_signet",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
@@ -1602,18 +1586,34 @@ const BIS = {
        "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Zyzz's Deathless Signet",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
        "stats": {
-        "spi": 6,
-        "int": 5
+        "int": 6,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "zyzzs_deathless_signet",
+       "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Niela's Coldlight Band",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "sta": 4
+       },
+       "w": null,
+       "sp": null,
+       "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
       }
@@ -1631,7 +1631,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 97.9
+    "score": 98.1
    },
    "dps": {
     "picks": {
@@ -1945,22 +1945,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Sutil's Gambit",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "agi": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "sutils_gambit",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
@@ -1973,18 +1957,34 @@ const BIS = {
        "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Sutil's Gambit",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 7,
+        "str": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "sutils_gambit",
+       "id": "seal_of_the_nine_oaths",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Oath of the Round Table",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
       }
@@ -2002,7 +2002,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 68.5
+    "score": 68.8
    }
   }
  },
@@ -2320,22 +2320,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Zyzz's Deathless Signet",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "spi": 6,
-        "int": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "zyzzs_deathless_signet",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
@@ -2348,18 +2332,34 @@ const BIS = {
        "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Zyzz's Deathless Signet",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
        "stats": {
-        "spi": 6,
-        "int": 5
+        "int": 6,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "zyzzs_deathless_signet",
+       "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Niela's Coldlight Band",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "sta": 4
+       },
+       "w": null,
+       "sp": null,
+       "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
       }
@@ -2377,7 +2377,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 111.2
+    "score": 111.4
    },
    "dps": {
     "picks": {
@@ -2691,22 +2691,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Sutil's Gambit",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "agi": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "sutils_gambit",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
@@ -2719,18 +2703,34 @@ const BIS = {
        "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Sutil's Gambit",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 7,
+        "str": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "sutils_gambit",
+       "id": "seal_of_the_nine_oaths",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Oath of the Round Table",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
       }
@@ -2748,7 +2748,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 64.4
+    "score": 64.8
    }
   }
  },
@@ -3066,22 +3066,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Seal of the Nine Oaths",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "seal_of_the_nine_oaths",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
@@ -3094,18 +3078,34 @@ const BIS = {
        "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Seal of the Nine Oaths",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Sutil's Gambit",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false
       }
@@ -3118,7 +3118,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4071.8
+    "score": 4101.2
    },
    "heal": {
     "picks": {
@@ -3417,6 +3417,20 @@ const BIS = {
      },
      "ring1": {
       "best": {
+       "name": "The Architect's Cornerstone",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 6,
+        "spi": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
        "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
@@ -3427,20 +3441,6 @@ const BIS = {
        "w": null,
        "sp": null,
        "id": "zyzzs_deathless_signet",
-       "score": 11.0,
-       "xclass": false
-      },
-      "alt": {
-       "name": "Niela's Coldlight Band",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
       }
@@ -3461,16 +3461,16 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Niela's Coldlight Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 7,
-        "sta": 4
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "nielas_coldlight_band",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false
       }
@@ -3488,7 +3488,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 111.9
+    "score": 112.4
    },
    "dps": {
     "picks": {
@@ -3800,22 +3800,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Sutil's Gambit",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "agi": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "sutils_gambit",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
@@ -3828,18 +3812,34 @@ const BIS = {
        "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Sutil's Gambit",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 7,
+        "str": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "sutils_gambit",
+       "id": "seal_of_the_nine_oaths",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Oath of the Round Table",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 6,
+        "str": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "oath_of_the_round_table",
        "score": 11.0,
        "xclass": false
       }
@@ -3857,7 +3857,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 73.0
+    "score": 74.2
    }
   }
  },
@@ -4175,22 +4175,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Zyzz's Deathless Signet",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "spi": 6,
-        "int": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "zyzzs_deathless_signet",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
@@ -4203,18 +4187,34 @@ const BIS = {
        "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Zyzz's Deathless Signet",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
        "stats": {
-        "spi": 6,
-        "int": 5
+        "int": 6,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "zyzzs_deathless_signet",
+       "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Niela's Coldlight Band",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "sta": 4
+       },
+       "w": null,
+       "sp": null,
+       "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
       }
@@ -4232,7 +4232,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 117.3
+    "score": 117.5
    },
    "dps": {
     "picks": {
@@ -4545,22 +4545,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Zyzz's Deathless Signet",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "spi": 6,
-        "int": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "zyzzs_deathless_signet",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
@@ -4573,18 +4557,34 @@ const BIS = {
        "id": "architects_cornerstone",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Zyzz's Deathless Signet",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
        "stats": {
-        "spi": 6,
-        "int": 5
+        "int": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "zyzzs_deathless_signet",
+       "id": "nielas_coldlight_band",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "The Architect's Cornerstone",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 6,
+        "spi": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "architects_cornerstone",
        "score": 11.0,
        "xclass": false
       }
@@ -4632,21 +4632,21 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Lunar Tide Greatstaff",
+       "name": "Staff of the Gravewyrm",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 13,
-        "spi": 9
+        "int": 12,
+        "spi": 6
        },
        "w": {
-        "min": 30,
-        "max": 50,
+        "min": 32,
+        "max": 52,
         "speed": 3
        },
        "sp": null,
-       "id": "lunar_tide_greatstaff",
-       "score": 28.7,
+       "id": "staff_of_the_gravewyrm",
+       "score": 25.0,
        "xclass": false
       }
      },
@@ -4936,16 +4936,16 @@ const BIS = {
      },
      "ring2": {
       "best": {
-       "name": "The Architect's Cornerstone",
+       "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "spi": 5
+        "int": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "architects_cornerstone",
+       "id": "nielas_coldlight_band",
        "score": 11.0,
        "xclass": false
       },
@@ -5007,21 +5007,21 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Lunar Tide Greatstaff",
+       "name": "Staff of the Gravewyrm",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 13,
-        "spi": 9
+        "int": 12,
+        "spi": 6
        },
        "w": {
-        "min": 30,
-        "max": 50,
+        "min": 32,
+        "max": 52,
         "speed": 3
        },
        "sp": null,
-       "id": "lunar_tide_greatstaff",
-       "score": 28.7,
+       "id": "staff_of_the_gravewyrm",
+       "score": 25.0,
        "xclass": false
       }
      },
@@ -5106,18 +5106,18 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Shroud of the Gravewyrm",
-       "q": "epic",
+       "name": "Moonwrack Robe",
+       "q": "rare",
        "set": null,
        "stats": {
-        "armor": 90,
-        "int": 12,
-        "spi": 10
+        "armor": 70,
+        "int": 10,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "shroud_of_the_gravewyrm",
-       "score": 29.5,
+       "id": "moonshroud_robe",
+       "score": 20.8,
        "xclass": false
       }
      },
@@ -5295,22 +5295,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "The Architect's Cornerstone",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 6,
-        "spi": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "architects_cornerstone",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
@@ -5323,18 +5307,34 @@ const BIS = {
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "The Architect's Cornerstone",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "spi": 5
+        "int": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "architects_cornerstone",
+       "id": "nielas_coldlight_band",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Zyzz's Deathless Signet",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "spi": 6,
+        "int": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false
       }
@@ -5352,7 +5352,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 79.3
+    "score": 79.7
    }
   }
  },
@@ -5670,22 +5670,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Oath of the Round Table",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "sta": 6,
-        "str": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "oath_of_the_round_table",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
@@ -5698,18 +5682,34 @@ const BIS = {
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Oath of the Round Table",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "sta": 6,
-        "str": 5
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "oath_of_the_round_table",
+       "id": "sutils_gambit",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Seal of the Nine Oaths",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 7,
+        "sta": 4
+       },
+       "w": null,
+       "sp": null,
+       "id": "seal_of_the_nine_oaths",
        "score": 11.0,
        "xclass": false
       }
@@ -5727,7 +5727,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 67.2
+    "score": 67.4
    }
   }
  },
@@ -6045,22 +6045,6 @@ const BIS = {
        "xclass": false
       },
       "alt": {
-       "name": "Niela's Coldlight Band",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "nielas_coldlight_band",
-       "score": 11.0,
-       "xclass": false
-      }
-     },
-     "ring2": {
-      "best": {
        "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
@@ -6073,18 +6057,34 @@ const BIS = {
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
        "xclass": false
-      },
-      "alt": {
-       "name": "Niela's Coldlight Band",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "nielas_coldlight_band",
+       "id": "sutils_gambit",
+       "score": 11.0,
+       "xclass": false
+      },
+      "alt": {
+       "name": "Seal of the Nine Oaths",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 7,
+        "sta": 4
+       },
+       "w": null,
+       "sp": null,
+       "id": "seal_of_the_nine_oaths",
        "score": 11.0,
        "xclass": false
       }
@@ -6102,7 +6102,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 69.6
+    "score": 71.3
    }
   }
  }
@@ -6157,6 +6157,7 @@ const ITEM_IMG = {
   "Mistcaller's Fang": "mistcallers_fang.png",
   "Mistforged Pauldrons": "mistforged_pauldrons.png",
   "Monarch's Crown": "monarch_crown_helm.webp",
+  "Moonwrack Robe": "moonshroud_robe.webp",
   "Morthen's Cryptforged Hauberk": "morthens_cryptforged_hauberk.png",
   "Mournweave Legwraps": "necromancers_legwraps.webp",
   "Mournweave Soulspire Mantle": "necromancers_soulspire_mantle.png",
@@ -6176,6 +6177,7 @@ const ITEM_IMG = {
   "Shadowpulse Slippers": "shadowpulse_slippers.png",
   "Shroud of the Gravewyrm": "shroud_of_the_gravewyrm.png",
   "Soulrend Diadem": "soulrend_diadem.png",
+  "Staff of the Gravewyrm": "staff_of_the_gravewyrm.jpg",
   "Stormcaller's Focus": "stormcallers_focus.png",
   "Sunken Reliquary Hood": "sunken_reliquary_hood.png",
   "Sutil's Gambit": "sutils_gambit.png",

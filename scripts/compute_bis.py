@@ -228,25 +228,22 @@ def optimize(cls, role):
         for sl in free:
             bs=None
             for iid in pool[sl]:
-                if iid in used: continue
                 equip[sl]=iid
                 v=evaluate(cls,role,equip)
                 if bs is None or v>bs[0]: bs=(v,iid)
             equip[sl]=bs[1] if bs else None
-            if bs: used.add(bs[1])
         for _ in range(4):  # passes de raffinement (slots libres uniquement)
             changed=False
             for sl in free:
                 cur=equip[sl]
                 bs=(evaluate(cls,role,equip),cur)
                 for iid in pool[sl]:
-                    if iid==cur or iid in used: continue
+                    if iid==cur: continue
                     equip[sl]=iid
                     v=evaluate(cls,role,equip)
                     if v>bs[0]+1e-9: bs=(v,iid)
                 equip[sl]=bs[1]  # TOUJOURS restaurer le meilleur (bug: le slot restait sur le dernier essayé)
-                if bs[1]!=cur:
-                    used.discard(cur); used.add(bs[1]); changed=True
+                if bs[1]!=cur: changed=True
             if not changed: break
         v=evaluate(cls,role,equip)
         if best is None or v>best[0]: best=(v,dict(equip))
@@ -256,7 +253,9 @@ def optimize(cls, role):
     for sl in SLOTS:
         cur=equip[sl]; bs=None
         for iid in pool[sl]:
-            if iid==cur or iid in equip.values(): continue
+            if iid==cur: continue
+            if sl not in ('ring1','ring2') and iid in equip.values(): continue
+            if sl in ('ring1','ring2') and iid in (equip['ring1'],equip['ring2']): continue
             e2=dict(equip); e2[sl]=iid
             v=evaluate(cls,role,e2)
             if bs is None or v>bs[0]: bs=(v,iid)
