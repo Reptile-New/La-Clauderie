@@ -32,6 +32,11 @@ aux versions précédentes** — l'historique se construit au fil du temps :
 C'est tout : la page « Nouveautés du jeu » et la carte de l'accueil (qui affiche
 toujours la dernière version) se mettent à jour automatiquement.
 
+> **Rappel automatique** : le workflow `.github/workflows/check-game-version.yml`
+> vérifie toutes les 6 h si une nouvelle version du jeu est sortie. Si ses
+> nouveautés manquent sur le site, il ouvre une issue sur le repo pour le
+> signaler (une seule par version).
+
 ## Gérer le calendrier, les membres et les faits d'armes (pour les officiers)
 
 Tout se fait depuis **`admin.html`** (lien « Espace officiers » en bas du site),

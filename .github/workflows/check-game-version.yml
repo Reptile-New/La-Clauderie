@@ -1,0 +1,55 @@
+# Vérifie toutes les 6 h si une nouvelle version de World of ClaudeCraft est
+# sortie. Si ses nouveautés ne sont pas encore sur le site (absentes de
+# patch-notes.json), ouvre une issue pour le rappeler — une seule par version.
+
+name: Alerte nouvelle version du jeu
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Comparer la version du jeu avec patch-notes.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          latest=$(curl -s "https://api.github.com/repos/levy-street/world-of-claudecraft/tags?per_page=1" | jq -r '.[0].name // empty')
+          if [ -z "$latest" ]; then
+            echo "Impossible de lire le dernier tag du jeu — on réessaiera au prochain passage."
+            exit 0
+          fi
+          echo "Dernière version du jeu : $latest"
+
+          if jq -e --arg v "$latest" 'any(.versions[]; .version == $v)' patch-notes.json > /dev/null; then
+            echo "Le site est à jour."
+            exit 0
+          fi
+
+          title="📜 Nouveautés $latest à ajouter au site"
+          if gh issue list --state open --json title --jq '.[].title' | grep -qF "$title"; then
+            echo "Issue déjà ouverte pour $latest."
+            exit 0
+          fi
+
+          body="La version **$latest** de World of ClaudeCraft est sortie, mais ses nouveautés ne sont pas encore sur le site.
+
+          Pour les ajouter (procédure détaillée dans le README) :
+          1. Créer \`notes/$latest.html\` sur le modèle de la version précédente.
+          2. Ajouter une entrée en tête de \`patch-notes.json\`.
+
+          Astuce : demander à Claude « ajoute les nouveautés de la $latest au site » fait exactement ça."
+          gh issue create --title "$title" --body "$body"
+          echo "Issue ouverte pour $latest."
