@@ -4,6 +4,11 @@
       "pseudo": "Pr Reptile Druid",
       "role": "Maître de guilde",
       "classe": "Druide Tank"
+    },
+    {
+      "pseudo": "Pr Reptile",
+      "role": "Officier",
+      "classe": "Mage"
     }
   ]
 }
