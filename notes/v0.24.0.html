@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Nouveautés v0.24.0 — La Clauderie</title>
+<meta name="description" content="Toutes les nouveautés de la v0.24.0 de World of ClaudeCraft, avec les règles exactes.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="Nouveautés v0.24.0 — La Clauderie">
+<meta property="og:description" content="Toutes les nouveautés de la v0.24.0 de World of ClaudeCraft, avec les règles exactes.">
+<meta property="og:url" content="https://reptile-new.github.io/La-Clauderie/notes/v0.24.0.html">
+<meta property="og:image" content="https://reptile-new.github.io/La-Clauderie/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  /* Sets */
+  .set h3 { font-size: 1.05rem; }
+  .set .role { font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); margin: 2px 0 12px; }
+  dl.bonus { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 7px 11px; }
+  dl.bonus dt { font-family: var(--font-mono); font-weight: 700; font-size: 0.74rem; color: var(--gold-bright); padding-top: 1px; }
+  dl.bonus dd { margin: 0; font-size: 0.87rem; color: var(--dim); }
+  dl.bonus dd .proc { color: var(--arcane); font-weight: 600; }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" aria-label="Navigation du site">
+      <a href="../index.html">Accueil</a>
+      <a href="../bis.html">⚔️ BiS</a>
+      <a href="../patch-notes.html" class="cur">📜 Nouveautés</a>
+      <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Notes de version</p>
+    <h1>Nouveautés <span class="v">v0.24.0</span></h1>
+    <p class="lede">Une mise à jour « polish & infrastructure » : interface entièrement refaite, butin héroïque renforcé, file de sorts, ready checks et grosses performances. Clique sur une bulle pour les règles détaillées.</p>
+    <div class="meta">
+      <span><b>Publiée</b> le 11 juil. 2026</span>
+      <span><b>376</b> commits</span>
+      <span><b>Aucun</b> nouveau contenu de zone — que du système</span>
+    </div>
+    <div class="hint">💡 Clique sur une nouveauté pour ouvrir ses règles détaillées.</div>
+  </header>
+
+  <!-- 1 DONJONS HÉROÏQUES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Donjons héroïques — à lire avant le prochain raid</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="hloot" tabindex="0" role="button" aria-label="Détails : Butin héroïque amélioré">
+        <h3>Butin héroïque renforcé <span class="chip c-raid">Loot</span></h3>
+        <p>Les drops en donjon héroïque sortent en version <strong class="hl">[HEROIC]</strong> : épiques ilvl 28, rares ilvl 25.</p>
+        <span class="more-link">Ce qui monte, ce qui ne bouge pas</span>
+      </div>
+      <div class="card more" data-detail="marks" tabindex="0" role="button" aria-label="Détails : Heroic Marks">
+        <h3>Heroic Marks liées <span class="chip c-bal">Économie</span></h3>
+        <p>Les marks deviennent <strong class="hl">soulbound</strong>, et un seul loot du boss final paie tout le groupe.</p>
+        <span class="more-link">Les nouvelles règles</span>
+      </div>
+      <div class="card more" data-detail="lockout" tabindex="0" role="button" aria-label="Détails : Lockout">
+        <h3>Lockout pour tout le groupe <span class="chip c-bal">Équilibrage</span></h3>
+        <p>Fini le « ferry » : le kill du boss final verrouille <strong class="hl">tout le groupe</strong>, présent ou non au corps.</p>
+        <span class="more-link">Comment ça marche exactement</span>
+      </div>
+      <div class="card more" data-detail="dgqol" tabindex="0" role="button" aria-label="Détails : Confort donjon">
+        <h3>Confort en donjon <span class="chip c-new">QoL</span></h3>
+        <p>On n'arrive plus en pleine aggro en zonant, et Thunzharr crie moins fort (mais plus souvent).</p>
+        <span class="more-link">Les détails</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 COMBAT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Combat</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="queue" tabindex="0" role="button" aria-label="Détails : File de sorts">
+        <h3>File de sorts <span class="chip c-new">Système</span></h3>
+        <p>Presser le sort suivant dans les <strong class="hl">0,4 dernières secondes</strong> d'une incantation le met en file — fini le « You are busy ».</p>
+        <span class="more-link">Les règles exactes</span>
+      </div>
+      <div class="card more" data-detail="buffs" tabindex="0" role="button" aria-label="Détails : Buffs de groupe">
+        <h3>Buffs : le dernier gagne <span class="chip c-bal">Équilibrage</span></h3>
+        <p>Les 6 buffs de groupe ne se cumulent plus entre lanceurs : le plus récent remplace l'ancien.</p>
+        <span class="more-link">La liste concernée</span>
+      </div>
+      <div class="card more" data-detail="fixes" tabindex="0" role="button" aria-label="Détails : Corrections de classes">
+        <h3>Corrections de classes <span class="chip c-bal">Fixes</span></h3>
+        <p>Mending Light moins cher, résumon de démon réparé, et les morts ne marchent plus tout seuls.</p>
+        <span class="more-link">Le détail par classe</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 INTERFACE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>L'interface refaite</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="windows" tabindex="0" role="button" aria-label="Détails : Fenêtres unifiées">
+        <h3>19 fenêtres unifiées <span class="chip c-new">Interface</span></h3>
+        <p>Sacs, banque, vendeurs, grimoire, talents… toutes les fenêtres passent sur un même cadre : déplaçables, redimensionnables, opaques.</p>
+        <span class="more-link">Ce qui change concrètement</span>
+      </div>
+      <div class="card more" data-detail="escmenu" tabindex="0" role="button" aria-label="Détails : Menu Échap">
+        <h3>Menu Échap refait <span class="chip c-new">Réglages</span></h3>
+        <p>Catégories, recherche globale de réglages, vrais raccourcis à combinaisons, et première navigation à la manette.</p>
+        <span class="more-link">Le tour du nouveau menu</span>
+      </div>
+      <div class="card more" data-detail="keyboard" tabindex="0" role="button" aria-label="Détails : Clavier moderne">
+        <h3>Clavier modernisé <span class="chip c-new">Contrôles</span></h3>
+        <p><span class="kbd">Q</span>/<span class="kbd">E</span> deviennent des boutons d'action, <span class="kbd">Maj+1…0</span> atteint la 2ᵉ barre. <strong class="hl">Tes touches personnalisées ne bougent pas.</strong></p>
+        <span class="more-link">Le nouveau plan par défaut</span>
+      </div>
+      <div class="card">
+        <h3>Aussi côté interface</h3>
+        <ul>
+          <li>Vendeurs à onglets Acheter / Vendre / Racheter.</li>
+          <li>Talents en choix par paliers, façon classique.</li>
+          <li>Plaques des mobs hostiles coupées à 40 yards (moins de bruit à l'écran).</li>
+          <li>Le curseur de champ de vision (FOV) fonctionne enfin.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SOCIAL -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Vie de groupe & confort</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="ready" tabindex="0" role="button" aria-label="Détails : Ready checks">
+        <h3>Ready checks <span class="chip c-new">Groupe</span></h3>
+        <p>Le chef lance <span class="kbd">/ready</span> : carillon, 30 secondes, et un bilan anonyme du groupe.</p>
+        <span class="more-link">Comment s'en servir en raid</span>
+      </div>
+      <div class="card">
+        <h3>Petits plus</h3>
+        <ul>
+          <li><span class="kbd">/playtime</span> : temps de jeu total du personnage.</li>
+          <li>5 touches réassignables pour la barre de familier (chasseur/démoniste).</li>
+          <li>Les dégâts s'affichent enfin tous en graphismes « Low ».</li>
+          <li>La barre d'action grise aussi les cibles <em>trop proches</em> (portée minimale).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 PERFS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Performances & chargement</h2></div>
+    <div class="grid cols-3">
+      <div class="card"><h3>Foules fluides <span class="chip c-mob">+35 %</span></h3><ul><li>Chaque personnage passe de ~9 draws à 1 seul.</li><li>90 joueurs à l'écran : 45 → 61 fps.</li><li>Toi, ta cible et tout ce qui incante restent animés à chaque frame.</li></ul></div>
+      <div class="card"><h3>Chargement bien plus rapide</h3><ul><li>Seul le terrain proche se construit avant l'entrée en jeu, le reste arrive en fond.</li><li>Astuces de gameplay pendant le chargement.</li></ul></div>
+      <div class="card"><h3>Serveur allégé</h3><ul><li>La sérialisation des auras coûte deux fois moins cher.</li><li>Moins de pics de latence aux heures de pointe.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 6 MOBILE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Mobile & applis natives</h2></div>
+    <div class="grid cols-2">
+      <div class="card"><h3>Contrôles tactiles</h3><ul><li>L'autorun se verrouille en poussant le joystick à fond — plus de bouton séparé.</li><li>Zoom à deux doigts plus délibéré, caméra qui ne se bloque plus après un pincement.</li><li>Le mode portrait est retiré : écran « tourne ton téléphone ».</li></ul></div>
+      <div class="card"><h3>Connexion native</h3><ul><li>Connexion et liaison <strong class="hl">Discord</strong> directement dans les applis iOS/Android.</li><li><strong class="hl">Sign in with Apple</strong> natif sur iOS.</li><li>Réinitialisation de mot de passe par e-mail depuis l'écran de connexion.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 7 RESTE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>Le reste de la mise à jour</h2></div>
+    <div class="grid cols-2">
+      <div class="card"><h3>Métiers</h3><ul><li>Nouvelle quête d'introduction « A Trade for Every Hand » chez Foreman Odell à Eastbrook (5 minerais → 150 XP, 50 cuivres).</li><li>La fenêtre de craft regroupe enfin les recettes par métier.</li><li>L'enchantement est construit dans le moteur (désenchantement + 12 enchants), mais <strong class="hl">pas encore activé en jeu</strong>.</li><li>Le courrier permet de choisir la quantité d'une pile jointe.</li></ul></div>
+      <div class="card more" data-detail="jail" tabindex="0" role="button" aria-label="Détails : La prison">
+        <h3>La prison 🚔 <span class="chip c-pvp">Modération</span></h3>
+        <p>Les modérateurs peuvent envoyer un joueur en <strong class="hl">prison</strong> — une vraie cellule dans le monde, avec baston entre détenus.</p>
+        <span class="more-link">Le règlement de la prison</span>
+      </div>
+      <div class="card"><h3>Localisation & plateformes</h3><ul><li>Les 21 langues non anglaises passent à <strong class="hl">0 chaîne en attente</strong> (2 596 traduites pour cette version).</li><li>Corrections de vrais contresens dans 16 langues.</li><li>Les builds desktop Linux (AppImage, .deb) sont de retour.</li></ul></div>
+      <div class="card"><h3>Ce qui n'est PAS dans la v0.24.0</h3><ul><li>La refonte du Guerrier (ambidextrie, parade, rage retravaillée) a été fusionnée <em>puis annulée</em> dans la même fenêtre — elle reviendra retravaillée.</li><li>Aucun nouvel objet, monstre, quête ou zone : les données de jeu sont identiques à la v0.23.0.</li></ul></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compilé pour <strong>La Clauderie</strong> — données et règles issues des notes de version officielles v0.24.0.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← Toutes les mises à jour</a> · <a href="../index.html">Accueil</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    hloot: {
+      title: "Butin héroïque renforcé",
+      summary: "Les drops des donjons héroïques sortent désormais en version améliorée, marquée [HEROIC] en doré sur le tooltip.",
+      body: `
+        <h4>Ce qui monte</h4>
+        <ul>
+          <li>Dans un donjon héroïque, les mobs remplacent leurs drops normaux par des variantes améliorées : <b>épiques à l'item level 28</b> et <b>rares à 25</b>.</li>
+          <li>Les stats principales sont remises à l'échelle du nouveau budget <b>en gardant l'identité de l'objet</b> (un objet Force reste un objet Force).</li>
+          <li>Les dégâts d'armes suivent maintenant une vraie courbe de DPS par item level.</li>
+          <li>Les <b>6 armes des sets héroïques</b> sont recalées à <b>16,0 DPS</b> — au-dessus des épiques de donjon (14–15), sous les légendaires (17+).</li>
+        </ul>
+        <h4>Ce qui ne bouge pas</h4>
+        <ul>
+          <li>Le <b>set du boss final (ilvl 31)</b> et les épiques de raid ne sont jamais touchés — la variante ne s'applique que si c'est une amélioration.</li>
+          <li>La variante garde le <b>nom de l'objet de base</b> ; seul le tag doré <b>[HEROIC]</b> la distingue.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Pour la guilde : les runs héroïques valent encore plus le coup pour équiper les rerolls — mais le BiS du site reste inchangé (il est déjà basé sur les sets finaux, jamais remplacés).</p>`
+    },
+    marks: {
+      title: "Heroic Marks : liées, et payées d'un coup",
+      summary: "La monnaie héroïque devient personnelle et intransférable, et le boss final paie tout le monde d'un seul loot.",
+      body: `
+        <h4>Soulbound</h4>
+        <ul>
+          <li>Les Heroic Marks ne peuvent plus être <b>échangées, envoyées par courrier, vendues au World Market, vendues au PNJ ni détruites</b>.</li>
+          <li>Seule utilisation possible : les dépenser chez <b>Quartermaster Vex</b> (anneau 12 marks, collier 16 marks).</li>
+          <li>Les marks déjà en vente ou dans des courriers ont été <b>renvoyées à leur propriétaire</b> au passage en v0.24.0 — vérifie ta boîte aux lettres.</li>
+        </ul>
+        <h4>Un loot paie tout le groupe</h4>
+        <ul>
+          <li>Le boss final ne dépose plus une mark par personne à ramasser : <b>le premier participant qui loote le corps déclenche le paiement de tout le monde</b>.</li>
+          <li>1 mark par participant en donjon 5 joueurs, <b>3 marks</b> pour le raid Nythraxis héroïque.</li>
+          <li>Plus besoin d'atteindre le corps pour être payé (mort au fond du couloir : payé quand même).</li>
+        </ul>`
+    },
+    lockout: {
+      title: "Le lockout héroïque verrouille tout le groupe",
+      summary: "Fini l'exploit du « ferry » où un joueur non verrouillé faisait rentrer un groupe déjà verrouillé.",
+      body: `
+        <h4>Avant / après</h4>
+        <ul>
+          <li><b>Avant :</b> seuls les membres à moins de 80 yards du corps prenaient le lockout, et la porte ne vérifiait que celui qui réclamait l'instance — un joueur libre pouvait faire rentrer tout un groupe verrouillé.</li>
+          <li><b>Maintenant :</b> le kill du boss final verrouille <b>tous les membres du groupe propriétaire</b>, tous les joueurs présents dans l'instance, et tous ceux qui reçoivent une récompense — crédit ou pas. Le raid Nythraxis applique le même balayage au raid entier.</li>
+        </ul>
+        <h4>La porte « boss vivant »</h4>
+        <ul>
+          <li>Un joueur verrouillé ne peut entrer dans une instance héroïque en cours <b>que si son boss final est déjà mort</b> et que son lock vient de ce kill.</li>
+          <li>Traduction : les <b>retours de cadavre et la récupération de loot marchent toujours</b>, mais plus aucune relance abusive.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Rappel : les marks restent conditionnées à la participation — c'est le lockout qui devient inconditionnel, pas la récompense.</p>`
+    },
+    dgqol: {
+      title: "Confort en donjon",
+      summary: "Deux irritants de moins dans les runs.",
+      body: `
+        <h4>Zoner sans pull</h4>
+        <ul>
+          <li>Les points d'arrivée des donjons reculent hors de portée d'aggro (au Drowned Temple, les gardes campaient à 10,4 yards pour 12 d'aggro… on chargeait la salle en zonant).</li>
+          <li>Tous les spawns de donjon sont désormais garantis à <b>au moins 20 yards</b> de l'entrée, et aucun camp extérieur ne peut plus apparaître collé à une porte de donjon.</li>
+        </ul>
+        <h4>Thunzharr se calme</h4>
+        <ul>
+          <li>Le world boss ne spamme plus une ligne de log par mécanique.</li>
+          <li>Son seul cri périodique est le cri de guerre de zone, resserré d'environ 60 s à <b>~45 s</b>, portée 350 yards.</li>
+        </ul>`
+    },
+    queue: {
+      title: "File de sorts (spell queueing)",
+      summary: "Le jeu accepte enfin le sort suivant pendant la fin de l'incantation en cours.",
+      body: `
+        <h4>La règle</h4>
+        <ul>
+          <li>Presser une capacité pendant les <b>0,4 dernières secondes</b> d'une incantation ou d'une canalisation la place dans une file (une seule place) au lieu d'afficher « You are busy ».</li>
+          <li>Elle part <b>à l'instant exact</b> où l'incantation se termine.</li>
+        </ul>
+        <h4>Les subtilités</h4>
+        <ul>
+          <li>Le sort en file est <b>revalidé au moment du départ</b> (cible, portée, coût, cooldown, GCD) comme un appui neuf.</li>
+          <li>Un nouvel appui dans la fenêtre <b>remplace</b> le précédent.</li>
+          <li>Si le GCD du sort en file court encore à la fin d'une incantation courte, la file <b>attend et réessaie</b>.</li>
+          <li>Une incantation <b>interrompue</b> vide la file. La pêche est exemptée.</li>
+          <li>Comportement identique hors ligne et sur le serveur.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Concrètement : vos rotations gagnent en fluidité sans rien changer — spammez juste la touche suivante un poil en avance, comme sur le WoW classique.</p>`
+    },
+    buffs: {
+      title: "Buffs de groupe : le plus récent gagne",
+      summary: "Les six buffs de groupe ne se cumulent plus entre lanceurs différents.",
+      body: `
+        <h4>Les buffs concernés</h4>
+        <ul>
+          <li><b>Aether Insight</b> (+5 % Int), <b>Wildward</b> (+5 % tout), <b>Litany of Resolve</b> (+5 % End), <b>Iron Bellow</b> et <b>Oath of Iron</b> (+10 % PA), <b>Steadfast Aura</b> (+10 % armure).</li>
+        </ul>
+        <h4>La règle</h4>
+        <ul>
+          <li>Poser un de ces buffs <b>remplace</b> la copie déjà présente sur la cible, quel que soit son lanceur — le plus récent gagne.</li>
+          <li>Toutes les autres auras gardent leur cumul normal par source.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">En raid : inutile de faire buffer deux chamans — assignez un seul responsable par buff.</p>`
+    },
+    fixes: {
+      title: "Corrections de classes",
+      summary: "Trois vraies corrections, et une refonte repoussée.",
+      body: `
+        <h4>Paladin</h4>
+        <p><b>Mending Light</b> coûte enfin son juste prix : 25/50/70/115 mana par rang (au lieu de 35/60/95/140), soins inchangés.</p>
+        <h4>Démoniste</h4>
+        <p>Résumer un démon <b>déjà invoqué</b> le remplaçait par… rien du tout. Le résumon livre maintenant une copie fraîche pleine vie.</p>
+        <h4>Tout le monde</h4>
+        <p>Mourir en avançant ne fait plus <b>marcher votre fantôme tout seul</b> — l'intention de mouvement est purgée à la mort et à la résurrection.</p>
+        <h4>Guerrier — pas cette fois</h4>
+        <p>La refonte du Guerrier (ambidextrie, blocage, parade, rage retravaillée, spé au niveau 5) a été fusionnée <b>puis entièrement annulée</b> dans cette même version, le temps d'être retravaillée. Rien n'en est présent en v0.24.0.</p>`
+    },
+    windows: {
+      title: "19 fenêtres sur un cadre unique",
+      summary: "Sacs, banque, vendeurs, calendrier, grimoire, talents, hôtel des ventes… tout le monde sur la même grammaire de fenêtre.",
+      body: `
+        <h4>Le nouveau cadre</h4>
+        <ul>
+          <li>Barre de titre + onglets + pied collant + cellules d'objets bordées par rareté.</li>
+          <li>Toutes les fenêtres se <b>déplacent</b> par la barre de titre, se <b>redimensionnent</b> par une poignée visible, restent dans l'écran et se décalent en cascade à l'ouverture.</li>
+          <li>Les fenêtres sont <b>opaques</b> : fini le monde qui transparaît derrière un menu haut.</li>
+        </ul>
+        <h4>Les vendeurs</h4>
+        <ul>
+          <li>Fenêtre marchande autonome avec onglets <b>Acheter / Vendre / Racheter</b> — elle ne force plus l'ouverture des sacs.</li>
+          <li>Vendre un objet à stats tirées demande confirmation (le rachat ne peut pas restaurer les stats tirées).</li>
+        </ul>
+        <h4>Les talents</h4>
+        <p>La fenêtre devient un sélecteur classique <b>à choix par paliers</b>, pleine hauteur, avec des rangées par tier.</p>`
+    },
+    escmenu: {
+      title: "Le menu Échap, refait de zéro",
+      summary: "Un vrai menu de réglages moderne, avec la première navigation manette du jeu.",
+      body: `
+        <h4>Navigation</h4>
+        <ul>
+          <li>Rail de catégories permanent (Affichage, Entrées, Système) + page d'accueil avec l'essentiel épinglé et le compteur de réglages modifiés.</li>
+          <li><b>Recherche globale</b> de n'importe quel réglage, avec portée « partout » ou « cette section ».</li>
+          <li><b>Reset</b> par catégorie, et reset général confirmé.</li>
+        </ul>
+        <h4>Raccourcis</h4>
+        <ul>
+          <li>Les <b>combinaisons</b> (Maj+1, etc.) deviennent assignables ; lier une touche déjà prise annonce l'éviction ; les conflits remontent en alerte.</li>
+        </ul>
+        <h4>Manette</h4>
+        <p>Première prise en charge des menus au pad : LB/RB changent de catégorie, la croix déplace le focus, A/B/X/Y agissent, RT/LT paginent — avec légende des boutons tant qu'une manette est branchée.</p>`
+    },
+    keyboard: {
+      title: "Le clavier par défaut, modernisé",
+      summary: "Uniquement pour les profils qui n'ont jamais personnalisé leurs touches.",
+      body: `
+        <h4>Le nouveau plan</h4>
+        <ul>
+          <li><span class="kbd">Q</span> et <span class="kbd">E</span> = boutons d'action 11 et 12 (fini le strafe par défaut : A/D + souris couvrent le déplacement latéral).</li>
+          <li>Strafe gauche/droite livrés <b>non assignés</b> mais réassignables.</li>
+          <li><span class="kbd">Maj+1</span> à <span class="kbd">Maj+0</span> atteignent toute la 2ᵉ barre d'action sans pavé numérique.</li>
+          <li>Damage meters passe de H à <span class="kbd">Z</span>.</li>
+        </ul>
+        <h4>Important</h4>
+        <p><b>Quiconque a déjà modifié la moindre touche garde exactement son plan actuel.</b> Seuls les profils vierges reçoivent le nouveau défaut.</p>`
+    },
+    ready: {
+      title: "Ready checks",
+      summary: "L'outil qu'il manquait pour lancer les pulls proprement.",
+      body: `
+        <h4>Comment ça marche</h4>
+        <ul>
+          <li>Le <b>chef de groupe ou de raid</b> tape <span class="kbd">/ready</span> (ou <span class="kbd">/readycheck</span>).</li>
+          <li>Chaque membre entend un <b>carillon à trois notes</b> et reçoit un choix Prêt / Pas prêt.</li>
+          <li>Le chef compte automatiquement comme prêt ; la vérification se termine quand tout le monde a répondu, ou après <b>30 secondes</b>.</li>
+        </ul>
+        <h4>Le résultat</h4>
+        <ul>
+          <li>Annonce de groupe <b>en comptes seulement</b> (ex. : « 4 prêts, 1 pas prêt ») — les réponses individuelles restent privées, comme sur le client classique.</li>
+          <li>Une seule vérification à la fois ; ceux qui quittent le groupe en cours de check en sont retirés.</li>
+        </ul>`
+    },
+    jail: {
+      title: "La prison 🚔",
+      summary: "Les modérateurs disposent d'une vraie prison en jeu. À ne pas tester volontairement.",
+      body: `
+        <h4>Le principe</h4>
+        <ul>
+          <li>Un modérateur peut condamner un joueur (<b>1 minute à 10 ans</b>) : téléportation immédiate dans une cellule d'un quartier pénitentiaire isolé — murs de pierre, torches, châlits et coin latrines.</li>
+          <li>La peine <b>persiste à travers les déconnexions</b> et se termine par un retour automatique à la position d'avant l'arrestation.</li>
+        </ul>
+        <h4>Pendant la peine</h4>
+        <ul>
+          <li>Aucun accès au contenu en instance (arène, Vale Cup, donjons, delves, duels) ; les files en cours sont vidées à l'incarcération.</li>
+          <li>Toute évasion vous <b>téléporte aussitôt dans votre cellule</b>.</li>
+          <li>Les détenus peuvent se battre entre eux : la <b>baston de prison</b> — sans enjeu, résurrection pleine vie instantanée dans la cellule, ni XP ni loot.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Politique de la guilde : on n'y met jamais les pieds 😇</p>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+</body>
+</html>

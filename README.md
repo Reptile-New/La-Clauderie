@@ -17,7 +17,7 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 | `events.json` | Les données du calendrier (modifiées via l'espace officiers) |
 | `members.json` | Les membres de la guilde : pseudo, rôles, classe (modifiés via l'espace officiers) |
 | `roles.json` | Les rôles de guilde (Maître de guilde, Officier, Head manager…), dans l'ordre d'affichage |
-| `guild.json` | Les infos de la guilde (classement serveur actuel, affiché sur l'accueil) |
+| `guild.json` | Les infos de la guilde (classement serveur, **mis à jour automatiquement toutes les 3 h** par `update-guild-rank.yml` depuis l'API du jeu) |
 | `achievements.json` | Les faits d'armes, avec les membres participants (modifiés via l'espace officiers) |
 
 ## Ajouter les nouveautés d'une mise à jour

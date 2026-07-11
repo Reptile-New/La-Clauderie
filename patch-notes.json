@@ -2,6 +2,19 @@
   "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls.",
   "versions": [
     {
+      "version": "v0.24.0",
+      "date": "2026-07-11",
+      "titre": "L'interface refaite, le butin héroïque renforcé et la file de sorts",
+      "resume": "Mise à jour « polish & infrastructure » : 19 fenêtres unifiées et nouveau menu Échap, drops héroïques améliorés [HEROIC] avec marks liées et lockout durci, file de sorts, ready checks, +35 % de fps en foule et chargement bien plus rapide.",
+      "temps_forts": [
+        "Butin héroïque ilvl 28, Heroic Marks liées, lockout pour tout le groupe",
+        "File de sorts : le sort suivant part sans délai",
+        "Interface refaite : 19 fenêtres, menu Échap, vendeurs à onglets",
+        "Ready checks /ready et +35 % de fps dans les foules"
+      ],
+      "page": "notes/v0.24.0.html"
+    },
+    {
       "version": "v0.23.0",
       "date": "2026-07-09",
       "titre": "La Vale Cup, les donjons héroïques et les 10 sets épiques",

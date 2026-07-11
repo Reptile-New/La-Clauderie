@@ -1,0 +1,66 @@
+# Relève toutes les 3 h la position de La Clauderie dans le classement des
+# guildes du serveur (l'API publique du jeu) et met à jour guild.json si elle
+# a changé — le badge de l'accueil suit tout seul. Le champ manuel de
+# l'espace officiers reste utilisable en secours ; ce workflow le réécrira
+# au prochain passage si le classement réel diffère.
+name: Classement de la guilde
+
+on:
+  schedule:
+    - cron: "7 */3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write   # pour relancer le déploiement Pages après le commit
+
+jobs:
+  rank:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Relever le classement
+        id: releve
+        run: |
+          set -euo pipefail
+          rank=""
+          for page in 0 1 2 3 4; do
+            resp=$(curl -s -m 20 "https://worldofclaudecraft.com/api/leaderboard?board=guilds&page=$page&pageSize=50" || true)
+            r=$(echo "$resp" | jq -r '.leaders[]? | select((.name | ascii_downcase) == "la clauderie") | .rank' 2>/dev/null | head -1)
+            if [ -n "$r" ]; then
+              rank="$r"
+              break
+            fi
+            n=$(echo "$resp" | jq -r '.leaders | length' 2>/dev/null || echo 0)
+            if [ "$n" = "0" ]; then
+              break
+            fi
+          done
+          if [ -z "$rank" ]; then
+            echo "Guilde introuvable dans le classement — on garde la valeur affichée."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          cur=$(jq -r '.guilde.classementServeur // empty' guild.json)
+          echo "Classement relevé : $rank (affiché : ${cur:-aucun})"
+          if [ "$cur" = "$rank" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          jq --argjson r "$rank" '.guilde.classementServeur = $r' guild.json > guild.tmp && mv guild.tmp guild.json
+          git config user.name "clauderie-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add guild.json
+          git commit -m "guilde : classement serveur ${cur:-?} → $rank"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Un push fait avec le GITHUB_TOKEN ne déclenche pas les workflows
+      # « on: push » — on relance donc la publication explicitement.
+      - name: Publier le site
+        if: steps.releve.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy-pages.yml --ref main
