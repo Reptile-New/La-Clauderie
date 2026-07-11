@@ -20,6 +20,18 @@
           "role": "DPS"
         }
       ]
+    },
+    {
+      "pseudo": "Nielas Aran",
+      "roles": [
+        "Archimage"
+      ],
+      "persos": [
+        {
+          "classe": "Mage",
+          "role": "DPS"
+        }
+      ]
     }
   ]
 }
