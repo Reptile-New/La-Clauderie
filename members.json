@@ -1,13 +1,6 @@
 {
   "members": [
     {
-      "pseudo": "Pr Reptile Druid",
-      "classe": "Druide Tank",
-      "roles": [
-        "Maître de guilde"
-      ]
-    },
-    {
       "pseudo": "Pr Reptile",
       "classe": "Mage",
       "roles": [
