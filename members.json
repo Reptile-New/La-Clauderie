@@ -1,3 +1,25 @@
 {
-  "members": []
+  "members": [
+    {
+      "pseudo": "Pr Reptile",
+      "roles": [
+        "Maître de guilde",
+        "Développeur web"
+      ],
+      "persos": [
+        {
+          "classe": "Druide",
+          "role": "Tank"
+        },
+        {
+          "classe": "Prêtre",
+          "role": "Heal"
+        },
+        {
+          "classe": "Mage",
+          "role": "DPS"
+        }
+      ]
+    }
+  ]
 }
