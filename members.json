@@ -32,6 +32,24 @@
           "role": "DPS"
         }
       ]
+    },
+    {
+      "pseudo": "Summus",
+      "roles": [],
+      "persos": [
+        {
+          "classe": "Mage",
+          "role": "DPS"
+        },
+        {
+          "classe": "Paladin",
+          "role": "Tank"
+        },
+        {
+          "classe": "Prêtre",
+          "role": "Heal"
+        }
+      ]
     }
   ]
 }
