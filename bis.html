@@ -180,7 +180,7 @@
   <header class="page">
     <p class="eyebrow">Guide de classe · Patch v0.24.0</p>
     <h1>Les builds de la guilde</h1>
-    <p class="lede">Choisis ta classe puis ton rôle : la spécialisation et les talents recommandés (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Clique sur un objet pour voir où il s'obtient.</p>
+    <p class="lede">Choisis ta classe puis ton rôle : la spécialisation et les talents recommandés (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
   </header>
 
   <div class="classes" id="clsTabs" role="tablist" aria-label="Classes"></div>
@@ -8033,16 +8033,26 @@ function fmtStats(it) {
   return parts.join(" · ");
 }
 
+// Rend chaque nom de talent / sort cliquable (fiche incrustée du Codex),
+// en découpant les libellés composés : « A → B », « A + B », « A / B », « A ×2 ».
+function cxNames(raw) {
+  return String(raw).split(/(\s*(?:→|\/|\+)\s*|\s*×\s*\d+\s*$)/).map(part => {
+    const t = part.trim();
+    if (!t || /^(→|\/|\+|×\s*\d+)$/.test(t)) return part;
+    return `<span data-codex="auto|${t.replace(/"/g, "&quot;")}">${part}</span>`;
+  }).join("");
+}
+
 function renderBuild() {
   const box = document.getElementById("buildBox");
   const b = (BUILDS[curCls] || {})[curRole];
   if (!b) { box.innerHTML = ""; return; }
-  const talents = b.talents.map(t => `<li><b>${t[0]}</b> <span class="bt-tree">${t[1]}</span> — ${t[2]}</li>`).join("");
-  const rota = b.rotation.map(r => `<li><b>${r[0]}</b> — ${r[1]}</li>`).join("");
+  const talents = b.talents.map(t => `<li><b>${cxNames(t[0])}</b> <span class="bt-tree">${t[1]}</span> — ${t[2]}</li>`).join("");
+  const rota = b.rotation.map(r => `<li><b>${cxNames(r[0])}</b> — ${r[1]}</li>`).join("");
   box.innerHTML = `
     <div class="bsec">
       <h2 class="bsec-h">🧠 Spé & talents</h2>
-      <div class="bspec"><b>${b.spec}</b><span class="bmastery">${b.mastery}</span><p>${b.pourquoi}</p></div>
+      <div class="bspec"><b><span data-codex="spec|${b.spec.replace(/"/g, "&quot;")}">${b.spec}</span></b><span class="bmastery">${b.mastery}</span><p>${b.pourquoi}</p></div>
       <div class="bstats">Priorité de stats : <b>${b.stats}</b></div>
       <ol class="btalents">${talents}</ol>
     </div>
@@ -8051,7 +8061,8 @@ function renderBuild() {
       <ol class="brota">${rota}</ol>
       ${b.astuce ? `<p class="bastuce">💡 ${b.astuce}</p>` : ""}
     </div>
-    <h2 class="bsec-h">⚔️ Le stuff (best in slot)</h2>`;
+    <h2 class="bsec-h">⚔️ Le stuff (<span data-codex="term|bis">best in slot</span>)</h2>`;
+  if (window.CodexPopup) CodexPopup.enhance(box);
 }
 
 function render() {
@@ -8106,5 +8117,7 @@ function render() {
 }
 render();
 </script>
+<!-- Fiches incrustées (talents, sorts, glossaire…) basées sur les données du Codex -->
+<script src="assets/codex-popup.js" defer></script>
 </body>
 </html>

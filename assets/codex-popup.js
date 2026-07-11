@@ -1,0 +1,661 @@
+/* ============================================================================
+   Codex Popup — fiches incrustées pour le site de La Clauderie
+   ----------------------------------------------------------------------------
+   Affiche une petite fiche dans la page (sans quitter le site) pour tout
+   élément marqué  data-codex="type|référence"  :
+
+     <span data-codex="item|swiftfang_talisman">Swiftfang Talisman</span>
+     <span data-codex="ability|Mending Light">Mending Light</span>
+     <span data-codex="talent|Seething Fury">Seething Fury</span>
+     <span data-codex="mob|Thunzharr">Thunzharr</span>
+     <span data-codex="term|soulbound">soulbound</span>
+     <span data-codex="auto|Oathbrand">Oathbrand</span>   ← devine le type
+
+   Types : item, ability (sort), talent, spec, mob, npc, quest, dungeon,
+   delve, set, zone, term (glossaire français), auto (essaie tout).
+   La référence est un id du jeu OU un nom exact (insensible aux accents).
+
+   Les données viennent du Codex WoCC (même domaine GitHub Pages), chargées
+   à la volée au premier clic puis mises en cache par le navigateur. Comme le
+   Codex se régénère tout seul à chaque release du jeu, ces fiches sont
+   toujours à jour sans aucune intervention.
+   ============================================================================ */
+(() => {
+'use strict';
+
+/* ---------- configuration ---------- */
+
+const GH_PAGES = 'https://reptile-new.github.io/wocc-knowledge-base';
+// En local (python3 -m http.server à la racine du dossier parent), le repo
+// du codex est servi sous le même hôte : on garde des chemins relatifs au host.
+const onPages = /\.github\.io$/.test(location.hostname);
+const DATA_BASE = window.CODEX_DATA_BASE ||
+  (onPages ? GH_PAGES + '/data' : '/wocc-knowledge-base/data');
+const CODEX_SITE = GH_PAGES + '/site/index.html';
+
+const FILES = ['ITEMS','MOBS','NPCS','QUESTS','DUNGEONS','DELVES','ITEM_SETS',
+               'WORLD_BOSSES','ZONES','HEROIC_BOSS_LOOT','ABILITIES','TALENTS','_meta'];
+
+/* ---------- petits helpers ---------- */
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fold = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const asList = x => !x ? [] : Array.isArray(x) ? x : Object.values(x);
+
+function money(copper) {
+  if (!copper && copper !== 0) return '';
+  const g = Math.floor(copper / 10000), s = Math.floor(copper / 100) % 100, c = copper % 100;
+  const parts = [];
+  if (g) parts.push(`<b class="cxp-po">${g} po</b>`);
+  if (s) parts.push(`<b class="cxp-pa">${s} pa</b>`);
+  if (c || !parts.length) parts.push(`<b class="cxp-pc">${c} pc</b>`);
+  return parts.join(' ');
+}
+const pct = x => x == null ? '' : (x >= 0.995 ? '100 %' : (x * 100).toFixed(x < 0.01 ? 1 : 0) + ' %');
+
+/* ---------- libellés français ---------- */
+
+const QUALITY_FR = { poor:'Médiocre', common:'Commun', uncommon:'Inhabituel', rare:'Rare', epic:'Épique', legendary:'Légendaire' };
+const KIND_FR = { weapon:'Arme', armor:'Armure', bag:'Sac', food:'Nourriture', drink:'Boisson', tool:'Outil', junk:'Camelote', potion:'Potion', elixir:'Élixir', quest:'Objet de quête' };
+const SLOT_FR = { mainhand:'Main droite', chest:'Torse', feet:'Pieds', legs:'Jambes', helmet:'Tête', shoulder:'Épaules', waist:'Taille', gloves:'Mains' };
+const ARMORTYPE_FR = { cloth:'Tissu', leather:'Cuir', mail:'Mailles' };
+const CLASS_FR = { warrior:'Guerrier', mage:'Mage', rogue:'Voleur', priest:'Prêtre', warlock:'Démoniste', druid:'Druide', hunter:'Chasseur', paladin:'Paladin', shaman:'Chaman' };
+const STAT_FR = { str:'Force', sta:'Endurance', agi:'Agilité', int:'Intelligence', spi:'Esprit', armor:'Armure', ap:"Puissance d'attaque", crit:'Score de critique', haste:'Score de hâte', sp:'Puissance des sorts' };
+const FAMILY_FR = { demon:'Démon', beast:'Bête', spider:'Araignée', humanoid:'Humanoïde', mudfin:'Mudfin', burrower:'Fouisseur', undead:'Mort-vivant', troll:'Troll', ogre:'Ogre', elemental:'Élémentaire', dragonkin:'Draconien' };
+const SCHOOL_FR = { physical:'Physique', fire:'Feu', frost:'Givre', arcane:'Arcanes', nature:'Nature', holy:'Sacré', shadow:'Ombre' };
+const ROLE_FR = { tank:'Tank', healer:'Soins', dps:'DPS' };
+const BIOME_FR = { vale:'Vallée', marsh:'Marais', peaks:'Pics', mountain:'Montagne', forest:'Forêt' };
+
+/* Capacités spéciales des monstres (drapeaux booléens des données du jeu). */
+const MOB_ABILITY_FR = {
+  aoePulse:'Vague de zone', summonAdds:'Invoque des renforts', enrage:'Enrage',
+  cleave:'Enchaînement', mortalStrike:'Frappe mortelle', knockback:'Projection',
+  stomp:'Piétinement', manaBurn:'Brûlure de mana', packFrenzy:'Frénésie de meute',
+  thorns:'Épines', venom:'Venin', ensnare:'Enchevêtrement', lifeleech:'Drain de vie',
+  plague:'Peste', silence:'Silence', terrify:'Terreur', spellReflect:'Renvoi de sorts',
+  stoneskin:'Peau de pierre', warcry:'Cri de guerre', bleed:'Saignement',
+  disarm:'Désarmement', rampage:'Sauvagerie', frostbite:'Gelure', hex:'Maléfice',
+  frenzyOnHit:'Frénésie au contact', wardAllies:'Protège ses alliés',
+  stunOnHit:'Frappe étourdissante', polymorphHex:'Métamorphose', blind:'Aveuglement',
+  demoralize:'Démoralisation', soulrot:"Pourriture d'âme", slowStrike:'Frappe ralentissante',
+  corrode:'Corrosion', sapVigor:'Sape la vigueur', desperateHeal:'Soin désespéré',
+  critVuln:'Expose aux critiques', stackPoison:'Poison cumulable', wither:'Flétrissement',
+  purgeOnHit:'Dissipation au contact', vulnerability:'Vulnérabilité', healAbsorb:'Absorbe les soins',
+  mendAlly:'Soigne ses alliés', costTax:'Sorts plus coûteux', siphonSpirit:"Siphon d'esprit",
+  tongues:'Malédiction des langages', arcaneRot:'Pourriture arcanique', deathThroes:'Explose à la mort',
+  staggerHit:'Frappe titubante', rally:'Ralliement', smolder:'Combustion', cinder:'Cendres brûlantes',
+  concuss:'Commotion', chillOnHit:'Frappe glaçante', spellVuln:'Expose aux sorts',
+  enfeeble:'Affaiblissement', lockout:'Verrouillage de sorts', enervate:'Énervation',
+  expose:"Expose l'armure", aoeSlow:'Ralentissement de zone', bigCast:'Incantation dévastatrice',
+  ccImmune:'Insensible au contrôle', slowImmune:'Insensible aux ralentissements',
+};
+
+/* ---------- glossaire français (les « mots techniques ») ---------- */
+
+const GLOSSARY = {
+  soulbound: { title: 'Soulbound (lié à l’âme)', def: `Un objet <b>soulbound</b> est lié définitivement au personnage qui l'a ramassé : impossible de le donner, de l'échanger ou de le vendre à un autre joueur. C'est le cas de la plupart des butins de donjon et des <span data-codex="term|heroic marks">Heroic Marks</span>.` },
+  ilvl: { title: 'ilvl (niveau d’objet)', def: `Le <b>niveau d'objet</b> (item level) mesure la puissance globale d'une pièce d'équipement : plus il est haut, plus l'objet porte de statistiques. Deux objets de même rareté peuvent avoir des ilvl différents — en héroïque, les épiques montent par exemple à l'ilvl 28.` },
+  proc: { title: 'Proc', def: `Un <b>proc</b> est un effet qui se déclenche aléatoirement quand une condition est remplie — souvent « à chaque coup critique, X % de chances de… ». Les bonus 4 pièces des sets épiques et les armes légendaires fonctionnent ainsi. Voir aussi <span data-codex="term|icd">ICD</span>.` },
+  icd: { title: 'ICD (temps de recharge interne)', def: `L'<b>Internal CooldDown</b> d'un <span data-codex="term|proc">proc</span> est le délai minimum entre deux déclenchements. Un proc « 50 %, ICD 15 s » ne peut jamais se re-déclencher moins de 15 secondes après le précédent, même avec de la chance.` },
+  dot: { title: 'DoT (dégâts sur la durée)', def: `Un <b>DoT</b> (<i>damage over time</i>) inflige ses dégâts par petites touches régulières pendant plusieurs secondes — poisons, saignements, malédictions. L'inverse pour les soins s'appelle un <span data-codex="term|hot">HoT</span>.` },
+  hot: { title: 'HoT (soins sur la durée)', def: `Un <b>HoT</b> (<i>heal over time</i>) soigne par petites touches régulières pendant plusieurs secondes, plutôt qu'en une seule fois. Idéal à poser sur le tank <i>avant</i> que les dégâts n'arrivent.` },
+  buff: { title: 'Buff', def: `Un <b>buff</b> est un effet positif temporaire posé sur un personnage (plus de force, plus de vitesse…). L'effet négatif équivalent, posé par un ennemi, est un <b>debuff</b>. Depuis la v0.24.0, les 6 buffs de groupe ne se cumulent plus entre lanceurs : le plus récent remplace l'ancien.` },
+  debuff: { title: 'Debuff', def: `Un <b>debuff</b> est un effet négatif temporaire posé sur une cible : armure réduite, ralentissement, poison… Les tanks et DPS cherchent à maintenir certains debuffs sur le boss (comme la réduction d'armure) pendant tout le combat.` },
+  aggro: { title: 'Aggro & menace', def: `L'<b>aggro</b> désigne « qui le monstre attaque ». Chaque action génère de la <b>menace</b> (threat) : le monstre frappe celui qui en a le plus. Le rôle du tank est de garder l'aggro ; un DPS qui « prend l'aggro » tape trop fort trop tôt.` },
+  lockout: { title: 'Lockout (verrouillage)', def: `Le <b>lockout</b> empêche de refaire un donjon héroïque immédiatement : depuis la v0.24.0, tuer le boss final verrouille <b>tout le groupe</b> (présent ou non au corps) jusqu'à la réinitialisation. Fini le « ferry » qui enchaînait les boss finaux.` },
+  kiting: { title: 'Kiting', def: `<b>Kiter</b> un monstre, c'est le garder à distance en se déplaçant sans cesse pendant qu'on lui inflige des dégâts — il court après vous sans jamais vous toucher. Depuis la v0.23.0, les mobs de mêlée frappent en avançant, ce qui rend le kiting plus risqué.` },
+  gcd: { title: 'GCD (temps de recharge global)', def: `Le <b>global cooldown</b> est le court délai (~1,5 s) imposé entre deux actions, partagé par presque toutes les compétences. Certaines capacités sont « hors GCD » : elles s'utilisent sans bloquer le reste.` },
+  crit: { title: 'Critique (crit)', def: `Un coup <b>critique</b> inflige des dégâts augmentés (×2 en mêlée, ×1,5 pour les sorts). La chance de critique vient de l'Agilité et du <b>Crit Rating</b> du stuff : 10 points de rating = 1 % de critique.` },
+  haste: { title: 'Hâte (haste)', def: `La <b>hâte</b> accélère à la fois les attaques automatiques et les incantations. Elle vient du <b>Haste Rating</b> du stuff : 10 points de rating = 1 % de hâte.` },
+  ap: { title: 'Puissance d’attaque (AP)', def: `L'<b>attack power</b> augmente les dégâts des attaques physiques. Elle vient de la Force (et de l'Agilité pour voleurs et chasseurs) : chaque classe a sa propre conversion.` },
+  sp: { title: 'Puissance des sorts (SP)', def: `Le <b>spell power</b> augmente les dégâts et les soins des sorts. Il vient de l'Intelligence (0,5 SP par point d'Int) et des bonus fixes du stuff de lanceur de sorts.` },
+  bis: { title: 'BiS (Best in Slot)', def: `Le <b>Best in Slot</b> est, pour chaque emplacement d'équipement, l'objet le plus puissant du jeu pour votre classe et votre rôle. La page <a href="/La-Clauderie/bis.html">Builds</a> le calcule à partir des vraies données du patch, bonus de sets compris.` },
+  filler: { title: 'Filler', def: `Le <b>filler</b> est le sort « bouche-trou » d'une rotation : celui qu'on lance quand tout le reste est en recharge. Pas le plus puissant, mais toujours disponible.` },
+  burst: { title: 'Burst', def: `Le <b>burst</b> est un pic de dégâts concentré sur quelques secondes, en cumulant cooldowns et procs — par opposition aux dégâts réguliers « soutenus » (sustained).` },
+  cooldown: { title: 'Cooldown (recharge)', def: `Le <b>cooldown</b> d'une capacité est son temps de recharge avant de pouvoir la réutiliser. Par extension, « les cooldowns » désignent les grosses capacités à longue recharge qu'on garde pour les moments clés.` },
+  imbue: { title: 'Imbue (imprégnation d’arme)', def: `Une <b>imprégnation</b> est un enchantement temporaire que chamans et paladins posent sur leur propre arme (Oathbrand, Stonebound Weapon…). Un seul actif à la fois, à renouveler régulièrement.` },
+  interrupt: { title: 'Interruption', def: `<b>Interrompre</b>, c'est couper l'incantation d'un ennemi avec une capacité dédiée (coup de pied, coup de bouclier…), ce qui l'empêche de lancer son sort et le verrouille quelques secondes. Vital contre les soigneurs ennemis en héroïque.` },
+  dispel: { title: 'Dissipation (dispel)', def: `<b>Dissiper</b>, c'est retirer un effet magique : un debuff posé sur un allié, ou un buff posé sur un ennemi. Certains monstres dissipent vos buffs au contact.` },
+  cc: { title: 'CC (contrôle)', def: `Le <b>crowd control</b> regroupe tout ce qui neutralise temporairement un ennemi sans le tuer : étourdissement, métamorphose, peur, racines… Certains monstres y sont insensibles (« CC immune »), notamment les boss.` },
+  tank: { title: 'Tank', def: `Le <b>tank</b> encaisse les coups à la place du groupe : il garde l'<span data-codex="term|aggro">aggro</span> des monstres grâce à sa menace et survit grâce à son armure et ses PV. Guerrier, paladin et druide-ours tiennent ce rôle.` },
+  heal: { title: 'Heal (soigneur)', def: `Le <b>soigneur</b> maintient le groupe en vie, en priorité le <span data-codex="term|tank">tank</span>. Prêtre, chaman, druide et paladin peuvent tenir ce rôle selon leur spécialisation.` },
+  dps: { title: 'DPS', def: `<b>DPS</b> (<i>damage per second</i>) désigne à la fois la mesure des dégâts par seconde et le rôle de ceux dont c'est le travail : tuer vite, sans voler l'<span data-codex="term|aggro">aggro</span> du tank.` },
+  needgreed: { title: 'Need / Greed', def: `Le système de partage du butin en groupe : on lance <b>Need</b> (besoin) si l'objet améliore directement son personnage, <b>Greed</b> (cupidité) sinon. Les jets Need battent toujours les jets Greed.` },
+  worldboss: { title: 'World boss', def: `Un <b>world boss</b> est un boss qui apparaît dans le monde ouvert (pas dans un donjon), à intervalle régulier, et se combat à plusieurs groupes. Thunzharr en est l'exemple actuel — ses PV montent avec le nombre de joueurs présents.` },
+  delve: { title: 'Delve', def: `Une <b>delve</b> est une petite excursion souterraine générée par modules, jouable en solo ou petit groupe, avec un compagnon automatique si besoin et des paliers de difficulté croissants.` },
+  'heroic marks': { title: 'Heroic Marks', def: `La monnaie de fin de donjon héroïque, échangeable contre des bijoux épiques chez le vendeur dédié. Depuis la v0.24.0 elles sont <span data-codex="term|soulbound">soulbound</span>, et un seul butin du boss final paie tout le groupe.` },
+  set: { title: 'Set / Panoplie (2P, 3P, 4P)', def: `Une <b>panoplie</b> est un ensemble d'objets assortis : en porter plusieurs pièces débloque des bonus cumulatifs, notés <b>2P / 3P / 4P</b> (pour 2, 3 ou 4 pièces portées). Les bonus 4P des sets épiques sont souvent des <span data-codex="term|proc">procs</span>.` },
+  pull: { title: 'Pull', def: `<b>Puller</b>, c'est engager le combat en attirant un ou plusieurs monstres vers le groupe. Un bon pull est choisi et maîtrisé ; un mauvais pull ramène la moitié du donjon et finit en <span data-codex="term|wipe">wipe</span>.` },
+  wipe: { title: 'Wipe', def: `Un <b>wipe</b>, c'est la mort de tout le groupe sur un combat. On récupère son corps, on se re-buff, et on y retourne — ça fait partie de l'apprentissage d'un boss.` },
+  rotation: { title: 'Rotation', def: `La <b>rotation</b> est l'ordre optimal dans lequel enchaîner ses capacités en combat : les priorités à maintenir (DoT, debuffs), les capacités à lancer dès qu'elles sont prêtes, et le <span data-codex="term|filler">filler</span> pour combler les trous.` },
+  spec: { title: 'Spé (spécialisation)', def: `La <b>spécialisation</b> est l'orientation choisie pour sa classe (tank, soins ou DPS, avec une identité propre). Elle détermine la <span data-codex="term|mastery">maîtrise</span>, le sort signature et l'arbre de talents de spécialisation.` },
+  mastery: { title: 'Maîtrise (mastery)', def: `La <b>maîtrise</b> est le bonus passif permanent conféré par une spécialisation — par exemple « +10 % de dégâts de mêlée » pour une spé DPS. Elle est active dès que la spécialisation est choisie.` },
+  uptime: { title: 'Uptime', def: `L'<b>uptime</b> d'un effet est le pourcentage du combat pendant lequel il est actif. « Garder un bon uptime » sur un DoT ou un debuff, c'est le réappliquer juste avant qu'il n'expire, sans gaspiller de temps.` },
+  elite: { title: 'Élite', def: `Un monstre <b>élite</b> est nettement plus coriace que les monstres normaux de son niveau — prévu pour être affronté en groupe. Les monstres <b>rares</b> sont des élites uniques à long temps de réapparition, avec du butin dédié.` },
+  ferry: { title: 'Ferry', def: `Le <b>ferry</b> consistait à faire tuer le boss final d'un donjon héroïque par un groupe rodé pendant que des « passagers » attendaient dehors pour ramasser la récompense. La v0.24.0 y a mis fin : le kill verrouille tout le groupe, présent ou non.` },
+  threat: { title: 'Menace (threat)', def: `Chaque action en combat génère de la <b>menace</b> : les dégâts en génèrent, les soins aussi (moitié moins, répartie sur les ennemis). Le monstre attaque toujours celui qui a le plus de menace — voir <span data-codex="term|aggro">aggro</span>.` },
+};
+/* alias → entrée du glossaire */
+const GLOSSARY_ALIAS = {
+  'lie a l’ame': 'soulbound', 'lie': 'soulbound', 'item level': 'ilvl', 'niveau d’objet': 'ilvl',
+  'internal cooldown': 'icd', 'temps de recharge interne': 'icd', 'procs': 'proc',
+  'damage over time': 'dot', 'heal over time': 'hot', 'buffs': 'buff', 'debuffs': 'debuff', 'debuff': 'debuff',
+  'menace': 'threat', 'global cooldown': 'gcd', 'critique': 'crit', 'crit rating': 'crit',
+  'hate': 'haste', 'haste rating': 'haste', 'attack power': 'ap', 'puissance d’attaque': 'ap',
+  'spell power': 'sp', 'puissance des sorts': 'sp', 'best in slot': 'bis',
+  'recharge': 'cooldown', 'imprégnation': 'imbue', 'imbuement': 'imbue', 'interruption': 'interrupt',
+  'dissipation': 'dispel', 'crowd control': 'cc', 'controle': 'cc', 'soigneur': 'heal', 'healer': 'heal',
+  'need': 'needgreed', 'greed': 'needgreed', 'need/greed': 'needgreed',
+  'world bosses': 'worldboss', 'delves': 'delve', 'heroic mark': 'heroic marks', 'marks': 'heroic marks',
+  'panoplie': 'set', '2p': 'set', '3p': 'set', '4p': 'set', 'specialisation': 'spec', 'spe': 'spec',
+  'maitrise': 'mastery', 'rare': 'elite', 'wipes': 'wipe',
+};
+
+/* ---------- chargement des données du Codex ---------- */
+
+let dataPromise = null;
+const D = {};                 // D.ITEMS = [...], etc.
+const byId = {};              // byId.item['swiftfang_talisman'] = {...}
+const byName = {};            // byName.item[fold(name)] = entité
+const refs = { droppedBy:{}, soldBy:{}, rewardOf:{}, neededBy:{}, killedFor:{}, npcQuests:{}, mobDungeons:{}, setPieces:{} };
+let talentIndex = null;       // fold(name|id) -> { node, cls, choice? }
+let specIndex = null;         // fold(name|id) -> { spec, cls }
+
+function ensureData() {
+  return dataPromise ??= Promise.all(
+    FILES.map(f => fetch(`${DATA_BASE}/${f}.json`).then(r => r.ok ? r.json() : null).catch(() => null))
+  ).then(res => {
+    FILES.forEach((f, i) => D[f] = res[i]);
+    if (!D.ITEMS) throw new Error('Codex injoignable');
+    buildIndexes();
+  });
+}
+
+function reg(type, list) {
+  byId[type] = {}; byName[type] = {};
+  for (const e of list) { byId[type][e.id] = e; byName[type][fold(e.name)] = e; }
+}
+
+function buildIndexes() {
+  reg('item', asList(D.ITEMS));
+  reg('mob', asList(D.MOBS));
+  reg('npc', asList(D.NPCS));
+  reg('quest', asList(D.QUESTS));
+  reg('dungeon', asList(D.DUNGEONS));
+  reg('delve', asList(D.DELVES));
+  reg('set', asList(D.ITEM_SETS));
+  reg('zone', asList(D.ZONES));
+  reg('ability', asList(D.ABILITIES));
+
+  // Les world bosses sont indexés par l'id du monstre correspondant.
+  byId.worldboss = {};
+  for (const w of asList(D.WORLD_BOSSES)) byId.worldboss[w.templateId] = w;
+
+  talentIndex = {}; specIndex = {};
+  for (const [cls, tree] of Object.entries(D.TALENTS || {})) {
+    for (const node of (tree.nodes || [])) {
+      talentIndex[fold(node.id)] = { node, cls };
+      talentIndex[fold(node.name)] ??= { node, cls };
+      for (const ch of (node.choices || [])) {
+        talentIndex[fold(ch.id)] = { node, cls, choice: ch };
+        talentIndex[fold(ch.name)] ??= { node, cls, choice: ch };
+      }
+    }
+    for (const s of (tree.specs || [])) {
+      specIndex[fold(s.id)] = { spec: s, cls };
+      specIndex[fold(s.name)] ??= { spec: s, cls };
+    }
+  }
+
+  for (const m of asList(D.MOBS))
+    for (const l of (m.loot || []))
+      if (l.itemId) (refs.droppedBy[l.itemId] ??= []).push({ mob: m, chance: l.chance });
+  for (const [mobId, entries] of Object.entries(D.HEROIC_BOSS_LOOT || {})) {
+    const m = byId.mob[mobId];
+    if (m) for (const l of (entries || []))
+      if (l.itemId) (refs.droppedBy[l.itemId] ??= []).push({ mob: m, chance: l.chance, heroic: true });
+  }
+  for (const n of asList(D.NPCS))
+    for (const it of (n.vendorItems || []))
+      (refs.soldBy[it] ??= []).push(n);
+  for (const q of asList(D.QUESTS)) {
+    for (const cls in (q.itemRewards || {})) {
+      const arr = (refs.rewardOf[q.itemRewards[cls]] ??= []);
+      if (!arr.includes(q)) arr.push(q);
+    }
+    for (const o of (q.objectives || [])) {
+      if (o.type === 'collect' && o.itemId) (refs.neededBy[o.itemId] ??= []).push(q);
+      if (o.type === 'kill' && o.targetMobId) (refs.killedFor[o.targetMobId] ??= []).push(q);
+    }
+    if (q.giverNpcId) (refs.npcQuests[q.giverNpcId] ??= []).push(q);
+  }
+  for (const d of asList(D.DUNGEONS))
+    for (const s of (d.spawns || []))
+      { const a = (refs.mobDungeons[s.mobId] ??= []); if (!a.includes(d)) a.push(d); }
+  for (const it of asList(D.ITEMS))
+    if (it.set) (refs.setPieces[it.set] ??= []).push(it);
+}
+
+/* ---------- résolution d'une référence ---------- */
+
+function lookup(type, ref) {
+  const k = fold(ref.replace(/\s*×\s*\d+\s*$/, ''));   // tolère « Swiftpaw ×2 »
+  const k2 = k.replace(/\s*\([^)]*\)\s*$/, '');        // tolère « Ironguard (prot) »
+  if (type === 'term') { const g = GLOSSARY[k] || GLOSSARY[GLOSSARY_ALIAS[k]] || GLOSSARY[k2] || GLOSSARY[GLOSSARY_ALIAS[k2]]; return g ? { type:'term', entity:g } : null; }
+  if (type === 'talent') { const t = talentIndex[k] || talentIndex[k2]; return t ? { type:'talent', entity:t } : null; }
+  if (type === 'spec') { const s = specIndex[k] || specIndex[k2]; return s ? { type:'spec', entity:s } : null; }
+  if (type === 'worldboss') type = 'mob';
+  if (byId[type]) {
+    let e = byId[type][ref] || byId[type][k] || byName[type][k] || byName[type][k2];
+    if (!e) {
+      // Nom partiel toléré s'il est sans ambiguïté : « Thunzharr » suffit
+      // pour « Thunzharr, the Waking Peak ».
+      const hits = Object.keys(byName[type]).filter(n => n.startsWith(k) || n.includes(k));
+      if (hits.length === 1) e = byName[type][hits[0]];
+    }
+    return e ? { type, entity:e } : null;
+  }
+  return null;
+}
+
+function resolve(type, ref) {
+  if (type !== 'auto') return lookup(type, ref);
+  for (const t of ['ability','talent','spec','item','set','mob','npc','quest','dungeon','delve','zone','term'])
+    { const r = lookup(t, ref); if (r) return r; }
+  return null;
+}
+
+/* ---------- briques de rendu ---------- */
+
+const xlink = (type, e, label, cls) =>
+  `<span class="cxp-x ${cls||''}" data-codex="${type}|${esc(e.id)}">${esc(label ?? e.name)}</span>`;
+const section = (title, inner) => inner ? `<div class="cxp-sec"><h4>${title}</h4>${inner}</div>` : '';
+const ul = rows => rows.length ? `<ul class="cxp-list">${rows.join('')}</ul>` : '';
+const kvGrid = pairs => {
+  const rows = pairs.filter(p => p && p[1] != null && p[1] !== '');
+  return rows.length ? `<div class="cxp-kv">${rows.map(([k,v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>` : '';
+};
+const qColor = q => ({ poor:'#9d9d9d', uncommon:'#1eff00', rare:'#2f8bff', epic:'#a335ee', legendary:'#ff8000' })[q] || '';
+
+/* ---------- fiches par type ---------- */
+
+function itemSheet(it) {
+  const q = it.quality || 'common';
+  const body = [];
+  if (it.weapon) body.push(`<div class="cxp-dps">${((it.weapon.min + it.weapon.max) / 2 / (it.weapon.speed || 1)).toFixed(1)} DPS — ${it.weapon.min}–${it.weapon.max} dégâts, vitesse ${it.weapon.speed ?? '—'}</div>`);
+  const stats = Object.entries(it.stats || {}).map(([k,v]) => `+${v} ${STAT_FR[k] || k}`);
+  if (stats.length) body.push(`<div class="cxp-stats">${stats.join('<br>')}</div>`);
+  body.push(kvGrid([
+    ['Type', KIND_FR[it.kind]],
+    ['Emplacement', it.slot && SLOT_FR[it.slot]],
+    ['Armure', it.armorType && ARMORTYPE_FR[it.armorType]],
+    ['Contenance', it.bagSlots && `${it.bagSlots} emplacements`],
+    ['Restaure', it.foodHp ? `${it.foodHp} PV` : it.drinkMana ? `${it.drinkMana} mana` : it.potionHp ? `${it.potionHp} PV (potion)` : it.potionMana ? `${it.potionMana} mana (potion)` : null],
+    ['Niveau requis', it.requiredLevel],
+    ['Classes', it.requiredClass && it.requiredClass.map(c => CLASS_FR[c] || c).join(', ')],
+    ['Vente', it.sellValue && money(it.sellValue)],
+  ]));
+  if (it.soulbound) body.push(`<p class="cxp-note"><span class="cxp-x" data-codex="term|soulbound">Soulbound</span> — lié au personnage qui le ramasse.</p>`);
+  const TRIGGER_FR = { weaponCrit: "coup critique d'arme", weaponHit: "coup d'arme", spellDamage: 'dégâts de sort', spellCrit: 'critique de sort', heal: 'soin' };
+  for (const p of (it.weaponProcs || [])) {
+    const cond = [p.chance != null && pct(p.chance), TRIGGER_FR[p.trigger] && 'sur ' + TRIGGER_FR[p.trigger]].filter(Boolean).join(' ');
+    body.push(`<p class="cxp-note">✦ <span class="cxp-x" data-codex="term|proc">Proc</span> <b>${esc(p.name || '')}</b>${cond ? ` <span class="cxp-dim">— ${cond}</span>` : ''}</p>`);
+  }
+
+  if (it.set && byId.set[it.set])
+    body.push(section('Panoplie', ul([`<li>${xlink('set', byId.set[it.set])}</li>`])));
+
+  const src = [];
+  for (const d of (refs.droppedBy[it.id] || []))
+    src.push(`<li>Butin${d.heroic ? ' <b class="cxp-hero">héroïque</b>' : ''} : ${xlink('mob', d.mob)}${d.chance != null ? ` <span class="cxp-dim">· ${pct(d.chance)}</span>` : ''}</li>`);
+  for (const n of (refs.soldBy[it.id] || []))
+    src.push(`<li>Vendu par ${xlink('npc', n)}${it.buyValue ? ` <span class="cxp-dim">· ${money(it.buyValue)}</span>` : ''}</li>`);
+  for (const qq of (refs.rewardOf[it.id] || []))
+    src.push(`<li>Récompense de quête : ${xlink('quest', qq)}</li>`);
+  body.push(section('Où l’obtenir', src.length ? ul(src) : `<p class="cxp-dim">Source non répertoriée (fabrication, récolte ou delve).</p>`));
+
+  return {
+    kicker: ['Objet', QUALITY_FR[q], it.slot && SLOT_FR[it.slot]].filter(Boolean).join(' · '),
+    title: it.name, titleColor: qColor(q),
+    body: body.join(''), codexHref: `${CODEX_SITE}#item/${it.id}`,
+  };
+}
+
+function abilitySheet(a) {
+  const body = [];
+  if (a.description) body.push(`<p class="cxp-desc">${esc(a.description)}</p>`);
+  body.push(kvGrid([
+    ['Appris au niveau', a.learnLevel],
+    ['Coût', a.cost || null],
+    ['Incantation', a.castTime ? `${a.castTime} s` : (a.channel ? 'Canalisé' : 'Instantané')],
+    ['Recharge', a.cooldown ? `${a.cooldown} s` : null],
+    ['Portée', a.range ? `${a.range} m` : 'Corps à corps'],
+    ['École', SCHOOL_FR[a.school]],
+  ]));
+  const flags = [];
+  if (a.onNextSwing) flags.push('se déclenche au prochain coup d’arme');
+  if (a.offGcd) flags.push(`hors <span class="cxp-x" data-codex="term|gcd">GCD</span>`);
+  if (a.requiresStealth) flags.push('nécessite le camouflage');
+  if (a.requiresOutOfCombat) flags.push('hors combat uniquement');
+  if (flags.length) body.push(`<p class="cxp-note">${flags.join(' · ')}</p>`);
+  if (a.ranks && a.ranks.length) {
+    const last = a.ranks[a.ranks.length - 1];
+    body.push(`<p class="cxp-dim">${a.ranks.length + 1} rangs — dernier rang au niveau ${last.level ?? '—'}.</p>`);
+  }
+  return {
+    kicker: ['Sort', CLASS_FR[a.class]].filter(Boolean).join(' · '),
+    title: a.name, body: body.join(''),
+  };
+}
+
+function talentSheet({ node, cls, choice }) {
+  const body = [];
+  if (choice) {
+    body.push(`<p class="cxp-desc">${esc(choice.description || '')}</p>`);
+    body.push(`<p class="cxp-dim">Option du talent au choix « ${xlink('talent', node)} ».</p>`);
+  } else {
+    if (node.description) body.push(`<p class="cxp-desc">${esc(node.description)}</p>`);
+    if (node.maxRank > 1) body.push(`<p class="cxp-dim">Jusqu'à ${node.maxRank} rangs.</p>`);
+    if (node.kind === 'choice' && node.choices)
+      body.push(section('Talent au choix — une seule option', ul(node.choices.map(ch =>
+        `<li><b>${esc(ch.icon || '')} ${esc(ch.name)}</b><br><span class="cxp-dim">${esc(ch.description || '')}</span></li>`))));
+  }
+  const tree = node.tree === 'class' ? 'Arbre de classe' : 'Arbre de spécialisation';
+  return {
+    kicker: ['Talent', CLASS_FR[cls], tree].filter(Boolean).join(' · '),
+    title: `${choice ? (choice.icon || '') : (node.icon || '')} ${choice ? choice.name : node.name}`.trim(),
+    body: body.join(''),
+  };
+}
+
+function specSheet({ spec, cls }) {
+  const body = [];
+  if (spec.description) body.push(`<p class="cxp-desc">${esc(spec.description)}</p>`);
+  const sig = spec.signature && byId.ability[spec.signature];
+  body.push(kvGrid([
+    ['Rôle', ROLE_FR[spec.role] || spec.role],
+    ['Sort signature', sig ? xlink('ability', sig) : null],
+  ]));
+  if (spec.mastery) body.push(section(`Maîtrise — ${esc(spec.mastery.name || '')}`,
+    `<p class="cxp-desc">${esc(spec.mastery.description || '')}</p>`));
+  return {
+    kicker: ['Spécialisation', CLASS_FR[cls]].filter(Boolean).join(' · '),
+    title: `${spec.icon || ''} ${spec.name}`.trim(), body: body.join(''),
+  };
+}
+
+function mobSheet(m) {
+  const body = [];
+  const rank = m.boss ? 'Boss' : m.elite ? (m.rare ? 'Élite rare' : 'Élite') : m.rare ? 'Rare' : null;
+  const wb = byId.worldboss[m.id];
+  body.push(kvGrid([
+    ['Niveau', m.minLevel === m.maxLevel ? m.minLevel : `${m.minLevel}–${m.maxLevel}`],
+    ['Famille', FAMILY_FR[m.family] || m.family],
+    ['Rang', wb ? 'World boss' : rank],
+    ['Réapparition', wb && wb.intervalSeconds ? `toutes les ${Math.round(wb.intervalSeconds / 60)} min` : null],
+  ]));
+  const abilities = Object.keys(MOB_ABILITY_FR).filter(k => m[k]);
+  if (abilities.length)
+    body.push(section('Capacités', `<p>${abilities.map(k => `<span class="cxp-chip">${MOB_ABILITY_FR[k]}</span>`).join(' ')}</p>`));
+  const loot = (m.loot || []).filter(l => l.itemId && byId.item[l.itemId])
+    .map(l => `<li>${xlink('item', byId.item[l.itemId], null, 'q-' + (byId.item[l.itemId].quality || 'common'))}${l.chance != null ? ` <span class="cxp-dim">· ${pct(l.chance)}</span>` : ''}</li>`);
+  const hloot = ((D.HEROIC_BOSS_LOOT || {})[m.id] || []).filter(l => l.itemId && byId.item[l.itemId])
+    .map(l => `<li>${xlink('item', byId.item[l.itemId], null, 'q-' + (byId.item[l.itemId].quality || 'common'))} <b class="cxp-hero">héroïque</b>${l.chance != null ? ` <span class="cxp-dim">· ${pct(l.chance)}</span>` : ''}</li>`);
+  body.push(section('Butin', ul([...loot, ...hloot])));
+  body.push(section('Où le trouver', ul((refs.mobDungeons[m.id] || []).map(d => `<li>${xlink('dungeon', d)}</li>`))));
+  body.push(section('Quêtes qui le ciblent', ul((refs.killedFor[m.id] || []).map(q => `<li>${xlink('quest', q)}</li>`))));
+  return {
+    kicker: ['Monstre', rank, wb && 'World boss'].filter(Boolean).join(' · '),
+    title: m.name, body: body.join(''), codexHref: `${CODEX_SITE}#mob/${m.id}`,
+  };
+}
+
+function npcSheet(n) {
+  const body = [];
+  if (n.greeting) body.push(`<p class="cxp-quote">« ${esc(n.greeting)} »</p>`);
+  const sells = (n.vendorItems || []).filter(id => byId.item[id])
+    .map(id => `<li>${xlink('item', byId.item[id], null, 'q-' + (byId.item[id].quality || 'common'))}${byId.item[id].buyValue ? ` <span class="cxp-dim">· ${money(byId.item[id].buyValue)}</span>` : ''}</li>`);
+  body.push(section('Vend', ul(sells)));
+  body.push(section('Donne les quêtes', ul((refs.npcQuests[n.id] || []).map(q => `<li>${xlink('quest', q)}</li>`))));
+  if (n.banker) body.push(`<p class="cxp-note">🏦 Banquier — donne accès à votre coffre personnel.</p>`);
+  return {
+    kicker: ['PNJ', n.title].filter(Boolean).join(' · '),
+    title: n.name, body: body.join(''), codexHref: `${CODEX_SITE}#npc/${n.id}`,
+  };
+}
+
+function questSheet(q) {
+  const body = [];
+  if (q.text) body.push(`<p class="cxp-quote">« ${esc(q.text).replace(/\$N/g, 'aventurier')} »</p>`);
+  const giver = byId.npc[q.giverNpcId], turnIn = byId.npc[q.turnInNpcId];
+  body.push(kvGrid([
+    ['Donnée par', giver && xlink('npc', giver)],
+    ['À rendre à', turnIn && turnIn !== giver ? xlink('npc', turnIn) : null],
+  ]));
+  const obj = (q.objectives || []).map(o => {
+    if (o.type === 'kill' && byId.mob[o.targetMobId]) return `<li>Tuer ${o.count ? o.count + ' × ' : ''}${xlink('mob', byId.mob[o.targetMobId])}</li>`;
+    if (o.type === 'collect' && byId.item[o.itemId]) return `<li>Rapporter ${o.count ? o.count + ' × ' : ''}${xlink('item', byId.item[o.itemId])}</li>`;
+    return `<li>${esc(o.label || o.type || 'Objectif')}</li>`;
+  });
+  body.push(section('Objectifs', ul(obj)));
+  const rewards = [];
+  if (q.xpReward) rewards.push(`<li><b class="cxp-xp">${q.xpReward} XP</b></li>`);
+  if (q.copperReward) rewards.push(`<li>${money(q.copperReward)}</li>`);
+  for (const [cls, itId] of Object.entries(q.itemRewards || {}))
+    if (byId.item[itId]) rewards.push(`<li>${xlink('item', byId.item[itId], null, 'q-' + (byId.item[itId].quality || 'common'))} <span class="cxp-dim">(${CLASS_FR[cls] || cls})</span></li>`);
+  body.push(section('Récompenses', ul(rewards)));
+  return {
+    kicker: 'Quête', title: q.name, body: body.join(''), codexHref: `${CODEX_SITE}#quest/${q.id}`,
+  };
+}
+
+function dungeonSheet(d) {
+  const body = [];
+  if (d.enterText) body.push(`<p class="cxp-quote">« ${esc(d.enterText)} »</p>`);
+  body.push(kvGrid([['Joueurs conseillés', d.suggestedPlayers]]));
+  const seen = new Set();
+  const bosses = (d.spawns || []).map(s => byId.mob[s.mobId])
+    .filter(m => m && (m.boss || m.elite) && !seen.has(m.id) && seen.add(m.id))
+    .map(m => `<li>${xlink('mob', m)}${m.boss ? ' <b class="cxp-hero">boss</b>' : ''}</li>`);
+  body.push(section('Boss & élites', ul(bosses)));
+  return { kicker: 'Donjon', title: d.name, body: body.join(''), codexHref: `${CODEX_SITE}#dungeon/${d.id}` };
+}
+
+function delveSheet(d) {
+  const body = [];
+  if (d.enterText) body.push(`<p class="cxp-quote">« ${esc(d.enterText)} »</p>`);
+  body.push(kvGrid([
+    ['Niveau minimum', d.minLevel],
+    ['Joueurs', d.maxPlayers ? `1–${d.maxPlayers}` : d.suggestedPlayers],
+    ['Paliers de difficulté', d.tiers && d.tiers.length],
+  ]));
+  const bosses = (d.bosses || []).map(id => byId.mob[id]).filter(Boolean).map(m => `<li>${xlink('mob', m)}</li>`);
+  body.push(section('Boss', ul(bosses)));
+  return { kicker: 'Delve', title: d.name, body: body.join(''), codexHref: `${CODEX_SITE}#delve/${d.id}` };
+}
+
+function setSheet(s) {
+  const body = [];
+  body.push(section('Bonus', ul((s.bonuses || []).map(b => `<li><b>${b.pieces} pièces</b> — ${esc(b.text || b.description || '')}</li>`))));
+  const pieces = (refs.setPieces[s.id] || []).map(it => `<li>${xlink('item', it, null, 'q-' + (it.quality || 'common'))}</li>`);
+  body.push(section(`Pièces (${pieces.length})`, ul(pieces)));
+  return { kicker: 'Panoplie', title: s.name, body: body.join(''), codexHref: `${CODEX_SITE}#set/${s.id}` };
+}
+
+function zoneSheet(z) {
+  const body = [];
+  body.push(kvGrid([
+    ['Biome', BIOME_FR[z.biome] || z.biome],
+    ['Niveaux', z.levelRange && `${z.levelRange[0]}–${z.levelRange[1]}`],
+    ['Capitale', z.hub && z.hub.name],
+  ]));
+  body.push(section('Points d’intérêt', ul((z.pois || []).map(p => `<li>${esc(p.label)}</li>`))));
+  return { kicker: 'Zone', title: z.name, body: body.join(''), codexHref: `${CODEX_SITE}#zone/${z.id}` };
+}
+
+function termSheet(g) {
+  return { kicker: 'Glossaire', title: g.title, body: `<p class="cxp-desc">${g.def}</p>` };
+}
+
+const SHEETS = {
+  item: itemSheet, ability: abilitySheet, talent: talentSheet, spec: specSheet,
+  mob: mobSheet, npc: npcSheet, quest: questSheet, dungeon: dungeonSheet,
+  delve: delveSheet, set: setSheet, zone: zoneSheet, term: termSheet,
+};
+
+/* ---------- l'interface (dialog natif : passe au-dessus des modales) ---------- */
+
+const CSS = `
+  [data-codex] { border-bottom: 1px dotted rgba(200,160,75,.75); cursor: pointer; }
+  [data-codex]:hover, [data-codex]:focus-visible { color: #e6c37a; border-bottom-color: #e6c37a; outline: none; }
+  dialog.cxp {
+    background: #141822; color: #dfe3ea; border: 1px solid rgba(200,160,75,.4);
+    border-radius: 14px; padding: 0; width: min(440px, 92vw); max-height: 82vh;
+    box-shadow: 0 24px 70px rgba(0,0,0,.6); font-size: .92rem; line-height: 1.5;
+  }
+  dialog.cxp::backdrop { background: rgba(5,7,11,.65); backdrop-filter: blur(2px); }
+  dialog.cxp[open] { display: flex; flex-direction: column; }
+  .cxp-head { display: flex; gap: 10px; align-items: flex-start; padding: 16px 18px 12px;
+    border-bottom: 1px solid rgba(200,160,75,.18); position: sticky; top: 0; background: #141822; z-index: 1; }
+  .cxp-head-txt { flex: 1; min-width: 0; }
+  .cxp-kicker { font-size: .68rem; text-transform: uppercase; letter-spacing: .09em; color: #c8a04b; margin-bottom: 3px; }
+  .cxp-title { margin: 0; font-size: 1.12rem; font-weight: 700; line-height: 1.25; }
+  .cxp-btn { flex: none; background: none; border: 1px solid rgba(139,147,163,.35); color: #8b93a3;
+    border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: .95rem; line-height: 1; }
+  .cxp-btn:hover { color: #e6c37a; border-color: rgba(200,160,75,.5); }
+  .cxp-body { padding: 14px 18px 16px; overflow-y: auto; flex: 1; }
+  .cxp-body p { margin: 0 0 10px; } .cxp-body p:last-child { margin-bottom: 0; }
+  .cxp-desc { color: #c9cfda; }
+  .cxp-quote { color: #aab1bf; font-style: italic; }
+  .cxp-note { color: #aab1bf; font-size: .86rem; }
+  .cxp-dim { color: #8b93a3; font-size: .86rem; }
+  .cxp-dps { font-weight: 600; margin-bottom: 8px; }
+  .cxp-stats { color: #1eff00cc; margin-bottom: 8px; }
+  .cxp-kv { display: grid; grid-template-columns: 1fr; gap: 4px 14px; margin: 8px 0; }
+  .cxp-kv div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed rgba(139,147,163,.16); padding: 3px 0; }
+  .cxp-kv span { color: #8b93a3; }
+  .cxp-sec { margin-top: 14px; }
+  .cxp-sec h4 { margin: 0 0 6px; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: #c8a04b; }
+  .cxp-list { margin: 0; padding: 0; list-style: none; }
+  .cxp-list li { padding: 4px 0; border-bottom: 1px dashed rgba(139,147,163,.14); }
+  .cxp-list li:last-child { border-bottom: none; }
+  .cxp-x { border-bottom: 1px dotted rgba(200,160,75,.75); cursor: pointer; }
+  .cxp-x:hover { color: #e6c37a; }
+  .cxp-x.q-poor { color: #9d9d9d; } .cxp-x.q-uncommon { color: #1eff00; }
+  .cxp-x.q-rare { color: #2f8bff; } .cxp-x.q-epic { color: #a335ee; } .cxp-x.q-legendary { color: #ff8000; }
+  .cxp-chip { display: inline-block; background: rgba(200,160,75,.1); border: 1px solid rgba(200,160,75,.25);
+    border-radius: 20px; padding: 1px 9px; margin: 2px 2px 2px 0; font-size: .78rem; }
+  .cxp-hero { color: #ff8000; font-size: .78rem; }
+  .cxp-xp { color: #b58cf5; }
+  .cxp-po { color: #ffd76e; } .cxp-pa { color: #c8ccd6; } .cxp-pc { color: #d29d6b; }
+  .cxp-foot { padding: 10px 18px 14px; border-top: 1px solid rgba(200,160,75,.18); font-size: .82rem; }
+  .cxp-foot a { color: #c8a04b; text-decoration: none; }
+  .cxp-foot a:hover { color: #e6c37a; text-decoration: underline; }
+  .cxp-load { padding: 26px 18px; text-align: center; color: #8b93a3; }
+`;
+
+let dlg = null;
+let stack = [];      // pile de fiches pour le bouton « ← »
+
+function ensureDialog() {
+  if (dlg) return dlg;
+  const style = document.createElement('style');
+  style.textContent = CSS;
+  document.head.appendChild(style);
+  dlg = document.createElement('dialog');
+  dlg.className = 'cxp';
+  dlg.setAttribute('aria-label', 'Fiche du Codex');
+  document.body.appendChild(dlg);
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => { stack = []; delete dlg.dataset.cur; });
+  return dlg;
+}
+
+function render(sheet, fromBack) {
+  const d = ensureDialog();
+  if (!fromBack && d.dataset.cur) stack.push(d.dataset.cur);
+  d.dataset.cur = JSON.stringify(sheet.ref);
+  d.innerHTML = `
+    <div class="cxp-head">
+      ${stack.length ? '<button class="cxp-btn cxp-back" aria-label="Fiche précédente" title="Fiche précédente">←</button>' : ''}
+      <div class="cxp-head-txt">
+        <div class="cxp-kicker">${esc(sheet.kicker || '')}</div>
+        <h3 class="cxp-title" ${sheet.titleColor ? `style="color:${sheet.titleColor}"` : ''}>${esc(sheet.title)}</h3>
+      </div>
+      <button class="cxp-btn cxp-close" aria-label="Fermer" title="Fermer">✕</button>
+    </div>
+    <div class="cxp-body">${sheet.body || ''}</div>
+    ${sheet.codexHref ? `<div class="cxp-foot"><a href="${sheet.codexHref}" target="_blank" rel="noopener">Fiche complète dans le Codex ↗</a></div>` : ''}`;
+  d.querySelector('.cxp-close').onclick = () => d.close();
+  const back = d.querySelector('.cxp-back');
+  if (back) back.onclick = () => {
+    const prev = JSON.parse(stack.pop());
+    openRef(prev[0], prev[1], true);
+  };
+  if (!d.open) (typeof d.showModal === 'function' ? d.showModal() : d.setAttribute('open', ''));
+  d.querySelector('.cxp-body').scrollTop = 0;
+}
+
+function openRef(type, ref, fromBack) {
+  const d = ensureDialog();
+  if (!d.open) {
+    d.innerHTML = `<div class="cxp-load">Consultation du Codex…</div>`;
+    (typeof d.showModal === 'function' ? d.showModal() : d.setAttribute('open', ''));
+  }
+  ensureData().then(() => {
+    const hit = resolve(type, ref);
+    if (!hit) {
+      render({ ref: [type, ref], kicker: 'Codex', title: ref,
+        body: `<p class="cxp-dim">Pas de fiche trouvée pour « ${esc(ref)} ».</p>
+               <p><a class="cxp-x" href="${CODEX_SITE}" target="_blank" rel="noopener" style="border:none">Chercher dans le Codex ↗</a></p>` }, fromBack);
+      return;
+    }
+    const sheet = SHEETS[hit.type](hit.entity);
+    sheet.ref = [type, ref];
+    render(sheet, fromBack);
+  }).catch(() => {
+    render({ ref: [type, ref], kicker: 'Codex', title: 'Codex injoignable',
+      body: `<p class="cxp-dim">Impossible de charger les données du jeu pour le moment.</p>
+             <p><a class="cxp-x" href="${CODEX_SITE}" target="_blank" rel="noopener" style="border:none">Ouvrir le Codex ↗</a></p>` }, fromBack);
+  });
+}
+
+/* ---------- déclenchement : clic ou clavier sur [data-codex] ---------- */
+
+function refOf(el) {
+  const [type, ...rest] = el.dataset.codex.split('|');
+  return [type.trim(), rest.join('|').trim() || el.textContent.trim()];
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-codex]');
+  if (!el) return;
+  e.preventDefault();
+  e.stopPropagation();
+  openRef(...refOf(el));
+}, true);
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const el = e.target.closest?.('[data-codex]');
+  if (!el) return;
+  e.preventDefault();
+  e.stopPropagation();
+  openRef(...refOf(el));
+}, true);
+
+/* Rend les éléments marqués focusables au clavier (à rappeler après un rendu dynamique). */
+function enhance(root) {
+  (root || document).querySelectorAll('[data-codex]:not([tabindex])').forEach(el => {
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    if (!el.title) el.title = 'Voir la fiche';
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => enhance());
+else enhance();
+
+window.CodexPopup = { open: openRef, enhance };
+
+})();
