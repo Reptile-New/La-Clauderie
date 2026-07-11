@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Stuff BiS — La Clauderie</title>
-<meta name="description" content="Le meilleur équipement de World of ClaudeCraft pour ta classe et ton rôle, calculé sur les vraies stats du patch.">
+<title>Builds — La Clauderie</title>
+<meta name="description" content="Builds complets par classe et rôle : talents, rotation et meilleur équipement, sur les vraies données du patch.">
 <meta name="theme-color" content="#c8a04b">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="La Clauderie">
-<meta property="og:title" content="Stuff BiS — La Clauderie">
-<meta property="og:description" content="Le meilleur équipement de World of ClaudeCraft pour ta classe et ton rôle, calculé sur les vraies stats du patch.">
+<meta property="og:title" content="Builds — La Clauderie">
+<meta property="og:description" content="Builds complets par classe et rôle : talents, rotation et meilleur équipement, sur les vraies données du patch.">
 <meta property="og:url" content="https://reptile-new.github.io/La-Clauderie/bis.html">
 <meta property="og:image" content="https://reptile-new.github.io/La-Clauderie/assets/og.png">
 <meta property="og:image:width" content="1200">
@@ -104,6 +104,19 @@
   .icon.q-rare { border-color: var(--q-rare); box-shadow: 0 0 8px color-mix(in srgb, var(--q-rare) 40%, transparent); }
   .icon.q-uncommon { border-color: var(--q-uncommon); }
   .item .nm { font-weight: 700; font-size: 0.98rem; }
+  /* Builds : spé, talents, rotation */
+  .bsec { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 12px; padding: 18px 20px; margin: 0 0 14px; }
+  .bsec-h { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin: 22px 0 12px; }
+  .bsec > .bsec-h:first-child, #buildBox > .bsec-h:first-child { margin-top: 0; }
+  .bspec p { color: var(--dim); margin: 6px 0 0; font-size: 0.92rem; }
+  .bmastery { font-family: var(--font-mono); font-size: 0.78rem; color: var(--gold-bright); margin-left: 8px; }
+  .bstats { margin: 12px 0; font-size: 0.92rem; color: var(--dim); }
+  .bstats b { color: var(--text); }
+  .btalents, .brota { margin: 0; padding-left: 1.3em; font-size: 0.92rem; }
+  .btalents li, .brota li { margin: 7px 0; color: var(--dim); }
+  .btalents b, .brota b { color: var(--text); }
+  .bt-tree { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); border-radius: 4px; padding: 1px 6px; margin: 0 2px; }
+  .bastuce { margin: 12px 0 0; font-size: 0.9rem; color: var(--gold-bright); }
   .ilink { color: inherit; text-decoration: none; border-bottom: 1px dotted color-mix(in srgb, currentColor 45%, transparent); }
   .ilink:hover { border-bottom-style: solid; filter: brightness(1.15); }
   /* Fiche objet (au clic, sans quitter la page) */
@@ -156,7 +169,7 @@
     <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
     <nav class="topnav" aria-label="Navigation du site">
       <a href="index.html">Accueil</a>
-      <a href="bis.html" class="cur">⚔️ BiS</a>
+      <a href="bis.html" class="cur">⚔️ Builds</a>
       <a href="patch-notes.html">📜 Nouveautés</a>
       <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
     </nav>
@@ -165,15 +178,16 @@
 
 <div class="wrap">
   <header class="page">
-    <p class="eyebrow">Guide d'équipement · Patch v0.23.0</p>
-    <h1>Le meilleur stuff (BiS)</h1>
-    <p class="lede">Choisis ta classe puis ton rôle : la liste montre la meilleure panoplie complète du jeu — bonus de sets compris (2, 3 et 4 pièces) — sur les 11 emplacements, 2 anneaux inclus.</p>
+    <p class="eyebrow">Guide de classe · Patch v0.24.0</p>
+    <h1>Les builds de la guilde</h1>
+    <p class="lede">Choisis ta classe puis ton rôle : la spécialisation et les talents recommandés (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Clique sur un objet pour voir où il s'obtient.</p>
   </header>
 
   <div class="classes" id="clsTabs" role="tablist" aria-label="Classes"></div>
   <div class="roles" id="roleTabs" role="tablist" aria-label="Rôles"></div>
 
   <div class="note" id="note"></div>
+  <div id="buildBox"></div>
   <div class="setline" id="setline"></div>
   <div class="bis" id="bisList"></div>
 </div>
@@ -198,6 +212,417 @@
 </dialog>
 
 <script>
+// Builds recommandés par La Clauderie — rédigés à partir des vraies données
+// du patch (TALENTS.json / ABILITIES.json de la knowledge base). À réviser à
+// chaque mise à jour du jeu qui touche talents ou sorts.
+const BUILDS = {
+ warrior: {
+  tank: {
+   spec: "Ironguard (prot)", mastery: "+30 % menace, +10 % armure",
+   pourquoi: "La spé de tank du Guerrier : la menace et l'armure de la maîtrise portent tout le build.",
+   stats: "Armure > Endurance > Esquive > Force",
+   talents: [
+    ["Shieldwright ×3", "spé", "+15 % d'armure, la base de l'EHP."],
+    ["Fair Warning ×3", "spé", "+3 % d'esquive."],
+    ["Improved Quaking Blow ×2", "spé", "ton AoE de menace frappe +30 % et coûte 50 % de rage en moins."],
+    ["Improved Armor Shear ×2", "spé", "Armor Shear quasi gratuit — les 5 stacks montent bien plus vite."],
+    ["Bulwark → Eleventh Hour", "spé", "+15 % de PV max, le meilleur des trois pour encaisser les boss héroïques."],
+    ["Improved Shieldcrack ×2", "spé", "+20 % de dégâts et +20 % de menace sur ta frappe principale."],
+    ["Grit ×3", "classe", "+12 % d'armure."],
+    ["Battle Doctrine → Fair Warning", "classe", "+5 % d'esquive."],
+    ["Deep Reserves ×2", "classe", "+10 % PV, +8 Endurance."]
+   ],
+   rotation: [
+    ["Guarded Stance", "toujours active en donjon."],
+    ["Onrush", "l'ouverture — charge + étourdissement 1 s."],
+    ["Shieldcrack", "à chaque cooldown (6 s), ta menace principale."],
+    ["Armor Shear ×5", "monte les 5 stacks vite (−10 % d'armure), puis entretiens."],
+    ["Quaking Blow", "en AoE, spam-le : dégâts de zone + ralentit les attaques."],
+    ["Reaver Strike", "vide la rage excédentaire (hors GCD)."],
+    ["Goad", "le taunt — récupère tout ce qui part sur le heal."]
+   ],
+   astuce: "Direhowl (−30 PA de zone) sur les packs, Bolstering Cry avant les boss. Blood Toll donne de la rage pour démarrer."
+  },
+  dps: {
+   spec: "Bloodrush (fury)", mastery: "+5 % crit, +10 PA",
+   pourquoi: "Le meilleur burst mêlée du Guerrier ; Battlecraft (arms) est l'alternative à Maiming Strike.",
+   stats: "Force > Crit > Hâte > Endurance",
+   talents: [
+    ["Barbarity ×3", "spé", "+3 % de crit."],
+    ["Boundless Ire ×2", "spé", "+20 PA."],
+    ["Bladed Gyre ×1", "spé", "débloque le coup tournoyant AoE — indispensable en donjon."],
+    ["Improved Reaping Arc ×2", "spé", "+40 % sur ton cleave."],
+    ["War Madness → Red Mist", "spé", "+8 % à toutes les capacités de mêlée, devant +4 % crit."],
+    ["Improved Bloodletting ×2", "spé", "ta frappe signature : +20 % de dégâts, cooldown réduit."],
+    ["Barbarity ×3", "classe", "encore +3 % de crit."],
+    ["Battle Doctrine → Spiked Harness", "classe", "+12 % de PA."]
+   ],
+   rotation: [
+    ["Iron Bellow", "le buff de groupe (+10 % PA) — un seul guerrier le pose."],
+    ["Onrush", "l'engage."],
+    ["Bloodletting", "à chaque cooldown (6 s)."],
+    ["Deep Gash", "le saignement, à garder actif."],
+    ["Bladed Gyre / Reaping Arc", "dès 2 cibles et plus."],
+    ["Early Grave", "l'exécution — dès que la cible est basse, ça tape très fort."],
+    ["Reaver Strike", "vide la rage restante (hors GCD)."]
+   ],
+   astuce: "Seething Fury (talent de classe) casse les peurs ET donne de la rage — garde-le pour les boss qui terrifient."
+  }
+ },
+ paladin: {
+  tank: {
+   spec: "Vigil (protection)", mastery: "+25 % menace, +10 % armure",
+   pourquoi: "Le tank à aura : tu protèges tout le groupe pendant que tu tiens le boss.",
+   stats: "Armure > Endurance > Esquive > Force",
+   talents: [
+    ["Palisade ×3", "spé", "+15 % d'armure."],
+    ["Forewarning ×3", "spé", "+3 % d'esquive."],
+    ["Improved Burning Oath ×2", "spé", "+20 % de menace, ton mode tank coûte 50 % de moins."],
+    ["Warder's Vow ×2", "spé", "Ward of Faith et Sundering Gavel plus souvent."],
+    ["Refuge → Deathless Ardor", "spé", "+12 % de PV max."],
+    ["Hallowed Wall ×2", "spé", "Holy Ground +24 % — ta menace AoE."],
+    ["Improved Steadfast Aura ×2", "classe", "+6 % d'armure et ton aura de groupe +40 %."],
+    ["Votive Calling → Warder's Vow", "classe", "+8 % armure, +2 % esquive."]
+   ],
+   rotation: [
+    ["Burning Oath", "toujours actif : c'est lui qui génère ta menace."],
+    ["Steadfast Aura", "l'aura de groupe (+10 % d'armure pour tout le monde)."],
+    ["Oathbrand + Verdict", "l'imbue puis le jugement à chaque cooldown."],
+    ["Holy Ground", "pose-le sous les packs — menace AoE énorme avec Hallowed Wall."],
+    ["Sundering Gavel", "l'étourdissement — coupe un cast dangereux."],
+    ["Ward of Faith / Last Rite", "les boutons de survie : absorption, puis 250 PV en urgence."]
+   ],
+   astuce: "Tu peux dépanner au heal entre deux packs avec Mending Light — le luxe du paladin."
+  },
+  heal: {
+   spec: "Sacrament (holy)", mastery: "+12 % soins",
+   pourquoi: "Le soigneur direct le plus solide, avec Last Rite comme joker d'urgence.",
+   stats: "Intelligence > Esprit > Hâte > Crit",
+   talents: [
+    ["Improved Mending Light ×3", "spé", "+24 % sur ton gros soin."],
+    ["Lettered Faith ×3", "spé", "+9 Intelligence."],
+    ["Lightmend Focus ×2", "spé", "ton soin rapide 20 % plus rapide et moins cher."],
+    ["Improved Last Rite ×2", "spé", "le joker à 250 PV revient 40 % plus vite."],
+    ["Lodestar → Unearned Mercy", "spé", "+8 % de soins."],
+    ["Lightwright ×2", "spé", "+12 % de soins, +2 % crit."],
+    ["Quiet Fervor ×3", "classe", "+6 Esprit et +6 % de soins."],
+    ["Votive Calling → Mender's Vow", "classe", "+6 % de soins."]
+   ],
+   rotation: [
+    ["Lightmend", "le soin de base : rapide, efficace, spammable."],
+    ["Mending Light", "quand le tank prend cher — gros soin talenté."],
+    ["Last Rite", "le bouton panique : 250 PV instantanés (10 min de cooldown)."],
+    ["Ward of Faith", "l'absorption préventive avant un gros coup."],
+    ["Oath of Iron + Steadfast Aura", "tes deux buffs de groupe, toujours actifs."]
+   ],
+   astuce: "Garde Sundering Gavel en secours : un heal qui étourdit l'add parti sur lui, c'est un heal vivant."
+  },
+  dps: {
+   spec: "Requital (retribution)", mastery: "+6 % dégâts mêlée & sorts",
+   pourquoi: "Le DPS hybride : gros Verdicts, utilitaire complet, et un buff de groupe.",
+   stats: "Force > Crit > Hâte > Intelligence",
+   talents: [
+    ["Grim Certainty ×3", "spé", "+3 % de crit."],
+    ["Fervent Oath ×3", "spé", "−24 % de mana sur tes attaques."],
+    ["Improved Verdict ×2", "spé", "+20 % de dégâts et cooldown réduit sur ta frappe principale."],
+    ["Oathbrand Command ×2", "spé", "+40 % sur les dégâts de ton imbue."],
+    ["Warpath → Swift Verdict", "spé", "+10 % de PA (et +3 % d'esquive en prime)."],
+    ["Punishing Blows ×2", "spé", "+12 % mêlée, +8 % sorts, Rite of Expulsion plus souvent."],
+    ["Sworn Strength ×3", "classe", "+6 Force."],
+    ["Votive Calling → Reaper's Vow", "classe", "+6 % de dégâts de mêlée."]
+   ],
+   rotation: [
+    ["Oathbrand", "l'imbue, toujours actif — talenté il tape fort au jugement."],
+    ["Verdict", "à chaque cooldown : ta plus grosse source de dégâts."],
+    ["Rite of Expulsion", "l'instant magique, à caler entre deux Verdicts."],
+    ["Holy Ground", "en AoE sous les packs."],
+    ["Oath of Iron", "le buff +10 % PA du groupe si aucun autre paladin ne le pose."]
+   ],
+   astuce: "Tu restes un demi-soigneur : un Lightmend sur le heal en danger vaut plus que 3 secondes de DPS."
+  }
+ },
+ shaman: {
+  heal: {
+   spec: "Spiritmend (restoration)", mastery: "+14 % soins",
+   pourquoi: "La plus grosse maîtrise de soin du jeu, autour d'un seul sort maîtrisé à la perfection.",
+   stats: "Intelligence > Esprit > Hâte > Crit",
+   talents: [
+    ["Improved Mending Waters ×3", "spé", "ton unique soin +15 % et 15 % plus rapide."],
+    ["Serene Waters ×3", "spé", "−18 % de mana dessus."],
+    ["Soothing Grace ×2", "spé", "+8 % de soins, +4 Esprit."],
+    ["Ancestor's Mercy ×2", "spé", "+6 % de soins, +10 % d'armure."],
+    ["Tidesworn Path → Cleansing Tides", "spé", "+10 % de soins fixes — devant le cast plus rapide."],
+    ["Guiding Spirits ×2", "spé", "+14 % de soins, +4 Int."],
+    ["Ancient Lore ×3", "classe", "+6 Intelligence."],
+    ["Path of Spirits → Soothing Grace", "classe", "+8 % de soins."]
+   ],
+   rotation: [
+    ["Mending Waters", "ton outil unique : rapide, pas cher, talenté à fond."],
+    ["Thunder Ward", "sur toi en permanence — punit les mobs qui te tapent."],
+    ["Cinder Jolt / Earthen Jolt", "en solo ou pendant les temps morts."]
+   ],
+   astuce: "Avec Rushing Waters en alternative du palier 5, tu peux passer en mode « heal mitraillette » pour le raid héroïque — question de goût."
+  },
+  dps: {
+   spec: "Warspirit (enhancement)", mastery: "+10 PA, +10 % dégâts mêlée",
+   pourquoi: "Colle au BiS mêlée du site ; Thundercall (elemental) est l'alternative caster.",
+   stats: "Force > Crit > Hâte > Intelligence",
+   talents: [
+    ["Elder Arms ×3", "spé", "+24 PA."],
+    ["Frenzied Tempo ×2", "spé", "+4 % de crit."],
+    ["Improved Stonebound ×2", "spé", "+40 % sur l'imbue Stonebound — il repasse devant Pyrebrand."],
+    ["Stalwart Shield ×3", "spé", "+12 % d'armure pour tenir en mêlée."],
+    ["Thunder Path → Honed Edge", "spé", "+10 % de dégâts de mêlée."],
+    ["Spiritforged Arms ×2", "spé", "Ancestral Strike +8 %, moins cher, 24 % plus souvent."],
+    ["Thunderous Blows ×2", "classe", "+3 % de crit."],
+    ["Path of Spirits → Frenzied Tempo", "classe", "+8 % de dégâts de mêlée."]
+   ],
+   rotation: [
+    ["Stonebound Weapon", "l'imbue talenté, à renouveler toutes les 5 min."],
+    ["Thunder Ward", "toujours actif."],
+    ["Ancestral Strike", "à chaque cooldown — ta frappe signature."],
+    ["Cinder Jolt", "l'instant + DoT, à entretenir."],
+    ["Earthen Jolt", "le filler instantané entre deux coups blancs."],
+    ["Rime Jolt", "pour ralentir ce qui fuit."]
+   ],
+   astuce: "Mending Waters dépanne le heal en urgence — et un /ready avant le pull pour vérifier imbues et buffs, c'est gratuit."
+  }
+ },
+ druid: {
+  tank: {
+   spec: "Wildfang (feral) — ours", mastery: "+8 % armure, +20 % menace, +6 % dégâts mêlée",
+   pourquoi: "Le tank à esquive : moins d'armure de plaques, mais une réserve de PV et une agilité énormes en forme de Bruin.",
+   stats: "Armure > Endurance > Agilité > Force",
+   talents: [
+    ["Ironpelt ×3", "spé", "+15 % d'armure — multiplié par le ×1,9 de la forme d'ours."],
+    ["Whetted Fangs ×3", "spé", "Bonecrush et Claw coûtent −18 % de rage."],
+    ["Heavy Blows ×2", "spé", "+20 % sur Bonecrush et Sweeping Claws — ta menace."],
+    ["Swiftpaw ×2", "spé", "+4 % d'esquive, +4 Agilité."],
+    ["Path of Fangs → Dire Bruin", "spé", "+12 % d'armure et +10 % de menace."],
+    ["Primal Heart ×2", "spé", "+10 % PV, +10 % PA, +10 % menace."],
+    ["Ironpelt ×3", "classe", "encore +12 % d'armure."],
+    ["Path of Seasons → Primal Heart", "classe", "+8 % PV et PA."]
+   ],
+   rotation: [
+    ["Bruin Form", "évidemment."],
+    ["Bruin Rush", "l'engage : charge + étourdissement."],
+    ["Bonecrush", "le spam de menace mono-cible."],
+    ["Sweeping Claws", "dès 2 cibles."],
+    ["Craven Roar", "−20 PA à tout le pack : de la mitigation gratuite."],
+    ["Menace", "le taunt."],
+    ["Oakhide + Stoke", "survie (+150 armure) et rage de secours."]
+   ],
+   astuce: "Witchlight sur le boss (−10 % d'armure) aide tout le groupe et ne coûte qu'un GCD."
+  },
+  heal: {
+   spec: "Groveheart (restoration)", mastery: "+14 % soins",
+   pourquoi: "Le heal à HoTs : tu soignes en avance, parfait pour les dégâts continus des héroïques.",
+   stats: "Intelligence > Esprit > Hâte > Crit",
+   talents: [
+    ["Improved Wildbloom ×3", "spé", "+24 % sur ton HoT principal."],
+    ["Woodwise ×3", "spé", "Wildmend +15 % et plus rapide."],
+    ["Quietude ×2", "spé", "−20 % de mana sur tes deux soins de base."],
+    ["Improved Second Bloom ×2", "spé", "+24 % sur le soin hybride."],
+    ["Path of Renewal → Lifesap", "spé", "−16 % de mana sur tout : tu ne tombes jamais à sec."],
+    ["Heartwood ×2", "spé", "+14 % de soins, +6 Esprit."],
+    ["Woodwise ×2", "classe", "Wildmend encore plus rapide."],
+    ["Path of Seasons → Grove's Gift", "classe", "+8 % de soins."]
+   ],
+   rotation: [
+    ["Wildbloom", "le HoT, sur le tank en permanence, sur les DPS qui prennent cher."],
+    ["Second Bloom", "soin direct + HoT de 21 s : ton meilleur rapport mana/soin."],
+    ["Wildmend", "le gros soin quand ça descend vraiment."],
+    ["Wildward", "le buff +5 % toutes stats du groupe."],
+    ["Briarguard", "sur le tank : des dégâts gratuits à chaque coup reçu."]
+   ],
+   astuce: "Pose Wildbloom AVANT le pull — un HoT qui tourne, c'est un heal d'avance."
+  },
+  dps: {
+   spec: "Wildfang (feral) — loup", mastery: "+8 % armure, +20 % menace, +6 % dégâts mêlée",
+   pourquoi: "Le DPS mêlée en forme de Loup, aligné sur le stuff Agilité du BiS ; Moongrove (balance) est l'alternative caster.",
+   stats: "Agilité > Crit > Force > Hâte",
+   talents: [
+    ["Whetted Fangs ×3", "spé", "Claw −18 % : plus de combos par minute."],
+    ["Swiftpaw ×2", "spé", "+4 Agilité, +4 % d'esquive."],
+    ["Path of Fangs → Predator's Cunning", "spé", "+10 % de dégâts de mêlée."],
+    ["Primal Heart ×2", "spé", "+10 % de PA (la menace ne gêne pas avec un bon tank)."],
+    ["Red Hunger ×3", "classe", "+15 % sur Claw et Bonecrush."],
+    ["Path of Seasons → Primal Heart", "classe", "+8 % PA et PV."],
+    ["Wildsurge ×2", "classe", "+6 Int/End — utilitaire."]
+   ],
+   rotation: [
+    ["Wolf Form", "et Stalk avant le pull."],
+    ["Slinkstrike", "l'ouverture furtive : étourdit 2 s."],
+    ["Flense", "le saignement, à garder actif."],
+    ["Claw", "le générateur de combo."],
+    ["Gorebite", "le finisher à 4-5 points."],
+    ["Rip", "sur les boss : le finisher-saignement fait plus au total."],
+    ["Wolfsblood", "+40 PA pendant 6 s, à caler sur les burst."]
+   ],
+   astuce: "En donjon tu es aussi la roue de secours : un battle-rez n'existe pas, mais sortir de forme pour un Wildmend d'urgence a sauvé des runs."
+  }
+ },
+ priest: {
+  heal: {
+   spec: "Benison (holy)", mastery: "+14 % soins",
+   pourquoi: "Le soigneur pur le plus puissant ; Doctrine (discipline) est l'alternative « boucliers ».",
+   stats: "Intelligence > Esprit > Hâte > Crit",
+   talents: [
+    ["Steadied Prayer ×3", "spé", "+18 % sur les soins directs."],
+    ["Improved Lingering Grace ×3", "spé", "+24 % sur ton HoT."],
+    ["Wrathful Psalm ×2", "spé", "Solemn Prayer 20 % plus rapide."],
+    ["Small Mercies ×2", "spé", "+6 % de soins, +10 % d'armure."],
+    ["Deepword → Gathered Prayers", "spé", "−12 % de mana sur tout."],
+    ["Grave Mercy ×2", "spé", "+14 % de soins, +2 % crit."],
+    ["Nocturns ×2", "classe", "−16 % de mana sur les soins."],
+    ["Veiled Calling → Wrathful Psalm", "classe", "+8 % de soins."]
+   ],
+   rotation: [
+    ["Psalm of Warding", "le bouclier AVANT les dégâts — il évite d'avoir à soigner."],
+    ["Lingering Grace", "le HoT d'entretien."],
+    ["Urgent Prayer", "le soin rapide quand ça urge."],
+    ["Solemn Prayer", "le très gros soin talenté, pour les trous d'un boss."],
+    ["Litany of Resolve", "le buff +5 % Endurance du groupe."]
+   ],
+   astuce: "Le bouclier profite deux fois : les dégâts absorbés, et le stress que tu n'as pas."
+  },
+  dps: {
+   spec: "Vespers (shadow)", mastery: "+12 % dégâts des sorts, +8 % armure",
+   pourquoi: "Le caster à DoTs avec un vrai kit de survie — et tu restes capable de dépanner au heal.",
+   stats: "Intelligence > Hâte > Crit > Esprit",
+   talents: [
+    ["Improved Dirge of Decay ×3", "spé", "+24 % sur ton DoT principal."],
+    ["Snuffed Light ×3", "spé", "+18 % sur Mindfracture."],
+    ["Improved Litany of Woe ×2", "spé", "ton filler canalisé +24 % et moins cher."],
+    ["Umbral Intent ×2", "spé", "+8 % à tous les sorts."],
+    ["Black Office → Creeping Dark", "spé", "+10 % de dégâts des sorts."],
+    ["Gloamveil ×2", "spé", "+14 % de sorts, +10 % d'armure."],
+    ["Duskbound ×3", "classe", "−15 % de mana sur l'ombre."],
+    ["Veiled Calling → Creeping Dark", "classe", "+8 % de sorts."]
+   ],
+   rotation: [
+    ["Dirge of Decay", "le DoT, actif en permanence sur tout ce qui vit plus de 10 s."],
+    ["Mindfracture", "à chaque cooldown (8 s)."],
+    ["Litany of Woe", "le filler canalisé entre deux Mindfracture."],
+    ["Psalm of Warding", "sur toi avant un pull risqué."],
+    ["Smite", "en dessous du niveau 16, ton filler."]
+   ],
+   astuce: "En donjon héroïque, un prêtre ombre qui bascule 3 soins au bon moment vaut deux DPS morts."
+  }
+ },
+ mage: {
+  dps: {
+   spec: "Pyromancy (fire)", mastery: "+2 % crit, +8 % dégâts des sorts",
+   pourquoi: "Le kit le plus complet : tout ton arsenal (Cinderbolt, Cinderfall, Scald) est boosté par la même spé. Aethermancy (arcane) est l'alternative mana-efficace.",
+   stats: "Intelligence > Hâte > Crit",
+   talents: [
+    ["Improved Cinderbolt ×3", "spé", "+15 % et cast plus rapide sur ton sort principal."],
+    ["Short Fuse ×3", "spé", "+3 % de crit."],
+    ["Improved Cinderfall ×2", "spé", "+16 % et 30 % plus souvent sur l'instant."],
+    ["Cremation ×2", "spé", "+30 % sur Scald."],
+    ["Flashfire → Flashfire", "spé", "+3 % crit ET +6 % de sorts — le combo du palier 5."],
+    ["Pyre Tender ×2", "spé", "+12 % de sorts, Cinderbolt +12 %."],
+    ["Splinterfrost ×3", "classe", "+3 % de crit."],
+    ["School Focus → Afterflame", "classe", "+6 % de dégâts des sorts."],
+    ["Effortless Art ×2", "classe", "−16 % de mana sur les sorts de base."]
+   ],
+   rotation: [
+    ["Pyrelance", "l'ouverture : 6 s de cast AVANT le pull, ~200 dégâts à l'impact."],
+    ["Cinderbolt", "le spam principal."],
+    ["Cinderfall", "l'instant à chaque cooldown, et en déplacement."],
+    ["Scald", "le filler court quand Cinderbolt est trop lent (talenté +30 %)."],
+    ["Aetherburst / Flamestrike", "l'AoE sur les packs."],
+    ["Icebind", "racine le pack qui te saute dessus — puis recule."],
+    ["Aether Insight", "le buff +5 % Int du groupe."]
+   ],
+   astuce: "Frostveil (absorption 130) avant chaque boss : un mage qui encaisse un coup, c'est un heal économisé."
+  }
+ },
+ warlock: {
+  dps: {
+   spec: "Hexcraft (affliction)", mastery: "+4 % dégâts d'ombre",
+   pourquoi: "Les DoTs font le gros du travail au niveau 20, et Consume te rend la vie que Hard Bargain dépense. Ruination (destruction) est l'alternative burst.",
+   stats: "Intelligence > Hâte > Crit > Endurance",
+   talents: [
+    ["Improved Hex of Anguish ×3", "spé", "+9 % sur ton plus gros DoT."],
+    ["Improved Blackrot ×3", "spé", "+9 % sur le deuxième."],
+    ["Deepened Hex ×2", "spé", "Hex +20 % et plus souvent."],
+    ["Unbroken Focus ×2", "spé", "Consume +24 % et moins cher."],
+    ["Reaping Path → Umbral Mastery", "spé", "+10 % à tous les sorts."],
+    ["Parting Gift ×2", "spé", "+20 % sur Blackrot ET Hex."],
+    ["Improved Blackrot ×2", "classe", "Blackrot devient quasi instantané (−70 % de cast)."],
+    ["Grim Bargain → Grim Tidings", "classe", "+2 % d'ombre."],
+    ["Vile Cunning ×2", "classe", "+6 Int/End."]
+   ],
+   rotation: [
+    ["Summon Warfiend", "(ou Gloomshade pour tanker en solo) — le familier d'abord."],
+    ["Hex of Anguish", "DoT n°1, sur tout."],
+    ["Blackrot", "DoT n°2, quasi instant talenté."],
+    ["Burning Pact", "DoT n°3 sur les cibles qui durent."],
+    ["Consume", "le filler : dégâts + vol de vie."],
+    ["Duskfire", "l'instant nuke à chaque cooldown."],
+    ["Hard Bargain", "PV → mana pendant que les DoTs travaillent — Consume rembourse."]
+   ],
+   astuce: "Sur un boss : les 3 DoTs + Consume en boucle = des dégâts que tu peux faire en bougeant pendant les mécaniques."
+  }
+ },
+ hunter: {
+  dps: {
+   spec: "Coldsight (marksmanship)", mastery: "+12 % PA, +2 % crit",
+   pourquoi: "La plus grosse maîtrise DPS à distance ; Packlord (BM) est l'alternative confort pour le solo.",
+   stats: "Agilité > Crit > Hâte > Endurance",
+   talents: [
+    ["Improved Fell Shot ×3", "spé", "+24 % sur ton instant."],
+    ["Butcher's Aim ×3", "spé", "+3 % de crit."],
+    ["Steady Draw ×2", "spé", "Long Draw +16 % et 20 % plus rapide."],
+    ["Arrow Squall ×2", "spé", "Fell Shot et Rattling Shot plus souvent."],
+    ["Sureflight → Sureflight Aura", "spé", "+16 % de PA — le meilleur du palier."],
+    ["Coldsight Mastery ×2", "spé", "Long Draw +20 % et 24 % plus souvent."],
+    ["Butcher's Aim ×3", "classe", "encore +3 % de crit."],
+    ["Improved Harrier's Guise ×2", "classe", "+16 PA et ton aspect +40 %."],
+    ["Waywise → Carrion Eye", "classe", "+12 % de PA à distance."]
+   ],
+   rotation: [
+    ["Harrier's Guise", "l'aspect PA, toujours actif."],
+    ["Wildbond", "apprivoise un familier tank (l'Auto Shot suit ton arme depuis la v0.23)."],
+    ["Venom Barb", "le DoT, à entretenir."],
+    ["Long Draw", "à chaque cooldown — ta plus grosse flèche, très talentée."],
+    ["Fell Shot", "l'instant entre deux."],
+    ["Volley", "l'AoE sur les packs."],
+    ["Fevered Draw", "+40 % de hâte pendant 15 s : le bouton burst des boss."]
+   ],
+   astuce: "Garde tes 8 yards : en dessous de la portée minimale, la barre d'action te grise les tirs (nouveau en v0.24)."
+  }
+ },
+ rogue: {
+  dps: {
+   spec: "Thuggery (combat)", mastery: "+10 % dégâts mêlée",
+   pourquoi: "Le DPS soutenu le plus fiable ; Knifework (assassination) crit plus fort sur les finishers.",
+   stats: "Agilité > Crit > Hâte > Force",
+   talents: [
+    ["Dead Aim ×3", "spé", "+24 PA."],
+    ["Practiced Steel ×2", "spé", "+20 % sur Wicked Slash, ton générateur."],
+    ["Improved Eye Jab ×3", "spé", "l'interruption tape plus et revient plus vite."],
+    ["Brawler's Way → Mirrored Blades", "spé", "+10 % de dégâts de mêlée."],
+    ["Weapon Mastery ×2", "spé", "+16 % de PA, Wicked Slash moins cher."],
+    ["Ill Will ×3", "classe", "+3 % de crit."],
+    ["Improved Wicked Slash ×2", "classe", "−16 % d'énergie sur le générateur."],
+    ["Foul Play → Mirrored Blades", "classe", "encore +8 % de mêlée."]
+   ],
+   rotation: [
+    ["Adder's Bite / Festering Venom", "le poison sur l'arme, toujours."],
+    ["Duskveil + Gut Punch", "l'ouverture furtive : 4 s d'étourdissement."],
+    ["Cutthroat Tempo", "à 2-3 combos : +30 % de hâte, LE buff à entretenir."],
+    ["Wicked Slash", "le générateur."],
+    ["Dirt Nap", "le finisher à 5 points (Bleed Out sur les boss longs)."],
+    ["Eye Jab", "l'interruption talentée — ton vrai boulot en héroïque."],
+    ["Quickened Blood", "+60 énergie : le burst des boss."]
+   ],
+   astuce: "Armor Breach (−10 % d'armure en un cast depuis la v0.23) profite à toute la mêlée : pose-le en début de boss."
+  }
+ }
+};
+
 const BIS = {
  "warrior": {
   "fr": "Guerrier",
@@ -7608,6 +8033,27 @@ function fmtStats(it) {
   return parts.join(" · ");
 }
 
+function renderBuild() {
+  const box = document.getElementById("buildBox");
+  const b = (BUILDS[curCls] || {})[curRole];
+  if (!b) { box.innerHTML = ""; return; }
+  const talents = b.talents.map(t => `<li><b>${t[0]}</b> <span class="bt-tree">${t[1]}</span> — ${t[2]}</li>`).join("");
+  const rota = b.rotation.map(r => `<li><b>${r[0]}</b> — ${r[1]}</li>`).join("");
+  box.innerHTML = `
+    <div class="bsec">
+      <h2 class="bsec-h">🧠 Spé & talents</h2>
+      <div class="bspec"><b>${b.spec}</b><span class="bmastery">${b.mastery}</span><p>${b.pourquoi}</p></div>
+      <div class="bstats">Priorité de stats : <b>${b.stats}</b></div>
+      <ol class="btalents">${talents}</ol>
+    </div>
+    <div class="bsec">
+      <h2 class="bsec-h">🔁 La rotation</h2>
+      <ol class="brota">${rota}</ol>
+      ${b.astuce ? `<p class="bastuce">💡 ${b.astuce}</p>` : ""}
+    </div>
+    <h2 class="bsec-h">⚔️ Le stuff (best in slot)</h2>`;
+}
+
 function render() {
   const cls = BIS[curCls];
   const roles = Object.keys(cls.roles);
@@ -7628,6 +8074,8 @@ function render() {
   }).join("");
 
   document.getElementById("note").innerHTML = NOTES[curRole];
+
+  renderBuild();
 
   // bonus de sets atteints par la panoplie recommandée
   const build = cls.roles[curRole];
