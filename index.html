@@ -460,11 +460,12 @@
           const n = wins.get(m.pseudo) || 0;
           const clickable = n > 0;
           const extras = rolesOf(m).slice(1);
+          const persos = (m.persos || []).map(p => `${p.classe} ${p.role}`).join(" · ");
           return `<div class="member ${rankCls}${clickable ? " haswins" : ""}"${clickable
               ? ` data-pseudo="${esc(m.pseudo)}" tabindex="0" role="button" title="Voir les faits d'armes de ${esc(m.pseudo)}"`
               : ""}>
             <div class="avatar">${esc((m.pseudo || "?").trim().charAt(0).toUpperCase())}</div>
-            <div class="who"><b>${esc(m.pseudo)}</b><span>${esc(m.classe || role)}</span>
+            <div class="who"><b>${esc(m.pseudo)}</b><span>${esc(persos || m.classe || role)}</span>
               ${extras.length ? `<span class="xtras">${extras.map(r => `<span>${esc(r)}</span>`).join("")}</span>` : ""}
             </div>
             ${n ? `<span class="fcount">🏆 ${n}</span>` : ""}
