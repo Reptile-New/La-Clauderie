@@ -31,6 +31,37 @@ DATA = sys.argv[1] if len(sys.argv) > 1 else '../wocc-knowledge-base/data'
 ITEMS = json.load(open(f'{DATA}/ITEMS.json'))
 SETS = json.load(open(f'{DATA}/ITEM_SETS.json'))
 
+# --- sources d'obtention (pour la fiche au clic sur le site) ------------------
+def _load(name, default):
+    try: return json.load(open(f'{DATA}/{name}.json'))
+    except FileNotFoundError: return default
+
+_MOBS = _load('MOBS', {})
+_NPCS = _load('NPCS', {})
+_QUESTS = _load('QUESTS', {})
+_HEROIC = _load('HEROIC_BOSS_LOOT', {})
+
+SOURCES = {}  # iid -> liste de lignes prêtes à afficher
+def _add(iid, line):
+    SOURCES.setdefault(iid, []).append(line)
+for _m in _MOBS.values():
+    for _l in _m.get('loot', []):
+        if isinstance(_l, dict) and _l.get('itemId'):
+            pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
+            _add(_l['itemId'], f"Butin : {_m['name']}{pct}")
+for _bid, _entries in _HEROIC.items():
+    _bname = _MOBS.get(_bid, {}).get('name', _bid)
+    for _l in _entries:
+        if _l.get('itemId'):
+            pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
+            _add(_l['itemId'], f"Butin héroïque : {_bname}{pct}")
+for _n in _NPCS.values():
+    for _iid in _n.get('vendorItems', []):
+        _add(_iid, f"Vendu par {_n['name']}")
+for _q in _QUESTS.values():
+    for _iid in set((_q.get('itemRewards') or {}).values()):
+        _add(_iid, f"Récompense de quête : « {_q['name']} »")
+
 LVL = 20
 CLASSES = {
     'warrior': {'base': {'str':23,'agi':20,'sta':22,'int':10,'spi':11,'armor':50}, 'per': {'str':2,'agi':1,'sta':2,'int':0,'spi':0,'armor':12}, 'hp': (50,18), 'mana': (100,0)},
@@ -294,6 +325,7 @@ def item_export(iid, cls):
         'stats': it.get('stats') or {}, 'w': it.get('weapon'),
         'sp': it.get('spellPower'), 'id': iid, 'score': round(sc,1),
         'xclass': bool(it.get('armorType') and it.get('requiredClass') and cls not in it['requiredClass']),
+        'slot': it.get('slot'), 'src': SOURCES.get(iid, []),
     }
 
 FR={'warrior':'Guerrier','paladin':'Paladin','shaman':'Chaman','druid':'Druide','priest':'Prêtre','mage':'Mage','warlock':'Démoniste','rogue':'Voleur','hunter':'Chasseur'}

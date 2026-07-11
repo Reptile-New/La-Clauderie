@@ -45,8 +45,6 @@
   .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
   .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
-  .back { margin-left: auto; color: var(--dim); text-decoration: none; font-size: 0.88rem; }
-  .back:hover { color: var(--gold-bright); }
   .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
   .topnav a { color: var(--dim); text-decoration: none; }
   .topnav a:hover { color: var(--gold-bright); }
@@ -108,6 +106,27 @@
   .item .nm { font-weight: 700; font-size: 0.98rem; }
   .ilink { color: inherit; text-decoration: none; border-bottom: 1px dotted color-mix(in srgb, currentColor 45%, transparent); }
   .ilink:hover { border-bottom-style: solid; filter: brightness(1.15); }
+  /* Fiche objet (au clic, sans quitter la page) */
+  dialog#itemModal { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: #12161f; color: var(--text); max-width: 460px; width: calc(100% - 28px); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog#itemModal::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .im-head { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px 14px; border-bottom: 1px solid var(--line-soft); }
+  .im-head .kick { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin: 0 0 5px; }
+  .im-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; margin: 0; line-height: 1.15; }
+  .im-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; line-height: 1; }
+  .im-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .im-body { padding: 16px 20px 20px; }
+  .im-body .stats { color: #58c46a; font-size: 0.92rem; line-height: 1.6; }
+  .im-body .dps-line { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text); margin-bottom: 6px; }
+  .im-body .setline2 { margin-top: 10px; font-size: 0.88rem; color: var(--gold-bright); }
+  .im-body h4 { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gold-bright); margin: 16px 0 7px; }
+  .im-body ul { margin: 0; padding-left: 1.1em; font-size: 0.92rem; }
+  .im-body li { margin: 4px 0; }
+  .im-body li::marker { color: var(--gold); }
+  .im-body .nosrc { color: var(--faint); font-size: 0.88rem; }
+  .im-foot { padding: 0 20px 20px; }
+  .im-foot a { color: var(--gold-bright); font-size: 0.86rem; font-weight: 600; text-decoration: none; }
+  .im-foot a::after { content: " →"; }
+  .im-foot a:hover { text-decoration: underline; }
   .q-epic .nm { color: var(--q-epic); } .q-legendary .nm { color: var(--q-legendary); }
   .q-rare .nm { color: var(--q-rare); } .q-uncommon .nm { color: var(--q-uncommon); }
   .item .meta { font-size: 0.82rem; color: var(--dim); margin-top: 2px; }
@@ -166,6 +185,18 @@
   </div>
 </footer>
 
+<dialog id="itemModal" aria-labelledby="imTitle">
+  <div class="im-head">
+    <div>
+      <p class="kick" id="imKick"></p>
+      <h3 id="imTitle"></h3>
+    </div>
+    <button class="close" id="imClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="im-body" id="imBody"></div>
+  <div class="im-foot"><a id="imCodex" href="#" target="_blank" rel="noopener">Fiche complète dans le codex</a></div>
+</dialog>
+
 <script>
 const BIS = {
  "warrior": {
@@ -191,7 +222,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Deathless Greatblade",
@@ -209,7 +244,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_greatblade",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -226,7 +265,14 @@ const BIS = {
        "sp": null,
        "id": "crownforged_dreadhelm",
        "score": 42.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Cryptplate Helm",
@@ -241,7 +287,11 @@ const BIS = {
        "sp": null,
        "id": "cryptplate_helm",
        "score": 42.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "shoulder": {
@@ -258,7 +308,12 @@ const BIS = {
        "sp": null,
        "id": "crownforged_warspaulders",
        "score": 36.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Mistforged Pauldrons",
@@ -273,7 +328,11 @@ const BIS = {
        "sp": null,
        "id": "mistforged_pauldrons",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "chest": {
@@ -290,7 +349,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_warplate",
        "score": 40.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Morthen's Cryptforged Hauberk",
@@ -305,7 +368,11 @@ const BIS = {
        "sp": null,
        "id": "morthens_cryptforged_hauberk",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "waist": {
@@ -322,7 +389,11 @@ const BIS = {
        "sp": null,
        "id": "gravescale_girdle",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       },
       "alt": {
        "name": "Bonewrought Girdle",
@@ -337,7 +408,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_girdle",
        "score": 25.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       }
      },
      "legs": {
@@ -354,7 +429,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_legguards",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Deathless Warguard Legmail",
@@ -369,7 +448,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_warguard_legmail",
        "score": 46.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "gloves": {
@@ -386,7 +469,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_gauntlets",
        "score": 28.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravewyrm Claws",
@@ -401,7 +488,11 @@ const BIS = {
        "sp": null,
        "id": "gravewyrm_claws",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
+       ]
       }
      },
      "feet": {
@@ -418,7 +509,12 @@ const BIS = {
        "sp": null,
        "id": "deathlord_sabatons",
        "score": 32.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Deeprock Tunneler · 0 %",
+        "Butin : Ironvein Foreman · 25 %"
+       ]
       },
       "alt": {
        "name": "Tideworn Warboots",
@@ -433,7 +529,11 @@ const BIS = {
        "sp": null,
        "id": "tideworn_warboots",
        "score": 31.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "neck": {
@@ -449,7 +549,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Medallion of Endless Profit",
@@ -463,7 +565,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -479,7 +583,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Sutil's Gambit",
@@ -493,7 +599,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -509,7 +617,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Sutil's Gambit",
@@ -523,7 +633,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -561,7 +673,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Deathless Greatblade",
@@ -579,7 +695,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_greatblade",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -596,7 +716,14 @@ const BIS = {
        "sp": null,
        "id": "crownforged_dreadhelm",
        "score": 42.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Barrowlord Dread Visage",
@@ -611,7 +738,11 @@ const BIS = {
        "sp": null,
        "id": "deathlords_dread_visage",
        "score": 35.4,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       }
      },
      "shoulder": {
@@ -628,7 +759,12 @@ const BIS = {
        "sp": null,
        "id": "crownforged_warspaulders",
        "score": 36.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Mistforged Pauldrons",
@@ -643,7 +779,11 @@ const BIS = {
        "sp": null,
        "id": "mistforged_pauldrons",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "chest": {
@@ -660,7 +800,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_warplate",
        "score": 40.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Morthen's Cryptforged Hauberk",
@@ -675,7 +819,11 @@ const BIS = {
        "sp": null,
        "id": "morthens_cryptforged_hauberk",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "waist": {
@@ -692,7 +840,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_girdle",
        "score": 25.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravescale Girdle",
@@ -707,7 +859,11 @@ const BIS = {
        "sp": null,
        "id": "gravescale_girdle",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "legs": {
@@ -724,7 +880,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_legguards",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Deathless Warguard Legmail",
@@ -739,7 +899,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_warguard_legmail",
        "score": 46.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "gloves": {
@@ -756,7 +920,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_gauntlets",
        "score": 28.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravewyrm Claws",
@@ -771,7 +939,11 @@ const BIS = {
        "sp": null,
        "id": "gravewyrm_claws",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
+       ]
       }
      },
      "feet": {
@@ -788,7 +960,12 @@ const BIS = {
        "sp": null,
        "id": "deathlord_sabatons",
        "score": 32.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Deeprock Tunneler · 0 %",
+        "Butin : Ironvein Foreman · 25 %"
+       ]
       },
       "alt": {
        "name": "Tideworn Warboots",
@@ -803,7 +980,11 @@ const BIS = {
        "sp": null,
        "id": "tideworn_warboots",
        "score": 31.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "neck": {
@@ -819,7 +1000,9 @@ const BIS = {
        "sp": null,
        "id": "swiftfang_talisman",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Medallion of Endless Profit",
@@ -833,7 +1016,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -849,7 +1034,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -863,7 +1050,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -879,7 +1068,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -893,7 +1084,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -936,7 +1129,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Heartwood of the Deathless Crown",
@@ -955,7 +1152,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       }
      },
      "helmet": {
@@ -972,7 +1173,14 @@ const BIS = {
        "sp": null,
        "id": "crownforged_dreadhelm",
        "score": 42.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Cryptplate Helm",
@@ -987,7 +1195,11 @@ const BIS = {
        "sp": null,
        "id": "cryptplate_helm",
        "score": 42.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "shoulder": {
@@ -1004,7 +1216,12 @@ const BIS = {
        "sp": null,
        "id": "crownforged_warspaulders",
        "score": 36.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Mistforged Pauldrons",
@@ -1019,7 +1236,11 @@ const BIS = {
        "sp": null,
        "id": "mistforged_pauldrons",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "chest": {
@@ -1036,7 +1257,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_warplate",
        "score": 40.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Morthen's Cryptforged Hauberk",
@@ -1051,7 +1276,11 @@ const BIS = {
        "sp": null,
        "id": "morthens_cryptforged_hauberk",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "waist": {
@@ -1068,7 +1297,11 @@ const BIS = {
        "sp": null,
        "id": "gravescale_girdle",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       },
       "alt": {
        "name": "Bonewrought Girdle",
@@ -1083,7 +1316,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_girdle",
        "score": 25.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       }
      },
      "legs": {
@@ -1100,7 +1337,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_legguards",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Deathless Warguard Legmail",
@@ -1115,7 +1356,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_warguard_legmail",
        "score": 46.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "gloves": {
@@ -1132,7 +1377,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_gauntlets",
        "score": 28.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravewyrm Claws",
@@ -1147,7 +1396,11 @@ const BIS = {
        "sp": null,
        "id": "gravewyrm_claws",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
+       ]
       }
      },
      "feet": {
@@ -1164,7 +1417,12 @@ const BIS = {
        "sp": null,
        "id": "deathlord_sabatons",
        "score": 32.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Deeprock Tunneler · 0 %",
+        "Butin : Ironvein Foreman · 25 %"
+       ]
       },
       "alt": {
        "name": "Tideworn Warboots",
@@ -1179,7 +1437,11 @@ const BIS = {
        "sp": null,
        "id": "tideworn_warboots",
        "score": 31.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "neck": {
@@ -1195,7 +1457,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Medallion of Endless Profit",
@@ -1209,7 +1473,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -1225,7 +1491,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Sutil's Gambit",
@@ -1239,7 +1507,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -1255,7 +1525,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Sutil's Gambit",
@@ -1269,7 +1541,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -1307,7 +1581,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Stormcaller's Focus",
@@ -1325,7 +1603,11 @@ const BIS = {
        "sp": null,
        "id": "stormcallers_focus",
        "score": 27.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
       }
      },
      "helmet": {
@@ -1342,7 +1624,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": true
+       "xclass": true,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Choirmother's Casque",
@@ -1357,7 +1644,11 @@ const BIS = {
        "sp": null,
        "id": "choirmothers_casque",
        "score": 42.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "shoulder": {
@@ -1374,7 +1665,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulspire_mantle",
        "score": 19.8,
-       "xclass": true
+       "xclass": true,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Wraithfire Mantle",
@@ -1389,7 +1684,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       }
      },
      "chest": {
@@ -1406,7 +1708,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Soulforged Warplate",
@@ -1421,7 +1727,11 @@ const BIS = {
        "sp": null,
        "id": "soulforged_warplate",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
       }
      },
      "waist": {
@@ -1438,7 +1748,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -1453,7 +1767,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -1470,7 +1788,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -1485,7 +1808,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -1502,7 +1829,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Wyrmchoir Handwraps",
@@ -1517,7 +1848,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmchoir_handwraps",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "feet": {
@@ -1534,7 +1869,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -1549,7 +1888,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -1565,7 +1908,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -1579,7 +1924,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -1595,7 +1942,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Niela's Coldlight Band",
@@ -1609,7 +1958,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -1625,7 +1976,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Niela's Coldlight Band",
@@ -1639,7 +1992,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -1677,7 +2032,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Heartwood of the Deathless Crown",
@@ -1696,7 +2055,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       }
      },
      "helmet": {
@@ -1713,7 +2076,14 @@ const BIS = {
        "sp": null,
        "id": "crownforged_dreadhelm",
        "score": 42.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Barrowlord Dread Visage",
@@ -1728,7 +2098,11 @@ const BIS = {
        "sp": null,
        "id": "deathlords_dread_visage",
        "score": 35.4,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       }
      },
      "shoulder": {
@@ -1745,7 +2119,12 @@ const BIS = {
        "sp": null,
        "id": "crownforged_warspaulders",
        "score": 36.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Mistforged Pauldrons",
@@ -1760,7 +2139,11 @@ const BIS = {
        "sp": null,
        "id": "mistforged_pauldrons",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "chest": {
@@ -1777,7 +2160,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_warplate",
        "score": 40.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Morthen's Cryptforged Hauberk",
@@ -1792,7 +2179,11 @@ const BIS = {
        "sp": null,
        "id": "morthens_cryptforged_hauberk",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "waist": {
@@ -1809,7 +2200,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_girdle",
        "score": 25.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravescale Girdle",
@@ -1824,7 +2219,11 @@ const BIS = {
        "sp": null,
        "id": "gravescale_girdle",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "legs": {
@@ -1841,7 +2240,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_legguards",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Deathless Warguard Legmail",
@@ -1856,7 +2259,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_warguard_legmail",
        "score": 46.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "gloves": {
@@ -1873,7 +2280,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_gauntlets",
        "score": 28.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravewyrm Claws",
@@ -1888,7 +2299,11 @@ const BIS = {
        "sp": null,
        "id": "gravewyrm_claws",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
+       ]
       }
      },
      "feet": {
@@ -1905,7 +2320,12 @@ const BIS = {
        "sp": null,
        "id": "deathlord_sabatons",
        "score": 32.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Deeprock Tunneler · 0 %",
+        "Butin : Ironvein Foreman · 25 %"
+       ]
       },
       "alt": {
        "name": "Tideworn Warboots",
@@ -1920,7 +2340,11 @@ const BIS = {
        "sp": null,
        "id": "tideworn_warboots",
        "score": 31.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "neck": {
@@ -1936,7 +2360,9 @@ const BIS = {
        "sp": null,
        "id": "swiftfang_talisman",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Medallion of Endless Profit",
@@ -1950,7 +2376,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -1966,7 +2394,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -1980,7 +2410,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -1996,7 +2428,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -2010,7 +2444,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -2053,7 +2489,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Stormcaller's Focus",
@@ -2071,7 +2511,11 @@ const BIS = {
        "sp": null,
        "id": "stormcallers_focus",
        "score": 27.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
       }
      },
      "helmet": {
@@ -2088,7 +2532,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": true
+       "xclass": true,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Choirmother's Casque",
@@ -2103,7 +2552,11 @@ const BIS = {
        "sp": null,
        "id": "choirmothers_casque",
        "score": 42.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "shoulder": {
@@ -2120,7 +2573,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulspire_mantle",
        "score": 19.8,
-       "xclass": true
+       "xclass": true,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Wraithfire Mantle",
@@ -2135,7 +2592,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       }
      },
      "chest": {
@@ -2152,7 +2616,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Soulforged Warplate",
@@ -2167,7 +2635,11 @@ const BIS = {
        "sp": null,
        "id": "soulforged_warplate",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
       }
      },
      "waist": {
@@ -2184,7 +2656,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -2199,7 +2675,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -2216,7 +2696,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -2231,7 +2716,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -2248,7 +2737,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Wyrmchoir Handwraps",
@@ -2263,7 +2756,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmchoir_handwraps",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "feet": {
@@ -2280,7 +2777,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -2295,7 +2796,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -2311,7 +2816,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -2325,7 +2832,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -2341,7 +2850,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Niela's Coldlight Band",
@@ -2355,7 +2866,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -2371,7 +2884,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Niela's Coldlight Band",
@@ -2385,7 +2900,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -2423,7 +2940,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Heartwood of the Deathless Crown",
@@ -2442,7 +2963,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       }
      },
      "helmet": {
@@ -2459,7 +2984,14 @@ const BIS = {
        "sp": null,
        "id": "crownforged_dreadhelm",
        "score": 42.8,
-       "xclass": true
+       "xclass": true,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Barrowlord Dread Visage",
@@ -2474,7 +3006,11 @@ const BIS = {
        "sp": null,
        "id": "deathlords_dread_visage",
        "score": 35.4,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       }
      },
      "shoulder": {
@@ -2491,7 +3027,12 @@ const BIS = {
        "sp": null,
        "id": "crownforged_warspaulders",
        "score": 36.7,
-       "xclass": true
+       "xclass": true,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Mistforged Pauldrons",
@@ -2506,7 +3047,11 @@ const BIS = {
        "sp": null,
        "id": "mistforged_pauldrons",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "chest": {
@@ -2523,7 +3068,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_warplate",
        "score": 40.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Morthen's Cryptforged Hauberk",
@@ -2538,7 +3087,11 @@ const BIS = {
        "sp": null,
        "id": "morthens_cryptforged_hauberk",
        "score": 49.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 34 %"
+       ]
       }
      },
      "waist": {
@@ -2555,7 +3108,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_girdle",
        "score": 25.5,
-       "xclass": true
+       "xclass": true,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravescale Girdle",
@@ -2570,7 +3127,11 @@ const BIS = {
        "sp": null,
        "id": "gravescale_girdle",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "legs": {
@@ -2587,7 +3148,11 @@ const BIS = {
        "sp": null,
        "id": "deathlord_legguards",
        "score": 36.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Deathless Warguard Legmail",
@@ -2602,7 +3167,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_warguard_legmail",
        "score": 46.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "gloves": {
@@ -2619,7 +3188,11 @@ const BIS = {
        "sp": null,
        "id": "crownforged_gauntlets",
        "score": 28.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Gravewyrm Claws",
@@ -2634,7 +3207,11 @@ const BIS = {
        "sp": null,
        "id": "gravewyrm_claws",
        "score": 33.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
+       ]
       }
      },
      "feet": {
@@ -2651,7 +3228,12 @@ const BIS = {
        "sp": null,
        "id": "deathlord_sabatons",
        "score": 32.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Deeprock Tunneler · 0 %",
+        "Butin : Ironvein Foreman · 25 %"
+       ]
       },
       "alt": {
        "name": "Tideworn Warboots",
@@ -2666,7 +3248,11 @@ const BIS = {
        "sp": null,
        "id": "tideworn_warboots",
        "score": 31.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "neck": {
@@ -2682,7 +3268,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Swiftfang Talisman",
@@ -2696,7 +3284,9 @@ const BIS = {
        "sp": null,
        "id": "swiftfang_talisman",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -2712,7 +3302,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -2726,7 +3318,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -2742,7 +3336,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -2756,7 +3352,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -2799,7 +3397,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Widowfang Dirk",
@@ -2818,7 +3420,11 @@ const BIS = {
        "sp": null,
        "id": "widowfang_dirk",
        "score": 9.4,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Récompense de quête : « Into the Hollow »"
+       ]
       }
      },
      "helmet": {
@@ -2835,7 +3441,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_crown",
        "score": 32.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Tideguard Faceguard",
@@ -2850,7 +3463,11 @@ const BIS = {
        "sp": null,
        "id": "tideguard_faceguard",
        "score": 32.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "shoulder": {
@@ -2867,7 +3484,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_shoulderguards",
        "score": 28.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Tidebound Spaulders",
@@ -2882,7 +3506,11 @@ const BIS = {
        "sp": null,
        "id": "tidebound_spaulders",
        "score": 28.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -2899,7 +3527,11 @@ const BIS = {
        "sp": null,
        "id": "scourgehide_carapace",
        "score": 36.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       },
       "alt": {
        "name": "Nightfang Harness",
@@ -2914,7 +3546,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_harness",
        "score": 32.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       }
      },
      "waist": {
@@ -2931,7 +3567,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_cord",
        "score": 23.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       },
       "alt": {
        "name": "Direfang Waistband",
@@ -2946,7 +3586,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_waistband",
        "score": 20.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       }
      },
      "legs": {
@@ -2962,7 +3606,12 @@ const BIS = {
        "sp": null,
        "id": "korgaths_chainwraps",
        "score": 22.4,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Korgath the Bound · 10 %",
+        "Récompense de quête : « The Bound Guardian »"
+       ]
       },
       "alt": {
        "name": "Tidewoven Trousers",
@@ -2977,7 +3626,11 @@ const BIS = {
        "sp": null,
        "id": "tidewoven_trousers",
        "score": 31.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "gloves": {
@@ -2994,7 +3647,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_grips",
        "score": 22.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sanctum Prowler's Grips",
@@ -3009,7 +3666,11 @@ const BIS = {
        "sp": null,
        "id": "sanctum_prowlers_grips",
        "score": 23.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "feet": {
@@ -3026,7 +3687,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_treads",
        "score": 24.1,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin : Korgath the Bound · 5 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Striders",
@@ -3041,7 +3706,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_striders",
        "score": 22.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -3057,7 +3726,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Medallion of Endless Profit",
@@ -3071,7 +3742,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -3087,7 +3760,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Sutil's Gambit",
@@ -3101,7 +3776,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -3117,7 +3794,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Sutil's Gambit",
@@ -3131,7 +3810,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -3164,7 +3845,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Lunar Tide Greatstaff",
@@ -3182,7 +3867,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_tide_greatstaff",
        "score": 28.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -3199,7 +3888,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Soulrend Diadem",
@@ -3214,7 +3908,11 @@ const BIS = {
        "sp": null,
        "id": "soulrend_diadem",
        "score": 24.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "shoulder": {
@@ -3231,7 +3929,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulspire_mantle",
        "score": 19.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Wraithfire Mantle",
@@ -3246,7 +3948,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       }
      },
      "chest": {
@@ -3263,7 +3972,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Shroud of the Gravewyrm",
@@ -3278,7 +3991,11 @@ const BIS = {
        "sp": null,
        "id": "shroud_of_the_gravewyrm",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "waist": {
@@ -3295,7 +4012,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -3310,7 +4031,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -3327,7 +4052,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -3342,7 +4072,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -3359,7 +4093,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Handwraps",
@@ -3374,7 +4112,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_handwraps",
        "score": 19.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "feet": {
@@ -3391,7 +4133,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -3406,7 +4152,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -3422,7 +4172,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -3436,7 +4188,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -3452,7 +4206,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Zyzz's Deathless Signet",
@@ -3466,7 +4222,9 @@ const BIS = {
        "sp": null,
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -3482,7 +4240,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Zyzz's Deathless Signet",
@@ -3496,7 +4256,9 @@ const BIS = {
        "sp": null,
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -3533,7 +4295,11 @@ const BIS = {
        "sp": null,
        "id": "gravecaller_blade",
        "score": 9.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Récompense de quête : « Into the Hollow »"
+       ]
       },
       "alt": {
        "name": "Crossroads Saber",
@@ -3550,7 +4316,9 @@ const BIS = {
        "sp": null,
        "id": "crossroads_saber",
        "score": 4.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": []
       }
      },
      "helmet": {
@@ -3567,7 +4335,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_crown",
        "score": 32.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Monarch's Crown",
@@ -3583,7 +4358,9 @@ const BIS = {
        "sp": null,
        "id": "monarch_crown_helm",
        "score": 9.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": []
       }
      },
      "shoulder": {
@@ -3600,7 +4377,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_shoulderguards",
        "score": 28.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Tidebound Spaulders",
@@ -3615,7 +4399,11 @@ const BIS = {
        "sp": null,
        "id": "tidebound_spaulders",
        "score": 28.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -3632,7 +4420,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_harness",
        "score": 32.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Scourgehide Carapace",
@@ -3647,7 +4439,11 @@ const BIS = {
        "sp": null,
        "id": "scourgehide_carapace",
        "score": 36.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "waist": {
@@ -3664,7 +4460,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_waistband",
        "score": 20.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Cord",
@@ -3679,7 +4479,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_cord",
        "score": 23.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "legs": {
@@ -3696,7 +4500,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_legguards",
        "score": 28.9,
-       "xclass": true
+       "xclass": true,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Trollhide Leggings",
@@ -3711,7 +4519,13 @@ const BIS = {
        "sp": null,
        "id": "trollhide_leggings",
        "score": 9.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Knight-Commander Olen · 50 %",
+        "Butin : Vael the Fogbinder · 34 %",
+        "Récompense de quête : « Fetish and Bone »"
+       ]
       }
      },
      "gloves": {
@@ -3728,7 +4542,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_talongrips",
        "score": 22.2,
-       "xclass": true
+       "xclass": true,
+       "slot": "gloves",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Direfang Grips",
@@ -3743,7 +4561,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_grips",
        "score": 22.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       }
      },
      "feet": {
@@ -3760,7 +4582,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_treads",
        "score": 24.1,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin : Korgath the Bound · 5 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Striders",
@@ -3775,7 +4601,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_striders",
        "score": 22.0,
-       "xclass": true
+       "xclass": true,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -3791,7 +4621,9 @@ const BIS = {
        "sp": null,
        "id": "medallion_of_endless_profit",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Swiftfang Talisman",
@@ -3805,7 +4637,9 @@ const BIS = {
        "sp": null,
        "id": "swiftfang_talisman",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -3821,7 +4655,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -3835,7 +4671,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -3851,7 +4689,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Oath of the Round Table",
@@ -3865,7 +4705,9 @@ const BIS = {
        "sp": null,
        "id": "oath_of_the_round_table",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -3908,7 +4750,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Lunar Tide Greatstaff",
@@ -3926,7 +4772,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_tide_greatstaff",
        "score": 28.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -3943,7 +4793,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Soulrend Diadem",
@@ -3958,7 +4813,11 @@ const BIS = {
        "sp": null,
        "id": "soulrend_diadem",
        "score": 24.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "shoulder": {
@@ -3975,7 +4834,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulspire_mantle",
        "score": 19.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Wraithfire Mantle",
@@ -3990,7 +4853,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       }
      },
      "chest": {
@@ -4007,7 +4877,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Shroud of the Gravewyrm",
@@ -4022,7 +4896,11 @@ const BIS = {
        "sp": null,
        "id": "shroud_of_the_gravewyrm",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "waist": {
@@ -4039,7 +4917,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -4054,7 +4936,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -4071,7 +4957,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -4086,7 +4977,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -4103,7 +4998,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Handwraps",
@@ -4118,7 +5017,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_handwraps",
        "score": 19.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "feet": {
@@ -4135,7 +5038,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -4150,7 +5057,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -4166,7 +5077,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -4180,7 +5093,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -4196,7 +5111,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Niela's Coldlight Band",
@@ -4210,7 +5127,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -4226,7 +5145,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Niela's Coldlight Band",
@@ -4240,7 +5161,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -4278,7 +5201,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Lunar Tide Greatstaff",
@@ -4296,7 +5223,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_tide_greatstaff",
        "score": 28.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -4313,7 +5244,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Soulrend Diadem",
@@ -4328,7 +5264,11 @@ const BIS = {
        "sp": null,
        "id": "soulrend_diadem",
        "score": 24.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "shoulder": {
@@ -4345,7 +5285,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Sunken Court Mantle",
@@ -4360,7 +5307,11 @@ const BIS = {
        "sp": null,
        "id": "sunken_court_mantle",
        "score": 20.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -4377,7 +5328,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Shroud of the Gravewyrm",
@@ -4392,7 +5347,11 @@ const BIS = {
        "sp": null,
        "id": "shroud_of_the_gravewyrm",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "waist": {
@@ -4409,7 +5368,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -4424,7 +5387,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -4441,7 +5408,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -4456,7 +5428,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -4473,7 +5449,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Handwraps",
@@ -4488,7 +5468,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_handwraps",
        "score": 19.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "feet": {
@@ -4505,7 +5489,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -4520,7 +5508,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -4536,7 +5528,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -4550,7 +5544,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -4566,7 +5562,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "The Architect's Cornerstone",
@@ -4580,7 +5578,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -4596,7 +5596,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "The Architect's Cornerstone",
@@ -4610,7 +5612,9 @@ const BIS = {
        "sp": null,
        "id": "architects_cornerstone",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -4653,7 +5657,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Lunar Tide Greatstaff",
@@ -4671,7 +5679,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_tide_greatstaff",
        "score": 28.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -4688,7 +5700,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Soulrend Diadem",
@@ -4703,7 +5720,11 @@ const BIS = {
        "sp": null,
        "id": "soulrend_diadem",
        "score": 24.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "shoulder": {
@@ -4720,7 +5741,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Sunken Court Mantle",
@@ -4735,7 +5763,11 @@ const BIS = {
        "sp": null,
        "id": "sunken_court_mantle",
        "score": 20.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -4752,7 +5784,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Shroud of the Gravewyrm",
@@ -4767,7 +5803,11 @@ const BIS = {
        "sp": null,
        "id": "shroud_of_the_gravewyrm",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "waist": {
@@ -4784,7 +5824,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -4799,7 +5843,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -4816,7 +5864,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -4831,7 +5884,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -4848,7 +5905,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Handwraps",
@@ -4863,7 +5924,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_handwraps",
        "score": 19.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "feet": {
@@ -4880,7 +5945,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -4895,7 +5964,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -4911,7 +5984,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -4925,7 +6000,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -4941,7 +6018,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Zyzz's Deathless Signet",
@@ -4955,7 +6034,9 @@ const BIS = {
        "sp": null,
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -4971,7 +6052,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Zyzz's Deathless Signet",
@@ -4985,7 +6068,9 @@ const BIS = {
        "sp": null,
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -5028,7 +6113,11 @@ const BIS = {
        "sp": null,
        "id": "deathless_heartwood",
        "score": 52.6,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Lunar Tide Greatstaff",
@@ -5046,7 +6135,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_tide_greatstaff",
        "score": 28.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -5063,7 +6156,12 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cowl",
        "score": 25.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Soulrend Diadem",
@@ -5078,7 +6176,11 @@ const BIS = {
        "sp": null,
        "id": "soulrend_diadem",
        "score": 24.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "shoulder": {
@@ -5095,7 +6197,14 @@ const BIS = {
        "sp": null,
        "id": "soulflame_mantle",
        "score": 22.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Sunken Court Mantle",
@@ -5110,7 +6219,11 @@ const BIS = {
        "sp": null,
        "id": "sunken_court_mantle",
        "score": 20.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -5127,7 +6240,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_starshroud",
        "score": 25.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Shroud of the Gravewyrm",
@@ -5142,7 +6259,11 @@ const BIS = {
        "sp": null,
        "id": "shroud_of_the_gravewyrm",
        "score": 29.5,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
       }
      },
      "waist": {
@@ -5159,7 +6280,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_cord",
        "score": 17.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Sash of the Sunken Court",
@@ -5174,7 +6299,11 @@ const BIS = {
        "sp": null,
        "id": "sash_of_the_sunken_court",
        "score": 19.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "legs": {
@@ -5191,7 +6320,12 @@ const BIS = {
        "sp": null,
        "id": "necromancers_legwraps",
        "score": 27.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Boneclad Revenant · 0 %",
+        "Butin : Marrowlord Varkas · 25 %"
+       ]
       },
       "alt": {
        "name": "Lunar Choir Leggings",
@@ -5206,7 +6340,11 @@ const BIS = {
        "sp": null,
        "id": "lunar_choir_leggings",
        "score": 26.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+       ]
       }
      },
      "gloves": {
@@ -5223,7 +6361,11 @@ const BIS = {
        "sp": null,
        "id": "soulflame_gloves",
        "score": 18.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Handwraps",
@@ -5238,7 +6380,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_handwraps",
        "score": 19.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "feet": {
@@ -5255,7 +6401,11 @@ const BIS = {
        "sp": null,
        "id": "necromancers_soulsteps",
        "score": 18.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Shadowpulse Slippers",
@@ -5270,7 +6420,11 @@ const BIS = {
        "sp": null,
        "id": "shadowpulse_slippers",
        "score": 17.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -5286,7 +6440,9 @@ const BIS = {
        "sp": null,
        "id": "zense_meridian",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -5300,7 +6456,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -5316,7 +6474,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Zyzz's Deathless Signet",
@@ -5330,7 +6490,9 @@ const BIS = {
        "sp": null,
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -5346,7 +6508,9 @@ const BIS = {
        "sp": null,
        "id": "nielas_coldlight_band",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Zyzz's Deathless Signet",
@@ -5360,7 +6524,9 @@ const BIS = {
        "sp": null,
        "id": "zyzzs_deathless_signet",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -5403,7 +6569,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Mistcaller's Fang",
@@ -5421,7 +6591,11 @@ const BIS = {
        "sp": null,
        "id": "mistcallers_fang",
        "score": 30.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -5438,7 +6612,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_crown",
        "score": 32.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Tideguard Faceguard",
@@ -5453,7 +6634,11 @@ const BIS = {
        "sp": null,
        "id": "tideguard_faceguard",
        "score": 32.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "shoulder": {
@@ -5470,7 +6655,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_shoulderguards",
        "score": 28.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Tidebound Spaulders",
@@ -5485,7 +6677,11 @@ const BIS = {
        "sp": null,
        "id": "tidebound_spaulders",
        "score": 28.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -5502,7 +6698,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_harness",
        "score": 32.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Scourgehide Carapace",
@@ -5517,7 +6717,11 @@ const BIS = {
        "sp": null,
        "id": "scourgehide_carapace",
        "score": 36.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "waist": {
@@ -5534,7 +6738,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_waistband",
        "score": 20.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Cord",
@@ -5549,7 +6757,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_cord",
        "score": 23.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "legs": {
@@ -5566,7 +6778,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_legguards",
        "score": 28.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Tidewoven Trousers",
@@ -5581,7 +6797,11 @@ const BIS = {
        "sp": null,
        "id": "tidewoven_trousers",
        "score": 31.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "gloves": {
@@ -5598,7 +6818,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_talongrips",
        "score": 22.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Direfang Grips",
@@ -5613,7 +6837,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_grips",
        "score": 22.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       }
      },
      "feet": {
@@ -5630,7 +6858,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_treads",
        "score": 24.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Korgath the Bound · 5 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Striders",
@@ -5645,7 +6877,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_striders",
        "score": 22.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -5661,7 +6897,9 @@ const BIS = {
        "sp": null,
        "id": "swiftfang_talisman",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Yumi's Keepsake Locket",
@@ -5675,7 +6913,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -5691,7 +6931,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Seal of the Nine Oaths",
@@ -5705,7 +6947,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -5721,7 +6965,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Seal of the Nine Oaths",
@@ -5735,7 +6981,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -5778,7 +7026,11 @@ const BIS = {
        "sp": null,
        "id": "kingsbane_last_oath",
        "score": 54.7,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
       },
       "alt": {
        "name": "Mistcaller's Fang",
@@ -5796,7 +7048,11 @@ const BIS = {
        "sp": null,
        "id": "mistcallers_fang",
        "score": 30.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
+       ]
       }
      },
      "helmet": {
@@ -5813,7 +7069,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_crown",
        "score": 32.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
       },
       "alt": {
        "name": "Tideguard Faceguard",
@@ -5828,7 +7091,11 @@ const BIS = {
        "sp": null,
        "id": "tideguard_faceguard",
        "score": 32.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "helmet",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "shoulder": {
@@ -5845,7 +7112,14 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_shoulderguards",
        "score": 28.8,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
+       ]
       },
       "alt": {
        "name": "Tidebound Spaulders",
@@ -5860,7 +7134,11 @@ const BIS = {
        "sp": null,
        "id": "tidebound_spaulders",
        "score": 28.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "shoulder",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 33 %"
+       ]
       }
      },
      "chest": {
@@ -5877,7 +7155,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_harness",
        "score": 32.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       },
       "alt": {
        "name": "Scourgehide Carapace",
@@ -5892,7 +7174,11 @@ const BIS = {
        "sp": null,
        "id": "scourgehide_carapace",
        "score": 36.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 25 %"
+       ]
       }
      },
      "waist": {
@@ -5909,7 +7195,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_waistband",
        "score": 20.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Cord",
@@ -5924,7 +7214,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_cord",
        "score": 23.3,
-       "xclass": false
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "legs": {
@@ -5941,7 +7235,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_legguards",
        "score": 28.9,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin : Grand Necromancer Velkhar · 5 %"
+       ]
       },
       "alt": {
        "name": "Tidewoven Trousers",
@@ -5956,7 +7254,11 @@ const BIS = {
        "sp": null,
        "id": "tidewoven_trousers",
        "score": 31.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "legs",
+       "src": [
+        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+       ]
       }
      },
      "gloves": {
@@ -5973,7 +7275,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_talongrips",
        "score": 22.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
+       ]
       },
       "alt": {
        "name": "Direfang Grips",
@@ -5988,7 +7294,11 @@ const BIS = {
        "sp": null,
        "id": "nighttalon_grips",
        "score": 22.2,
-       "xclass": false
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
       }
      },
      "feet": {
@@ -6005,7 +7315,11 @@ const BIS = {
        "sp": null,
        "id": "wyrmshadow_treads",
        "score": 24.1,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin : Korgath the Bound · 5 %"
+       ]
       },
       "alt": {
        "name": "Bonechill Striders",
@@ -6020,7 +7334,11 @@ const BIS = {
        "sp": null,
        "id": "bonechill_striders",
        "score": 22.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
       }
      },
      "neck": {
@@ -6036,7 +7354,9 @@ const BIS = {
        "sp": null,
        "id": "yumis_keepsake_locket",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       },
       "alt": {
        "name": "Swiftfang Talisman",
@@ -6050,7 +7370,9 @@ const BIS = {
        "sp": null,
        "id": "swiftfang_talisman",
        "score": 12.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "neck",
+       "src": []
       }
      },
      "ring1": {
@@ -6066,7 +7388,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Seal of the Nine Oaths",
@@ -6080,7 +7404,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      },
      "ring2": {
@@ -6096,7 +7422,9 @@ const BIS = {
        "sp": null,
        "id": "sutils_gambit",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       },
       "alt": {
        "name": "Seal of the Nine Oaths",
@@ -6110,7 +7438,9 @@ const BIS = {
        "sp": null,
        "id": "seal_of_the_nine_oaths",
        "score": 11.0,
-       "xclass": false
+       "xclass": false,
+       "slot": "ring",
+       "src": []
       }
      }
     },
@@ -6230,7 +7560,43 @@ function iconFor(item) {
 
 // Fiche détaillée de l'objet dans le codex WoCC (drops, vendeurs, panoplies…)
 const CODEX = "https://reptile-new.github.io/wocc-knowledge-base/site/index.html";
-const ilink = it => `<a class="ilink" href="${CODEX}#item/${it.id}" title="Voir la fiche détaillée dans le codex">${it.name}</a>`;
+const ITEM_REG = {};
+const ilink = it => { ITEM_REG[it.id] = it;
+  return `<a class="ilink" href="${CODEX}#item/${it.id}" data-iid="${it.id}" title="Voir le détail de l'objet">${it.name}</a>`; };
+
+const QUALITY_FR2 = { poor:"Médiocre", common:"Commun", uncommon:"Inhabituel", rare:"Rare", epic:"Épique", legendary:"Légendaire" };
+const imodal = document.getElementById("itemModal");
+
+function openItemModal(it) {
+  document.getElementById("imKick").textContent =
+    [QUALITY_FR2[it.q] || it.q, SLOT_FR[it.slot] || it.slot].filter(Boolean).join(" · ");
+  const t = document.getElementById("imTitle");
+  t.textContent = it.name;
+  t.style.color = ({ epic:"var(--q-epic)", legendary:"var(--q-legendary)", rare:"var(--q-rare)", uncommon:"var(--q-uncommon)" })[it.q] || "var(--text)";
+  const st = Object.entries(it.stats || {}).map(([k,v]) => `+${v} ${STAT_FR[k]||k}`);
+  if (it.sp) st.push(`+${it.sp} Puissance des sorts`);
+  let body = "";
+  if (it.w) body += `<div class="dps-line">${((it.w.min+it.w.max)/2/it.w.speed).toFixed(1)} DPS — ${it.w.min}–${it.w.max} dégâts, vitesse ${it.w.speed}</div>`;
+  if (st.length) body += `<div class="stats">${st.join("<br>")}</div>`;
+  if (it.set) body += `<div class="setline2">Panoplie : ${it.set}</div>`;
+  body += `<h4>Où l'obtenir</h4>`;
+  body += (it.src && it.src.length)
+    ? `<ul>${it.src.map(x => `<li>${x}</li>`).join("")}</ul>`
+    : `<p class="nosrc">Source non répertoriée dans les données du jeu (fabrication, récolte ou delve).</p>`;
+  document.getElementById("imBody").innerHTML = body;
+  document.getElementById("imCodex").href = `${CODEX}#item/${it.id}`;
+  if (typeof imodal.showModal === "function") imodal.showModal();
+  else imodal.setAttribute("open", "");
+}
+document.getElementById("imClose").addEventListener("click", () => imodal.close());
+imodal.addEventListener("click", e => { if (e.target === imodal) imodal.close(); });
+document.getElementById("bisList").addEventListener("click", e => {
+  const a = e.target.closest(".ilink");
+  if (!a) return;
+  e.preventDefault();
+  const it = ITEM_REG[a.dataset.iid];
+  if (it) openItemModal(it);
+});
 
 let curCls = Object.keys(BIS)[0];
 let curRole = null;
