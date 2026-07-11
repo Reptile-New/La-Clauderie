@@ -15,7 +15,9 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 | `notes/vX.Y.Z.html` | Les nouveautés détaillées d'une version (une page par mise à jour) |
 | `patch-notes.json` | La liste des mises à jour (alimente l'historique **et** la carte de l'accueil) |
 | `events.json` | Les données du calendrier (modifiées via l'espace officiers) |
-| `members.json` | Les membres de la guilde : pseudo, rôle, classe (modifiés via l'espace officiers) |
+| `members.json` | Les membres de la guilde : pseudo, rôles, classe (modifiés via l'espace officiers) |
+| `roles.json` | Les rôles de guilde (Maître de guilde, Officier, Head manager…), dans l'ordre d'affichage |
+| `guild.json` | Les infos de la guilde (classement serveur actuel, affiché sur l'accueil) |
 | `achievements.json` | Les faits d'armes, avec les membres participants (modifiés via l'espace officiers) |
 
 ## Ajouter les nouveautés d'une mise à jour
@@ -40,9 +42,10 @@ toujours la dernière version) se mettent à jour automatiquement.
 ## Gérer le calendrier, les membres et les faits d'armes (pour les officiers)
 
 Tout se fait depuis **`admin.html`** (lien « Espace officiers » en bas du site),
-avec des formulaires simples — **aucun code à toucher** : ajouter/modifier les
-events du calendrier, la liste des membres (pseudo, rôle, classe), et les faits
-d'armes en cochant les membres qui y ont participé.
+avec des formulaires simples — **aucun code à toucher** : les events du
+calendrier, le classement serveur de la guilde, les rôles de guilde (création,
+renommage, ordre d'affichage), les membres (pseudo, classe, un ou plusieurs
+rôles à cocher), et les faits d'armes en cochant les membres participants.
 
 > Les events passés ne disparaissent plus : ils restent visibles sur l'accueil
 > dans la section « Événements passés », pour montrer l'activité de la guilde.

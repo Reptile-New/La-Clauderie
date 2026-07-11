@@ -168,24 +168,45 @@
     </div>
 
     <div class="card">
+      <h2>Classement de la guilde</h2>
+      <p class="help" style="margin-top:-8px">Affiché sur l'accueil, à côté de « 🇫🇷 Première guilde française » (qui reste affiché en permanence). Mets à jour la position quand le classement du serveur bouge.</p>
+      <div class="row">
+        <div style="flex:1;min-width:140px">
+          <label for="gRank">Position sur le serveur</label>
+          <input id="gRank" type="number" min="1" step="1" placeholder="4" style="margin-bottom:0">
+        </div>
+        <button class="btn btn-primary" id="rankBtn" style="align-self:flex-end">Enregistrer</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Rôles de guilde</h2>
+      <p class="help" style="margin-top:-8px">Crée les rôles de ton choix (Head manager, Développeur du site web…) et coche-les sur les membres ci-dessous. L'ordre de cette liste = l'ordre d'affichage sur l'accueil, du plus haut gradé au moins gradé (flèches ↑↓ pour réordonner).</p>
+      <div class="row">
+        <div style="flex:1;min-width:180px">
+          <label for="rNom">Nouveau rôle</label>
+          <input id="rNom" type="text" placeholder="Head manager" style="margin-bottom:0">
+        </div>
+        <button class="btn btn-primary" id="rlAddBtn" style="align-self:flex-end">+ Créer le rôle</button>
+      </div>
+      <div id="rlList" style="margin-top:16px"><p class="sub">Chargement…</p></div>
+    </div>
+
+    <div class="card">
       <h2 id="mbFormTitle">Ajouter un membre</h2>
-      <p class="help" style="margin-top:-8px">La liste des membres s'affiche sur la page d'accueil (onglet Membres), et sert à marquer qui a participé à chaque fait d'armes.</p>
+      <p class="help" style="margin-top:-8px">La liste des membres s'affiche sur la page d'accueil (onglet Membres), et sert à marquer qui a participé à chaque fait d'armes. Un membre peut cumuler plusieurs rôles.</p>
       <div class="grid2">
         <div>
           <label for="mPseudo">Pseudo</label>
           <input id="mPseudo" type="text" placeholder="Reptile">
         </div>
         <div>
-          <label for="mRole">Rôle</label>
-          <select id="mRole">
-            <option>Membre</option>
-            <option>Officier</option>
-            <option>Maître de guilde</option>
-          </select>
+          <label for="mClasse">Classe <span style="font-weight:400;color:var(--faint)">(facultatif)</span></label>
+          <input id="mClasse" type="text" placeholder="Chaman, Chasseur, Mage…">
         </div>
       </div>
-      <label for="mClasse">Classe <span style="font-weight:400;color:var(--faint)">(facultatif)</span></label>
-      <input id="mClasse" type="text" placeholder="Chaman, Chasseur, Mage…">
+      <label>Rôles</label>
+      <div id="mRoles" class="chkgrid"><p class="sub" style="margin:0">Crée d'abord des rôles ci-dessus.</p></div>
       <div class="row">
         <button class="btn btn-primary" id="mbAddBtn">+ Ajouter le membre</button>
         <button class="btn btn-ghost hidden" id="mbCancelEditBtn">Annuler la modification</button>
@@ -242,14 +263,18 @@
   const apiFor = path => `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
 
   let token = null;
-  // Trois fichiers gérés avec le même mécanisme : calendrier, membres et faits d'armes.
+  // Fichiers gérés avec le même mécanisme (obj: contenu objet plutôt que liste).
   const FILES = {
     events:  { path: "events.json", key: "events", sha: null, list: [] },
     membres: { path: "members.json", key: "members", sha: null, list: [] },
+    roles:   { path: "roles.json", key: "roles", sha: null, list: [] },
+    guilde:  { path: "guild.json", key: "guilde", sha: null, list: {}, obj: true },
     faits:   { path: "achievements.json", key: "achievements", sha: null, list: [] },
   };
   const events = () => FILES.events.list;
   const membres = () => FILES.membres.list;
+  const roles = () => FILES.roles.list;
+  const guilde = () => FILES.guilde.list;
   const faits = () => FILES.faits.list;
 
   const $ = id => document.getElementById(id);
@@ -284,13 +309,16 @@
     const data = await res.json();
     f.sha = data.sha;
     const json = JSON.parse(decodeB64(data.content));
-    f.list = Array.isArray(json[f.key]) ? json[f.key] : [];
+    if (f.obj) f.list = (json[f.key] && typeof json[f.key] === "object") ? json[f.key] : {};
+    else f.list = Array.isArray(json[f.key]) ? json[f.key] : [];
   }
 
   async function login(tok) {
-    await loadFile(FILES.events, tok);
-    await loadFile(FILES.membres, tok);
-    await loadFile(FILES.faits, tok);
+    for (const f of Object.values(FILES)) await loadFile(f, tok);
+    // migration douce : les anciens membres avaient un rôle unique (champ role)
+    membres().forEach(m => {
+      if (!m.roles) { m.roles = m.role ? [m.role] : []; delete m.role; }
+    });
     return true;
   }
 
@@ -328,8 +356,26 @@
   let mbEditIndex = null;
   let faEditIndex = null;
 
-  const ROLE_CLASS = { "Maître de guilde": "t-raid", "Officier": "t-hero", "Membre": "t-social" };
-  const ROLE_RANK = { "Maître de guilde": 0, "Officier": 1, "Membre": 2 };
+  // L'ordre des rôles (roles.json) définit la hiérarchie d'affichage.
+  const roleIdx = r => { const i = roles().indexOf(r); return i === -1 ? roles().length : i; };
+  const roleCls = r => roleIdx(r) === 0 ? "t-raid" : roleIdx(r) === 1 ? "t-hero" : "t-social";
+  const rolesOf = m => (m.roles || []).slice().sort((a, b) => roleIdx(a) - roleIdx(b));
+
+  // Cases à cocher « rôles du membre » (conserve la sélection en cours)
+  function renderRoleChecks(selected) {
+    const box = $("mRoles");
+    if (!roles().length) {
+      box.innerHTML = '<p class="sub" style="margin:0">Crée d\'abord des rôles ci-dessus.</p>';
+      return;
+    }
+    const sel = new Set(selected || []);
+    box.innerHTML = roles()
+      .map(r => `<label class="chk"><input type="checkbox" value="${escapeHtml(r)}"${sel.has(r) ? " checked" : ""}> ${escapeHtml(r)}</label>`)
+      .join("");
+  }
+  function checkedRoles() {
+    return [...document.querySelectorAll("#mRoles input:checked")].map(c => c.value);
+  }
 
   // Cases à cocher « membres du fait d'armes » (conserve la sélection en cours)
   function renderMemberChecks(selected) {
@@ -369,19 +415,44 @@
       box.querySelectorAll("button[data-i]").forEach(b => b.addEventListener("click", () => removeEvent(parseInt(b.dataset.i, 10))));
       box.querySelectorAll("button[data-edit]").forEach(b => b.addEventListener("click", () => startEditEvent(parseInt(b.dataset.edit, 10))));
     }
+    // --- rôles ---
+    const rbox = $("rlList");
+    if (!roles().length) { rbox.innerHTML = '<p class="sub">Aucun rôle. Crée le premier ci-dessus !</p>'; }
+    else {
+      rbox.innerHTML = roles().map((r, i) => {
+        const used = membres().filter(m => (m.roles || []).includes(r)).length;
+        return `<div class="ev">
+          <span class="d">${i + 1}.</span>
+          <span><span class="t">${escapeHtml(r)}</span><span class="type ${roleCls(r)}">${used} membre${used > 1 ? "s" : ""}</span></span>
+          <span class="row" style="flex-wrap:nowrap">
+            <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.82rem" data-rlup="${i}" ${i === 0 ? "disabled" : ""} aria-label="Monter">↑</button>
+            <button class="btn btn-ghost" style="padding:6px 10px;font-size:0.82rem" data-rldown="${i}" ${i === roles().length - 1 ? "disabled" : ""} aria-label="Descendre">↓</button>
+            <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-rlren="${i}">Renommer</button>
+            <button class="btn btn-danger" data-rldel="${i}">Supprimer</button>
+          </span>
+        </div>`;
+      }).join("");
+      rbox.querySelectorAll("button[data-rlup]").forEach(b => b.addEventListener("click", () => moveRole(parseInt(b.dataset.rlup, 10), -1)));
+      rbox.querySelectorAll("button[data-rldown]").forEach(b => b.addEventListener("click", () => moveRole(parseInt(b.dataset.rldown, 10), 1)));
+      rbox.querySelectorAll("button[data-rlren]").forEach(b => b.addEventListener("click", () => renameRole(parseInt(b.dataset.rlren, 10))));
+      rbox.querySelectorAll("button[data-rldel]").forEach(b => b.addEventListener("click", () => removeRole(parseInt(b.dataset.rldel, 10))));
+    }
+    // les cases à cocher du formulaire membre suivent la liste des rôles
+    renderRoleChecks(checkedRoles());
     // --- membres ---
     const mbox = $("mbList");
     const msorted = [...membres()].sort((a, b) =>
-      (ROLE_RANK[a.role] ?? 9) - (ROLE_RANK[b.role] ?? 9) ||
+      roleIdx(rolesOf(a)[0]) - roleIdx(rolesOf(b)[0]) ||
       (a.pseudo || "").localeCompare(b.pseudo || "", "fr"));
     if (!msorted.length) { mbox.innerHTML = '<p class="sub">Aucun membre pour l\'instant. Ajoute le premier ci-dessus !</p>'; }
     else {
       mbox.innerHTML = msorted.map(m => {
-        const cls = ROLE_CLASS[m.role] || "t-social";
         const i = membres().indexOf(m);
+        const chips = rolesOf(m).map(r => `<span class="type ${roleCls(r)}">${escapeHtml(r)}</span>`).join("") ||
+          '<span class="type t-social">sans rôle</span>';
         return `<div class="ev">
           <span class="d">${escapeHtml(m.classe || "")}</span>
-          <span><span class="t">${escapeHtml(m.pseudo || "")}</span><span class="type ${cls}">${m.role || ""}</span></span>
+          <span><span class="t">${escapeHtml(m.pseudo || "")}</span>${chips}</span>
           <span class="row" style="flex-wrap:nowrap">
             <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-mbedit="${i}">Modifier</button>
             <button class="btn btn-danger" data-mbi="${i}">Supprimer</button>
@@ -491,6 +562,109 @@
     }
   }
 
+  // ---- Classement de la guilde ----
+  async function saveRank() {
+    clearMsg($("dashMsg"));
+    const n = parseInt($("gRank").value, 10);
+    if (!n || n < 1) { msg($("dashMsg"), "Entre une position valide (1 ou plus).", "err"); return; }
+    const backup = { ...guilde() };
+    $("rankBtn").disabled = true;
+    guilde().classementServeur = n;
+    try {
+      await save(FILES.guilde, "guilde : classement serveur → " + n + (n === 1 ? "ʳᵉ" : "ᵉ"));
+      msg($("dashMsg"), "Classement enregistré ✓ Le site se met à jour dans ~1 min.", "ok");
+    } catch (err) {
+      FILES.guilde.list = backup;
+      msg($("dashMsg"), err.message, "err");
+    } finally {
+      $("rankBtn").disabled = false;
+    }
+  }
+
+  // ---- Rôles de guilde : créer / renommer / réordonner / supprimer ----
+  async function saveRoles(commitMsg, alsoMembers) {
+    await save(FILES.roles, commitMsg);
+    if (alsoMembers) await save(FILES.membres, commitMsg);
+  }
+
+  async function addRole() {
+    clearMsg($("dashMsg"));
+    const nom = $("rNom").value.trim();
+    if (!nom) { msg($("dashMsg"), "Donne un nom au rôle.", "err"); return; }
+    if (roles().some(r => r.toLowerCase() === nom.toLowerCase())) {
+      msg($("dashMsg"), "Le rôle « " + nom + " » existe déjà.", "err"); return;
+    }
+    roles().push(nom);
+    try {
+      await saveRoles("rôles : création « " + nom + " »");
+      msg($("dashMsg"), "Rôle créé ✓", "ok");
+      $("rNom").value = "";
+      render();
+    } catch (err) {
+      roles().pop();
+      msg($("dashMsg"), err.message, "err");
+    }
+  }
+
+  async function renameRole(i) {
+    const old = roles()[i];
+    if (old == null) return;
+    const nom = (prompt("Nouveau nom pour le rôle « " + old + "  » :", old) || "").trim();
+    if (!nom || nom === old) return;
+    if (roles().some((r, j) => j !== i && r.toLowerCase() === nom.toLowerCase())) {
+      msg($("dashMsg"), "Le rôle « " + nom + " » existe déjà.", "err"); return;
+    }
+    clearMsg($("dashMsg"));
+    roles()[i] = nom;
+    const touched = membres().some(m => (m.roles || []).includes(old));
+    membres().forEach(m => { if (m.roles) m.roles = m.roles.map(r => r === old ? nom : r); });
+    try {
+      await saveRoles("rôles : « " + old + " » renommé en « " + nom + " »", touched);
+      msg($("dashMsg"), "Rôle renommé ✓", "ok");
+      render();
+    } catch (err) {
+      roles()[i] = old;
+      membres().forEach(m => { if (m.roles) m.roles = m.roles.map(r => r === nom ? old : r); });
+      msg($("dashMsg"), err.message, "err");
+    }
+  }
+
+  async function moveRole(i, dir) {
+    const j = i + dir;
+    if (j < 0 || j >= roles().length) return;
+    clearMsg($("dashMsg"));
+    [roles()[i], roles()[j]] = [roles()[j], roles()[i]];
+    try {
+      await saveRoles("rôles : réordonnancement");
+      render();
+    } catch (err) {
+      [roles()[i], roles()[j]] = [roles()[j], roles()[i]];
+      msg($("dashMsg"), err.message, "err");
+    }
+  }
+
+  async function removeRole(i) {
+    const nom = roles()[i];
+    if (nom == null) return;
+    const used = membres().filter(m => (m.roles || []).includes(nom)).length;
+    if (!confirm("Supprimer le rôle « " + nom + " »" + (used ? " ? Il sera retiré de " + used + " membre(s)." : " ?"))) return;
+    clearMsg($("dashMsg"));
+    const backupRoles = [...roles()];
+    const backupMembers = membres().map(m => ({ ...m, roles: [...(m.roles || [])] }));
+    roles().splice(i, 1);
+    membres().forEach(m => { if (m.roles) m.roles = m.roles.filter(r => r !== nom); });
+    try {
+      await saveRoles("rôles : suppression « " + nom + " »", used > 0);
+      msg($("dashMsg"), "Rôle supprimé ✓", "ok");
+      render();
+    } catch (err) {
+      FILES.roles.list = backupRoles;
+      FILES.membres.list = backupMembers;
+      msg($("dashMsg"), err.message, "err");
+      render();
+    }
+  }
+
   // ---- Membres : ajout / modification / suppression ----
   function setMbFormMode() {
     const editing = mbEditIndex !== null;
@@ -504,8 +678,8 @@
     if (!m) return;
     mbEditIndex = i;
     $("mPseudo").value = m.pseudo || "";
-    $("mRole").value = m.role || "Membre";
     $("mClasse").value = m.classe || "";
+    renderRoleChecks(m.roles || []);
     setMbFormMode();
     $("mbFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -513,14 +687,14 @@
   function cancelEditMember() {
     mbEditIndex = null;
     $("mPseudo").value = ""; $("mClasse").value = "";
-    $("mRole").value = "Membre";
+    renderRoleChecks([]);
     setMbFormMode();
   }
 
   async function submitMember() {
     clearMsg($("dashMsg"));
     const pseudo = $("mPseudo").value.trim();
-    const role = $("mRole").value;
+    const mroles = checkedRoles();
     const classe = $("mClasse").value.trim();
     if (!pseudo) { msg($("dashMsg"), "Il faut au moins un pseudo.", "err"); return; }
     const editing = mbEditIndex !== null;
@@ -530,8 +704,8 @@
     const backup = editing ? membres()[mbEditIndex] : null;
     const oldPseudo = backup ? backup.pseudo : null;
     $("mbAddBtn").disabled = true; $("mbAddBtn").textContent = "Enregistrement…";
-    if (editing) membres()[mbEditIndex] = { pseudo, role, classe };
-    else membres().push({ pseudo, role, classe });
+    if (editing) membres()[mbEditIndex] = { pseudo, roles: mroles, classe };
+    else membres().push({ pseudo, roles: mroles, classe });
     try {
       await save(FILES.membres, "membres : " + (editing ? "modification" : "ajout") + " « " + pseudo + " »");
       // si le pseudo a changé, on le répercute dans les faits d'armes qui le citent
@@ -655,6 +829,7 @@
     $("dash").classList.remove("hidden");
     $("fDate").value = new Date().toISOString().slice(0, 10);
     $("gDate").value = new Date().toISOString().slice(0, 10);
+    if (guilde().classementServeur) $("gRank").value = guilde().classementServeur;
     setEvFormMode();
     setMbFormMode();
     setFaFormMode();
@@ -683,6 +858,9 @@
   $("cancelEditBtn").addEventListener("click", cancelEditEvent);
   $("mbAddBtn").addEventListener("click", submitMember);
   $("mbCancelEditBtn").addEventListener("click", cancelEditMember);
+  $("rankBtn").addEventListener("click", saveRank);
+  $("rlAddBtn").addEventListener("click", addRole);
+  $("rNom").addEventListener("keydown", e => { if (e.key === "Enter") addRole(); });
   $("faAddBtn").addEventListener("click", submitFait);
   $("faCancelEditBtn").addEventListener("click", cancelEditFait);
   $("logoutBtn").addEventListener("click", () => {
