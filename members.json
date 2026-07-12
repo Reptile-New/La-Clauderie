@@ -50,6 +50,26 @@
           "role": "Heal"
         }
       ]
+    },
+    {
+      "pseudo": "Moochrizer",
+      "roles": [
+        "Raid leader"
+      ],
+      "persos": [
+        {
+          "classe": "Paladin",
+          "role": "Tank"
+        },
+        {
+          "classe": "Voleur",
+          "role": "DPS"
+        },
+        {
+          "classe": "Mage",
+          "role": "DPS"
+        }
+      ]
     }
   ]
 }
