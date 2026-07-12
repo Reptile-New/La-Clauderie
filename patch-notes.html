@@ -150,7 +150,7 @@
         return;
       }
       box.innerHTML = list.map((v, i) => `
-        <a class="version" href="${esc(v.page)}">
+        <a class="version" href="${esc(pick(v, "page"))}">
           <div class="v-head">
             <span class="v-num">${esc(v.version)}</span>
             <span class="v-date">${esc(fmtDate(v.date))}</span>
@@ -159,7 +159,7 @@
           ${v.titre ? `<p class="v-titre">${esc(pick(v, "titre"))}</p>` : ""}
           ${v.resume ? `<p class="v-resume">${esc(pick(v, "resume"))}</p>` : ""}
           ${(pick(v, "temps_forts") || []).length ? `<ul class="v-forts">${pick(v, "temps_forts").map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
-          <span class="v-go">${T({ fr: "Lire toutes les nouveautés", en: "Read the full notes (in French)" })}</span>
+          <span class="v-go">${T({ fr: "Lire toutes les nouveautés", en: "Read the full notes" })}</span>
         </a>`).join("");
     })
     .catch(() => {

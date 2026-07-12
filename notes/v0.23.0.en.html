@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>What's new in v0.23.0 — La Clauderie</title>
+<meta name="description" content="Everything new in World of ClaudeCraft v0.23.0, with the exact rules.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="What's new in v0.23.0 — La Clauderie">
+<meta property="og:description" content="Everything new in World of ClaudeCraft v0.23.0, with the exact rules.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.23.0.en.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.23.0.en.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') !== 'en') location.replace('v0.23.0.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  /* Sets */
+  .set h3 { font-size: 1.05rem; }
+  .set .role { font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); margin: 2px 0 12px; }
+  dl.bonus { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 7px 11px; }
+  dl.bonus dt { font-family: var(--font-mono); font-weight: 700; font-size: 0.74rem; color: var(--gold-bright); padding-top: 1px; }
+  dl.bonus dd { margin: 0; font-size: 0.87rem; color: var(--dim); }
+  dl.bonus dd .proc { color: var(--arcane); font-weight: 600; }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" aria-label="Site navigation">
+      <a href="../index.html">Home</a>
+      <a href="../bis.html">⚔️ Builds</a>
+      <a href="../patch-notes.html" class="cur">📜 What's new</a>
+      <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Patch notes</p>
+    <h1>What's new <span class="v">v0.23.0</span></h1>
+    <p class="lede">Everything new in the update, with the exact rules. Each card is a summary — click it to see exactly how it works.</p>
+    <div class="meta">
+      <span><b>Released</b> July 9, 2026</span>
+      <span><b>680</b> commits</span>
+      <span><b>820</b> files</span>
+    </div>
+    <div class="hint">💡 Click a card to open its detailed rules — and the <span data-codex="term|proc">underlined words</span> for their definition.</div>
+  </header>
+
+  <!-- 1 MODES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>New game modes</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="valecup" tabindex="0" role="button" aria-label="Details: The Vale Cup">
+        <h3>The Vale Cup <span class="chip c-pvp">Mini-game</span></h3>
+        <p>A <strong class="hl">boarball</strong> (football) mini-game at the Sowfield stadium.</p>
+        <ul><li>1v1 to 5v5 queues</li><li>Sport role kits</li><li>Spectator betting</li></ul>
+        <span class="more-link">How to play &amp; rules</span>
+      </div>
+      <div class="card more" data-detail="yumi" tabindex="0" role="button" aria-label="Details: Protect Yumi">
+        <h3>Protect Yumi <span class="chip c-pvp">PvP</span></h3>
+        <p>Defend a pet cat in a maze, in <strong class="hl">3v3 / 5v5</strong>.</p>
+        <ul><li>Goal: destroy the enemy cat</li><li>Teleports every 60s</li><li>Sudden death at 10 min</li></ul>
+        <span class="more-link">How to play &amp; rules</span>
+      </div>
+      <div class="card more" data-detail="dummy" tabindex="0" role="button" aria-label="Details: Training Dummy">
+        <h3>Training Dummy <span class="chip c-new">Utility</span></h3>
+        <p>A <span data-codex="mob|Training Dummy">training dummy</span> in Highwatch to test your <span data-codex="term|rotation">rotations</span>.</p>
+        <ul><li>999,999 HP, 0 armor</li><li>Never fights back</li></ul>
+        <span class="more-link">Details</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 DUNGEONS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Dungeons, Raid &amp; Bosses</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="heroic" tabindex="0" role="button" aria-label="Details: Heroic difficulty">
+        <h3>Heroic difficulty <span class="chip c-raid">Endgame</span></h3>
+        <p>All 4 five-player dungeons get a Heroic mode. Level 22 mobs, damage retuned per dungeon.</p>
+        <span class="more-link">Difficulty, mobs &amp; multipliers</span>
+      </div>
+      <div class="card more" data-detail="marks" tabindex="0" role="button" aria-label="Details: Heroic Marks">
+        <h3>Heroic Marks <span class="chip c-new">Currency</span></h3>
+        <p>The new dungeon-completion currency, exchangeable for epic jewellery.</p>
+        <span class="more-link">How to earn them &amp; the vendor</span>
+      </div>
+      <div class="card more" data-detail="nythraxis" tabindex="0" role="button" aria-label="Details: Nythraxis raid">
+        <h3>Raid — <span data-codex="mob|Nythraxis">Nythraxis</span> <span class="chip c-raid">Raid</span></h3>
+        <p>The Thornpeak raid arena, in a level 22 heroic version.</p>
+        <span class="more-link">Raid details</span>
+      </div>
+      <div class="card more" data-detail="thunzharr" tabindex="0" role="button" aria-label="Details: Thunzharr">
+        <h3><span data-codex="term|worldboss">World Boss</span> — <span data-codex="mob|Thunzharr">Thunzharr</span> <span class="chip c-raid">World Boss</span></h3>
+        <p>Retuned: double speed, longer loot window. HP scales with player count.</p>
+        <span class="more-link">Numbers &amp; spawn</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 ITEMISATION -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Itemisation</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="stats" tabindex="0" role="button" aria-label="Details: Crit and Haste">
+        <h3>Crit &amp; Haste <span class="chip c-new">Stats</span></h3>
+        <p>Two new gear stats: <span data-codex="term|crit">Crit Rating</span> and <span data-codex="term|haste">Haste Rating</span>.</p>
+        <span class="more-link">Conversion &amp; how it works</span>
+      </div>
+      <div class="card more" data-detail="procs" tabindex="0" role="button" aria-label="Details: Legendary procs">
+        <h3>Legendary <span data-codex="term|proc">procs</span> <span class="chip c-raid">Legendary</span></h3>
+        <p>Signature effects on the legendary weapons + a change to the Hunter's Auto Shot.</p>
+        <span class="more-link">Proc details</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SETS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>The 10 epic sets</h2></div>
+    <p class="sec-sub"><span class="proc" style="color:var(--arcane)" data-codex="term|icd">ICD</span> = the <span data-codex="term|proc">proc</span>'s internal cooldown. Weapon crits / spell casts trigger the effect at the listed probability. Click a set's name to see its pieces.</p>
+
+    <p class="grp-title">⚔️ Strength melee · Plate</p>
+    <div class="grid cols-2">
+      <div class="card set"><h3><span data-codex="set|Barrowlord Battlegear">Barrowlord Battlegear</span> <span class="chip c-plate">Plate</span></h3><p class="role">Strength / Stamina</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Attack power.</dd><dt>3P</dt><dd>+15 Strength and +15 Stamina.</dd><dt>4P</dt><dd>Weapon crits: 50% → <span class="proc">Gravemight</span>, +60 AP for 10s (15s ICD).</dd></dl></div>
+      <div class="card set"><h3><span data-codex="set|Bonewrought Regalia">Bonewrought Regalia</span> <span class="chip c-plate">Plate</span></h3><p class="role">Strength / speed</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Attack power.</dd><dt>3P</dt><dd>+15 Strength, +15 Stamina, +15% speed.</dd><dt>4P</dt><dd>Weapon crits: <span class="proc">Bonesplinter</span>, a bleed for 8 dmg/2s over 12s, stacks ×3.</dd></dl></div>
+    </div>
+
+    <p class="grp-title">🗡️ Agility · Leather</p>
+    <div class="grid cols-2">
+      <div class="card set"><h3><span data-codex="set|Nightfang Vestments">Nightfang Vestments</span> <span class="chip c-leather">Leather</span></h3><p class="role">Agility / Crit</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Attack power.</dd><dt>3P</dt><dd>+15 Agility and +2% crit.</dd><dt>4P</dt><dd>Weapon crits: 50% → <span class="proc">Fangrush</span>, +25% attack speed for 8s.</dd></dl></div>
+      <div class="card set"><h3><span data-codex="set|Direfang Pelt">Direfang Pelt</span> <span class="chip c-leather">Leather</span></h3><p class="role">Agility / speed</p>
+        <dl class="bonus"><dt>2P</dt><dd>+40 Attack power.</dd><dt>3P</dt><dd>+15 Agility, +2% crit, +15% speed.</dd><dt>4P</dt><dd>Weapon crits: <span class="proc">Ragged Gash</span>, a bleed for 6 dmg/2s over 12s, stacks ×3.</dd></dl></div>
+    </div>
+
+    <p class="grp-title">✨ Spellcasters · Cloth</p>
+    <div class="grid cols-3">
+      <div class="card set"><h3><span data-codex="set|Mournweave Raiment">Mournweave Raiment</span> <span class="chip c-cloth">Cloth</span></h3><p class="role">Intellect</p>
+        <dl class="bonus"><dt>2P</dt><dd>+20 Spell power. Knockback immunity.</dd><dt>3P</dt><dd>+10 Int, +10 Stamina.</dd><dt>4P</dt><dd>Spells: 10% → <span class="proc">Clearcasting</span>, next spell is free.</dd></dl></div>
+      <div class="card set"><h3><span data-codex="set|Wraithfire Regalia">Wraithfire Regalia</span> <span class="chip c-cloth">Cloth</span></h3><p class="role">Int / Spirit</p>
+        <dl class="bonus"><dt>2P</dt><dd>+20 Spell power. Knockback immunity.</dd><dt>3P</dt><dd>+15 Int, +15 Spirit, +15% speed.</dd><dt>4P</dt><dd>Spells: 10% → <span class="proc">Soulblaze</span>, +40 SP for 10s.</dd></dl></div>
+      <div class="card set"><h3><span data-codex="set|Galecall Vestments">Galecall Vestments</span> <span class="chip c-cloth">Cloth</span></h3><p class="role">Int / Spirit</p>
+        <dl class="bonus"><dt>2P</dt><dd>+20 Spell power. Knockback immunity.</dd><dt>3P</dt><dd>+15 Int, +15 Spirit, +15% speed.</dd><dt>4P</dt><dd>Spells: 10% → <span class="proc">Soulblaze</span>, +40 SP for 10s.</dd></dl></div>
+    </div>
+
+    <p class="grp-title">🏹 Utility sets (3-piece bonus)</p>
+    <div class="grid cols-3">
+      <div class="card set"><h3><span data-codex="set|Vale Arcanist's Regalia">Vale Arcanist's Regalia</span> <span class="chip c-util">Utility</span></h3><dl class="bonus"><dt>3P</dt><dd>+15% attack and casting speed.</dd></dl></div>
+      <div class="card set"><h3><span data-codex="set|Boundstone Vanguard">Boundstone Vanguard</span> <span class="chip c-util">Utility</span></h3><dl class="bonus"><dt>3P</dt><dd>+15% attack and casting speed.</dd></dl></div>
+      <div class="card set"><h3><span data-codex="set|Greyjaw Stalker's Kit">Greyjaw Stalker's Kit</span> <span class="chip c-util">Utility</span></h3><dl class="bonus"><dt>3P</dt><dd>+15% attack and casting speed.</dd></dl></div>
+    </div>
+  </section>
+
+  <!-- 5 SYSTEMS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Professions &amp; Bank</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="metiers" tabindex="0" role="button" aria-label="Details: Professions">
+        <h3>Professions — the finished system <span class="chip c-new">System</span></h3>
+        <p>Gathering, crafting, archetypes: the step-by-step guide to getting started, with the first recipes to make.</p>
+        <span class="more-link">The full guide</span>
+      </div>
+      <div class="card more" data-detail="banque" tabindex="0" role="button" aria-label="Details: Bank">
+        <h3>The Gilded Strongbox <span class="chip c-new">Bank</span></h3>
+        <p>A personal bank per character, from 24 to 112 slots, with an audit ledger.</p>
+        <span class="more-link">Slots, prices &amp; security</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 COMBAT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Combat &amp; Balance</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="buffs" tabindex="0" role="button" aria-label="Details: Raid buffs">
+        <h3>Raid buffs go % <span class="chip c-bal">Balance</span></h3>
+        <p>Group buffs become percentages, applied to the whole raid.</p>
+        <span class="more-link">The exact list</span>
+      </div>
+      <div class="card more" data-detail="armor" tabindex="0" role="button" aria-label="Details: Armor Shear">
+        <h3>Armor reduction <span class="chip c-bal">Balance</span></h3>
+        <p>Armor Shear becomes a percentage. New Witchlight and Armor Breach debuffs.</p>
+        <span class="more-link">The numbers</span>
+      </div>
+      <div class="card more" data-detail="hitrun" tabindex="0" role="button" aria-label="Details: Mob AI">
+        <h3>Mob hit-and-run <span class="chip c-bal">AI</span></h3>
+        <p>Melee mobs now strike while moving. <span data-codex="term|kiting">Kiting</span> changes.</p>
+        <span class="more-link">What changes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 THE REST -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>The rest of the update</h2></div>
+    <div class="grid cols-2">
+      <div class="card"><h3>Mobile <span class="chip c-mob">4 waves</span></h3><ul><li>Action ring rework (joystick + consumables).</li><li>Adaptive landscape/portrait layout.</li><li>Full window parity, compact minimap.</li></ul></div>
+      <div class="card"><h3>Online play &amp; netcode</h3><ul><li>Movement prediction (instant key response, 350 ms cap).</li><li>No more collision strobing at high ping.</li><li>Need/greed loot rolls shown in real time.</li></ul></div>
+      <div class="card"><h3>World &amp; rendering</h3><ul><li>Terrain LOD seams closed (gaps up to 3.3 yards).</li><li>Baked wolf models (mobs, druid, pets).</li><li>Groundwork for a voxel terrain engine (future tunnels).</li></ul></div>
+      <div class="card"><h3>Localisation &amp; audit</h3><ul><li>Czech: 22nd language (6,045 strings), 0 pending across all 22.</li><li>Accuracy audit of all 157 ability tooltips.</li><li>Signed desktop launchers (Linux, macOS), Linux download re-enabled.</li></ul></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compiled for <strong>La Clauderie</strong> — data and rules from the patch notes and the WoCC codex (tag v0.23.0).</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← All updates</a> · <a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Close">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    valecup: {
+      title: "The Vale Cup — boarball (football)",
+      summary: "A football mini-game at the Sowfield stadium in Eastbrook Vale. No damage: pure sport.",
+      body: `
+        <h4>Where and how to play</h4>
+        <ul>
+          <li>Head to the <b>Sowfield stadium</b> in Eastbrook Vale.</li>
+          <li>You can queue from anywhere via the Vale Cup window (<span class="kbd">Y</span> by default), or with <b><span data-codex="npc|Groundskeeper Bram">Groundskeeper Bram</span></b> at the stadium entrance.</li>
+        </ul>
+        <h4>Match format</h4>
+        <ul>
+          <li>Queues from <b>1v1 to 5v5</b>. From 3v3 up, each team gets an <b>automatic goalkeeper</b>.</li>
+          <li><b>One single 6:00 period.</b> First to <b>5 goals</b> → the match ends. Tied at full time → <b>golden goal</b>.</li>
+        </ul>
+        <h4>The roles (sport kits)</h4>
+        <ul>
+          <li>Your class kit is replaced by a <b>role kit</b>: Striker, Sweeper, Keeper, or an all-rounder kit in the small formats.</li>
+          <li>Every kit grants: a <b>charged Shot</b>, a <b>Pass</b>, and a <b>shoulder Slide</b> tackle.</li>
+          <li>“Harvest truce” rule: <b>nothing deals damage</b>, nobody can kill anybody.</li>
+        </ul>
+        <h4>Ball possession</h4>
+        <p>To shoot you need <b>possession</b>: be within <b>4 yards</b> of the loose ball, or hold it as the keeper.</p>
+        <h4>Matchmaking &amp; bots</h4>
+        <ul>
+          <li>FIFO queue; empty spots are filled by <b>bots after 60s</b>.</li>
+          <li>A match filled with bots <b>is not ranked</b>. Private practice matches take place on isolated pitches.</li>
+        </ul>
+        <h4>Spectator betting (parimutuel)</h4>
+        <ul>
+          <li>During the pre-match briefing, spectators bet <b>in copper</b>.</li>
+          <li>Winners split the losers' pot <b>pro rata</b> to their stake.</li>
+          <li>A draw, or a winner nobody bet on → <b>all bets are refunded</b>.</li>
+          <li>Server-run system; bots never bet.</li>
+        </ul>
+        <h4>Rewards</h4>
+        <ul>
+          <li><b>Ranked wins</b> grant daily reward points, a W/L record, and feed the <b>player and guild leaderboards</b>.</li>
+          <li>Wins against bots or in practice are worth only <b>20%</b> of the normal value.</li>
+        </ul>
+        <h4>Penalty &amp; atmosphere</h4>
+        <ul>
+          <li>Deserting a match in progress blocks your spot and <b>locks you out of the queue for 5 minutes</b>.</li>
+          <li>Walkable stands with sitting poses (<span class="kbd">/sit</span>, <span class="kbd">/stand</span>), a light trail on the ball, two new music tracks.</li>
+        </ul>`
+    },
+    yumi: {
+      title: "Protect Yumi",
+      summary: "Unranked team PvP where each side protects its pet cat in a maze.",
+      body: `
+        <h4>Access</h4>
+        <p><b>Unranked</b> team PvP, in <b>3v3</b> and <b>5v5</b>, queued from the <b>Coliseum</b>.</p>
+        <h4>Objective</h4>
+        <ul>
+          <li>Each team protects <b>Yumi</b>, a passive pet cat with <b>5000 HP</b>, in a torch-lit maze.</li>
+          <li>Every <b>60 seconds</b>, both cats <b>teleport simultaneously</b> to distant points of the maze.</li>
+          <li>The <b>first team to destroy the enemy cat</b> wins.</li>
+        </ul>
+        <h4>Downed players</h4>
+        <p>A downed player sits out a fixed <b>10 seconds</b>, then respawns <b>next to their cat</b>.</p>
+        <h4>Sudden death</h4>
+        <p>At <b>10 minutes</b>, sudden death kicks in: teleports <b>freeze</b> and a <b>ramping damage increase</b> guarantees a winner — <b>never a draw</b>.</p>
+        <h4>Yumi</h4>
+        <ul>
+          <li><b>Never</b> attacks and doesn't move on her own.</li>
+          <li><b>Immune</b> to <span data-codex="term|cc">CC</span> and slows.</li>
+          <li>Can be <b>healed and shielded</b> by her own team.</li>
+        </ul>
+        <h4>The maze</h4>
+        <p>A braided <b>13×13</b> fixed-seed grid (so identical every game), rotationally symmetric, <b>zero dead ends</b>, with <b>five open plazas</b>.</p>
+        <h4>Good to know</h4>
+        <ul>
+          <li>The HUD shows both cats' health bars, the sudden-death timer and the teleport countdown (designed for portrait mobile too).</li>
+          <li>Yumi wins <b>don't count</b> towards the daily arena reward task.</li>
+        </ul>`
+    },
+    dummy: {
+      title: "Training Dummy",
+      summary: "A training dummy to measure and refine your DPS or healing rotations.",
+      body: `
+        <h4>Where</h4>
+        <p>On the hill <b>above Highwatch</b>.</p>
+        <h4>Characteristics</h4>
+        <ul>
+          <li><b>Max level</b> and <b>0 armor</b> → you read your <b>pure unmitigated DPS</b>.</li>
+          <li><b>999,999 HP.</b></li>
+          <li>Never moves, never fights back.</li>
+          <li>Leaves combat and <b>heals to full 5s</b> after your last hit.</li>
+          <li><b>Respawns 10s</b> after dying.</li>
+        </ul>`
+    },
+    heroic: {
+      title: "Heroic difficulty",
+      summary: "A tougher version of the 4 five-player dungeons, chosen before entering.",
+      body: `
+        <h4>Choosing the difficulty</h4>
+        <ul>
+          <li>The <b>group leader</b> (or the solo player) chooses <b>before entering</b>: the <span class="kbd">/dungeon normal|heroic</span> command or a <b>right-click on their own portrait</b>.</li>
+          <li>The difficulty is <b>locked in</b> for the lifetime of the claimed instance.</li>
+        </ul>
+        <h4>Heroic mobs</h4>
+        <ul>
+          <li>Per-dungeon multipliers for <b>HP, damage and armor</b>. Boss mechanics (aoePulse, bigCast, stomp, mendAlly, wardAllies, stoneskin) scale with the same multipliers.</li>
+          <li><b>Level 22.</b> For reference: one elite trash hit lands for ~<b>300 after mitigation</b> (about 20% of a geared reference shaman's max HP); final bosses reach 22–24%.</li>
+        </ul>
+        <h4>Per-dungeon multipliers</h4>
+        <ul>
+          <li><span data-codex="dungeon|The Hollow Crypt">The Hollow Crypt</span>: <b>×6.8</b></li>
+          <li><span data-codex="dungeon|The Sunken Bastion">The Sunken Bastion</span>: <b>×6.2</b></li>
+          <li><span data-codex="dungeon|The Drowned Temple">The Drowned Temple</span>: <b>×5.7</b></li>
+          <li><span data-codex="dungeon|Gravewyrm Sanctum">Gravewyrm Sanctum</span>: <b>×5.4</b></li>
+        </ul>`
+    },
+    marks: {
+      title: "Heroic Marks",
+      summary: "The heroic-dungeon completion currency, exchangeable for epic jewellery.",
+      body: `
+        <h4>How to earn them</h4>
+        <ul>
+          <li>Killing the <b>final boss</b> drops <b>personal</b> Heroic Marks for every eligible participant — <b>even those who are down</b>.</li>
+          <li><b>1 mark</b> per 5-player dungeon clear; <b>3 marks</b> for the heroic Nythraxis raid arena.</li>
+          <li>Each kill <b>locks you</b> out of that heroic dungeon until the daily reset.</li>
+          <li>Cap: <b>1 mark per dungeon per UTC day</b> → at most <b>7 marks/day</b>.</li>
+        </ul>
+        <h4>The vendor</h4>
+        <p><b><span data-codex="npc|Quartermaster Vex">Quartermaster Vex</span></b>, in Highwatch, sells the epic jewellery:</p>
+        <ul>
+          <li>Epic <b>ring</b> — 12 marks</li>
+          <li>Epic <b>necklace</b> — 16 marks</li>
+          <li>This is the game's <b>only source</b> for these two slots.</li>
+        </ul>`
+    },
+    nythraxis: {
+      title: "Raid — Nythraxis, Scourge of Thornpeak",
+      summary: "The Thornpeak Heights raid arena, also available in a heroic version.",
+      body: `
+        <h4>The essentials</h4>
+        <ul>
+          <li>A raid arena located in <b>Thornpeak Heights</b> (level 13–20 zone).</li>
+          <li>In <b>heroic</b>: mobs spawn at <b>level 22</b> and apply the <b>same damage multipliers</b> as the heroic dungeons.</li>
+          <li>A heroic clear awards <b>3 Heroic Marks</b> per participant.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">The perfect venue for a larger guild event.</p>`
+    },
+    thunzharr: {
+      title: "World Boss — Thunzharr, the Waking Peak",
+      summary: "A world boss that grows with the number of players present.",
+      body: `
+        <h4>Spawn</h4>
+        <ul>
+          <li>Spawns at <b>Waking Peak</b>.</li>
+          <li>Respawns <b>every 3600s (1 hour)</b>.</li>
+        </ul>
+        <h4>Hit points</h4>
+        <ul>
+          <li><b>40,000 HP</b> base</li>
+          <li><b>+5,000 HP</b> per player present</li>
+          <li>Capped at <b>1,000,000 HP</b></li>
+        </ul>
+        <h4>v0.23.0 retuning</h4>
+        <ul>
+          <li>Movement speed <b>doubled</b>.</li>
+          <li><b>Longer loot window</b> after his death.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">The more of you there are, the tougher he gets: zerg him in open raid with the whole guild.</p>`
+    },
+    stats: {
+      title: "Crit Rating & Haste Rating",
+      summary: "Two new gear statistics replacing old flat bonuses.",
+      body: `
+        <h4>How it works</h4>
+        <ul>
+          <li>Two new gear stats: <b>Crit Rating</b> (critical strike chance) and <b>Haste Rating</b> (attack / casting speed).</li>
+          <li>Conversion: <b>10 rating = 1%</b>.</li>
+          <li>They show on the <b>character sheet</b> with an explanatory hover text.</li>
+          <li>Old flat set bonuses were <b>converted at identical value</b> — no loss.</li>
+        </ul>`
+    },
+    procs: {
+      title: "Legendary procs & Auto Shot",
+      summary: "Signature effects on the legendary weapons, and a rework of the Hunter's Auto Shot.",
+      body: `
+        <h4><span data-codex="item|Thronebane">Thronebane, Last Oath of Thornpeak</span> (sword)</h4>
+        <p><b>Chain Arc</b> — 10% chance on hit: nature damage that <b>bounces</b> between enemies, plus an <b>attack speed slow</b>.</p>
+        <h4><span data-codex="item|Heartwood of the Deathless Crown">Heartwood of the Deathless Crown</span> (staff)</h4>
+        <ul>
+          <li><b>Deathbloom</b> — a nature <span data-codex="term|dot">DoT</span> on damage spells.</li>
+          <li><b>Lifebloom</b> — a nature <span data-codex="term|hot">HoT</span> on heals.</li>
+        </ul>
+        <h4>Hunter — Auto Shot</h4>
+        <p>Auto Shot now <b>scales with the equipped weapon's damage and speed</b> instead of a fixed profile. Re-optimise your bows / guns.</p>`
+    },
+    metiers: {
+      title: "Professions — the guide to getting started",
+      summary: "Two activities: gathering (free for everyone) and crafting (where you specialise). Here's what to do, in order.",
+      body: `
+        <h4>The essentials in 30 seconds</h4>
+        <ul>
+          <li><b>Materials</b>: today they drop from monsters (and from skinning beasts); ore/wood/herb gathering arrives in a future version. Everyone will be able to gather everything, no restrictions.</li>
+          <li><b>Crafting</b> (10 professions): that's where you specialise. You can learn every profession and nothing is ever lost, but only <b>2 neighbouring professions</b> — your “majors” — can climb all the way to legendary.</li>
+        </ul>
+
+        <h4>Where to start, concretely</h4>
+        <ol>
+          <li><b>Collect materials by killing monsters.</b> The three base materials are drops: <b><span data-codex="item|Bone Fragments">Bone Fragments</span></b> from undead (Restless Bones…), <b><span data-codex="item|Linen Scrap">Linen Scrap</span></b> from humanoids (Moggers, Vale Bandits, cultists…), <b><span data-codex="item|Twitching Spider Leg">Twitching Spider Leg</span></b> from spiders (Sableweb Lurkers…). You can also <b>skin the corpses</b> of marked beasts (wolves, boars, spiders) for hides, fangs, venoms — rare+ materials gathered this way are signed with your name.</li>
+          <li><b>Open the crafting window</b> (the “Crafting” keybind — visible in the options / keybinds) and start a recipe. Common recipes require <b>no skill at all</b>, just the materials and a few coppers. For example: <b><span data-codex="item|Eastbrook Arming Sword">Eastbrook Arming Sword</span></b> (weaponsmithing) = 2 Bone Fragments + 1 Linen Scrap; <b><span data-codex="item|Eastbrook Chainmail Vest">Eastbrook Chainmail Vest</span></b> (armorsmithing) = 3 Bone Fragments.</li>
+          <li><b>Level your skill.</b> Every successful craft grants <b>+1 point</b> in the profession used. Every <b>25 points</b>, one more tier — at 25 in two neighbouring professions, the <b>combo recipes</b> unlock (see below).</li>
+        </ol>
+
+        <h4>⚠️ Not yet active in this version</h4>
+        <ul>
+          <li><b>Ore / wood / herb nodes cannot be gathered yet.</b> You can see them on the minimap (Eastbrook Vale, Mirefen Marsh) and clicking them does nothing: the interaction isn't wired into the game yet. It's coming in a future version — the tools sold by <b><span data-codex="npc|Trader Wilkes">Trader Wilkes</span></b> in Eastbrook (pickaxe, axe, sickle, 20 copper) are there to prepare.</li>
+          <li><b>The archetype choice isn't enabled yet</b> (the “A Craft to Call Your Own” quest is disabled in this version). In the meantime everyone is capped at <b>rare</b> — more than enough for every current recipe.</li>
+        </ul>
+
+        <h4>The ring of 10 professions</h4>
+        <p>Armorsmithing → Weaponsmithing → Jewelcrafting → Alchemy → Engineering → Cooking → Inscription → Enchanting → Tailoring → Leatherworking → (back to Armorsmithing). “Neighbours” and “opposite” are read on this ring.</p>
+
+        <h4>The quality caps (once archetypes are enabled)</h4>
+        <ul>
+          <li>Your <b>2 majors</b> (the chosen profession + its ring neighbour): <b>no limit</b>, all the way to legendary.</li>
+          <li>The profession <b>opposite</b> on the ring: your “hobby”, capped at <b>rare</b>.</li>
+          <li>All the others: capped at <b>common</b> (base recipes remain craftable).</li>
+          <li>No archetype chosen — everyone's situation today: everything capped at <b>rare</b>.</li>
+          <li>Switching archetype? Via a repeatable “buy-back” quest whose cost <b>rises with every switch</b>. You never lose earned points: non-major professions just go “dormant”.</li>
+        </ul>
+
+        <h4>Bonuses worth knowing</h4>
+        <ul>
+          <li><b>Specialisation (75 points in a profession)</b>: <b>−20%</b> materials on its recipes, and an extra <b>−25%</b> to recharge a tool you crafted yourself.</li>
+          <li><b>Signed materials</b>: <b>rare or better</b> materials skinned from corpses carry your name. Crafting with a material signed <b>by you</b> = <b>1 fewer unit</b> required. Rare+ items you craft are signed too, and using them yourself grants a trickle of XP.</li>
+          <li><b>City focus</b>: in your hub city (Eastbrook, Fenbridge or Highwatch), spread <b>10 points</b> across resource types: <b>+10% yield</b> per point, and every 5 points the gathering tier rises one step (max 2).</li>
+          <li><b>Tools</b>: enchanters craft effects to socket into gathering tools — <b>Gatherer's Cache</b> (+quantity), <b>Artisan's Eye</b> (+quality), <b>Quickening Charm</b> (faster respawn).</li>
+        </ul>
+
+        <h4>Combo recipes (both professions of the pair at tier 1, i.e. 25 points each)</h4>
+        <ul>
+          <li><b><span data-codex="item|Boundstone Helm">Boundstone Helm</span></b> — armorsmithing + weaponsmithing; 4 Bone Fragments + 2 Linen Scrap.</li>
+          <li><b><span data-codex="item|Gravewyrm Gauntlets">Gravewyrm Gauntlets</span></b> — armorsmithing + weaponsmithing; 3 Bone Fragments + 3 Linen Scrap.</li>
+          <li><b><span data-codex="item|Elixir of the Bear">Elixir of the Bear</span></b> — alchemy + engineering; 2 Linen Scrap + 2 Twitching Spider Leg.</li>
+        </ul>
+
+        <h4>The technical limits</h4>
+        <ul>
+          <li>Gold cost: <b>2 copper</b> per point of the recipe's item-level budget (starter recipes cost ~20 copper).</li>
+          <li>Maximum pace: <b>10 crafts per minute</b>.</li>
+          <li>Advanced tool recipes (tiers 75 and 150) are made at the <b>level 20 crafting hub workbench in Highwatch</b>.</li>
+        </ul>`
+    },
+    banque: {
+      title: "The Gilded Strongbox — personal bank",
+      summary: "One vault per character, expandable and fully auditable.",
+      body: `
+        <h4>Access</h4>
+        <p>Every character gets a vault on top of their bags, opened at a <b>bursar</b> in each hub city:</p>
+        <ul>
+          <li>Bursar <b><span data-codex="npc|Bursar Fernando">Fernando</span></b> — Eastbrook</li>
+          <li>Bursar <b><span data-codex="npc|Bursar Petra Vell">Petra Vell</span></b> — Fenbridge</li>
+          <li>Bursar <b><span data-codex="npc|Bursar Aldous Crane">Aldous Crane</span></b> — Highwatch</li>
+        </ul>
+        <h4>Expansions</h4>
+        <ul>
+          <li><b>24 slots</b> base.</li>
+          <li>Up to <b>12 expansions of 6 slots</b>, bought with coin at rising prices (<b>500 copper</b> for the first, up to <b>1,200,000</b> for the twelfth) → <b>96 purchased slots</b>.</li>
+          <li>Online accounts: up to <b>16 bonus slots</b> (+2 verified email, +2 linked Discord, +2 linked wallet, +2 per qualified referral up to 5).</li>
+          <li><b>Absolute maximum: 112 slots.</b></li>
+        </ul>
+        <h4>Security</h4>
+        <p>Server-side persistence with an <b>append-only</b> audit table (<span class="kbd">bank_ledger</span>) and a <span class="kbd">character_leases</span> table that prevents duplicate characters. An operator script replays the ledger against the vault's actual state.</p>`
+    },
+    buffs: {
+      title: "Raid buffs go percentage",
+      summary: "Group buffs become percentages applied to the whole raid, with no range limit.",
+      body: `
+        <h4>What changes</h4>
+        <p>These buffs now apply to the <b>caster and the entire group/raid</b>, at any distance (and to <b>controlled pets</b> too):</p>
+        <ul>
+          <li><b><span data-codex="auto|Aether Insight">Aether Insight</span></b> — +5% Intellect</li>
+          <li><b><span data-codex="auto|Wildward">Wildward</span></b> — +5% to all attributes</li>
+          <li><b><span data-codex="auto|Litany of Resolve">Litany of Resolve</span></b> — +5% Stamina</li>
+          <li><b><span data-codex="auto|Iron Bellow">Iron Bellow</span></b> and <b><span data-codex="auto|Oath of Iron">Oath of Iron</span></b> — +10% <span data-codex="term|ap">Attack power</span></li>
+          <li><b><span data-codex="auto|Steadfast Aura">Steadfast Aura</span></b> — +10% Armor</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Consequence for the guild: a buff's value now depends on the raid's composition, not a flat number.</p>`
+    },
+    armor: {
+      title: "Armor reduction",
+      summary: "Armor Shear goes percentage-based, with two new debuffs.",
+      body: `
+        <h4>The numbers</h4>
+        <ul>
+          <li><b><span data-codex="ability|Armor Shear">Armor Shear</span></b>: percentage reduction — <b>2% per stack</b>, i.e. <b>10% at 5 stacks</b>.</li>
+          <li><b><span data-codex="ability|Witchlight">Witchlight</span></b> (new): a flat <b>10%</b>, doesn't stack with Armor Shear.</li>
+          <li><b><span data-codex="ability|Armor Breach">Armor Breach</span></b>: applies the <b>full 10% in a single cast</b>.</li>
+        </ul>`
+    },
+    hitrun: {
+      title: "Melee mob hit-and-run",
+      summary: "Hostile mobs strike from their reach while still closing in.",
+      body: `
+        <h4>What changes</h4>
+        <ul>
+          <li>Every hostile melee mob <b>strikes from its effective reach</b> while <b>continuing to close the gap</b>.</li>
+          <li>It <b>swings as soon as it enters reach</b>.</li>
+          <li>It checks its <b>leash</b> even mid-melee.</li>
+          <li>Result: the “stop-and-go” cycle at max range is gone — <b>pursuit is smoother</b>, and <span data-codex="term|kiting">kiting</span> gets more demanding.</li>
+        </ul>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Embedded sheets (glossary, mobs, spells…) powered by the Codex data -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>
