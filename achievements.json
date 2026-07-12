@@ -24,6 +24,21 @@
       "membres": [
         "Faho"
       ]
+    },
+    {
+      "date": "2026-07-12",
+      "type": "Boss",
+      "portee": "perso",
+      "titre": "Nythraxis, Scourge of Thornpeak",
+      "desc": "",
+      "membres": [
+        "Pr Reptile"
+      ],
+      "codex": "mob|nythraxis_scourge_of_thornpeak",
+      "tags": [
+        "world_first",
+        "solo"
+      ]
     }
   ]
 }
