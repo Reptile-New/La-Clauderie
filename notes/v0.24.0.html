@@ -143,9 +143,9 @@
   <div class="row">
     <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
     <nav class="topnav" aria-label="Navigation du site">
-      <a href="../index.html">Accueil</a>
+      <a href="../index.html" data-en="Home">Accueil</a>
       <a href="../bis.html">⚔️ Builds</a>
-      <a href="../patch-notes.html" class="cur">📜 Nouveautés</a>
+      <a href="../patch-notes.html" class="cur" data-en="📜 What&#39;s new">📜 Nouveautés</a>
       <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
     </nav>
   </div>
@@ -549,5 +549,17 @@
 </script>
 <!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->
 <script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/lang.js"></script>
+<script>
+  // Version anglaise : ces pages détaillées n'existent qu'en français pour
+  // l'instant — on l'annonce plutôt que de laisser croire à un bug.
+  if (LANG === "en") {
+    const note = document.createElement("p");
+    note.style.cssText = "border:1px dashed var(--line,#262c3a);border-radius:10px;padding:10px 14px;color:var(--dim,#8b93a3);font-size:0.9rem";
+    note.textContent = "🇫🇷 This detailed patch-notes page is currently only available in French.";
+    const h1 = document.querySelector("h1");
+    if (h1 && h1.parentNode) h1.parentNode.insertBefore(note, h1.nextSibling);
+  }
+</script>
 </body>
 </html>
