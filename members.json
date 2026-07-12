@@ -70,6 +70,28 @@
           "role": "DPS"
         }
       ]
+    },
+    {
+      "pseudo": "Waylander",
+      "roles": [],
+      "persos": [
+        {
+          "classe": "Chasseur",
+          "role": "DPS"
+        },
+        {
+          "classe": "Guerrier",
+          "role": "Tank"
+        },
+        {
+          "classe": "Paladin",
+          "role": "Heal"
+        },
+        {
+          "classe": "Démoniste",
+          "role": "DPS"
+        }
+      ]
     }
   ]
 }
