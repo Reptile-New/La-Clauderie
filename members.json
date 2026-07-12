@@ -127,7 +127,9 @@
     },
     {
       "pseudo": "Rtype",
-      "roles": [],
+      "roles": [
+        "1er de la guilde"
+      ],
       "persos": [
         {
           "classe": "Chasseur",
