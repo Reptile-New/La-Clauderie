@@ -117,6 +117,8 @@
   .btalents li, .brota li { margin: 7px 0; color: var(--dim); }
   .btalents b, .brota b { color: var(--text); }
   .bt-tree { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); border-radius: 4px; padding: 1px 6px; margin: 0 2px; }
+  .bt-cap { margin: 12px 0 0; font-size: 0.82rem; color: var(--dim); font-style: italic; }
+  .bt-cap b { color: var(--text); }
   .bastuce { margin: 12px 0 0; font-size: 0.9rem; color: var(--gold-bright); }
   .ilink { color: inherit; text-decoration: none; border-bottom: 1px dotted color-mix(in srgb, currentColor 45%, transparent); }
   .ilink:hover { border-bottom-style: solid; filter: brightness(1.15); }
@@ -216,6 +218,9 @@
 // Builds recommandés par La Clauderie — rédigés à partir des vraies données
 // du patch (TALENTS.json / ABILITIES.json de la knowledge base). À réviser à
 // chaque mise à jour du jeu qui touche talents ou sorts.
+// RÈGLE : 11 points de talent maximum par personnage. Chaque build en dépense
+// exactement 11, dans un ordre qui respecte les paliers (2/5/8 points dépensés)
+// et les prérequis des arbres.
 const BUILDS = {
  warrior: {
   tank: {
@@ -224,14 +229,11 @@ const BUILDS = {
    stats: "Armure > Endurance > Esquive > Force",
    talents: [
     ["Shieldwright ×3", "spé", "+15 % d'armure, la base de l'EHP."],
-    ["Fair Warning ×3", "spé", "+3 % d'esquive."],
     ["Improved Quaking Blow ×2", "spé", "ton AoE de menace frappe +30 % et coûte 50 % de rage en moins."],
     ["Improved Armor Shear ×2", "spé", "Armor Shear quasi gratuit — les 5 stacks montent bien plus vite."],
     ["Bulwark → Eleventh Hour", "spé", "+15 % de PV max, le meilleur des trois pour encaisser les boss héroïques."],
     ["Improved Shieldcrack ×2", "spé", "+20 % de dégâts et +20 % de menace sur ta frappe principale."],
-    ["Grit ×3", "classe", "+12 % d'armure."],
-    ["Battle Doctrine → Fair Warning", "classe", "+5 % d'esquive."],
-    ["Deep Reserves ×2", "classe", "+10 % PV, +8 Endurance."]
+    ["Grit ×1", "classe", "le point restant : +4 % d'armure."]
    ],
    rotation: [
     ["Guarded Stance", "toujours active en donjon."],
@@ -250,13 +252,12 @@ const BUILDS = {
    stats: "Force > Crit > Hâte > Endurance",
    talents: [
     ["Barbarity ×3", "spé", "+3 % de crit."],
-    ["Boundless Ire ×2", "spé", "+20 PA."],
+    ["Boundless Ire ×1", "spé", "+10 PA."],
     ["Bladed Gyre ×1", "spé", "débloque le coup tournoyant AoE — indispensable en donjon."],
     ["Improved Reaping Arc ×2", "spé", "+40 % sur ton cleave."],
     ["War Madness → Red Mist", "spé", "+8 % à toutes les capacités de mêlée, devant +4 % crit."],
     ["Improved Bloodletting ×2", "spé", "ta frappe signature : +20 % de dégâts, cooldown réduit."],
-    ["Barbarity ×3", "classe", "encore +3 % de crit."],
-    ["Battle Doctrine → Spiked Harness", "classe", "+12 % de PA."]
+    ["Barbarity ×1", "classe", "le point restant : +1 % de crit."]
    ],
    rotation: [
     ["Iron Bellow", "le buff de groupe (+10 % PA) — un seul guerrier le pose."],
@@ -267,7 +268,7 @@ const BUILDS = {
     ["Early Grave", "l'exécution — dès que la cible est basse, ça tape très fort."],
     ["Reaver Strike", "vide la rage restante (hors GCD)."]
    ],
-   astuce: "Seething Fury (talent de classe) casse les peurs ET donne de la rage — garde-le pour les boss qui terrifient."
+   astuce: "Contre les boss qui terrifient, une respé vers Seething Fury (talent de classe, palier 8) casse les peurs ET donne de la rage — mais elle coûte le haut de l'arbre Bloodrush."
   }
  },
  paladin: {
@@ -277,13 +278,11 @@ const BUILDS = {
    stats: "Armure > Endurance > Esquive > Force",
    talents: [
     ["Palisade ×3", "spé", "+15 % d'armure."],
-    ["Forewarning ×3", "spé", "+3 % d'esquive."],
     ["Improved Burning Oath ×2", "spé", "+20 % de menace, ton mode tank coûte 50 % de moins."],
     ["Warder's Vow ×2", "spé", "Ward of Faith et Sundering Gavel plus souvent."],
     ["Refuge → Deathless Ardor", "spé", "+12 % de PV max."],
     ["Hallowed Wall ×2", "spé", "Holy Ground +24 % — ta menace AoE."],
-    ["Improved Steadfast Aura ×2", "classe", "+6 % d'armure et ton aura de groupe +40 %."],
-    ["Votive Calling → Warder's Vow", "classe", "+8 % armure, +2 % esquive."]
+    ["Sworn Strength ×1", "classe", "le point restant : +2 Force."]
    ],
    rotation: [
     ["Burning Oath", "toujours actif : c'est lui qui génère ta menace."],
@@ -301,13 +300,11 @@ const BUILDS = {
    stats: "Intelligence > Esprit > Hâte > Crit",
    talents: [
     ["Improved Mending Light ×3", "spé", "+24 % sur ton gros soin."],
-    ["Lettered Faith ×3", "spé", "+9 Intelligence."],
     ["Lightmend Focus ×2", "spé", "ton soin rapide 20 % plus rapide et moins cher."],
     ["Improved Last Rite ×2", "spé", "le joker à 250 PV revient 40 % plus vite."],
     ["Lodestar → Unearned Mercy", "spé", "+8 % de soins."],
     ["Lightwright ×2", "spé", "+12 % de soins, +2 % crit."],
-    ["Quiet Fervor ×3", "classe", "+6 Esprit et +6 % de soins."],
-    ["Votive Calling → Mender's Vow", "classe", "+6 % de soins."]
+    ["Quiet Fervor ×1", "classe", "le point restant : +2 Esprit, +2 % de soins."]
    ],
    rotation: [
     ["Lightmend", "le soin de base : rapide, efficace, spammable."],
@@ -323,14 +320,12 @@ const BUILDS = {
    pourquoi: "Le DPS hybride : gros Verdicts, utilitaire complet, et un buff de groupe.",
    stats: "Force > Crit > Hâte > Intelligence",
    talents: [
-    ["Grim Certainty ×3", "spé", "+3 % de crit."],
     ["Fervent Oath ×3", "spé", "−24 % de mana sur tes attaques."],
     ["Improved Verdict ×2", "spé", "+20 % de dégâts et cooldown réduit sur ta frappe principale."],
     ["Oathbrand Command ×2", "spé", "+40 % sur les dégâts de ton imbue."],
     ["Warpath → Swift Verdict", "spé", "+10 % de PA (et +3 % d'esquive en prime)."],
     ["Punishing Blows ×2", "spé", "+12 % mêlée, +8 % sorts, Rite of Expulsion plus souvent."],
-    ["Sworn Strength ×3", "classe", "+6 Force."],
-    ["Votive Calling → Reaper's Vow", "classe", "+6 % de dégâts de mêlée."]
+    ["Sworn Strength ×1", "classe", "le point restant : +2 Force."]
    ],
    rotation: [
     ["Oathbrand", "l'imbue, toujours actif — talenté il tape fort au jugement."],
@@ -349,13 +344,11 @@ const BUILDS = {
    stats: "Intelligence > Esprit > Hâte > Crit",
    talents: [
     ["Improved Mending Waters ×3", "spé", "ton unique soin +15 % et 15 % plus rapide."],
-    ["Serene Waters ×3", "spé", "−18 % de mana dessus."],
+    ["Serene Waters ×2", "spé", "−12 % de mana dessus."],
     ["Soothing Grace ×2", "spé", "+8 % de soins, +4 Esprit."],
-    ["Ancestor's Mercy ×2", "spé", "+6 % de soins, +10 % d'armure."],
     ["Tidesworn Path → Cleansing Tides", "spé", "+10 % de soins fixes — devant le cast plus rapide."],
     ["Guiding Spirits ×2", "spé", "+14 % de soins, +4 Int."],
-    ["Ancient Lore ×3", "classe", "+6 Intelligence."],
-    ["Path of Spirits → Soothing Grace", "classe", "+8 % de soins."]
+    ["Ancient Lore ×1", "classe", "le point restant : +2 Intelligence."]
    ],
    rotation: [
     ["Mending Waters", "ton outil unique : rapide, pas cher, talenté à fond."],
@@ -370,13 +363,11 @@ const BUILDS = {
    stats: "Force > Crit > Hâte > Intelligence",
    talents: [
     ["Elder Arms ×3", "spé", "+24 PA."],
-    ["Frenzied Tempo ×2", "spé", "+4 % de crit."],
     ["Improved Stonebound ×2", "spé", "+40 % sur l'imbue Stonebound — il repasse devant Pyrebrand."],
-    ["Stalwart Shield ×3", "spé", "+12 % d'armure pour tenir en mêlée."],
+    ["Frenzied Tempo ×2", "spé", "+4 % de crit."],
     ["Thunder Path → Honed Edge", "spé", "+10 % de dégâts de mêlée."],
     ["Spiritforged Arms ×2", "spé", "Ancestral Strike +8 %, moins cher, 24 % plus souvent."],
-    ["Thunderous Blows ×2", "classe", "+3 % de crit."],
-    ["Path of Spirits → Frenzied Tempo", "classe", "+8 % de dégâts de mêlée."]
+    ["Latent Charge ×1", "classe", "le point restant : Earthen Jolt, ton filler, coûte 5 % de moins."]
    ],
    rotation: [
     ["Stonebound Weapon", "l'imbue talenté, à renouveler toutes les 5 min."],
@@ -396,13 +387,11 @@ const BUILDS = {
    stats: "Armure > Endurance > Agilité > Force",
    talents: [
     ["Ironpelt ×3", "spé", "+15 % d'armure — multiplié par le ×1,9 de la forme d'ours."],
-    ["Whetted Fangs ×3", "spé", "Bonecrush et Claw coûtent −18 % de rage."],
     ["Heavy Blows ×2", "spé", "+20 % sur Bonecrush et Sweeping Claws — ta menace."],
     ["Swiftpaw ×2", "spé", "+4 % d'esquive, +4 Agilité."],
     ["Path of Fangs → Dire Bruin", "spé", "+12 % d'armure et +10 % de menace."],
     ["Primal Heart ×2", "spé", "+10 % PV, +10 % PA, +10 % menace."],
-    ["Ironpelt ×3", "classe", "encore +12 % d'armure."],
-    ["Path of Seasons → Primal Heart", "classe", "+8 % PV et PA."]
+    ["Red Hunger ×1", "classe", "le point restant : +5 % sur Bonecrush et Claw."]
    ],
    rotation: [
     ["Bruin Form", "évidemment."],
@@ -421,13 +410,11 @@ const BUILDS = {
    stats: "Intelligence > Esprit > Hâte > Crit",
    talents: [
     ["Improved Wildbloom ×3", "spé", "+24 % sur ton HoT principal."],
-    ["Woodwise ×3", "spé", "Wildmend +15 % et plus rapide."],
     ["Quietude ×2", "spé", "−20 % de mana sur tes deux soins de base."],
     ["Improved Second Bloom ×2", "spé", "+24 % sur le soin hybride."],
     ["Path of Renewal → Lifesap", "spé", "−16 % de mana sur tout : tu ne tombes jamais à sec."],
     ["Heartwood ×2", "spé", "+14 % de soins, +6 Esprit."],
-    ["Woodwise ×2", "classe", "Wildmend encore plus rapide."],
-    ["Path of Seasons → Grove's Gift", "classe", "+8 % de soins."]
+    ["Thicket Snare ×1", "classe", "le point restant : +1 Esprit, Gripping Roots moins cher."]
    ],
    rotation: [
     ["Wildbloom", "le HoT, sur le tank en permanence, sur les DPS qui prennent cher."],
@@ -444,12 +431,10 @@ const BUILDS = {
    stats: "Agilité > Crit > Force > Hâte",
    talents: [
     ["Whetted Fangs ×3", "spé", "Claw −18 % : plus de combos par minute."],
+    ["Ironpelt ×2", "spé", "+10 % d'armure — la survie d'un DPS mêlée n'est jamais du luxe."],
     ["Swiftpaw ×2", "spé", "+4 Agilité, +4 % d'esquive."],
     ["Path of Fangs → Predator's Cunning", "spé", "+10 % de dégâts de mêlée."],
-    ["Primal Heart ×2", "spé", "+10 % de PA (la menace ne gêne pas avec un bon tank)."],
-    ["Red Hunger ×3", "classe", "+15 % sur Claw et Bonecrush."],
-    ["Path of Seasons → Primal Heart", "classe", "+8 % PA et PV."],
-    ["Wildsurge ×2", "classe", "+6 Int/End — utilitaire."]
+    ["Red Hunger ×3", "classe", "+15 % sur Claw et Bonecrush."]
    ],
    rotation: [
     ["Wolf Form", "et Stalk avant le pull."],
@@ -470,13 +455,11 @@ const BUILDS = {
    stats: "Intelligence > Esprit > Hâte > Crit",
    talents: [
     ["Steadied Prayer ×3", "spé", "+18 % sur les soins directs."],
-    ["Improved Lingering Grace ×3", "spé", "+24 % sur ton HoT."],
     ["Wrathful Psalm ×2", "spé", "Solemn Prayer 20 % plus rapide."],
     ["Small Mercies ×2", "spé", "+6 % de soins, +10 % d'armure."],
     ["Deepword → Gathered Prayers", "spé", "−12 % de mana sur tout."],
     ["Grave Mercy ×2", "spé", "+14 % de soins, +2 % crit."],
-    ["Nocturns ×2", "classe", "−16 % de mana sur les soins."],
-    ["Veiled Calling → Wrathful Psalm", "classe", "+8 % de soins."]
+    ["Soulglean ×1", "classe", "le point restant : +3 Esprit."]
    ],
    rotation: [
     ["Psalm of Warding", "le bouclier AVANT les dégâts — il évite d'avoir à soigner."],
@@ -493,13 +476,11 @@ const BUILDS = {
    stats: "Intelligence > Hâte > Crit > Esprit",
    talents: [
     ["Improved Dirge of Decay ×3", "spé", "+24 % sur ton DoT principal."],
-    ["Snuffed Light ×3", "spé", "+18 % sur Mindfracture."],
-    ["Improved Litany of Woe ×2", "spé", "ton filler canalisé +24 % et moins cher."],
     ["Umbral Intent ×2", "spé", "+8 % à tous les sorts."],
+    ["Snuffed Light ×2", "spé", "+12 % sur Mindfracture."],
     ["Black Office → Creeping Dark", "spé", "+10 % de dégâts des sorts."],
     ["Gloamveil ×2", "spé", "+14 % de sorts, +10 % d'armure."],
-    ["Duskbound ×3", "classe", "−15 % de mana sur l'ombre."],
-    ["Veiled Calling → Creeping Dark", "classe", "+8 % de sorts."]
+    ["Baleful Rod ×1", "classe", "le point restant : +1 Int, +1 Esprit."]
    ],
    rotation: [
     ["Dirge of Decay", "le DoT, actif en permanence sur tout ce qui vit plus de 10 s."],
@@ -518,14 +499,11 @@ const BUILDS = {
    stats: "Intelligence > Hâte > Crit",
    talents: [
     ["Improved Cinderbolt ×3", "spé", "+15 % et cast plus rapide sur ton sort principal."],
-    ["Short Fuse ×3", "spé", "+3 % de crit."],
     ["Improved Cinderfall ×2", "spé", "+16 % et 30 % plus souvent sur l'instant."],
     ["Cremation ×2", "spé", "+30 % sur Scald."],
     ["Flashfire → Flashfire", "spé", "+3 % crit ET +6 % de sorts — le combo du palier 5."],
     ["Pyre Tender ×2", "spé", "+12 % de sorts, Cinderbolt +12 %."],
-    ["Splinterfrost ×3", "classe", "+3 % de crit."],
-    ["School Focus → Afterflame", "classe", "+6 % de dégâts des sorts."],
-    ["Effortless Art ×2", "classe", "−16 % de mana sur les sorts de base."]
+    ["Elemental Rigor ×1", "classe", "le point restant : Cinderbolt coûte 4 % de moins."]
    ],
    rotation: [
     ["Pyrelance", "l'ouverture : 6 s de cast AVANT le pull, ~200 dégâts à l'impact."],
@@ -546,19 +524,16 @@ const BUILDS = {
    stats: "Intelligence > Hâte > Crit > Endurance",
    talents: [
     ["Improved Hex of Anguish ×3", "spé", "+9 % sur ton plus gros DoT."],
-    ["Improved Blackrot ×3", "spé", "+9 % sur le deuxième."],
-    ["Deepened Hex ×2", "spé", "Hex +20 % et plus souvent."],
     ["Unbroken Focus ×2", "spé", "Consume +24 % et moins cher."],
+    ["Deepened Hex ×2", "spé", "Hex +20 % et plus souvent."],
     ["Reaping Path → Umbral Mastery", "spé", "+10 % à tous les sorts."],
     ["Parting Gift ×2", "spé", "+20 % sur Blackrot ET Hex."],
-    ["Improved Blackrot ×2", "classe", "Blackrot devient quasi instantané (−70 % de cast)."],
-    ["Grim Bargain → Grim Tidings", "classe", "+2 % d'ombre."],
-    ["Vile Cunning ×2", "classe", "+6 Int/End."]
+    ["Stifling Grasp ×1", "classe", "le point restant : −5 % de mana sur tes afflictions."]
    ],
    rotation: [
     ["Summon Warfiend", "(ou Gloomshade pour tanker en solo) — le familier d'abord."],
     ["Hex of Anguish", "DoT n°1, sur tout."],
-    ["Blackrot", "DoT n°2, quasi instant talenté."],
+    ["Blackrot", "DoT n°2, boosté par Parting Gift."],
     ["Burning Pact", "DoT n°3 sur les cibles qui durent."],
     ["Consume", "le filler : dégâts + vol de vie."],
     ["Duskfire", "l'instant nuke à chaque cooldown."],
@@ -574,14 +549,11 @@ const BUILDS = {
    stats: "Agilité > Crit > Hâte > Endurance",
    talents: [
     ["Improved Fell Shot ×3", "spé", "+24 % sur ton instant."],
-    ["Butcher's Aim ×3", "spé", "+3 % de crit."],
     ["Steady Draw ×2", "spé", "Long Draw +16 % et 20 % plus rapide."],
     ["Arrow Squall ×2", "spé", "Fell Shot et Rattling Shot plus souvent."],
     ["Sureflight → Sureflight Aura", "spé", "+16 % de PA — le meilleur du palier."],
     ["Coldsight Mastery ×2", "spé", "Long Draw +20 % et 24 % plus souvent."],
-    ["Butcher's Aim ×3", "classe", "encore +3 % de crit."],
-    ["Improved Harrier's Guise ×2", "classe", "+16 PA et ton aspect +40 %."],
-    ["Waywise → Carrion Eye", "classe", "+12 % de PA à distance."]
+    ["Butcher's Aim ×1", "classe", "le point restant : +1 % de crit."]
    ],
    rotation: [
     ["Harrier's Guise", "l'aspect PA, toujours actif."],
@@ -603,12 +575,10 @@ const BUILDS = {
    talents: [
     ["Dead Aim ×3", "spé", "+24 PA."],
     ["Practiced Steel ×2", "spé", "+20 % sur Wicked Slash, ton générateur."],
-    ["Improved Eye Jab ×3", "spé", "l'interruption tape plus et revient plus vite."],
+    ["Improved Eye Jab ×2", "spé", "l'interruption tape +16 % et revient plus vite."],
     ["Brawler's Way → Mirrored Blades", "spé", "+10 % de dégâts de mêlée."],
     ["Weapon Mastery ×2", "spé", "+16 % de PA, Wicked Slash moins cher."],
-    ["Ill Will ×3", "classe", "+3 % de crit."],
-    ["Improved Wicked Slash ×2", "classe", "−16 % d'énergie sur le générateur."],
-    ["Foul Play → Mirrored Blades", "classe", "encore +8 % de mêlée."]
+    ["Ill Will ×1", "classe", "le point restant : +1 % de crit."]
    ],
    rotation: [
     ["Adder's Bite / Festering Venom", "le poison sur l'arme, toujours."],
@@ -8056,6 +8026,7 @@ function renderBuild() {
       <div class="bspec"><b><span data-codex="spec|${b.spec.replace(/"/g, "&quot;")}">${b.spec}</span></b><span class="bmastery">${b.mastery}</span><p>${b.pourquoi}</p></div>
       <div class="bstats">Priorité de stats : <b>${b.stats}</b></div>
       <ol class="btalents">${talents}</ol>
+      <p class="bt-cap">Total : <b>11 points de talent</b> — le maximum — dépensés dans l'ordre de la liste pour respecter les paliers de déblocage (2, 5 et 8 points).</p>
     </div>
     <div class="bsec">
       <h2 class="bsec-h">🔁 La rotation</h2>
