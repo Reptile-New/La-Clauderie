@@ -1,5 +1,5 @@
 {
-  "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français).",
+  "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français). Champ page_en : la page de notes en anglais (notes/vX.Y.Z.en.html) ; la version anglaise du site l'utilise.",
   "versions": [
     {
       "version": "v0.24.0",
@@ -20,7 +20,8 @@
         "Spell queueing: your next spell fires without delay",
         "UI overhaul: 19 windows, Escape menu, tabbed vendors",
         "/ready ready checks and +35% fps in crowds"
-      ]
+      ],
+      "page_en": "notes/v0.24.0.en.html"
     },
     {
       "version": "v0.23.0",
@@ -41,7 +42,8 @@
         "Heroic difficulty for all 4 dungeons + Heroic Marks",
         "10 epic sets, Crit Rating & Haste Rating stats",
         "Finalised professions and The Gilded Strongbox bank"
-      ]
+      ],
+      "page_en": "notes/v0.23.0.en.html"
     }
   ]
 }

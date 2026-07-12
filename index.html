@@ -494,6 +494,15 @@
     // Classes des persos : stockées en français, traduites à l'affichage.
     const CLASSE_EN = { "Guerrier": "Warrior", "Voleur": "Rogue", "Prêtre": "Priest", "Démoniste": "Warlock", "Druide": "Druid", "Chasseur": "Hunter", "Chaman": "Shaman" };
     const classeLbl = c => LANG === "en" ? (CLASSE_EN[c] || c) : c;
+    // Rôles de guilde (créés librement dans l'espace officiers) : traduction
+    // des rôles connus, repli sur le texte d'origine pour les autres.
+    const ROLE_EN = {
+      "Maître de guilde": "Guild Master", "Archimage": "Archmage",
+      "Développeur web": "Web developer", "1er de la guilde": "1st of the guild",
+      "Chef de raid": "Raid leader", "Officier": "Officer", "Trésorier": "Treasurer",
+      "Recruteur": "Recruiter", "Ambianceur": "Morale officer",
+    };
+    const roleLbl = r => LANG === "en" ? (ROLE_EN[r] || r) : r;
     $("membersBox").innerHTML = '<div class="members">' + list
       .slice()
       .sort((a, b) => (a.pseudo || "").localeCompare(b.pseudo || "", "fr"))
@@ -507,7 +516,7 @@
             : ""}>
           <div class="avatar">${esc((m.pseudo || "?").trim().charAt(0).toUpperCase())}</div>
           <div class="who"><b>${esc(m.pseudo)}</b>${persos ? `<span>${esc(persos)}</span>` : ""}
-            ${tags.length ? `<span class="xtras">${tags.map(r => `<span>${esc(r)}</span>`).join("")}</span>` : ""}
+            ${tags.length ? `<span class="xtras">${tags.map(r => `<span>${esc(roleLbl(r))}</span>`).join("")}</span>` : ""}
           </div>
           ${n ? `<span class="fcount">🏆 ${n}</span>` : ""}
         </div>`;
