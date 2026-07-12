@@ -102,14 +102,47 @@ modification est enregistrée dans le fichier JSON correspondant (`events.json`,
 `members.json` ou `achievements.json`) et **le site se met à jour tout seul en
 ~1 min**.
 
-## Mise en ligne (GitHub Pages)
+## Mise en ligne
 
-Déjà configuré. Le workflow `.github/workflows/deploy-pages.yml` publie le site à
-chaque push sur `main`. Adresse publique :
-`https://reptile-new.github.io/La-Clauderie/`.
+L'adresse officielle du site est **<https://laclauderie.fr>** (domaine +
+hébergement web 100 Mo chez OVH). Deux workflows publient le site à chaque
+push sur `main` :
+
+| Workflow | Destination |
+|---|---|
+| `.github/workflows/deploy-ovh.yml` | **laclauderie.fr** (hébergement OVH, envoi par FTPS) |
+| `.github/workflows/deploy-pages.yml` | `https://reptile-new.github.io/La-Clauderie/` (miroir GitHub Pages, utile en secours) |
+
+Les mises à jour faites depuis l'espace officiers arrivent donc sur
+laclauderie.fr toutes seules, comme avant (~1 à 2 min).
+
+### Configuration OVH (une seule fois)
+
+Le déploiement OVH a besoin des identifiants FTP de l'hébergement, stockés en
+secrets du repo :
+
+1. [Espace client OVH](https://www.ovh.com/manager/) → **Web Cloud →
+   Hébergements → laclauderie.fr → onglet FTP-SSH** : noter l'**adresse du
+   serveur FTP** (ex. `ftp.cluster0XX.hosting.ovh.net`) et l'**identifiant
+   principal** ; définir le **mot de passe FTP** (« Modifier le mot de
+   passe ») si ce n'est pas déjà fait.
+2. Sur GitHub : **Settings → Secrets and variables → Actions → New repository
+   secret**, créer les trois secrets :
+   - `OVH_FTP_SERVER` — l'adresse du serveur FTP
+   - `OVH_FTP_USERNAME` — l'identifiant principal
+   - `OVH_FTP_PASSWORD` — le mot de passe FTP
+3. Lancer un premier déploiement : onglet **Actions → « Deploy La Clauderie
+   sur OVH » → Run workflow** (ou pousser n'importe quel changement sur
+   `main`).
+
+> **HTTPS** : le certificat Let's Encrypt est généré automatiquement par OVH
+> (visible dans l'onglet « Informations générales » de l'hébergement). Le
+> fichier `.htaccess` du site redirige ensuite `http://` et `www.` vers
+> `https://laclauderie.fr`.
 
 ## Liens
 
+- 🌐 Site : <https://laclauderie.fr>
 - 🎮 Jeu : <https://worldofclaudecraft.com/>
 - 💬 Discord officiel (salon **#france**) : <https://discord.gg/GjhnUsBtw>
 - 📚 Codex WoCC : <https://github.com/Reptile-New/wocc-knowledge-base>

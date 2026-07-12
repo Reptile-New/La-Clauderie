@@ -28,10 +28,15 @@
 const GH_PAGES = 'https://reptile-new.github.io/wocc-knowledge-base';
 // En local (python3 -m http.server à la racine du dossier parent), le repo
 // du codex est servi sous le même hôte : on garde des chemins relatifs au host.
-const onPages = /\.github\.io$/.test(location.hostname);
+// Partout ailleurs (laclauderie.fr, GitHub Pages…), on lit les JSON du Codex
+// directement sur son GitHub Pages, qui autorise les requêtes cross-origin.
+const onLocal = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
 const DATA_BASE = window.CODEX_DATA_BASE ||
-  (onPages ? GH_PAGES + '/data' : '/wocc-knowledge-base/data');
+  (onLocal ? '/wocc-knowledge-base/data' : GH_PAGES + '/data');
 const CODEX_SITE = GH_PAGES + '/site/index.html';
+// Racine du site de la guilde : « / » sur laclauderie.fr, « /La-Clauderie/ »
+// ailleurs (GitHub Pages, dev local) — pour les liens internes des fiches.
+const SITE_BASE = /(^|\.)laclauderie\.fr$/.test(location.hostname) ? '/' : '/La-Clauderie/';
 
 const FILES = ['ITEMS','MOBS','NPCS','QUESTS','DUNGEONS','DELVES','ITEM_SETS',
                'WORLD_BOSSES','ZONES','HEROIC_BOSS_LOOT','ABILITIES','TALENTS','_meta'];
@@ -110,7 +115,7 @@ const GLOSSARY = {
   haste: { title: 'Hâte (haste)', def: `La <b>hâte</b> accélère à la fois les attaques automatiques et les incantations. Elle vient du <b>Haste Rating</b> du stuff : 10 points de rating = 1 % de hâte.` },
   ap: { title: 'Puissance d’attaque (AP)', def: `L'<b>attack power</b> augmente les dégâts des attaques physiques. Elle vient de la Force (et de l'Agilité pour voleurs et chasseurs) : chaque classe a sa propre conversion.` },
   sp: { title: 'Puissance des sorts (SP)', def: `Le <b>spell power</b> augmente les dégâts et les soins des sorts. Il vient de l'Intelligence (0,5 SP par point d'Int) et des bonus fixes du stuff de lanceur de sorts.` },
-  bis: { title: 'BiS (Best in Slot)', def: `Le <b>Best in Slot</b> est, pour chaque emplacement d'équipement, l'objet le plus puissant du jeu pour votre classe et votre rôle. La page <a href="/La-Clauderie/bis.html">Builds</a> le calcule à partir des vraies données du patch, bonus de sets compris.` },
+  bis: { title: 'BiS (Best in Slot)', def: `Le <b>Best in Slot</b> est, pour chaque emplacement d'équipement, l'objet le plus puissant du jeu pour votre classe et votre rôle. La page <a href="${SITE_BASE}bis.html">Builds</a> le calcule à partir des vraies données du patch, bonus de sets compris.` },
   filler: { title: 'Filler', def: `Le <b>filler</b> est le sort « bouche-trou » d'une rotation : celui qu'on lance quand tout le reste est en recharge. Pas le plus puissant, mais toujours disponible.` },
   burst: { title: 'Burst', def: `Le <b>burst</b> est un pic de dégâts concentré sur quelques secondes, en cumulant cooldowns et procs — par opposition aux dégâts réguliers « soutenus » (sustained).` },
   cooldown: { title: 'Cooldown (recharge)', def: `Le <b>cooldown</b> d'une capacité est son temps de recharge avant de pouvoir la réutiliser. Par extension, « les cooldowns » désignent les grosses capacités à longue recharge qu'on garde pour les moments clés.` },

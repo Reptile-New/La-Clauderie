@@ -1,0 +1,15 @@
+# Config Apache pour l'hébergement OVH (laclauderie.fr).
+# Déployé à la racine du site par .github/workflows/deploy-ovh.yml
+# (GitHub Pages l'ignore : il n'est pas copié dans son artefact).
+
+AddDefaultCharset UTF-8
+
+RewriteEngine On
+
+# www.laclauderie.fr → laclauderie.fr
+RewriteCond %{HTTP_HOST} ^www\.laclauderie\.fr$ [NC]
+RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
+
+# http → https (le certificat Let's Encrypt est fourni par OVH)
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]

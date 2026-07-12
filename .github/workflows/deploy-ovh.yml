@@ -1,0 +1,67 @@
+# Publie le site sur l'hébergement OVH (https://laclauderie.fr) à chaque
+# changement sur main, par FTP sécurisé (FTPS).
+#
+# Prérequis (une seule fois) : créer 3 secrets dans
+# Settings → Secrets and variables → Actions → "New repository secret" :
+#
+#   OVH_FTP_SERVER    → l'« Adresse du serveur FTP » (ex: ftp.cluster0XX.hosting.ovh.net),
+#                       visible dans l'espace client OVH : Web Cloud → Hébergements
+#                       → laclauderie.fr → onglet FTP-SSH
+#   OVH_FTP_USERNAME  → l'« identifiant principal » du même onglet (ex: laclaudp)
+#   OVH_FTP_PASSWORD  → le mot de passe FTP (bouton « Modifier le mot de passe »
+#                       dans le même onglet si vous ne l'avez pas encore défini)
+#
+# Le site est envoyé dans le dossier www/ de l'hébergement (la racine du site).
+# Seuls les fichiers modifiés sont retransférés à chaque passage.
+
+name: Deploy La Clauderie sur OVH
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ovh
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Vérifier que les secrets FTP sont configurés
+        env:
+          FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
+        run: |
+          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "::error::Secrets FTP manquants. Créer OVH_FTP_SERVER, OVH_FTP_USERNAME et OVH_FTP_PASSWORD dans Settings → Secrets and variables → Actions (voir le commentaire en tête de ce fichier)."
+            exit 1
+          fi
+
+      # Mêmes fichiers que le déploiement GitHub Pages, plus le .htaccess
+      # (redirections HTTPS/www, utile seulement chez OVH).
+      - name: Assembler le site
+        run: |
+          mkdir -p _site
+          cp index.html patch-notes.html admin.html bis.html events.json achievements.json members.json roles.json guild.json patch-notes.json _site/
+          cp -r assets _site/assets
+          cp -r notes _site/notes
+          cp .htaccess _site/.htaccess
+
+      - name: Déployer sur OVH (FTPS)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.OVH_FTP_SERVER }}
+          username: ${{ secrets.OVH_FTP_USERNAME }}
+          password: ${{ secrets.OVH_FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: _site/
+          server-dir: www/
