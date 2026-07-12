@@ -1,5 +1,9 @@
 # Publie le site sur l'hébergement OVH (https://laclauderie.fr) à chaque
-# changement sur main, par FTP sécurisé (FTPS).
+# changement sur main, par FTP.
+#
+# Note : l'hébergement offert avec le domaine ne supporte que le FTP simple —
+# le serveur répond « 500 This security scheme is not implemented » en FTPS
+# (testé), et le SFTP est réservé aux offres payantes Pro/Performance.
 #
 # Prérequis (une seule fois) : créer 3 secrets dans
 # Settings → Secrets and variables → Actions → "New repository secret" :
@@ -56,12 +60,12 @@ jobs:
           cp -r notes _site/notes
           cp .htaccess _site/.htaccess
 
-      - name: Déployer sur OVH (FTPS)
+      - name: Déployer sur OVH (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.OVH_FTP_SERVER }}
           username: ${{ secrets.OVH_FTP_USERNAME }}
           password: ${{ secrets.OVH_FTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftp
           local-dir: _site/
           server-dir: www/
