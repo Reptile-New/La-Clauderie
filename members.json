@@ -124,6 +124,16 @@
           "role": "Heal"
         }
       ]
+    },
+    {
+      "pseudo": "Rtype",
+      "roles": [],
+      "persos": [
+        {
+          "classe": "Chasseur",
+          "role": "DPS"
+        }
+      ]
     }
   ]
 }
