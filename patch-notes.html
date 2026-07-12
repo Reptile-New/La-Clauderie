@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Nouveautés du jeu — La Clauderie</title>
+<title data-en="Game updates — La Clauderie">Nouveautés du jeu — La Clauderie</title>
 <meta name="description" content="Chaque mise à jour de World of ClaudeCraft, expliquée en détail pour la guilde.">
 <meta name="theme-color" content="#c8a04b">
 <meta property="og:type" content="website">
@@ -96,9 +96,9 @@
   <div class="row">
     <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
     <nav class="topnav" aria-label="Navigation du site">
-      <a href="index.html">Accueil</a>
+      <a href="index.html" data-en="Home">Accueil</a>
       <a href="bis.html">⚔️ Builds</a>
-      <a href="patch-notes.html" class="cur">📜 Nouveautés</a>
+      <a href="patch-notes.html" class="cur" data-en="📜 What&#39;s new">📜 Nouveautés</a>
       <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
     </nav>
   </div>
@@ -106,28 +106,32 @@
 
 <div class="wrap">
   <header class="hero">
-    <p class="eyebrow">World of ClaudeCraft · Notes de version</p>
-    <h1>Nouveautés du jeu</h1>
-    <p class="lede">Chaque mise à jour du jeu, expliquée en détail pour la guilde. La plus récente en premier — clique sur une version pour lire toutes ses nouveautés et les règles exactes.</p>
+    <p class="eyebrow" data-en="World of ClaudeCraft · Patch notes">World of ClaudeCraft · Notes de version</p>
+    <h1 data-en="Game updates">Nouveautés du jeu</h1>
+    <p class="lede" data-en="Every game update, explained in detail for the guild. Most recent first — click a version to read all its changes and the exact rules.">Chaque mise à jour du jeu, expliquée en détail pour la guilde. La plus récente en premier — clique sur une version pour lire toutes ses nouveautés et les règles exactes.</p>
   </header>
 
   <div class="versions" id="versions">
-    <div class="empty">Chargement…</div>
+    <div class="empty" data-en="Loading…">Chargement…</div>
   </div>
 </div>
 
 <footer>
   <div class="wrap">
-    <p>Compilé pour <strong>La Clauderie</strong> — d'après les notes de version et le codex WoCC.</p>
-    <p style="margin-top:8px"><a href="index.html">← Retour à l'accueil</a></p>
+    <p data-en="Compiled for <strong>La Clauderie</strong> — from the patch notes and the WoCC codex.">Compilé pour <strong>La Clauderie</strong> — d'après les notes de version et le codex WoCC.</p>
+    <p style="margin-top:8px"><a href="index.html" data-en="← Back to home">← Retour à l'accueil</a></p>
   </div>
 </footer>
 
+<script src="assets/lang.js"></script>
 <script>
-  const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const MOIS = LANG === "en"
+    ? ["January","February","March","April","May","June","July","August","September","October","November","December"]
+    : ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
   function fmtDate(iso) {
     const [y, m, d] = (iso || "").split("-").map(Number);
     if (!y || !m || !d) return iso || "";
+    if (LANG === "en") return `${MOIS[m - 1]} ${d}, ${y}`;
     return `${d}${d === 1 ? "ᵉʳ" : ""} ${MOIS[m - 1]} ${y}`;
   }
   function esc(s) {
@@ -142,7 +146,7 @@
         .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
       const box = document.getElementById("versions");
       if (!list.length) {
-        box.innerHTML = '<div class="empty">Aucune note de version pour le moment.</div>';
+        box.innerHTML = '<div class="empty">' + T({ fr: "Aucune note de version pour le moment.", en: "No patch notes yet." }) + '</div>';
         return;
       }
       box.innerHTML = list.map((v, i) => `
@@ -150,17 +154,17 @@
           <div class="v-head">
             <span class="v-num">${esc(v.version)}</span>
             <span class="v-date">${esc(fmtDate(v.date))}</span>
-            ${i === 0 ? '<span class="badge-last">Dernière mise à jour</span>' : ""}
+            ${i === 0 ? `<span class="badge-last">${T({ fr: "Dernière mise à jour", en: "Latest update" })}</span>` : ""}
           </div>
-          ${v.titre ? `<p class="v-titre">${esc(v.titre)}</p>` : ""}
-          ${v.resume ? `<p class="v-resume">${esc(v.resume)}</p>` : ""}
-          ${(v.temps_forts || []).length ? `<ul class="v-forts">${v.temps_forts.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
-          <span class="v-go">Lire toutes les nouveautés</span>
+          ${v.titre ? `<p class="v-titre">${esc(pick(v, "titre"))}</p>` : ""}
+          ${v.resume ? `<p class="v-resume">${esc(pick(v, "resume"))}</p>` : ""}
+          ${(pick(v, "temps_forts") || []).length ? `<ul class="v-forts">${pick(v, "temps_forts").map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+          <span class="v-go">${T({ fr: "Lire toutes les nouveautés", en: "Read the full notes (in French)" })}</span>
         </a>`).join("");
     })
     .catch(() => {
       document.getElementById("versions").innerHTML =
-        '<div class="empty">Impossible de charger les notes de version.</div>';
+        '<div class="empty">' + T({ fr: "Impossible de charger les notes de version.", en: "Could not load the patch notes." }) + '</div>';
     });
 </script>
 <!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->

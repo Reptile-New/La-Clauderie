@@ -1,5 +1,5 @@
 {
-  "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls.",
+  "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français).",
   "versions": [
     {
       "version": "v0.24.0",
@@ -12,7 +12,15 @@
         "Interface refaite : 19 fenêtres, menu Échap, vendeurs à onglets",
         "Ready checks /ready et +35 % de fps dans les foules"
       ],
-      "page": "notes/v0.24.0.html"
+      "page": "notes/v0.24.0.html",
+      "titre_en": "The UI overhaul, beefed-up heroic loot and spell queueing",
+      "resume_en": "A “polish & infrastructure” update: 19 unified windows and a new Escape menu, improved heroic drops [HEROIC] with soulbound marks and a stricter lockout, spell queueing, ready checks, +35% fps in crowds and much faster loading.",
+      "temps_forts_en": [
+        "Heroic loot at ilvl 28, soulbound Heroic Marks, group-wide lockout",
+        "Spell queueing: your next spell fires without delay",
+        "UI overhaul: 19 windows, Escape menu, tabbed vendors",
+        "/ready ready checks and +35% fps in crowds"
+      ]
     },
     {
       "version": "v0.23.0",
@@ -25,7 +33,15 @@
         "10 sets épiques, stats Crit Rating & Haste Rating",
         "Métiers finalisés et banque The Gilded Strongbox"
       ],
-      "page": "notes/v0.23.0.html"
+      "page": "notes/v0.23.0.html",
+      "titre_en": "The Vale Cup, heroic dungeons and the 10 epic sets",
+      "resume_en": "A big endgame update: two new game modes, Heroic difficulty with its Heroic Marks currency, ten epic sets, the Crit & Haste stats, finalised professions and the personal bank.",
+      "temps_forts_en": [
+        "The Vale Cup (boarball) and Protect Yumi, two new game modes",
+        "Heroic difficulty for all 4 dungeons + Heroic Marks",
+        "10 epic sets, Crit Rating & Haste Rating stats",
+        "Finalised professions and The Gilded Strongbox bank"
+      ]
     }
   ]
 }
