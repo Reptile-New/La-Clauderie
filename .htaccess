@@ -17,3 +17,4 @@ RewriteRule ^(.*)$ http://laclauderie.fr/$1 [R=301,L]
 #
 # RewriteCond %{HTTPS} !=on
 # RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
+
