@@ -110,6 +110,20 @@
           "role": "Tank"
         }
       ]
+    },
+    {
+      "pseudo": "Nhawi",
+      "roles": [],
+      "persos": [
+        {
+          "classe": "Chaman",
+          "role": "DPS"
+        },
+        {
+          "classe": "Prêtre",
+          "role": "Heal"
+        }
+      ]
     }
   ]
 }
