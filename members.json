@@ -92,6 +92,26 @@
           "role": "DPS"
         }
       ]
+    },
+    {
+      "pseudo": "Faho",
+      "roles": [
+        "Raid leader"
+      ],
+      "persos": [
+        {
+          "classe": "Chasseur",
+          "role": "DPS"
+        },
+        {
+          "classe": "Chaman",
+          "role": "Heal"
+        },
+        {
+          "classe": "Guerrier",
+          "role": "Tank"
+        }
+      ]
     }
   ]
 }
