@@ -11,24 +11,19 @@
       "membres": []
     },
     {
-      "date": "2026-06-27",
-      "type": "Boss",
-      "portee": "guilde",
-      "codex": "mob|nythraxis_scourge_of_thornpeak",
-      "titre": "Nythraxis, Scourge of Thornpeak",
-      "tags": ["world_first"],
-      "desc": "",
-      "membres": ["Summus", "Pr Reptile"]
-    },
-    {
       "date": "2026-07-09",
       "type": "Boss",
       "portee": "perso",
       "codex": "mob|nythraxis_scourge_of_thornpeak",
       "titre": "Nythraxis, Scourge of Thornpeak",
-      "tags": ["heroic", "world_first"],
+      "tags": [
+        "heroic",
+        "world_first"
+      ],
       "desc": "",
-      "membres": ["Faho"]
+      "membres": [
+        "Faho"
+      ]
     }
   ]
 }
