@@ -8,8 +8,12 @@ RewriteEngine On
 
 # www.laclauderie.fr → laclauderie.fr
 RewriteCond %{HTTP_HOST} ^www\.laclauderie\.fr$ [NC]
-RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
+RewriteRule ^(.*)$ http://laclauderie.fr/$1 [R=301,L]
 
-# http → https (le certificat Let's Encrypt est fourni par OVH)
-RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
+# http → https désactivé temporairement : le certificat Let's Encrypt
+# fourni par OVH n'est pas encore actif, la redirection forcée casse
+# l'accès au site tant qu'il n'est pas généré. À réactiver une fois le
+# certificat actif (onglet SSL de l'hébergement OVH) :
+#
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
