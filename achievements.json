@@ -3,20 +3,32 @@
     {
       "date": "2026-07-09",
       "type": "Boss",
-      "titre": "Nythraxis, Fléau de Thornpeak",
-      "desc": "Vaincu à 5 joueurs en mode normal."
+      "portee": "guilde",
+      "codex": "mob|nythraxis_scourge_of_thornpeak",
+      "titre": "Nythraxis, Scourge of Thornpeak",
+      "desc": "Vaincu à 5 joueurs en mode normal.",
+      "desc_en": "Defeated with 5 players in normal mode.",
+      "membres": []
     },
     {
       "date": "2026-06-27",
       "type": "Boss",
-      "titre": "Nythraxis first world",
-      "desc": "Summus\nPr Reptile"
+      "portee": "guilde",
+      "codex": "mob|nythraxis_scourge_of_thornpeak",
+      "titre": "Nythraxis, Scourge of Thornpeak",
+      "tags": ["world_first"],
+      "desc": "",
+      "membres": ["Summus", "Pr Reptile"]
     },
     {
       "date": "2026-07-09",
       "type": "Boss",
-      "titre": "Heroic Nythraxis First World",
-      "desc": "Faho"
+      "portee": "perso",
+      "codex": "mob|nythraxis_scourge_of_thornpeak",
+      "titre": "Nythraxis, Scourge of Thornpeak",
+      "tags": ["heroic", "world_first"],
+      "desc": "",
+      "membres": ["Faho"]
     }
   ]
 }
