@@ -151,14 +151,9 @@
   @media (max-width: 560px) { .event { grid-template-columns: 56px 1fr; } .event .when { grid-column: 2; text-align: left; margin-top: 2px; } }
 
   /* Membres */
-  .role-group { margin: 0 0 22px; }
-  .role-group:last-child { margin-bottom: 0; }
-  .role-title { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--faint); margin: 0 0 10px; }
   .members { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
   .member { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 12px 15px; }
   .member .avatar { width: 38px; height: 38px; flex: none; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; background: linear-gradient(160deg, #1c2130, #12151d); border: 1px solid var(--line); color: var(--gold-bright); }
-  .member.r-gm .avatar { border-color: var(--q-legendary); color: var(--q-legendary); }
-  .member.r-off .avatar { border-color: var(--q-epic); color: var(--q-epic); }
   .member .who { min-width: 0; }
   .member .who b { display: block; font-size: 0.98rem; line-height: 1.25; }
   .member .who span { font-size: 0.78rem; color: var(--faint); }
@@ -417,8 +412,7 @@
   Promise.all([
     getJson("members.json", { members: [] }),
     getJson("achievements.json", { achievements: [] }),
-    getJson("roles.json", { roles: [] }),
-  ]).then(([md, ad, rd]) => {
+  ]).then(([md, ad]) => {
     FEATS = (ad.achievements || []).sort((a, b) => b.date.localeCompare(a.date));
     if (FEATS.length) $("nFeats").textContent = FEATS.length;
     renderFeats(null);
@@ -435,47 +429,27 @@
     }
     $("nMembers").textContent = list.length;
 
-    // Rôles définis par les officiers (roles.json) ; l'ordre = la hiérarchie
-    // d'affichage. Chaque membre peut cumuler plusieurs rôles : il est rangé
-    // sous son rôle le plus haut, les autres apparaissent en pastilles.
-    const ROLES = (rd.roles || []).length ? rd.roles : ["Membre"];
-    const idx = r => { const i = ROLES.indexOf(r); return i === -1 ? ROLES.length : i; };
-    const rolesOf = m => (m.roles && m.roles.length ? m.roles : (m.role ? [m.role] : []))
-      .slice().sort((a, b) => idx(a) - idx(b));
-    const primary = m => rolesOf(m)[0] || "Membre";
-
-    const groups = new Map();
-    list.forEach(m => {
-      const p = primary(m);
-      if (!groups.has(p)) groups.set(p, []);
-      groups.get(p).push(m);
-    });
-    const order = [...ROLES.filter(r => groups.has(r)), ...[...groups.keys()].filter(r => !ROLES.includes(r))];
-    $("membersBox").innerHTML = order.map(role => {
-      const rankCls = idx(role) === 0 ? "r-gm" : idx(role) === 1 ? "r-off" : "";
-      const rows = groups.get(role)
-        .slice()
-        .sort((a, b) => (a.pseudo || "").localeCompare(b.pseudo || "", "fr"))
-        .map(m => {
-          const n = wins.get(m.pseudo) || 0;
-          const clickable = n > 0;
-          const extras = rolesOf(m).slice(1);
-          const persos = (m.persos || []).map(p => `${p.classe} ${p.role}`).join(" · ");
-          return `<div class="member ${rankCls}${clickable ? " haswins" : ""}"${clickable
-              ? ` data-pseudo="${esc(m.pseudo)}" tabindex="0" role="button" title="Voir les faits d'armes de ${esc(m.pseudo)}"`
-              : ""}>
-            <div class="avatar">${esc((m.pseudo || "?").trim().charAt(0).toUpperCase())}</div>
-            <div class="who"><b>${esc(m.pseudo)}</b><span>${esc(persos || m.classe || role)}</span>
-              ${extras.length ? `<span class="xtras">${extras.map(r => `<span>${esc(r)}</span>`).join("")}</span>` : ""}
-            </div>
-            ${n ? `<span class="fcount">🏆 ${n}</span>` : ""}
-          </div>`;
-        }).join("");
-      return `<div class="role-group">
-        <p class="role-title">${esc(role)} · ${groups.get(role).length}</p>
-        <div class="members">${rows}</div>
-      </div>`;
-    }).join("");
+    // Liste simple triée par pseudo ; pas de hiérarchie entre les rôles,
+    // tous ceux du membre s'affichent en pastilles sur sa carte.
+    const rolesOf = m => (m.roles && m.roles.length ? m.roles : (m.role ? [m.role] : []));
+    $("membersBox").innerHTML = '<div class="members">' + list
+      .slice()
+      .sort((a, b) => (a.pseudo || "").localeCompare(b.pseudo || "", "fr"))
+      .map(m => {
+        const n = wins.get(m.pseudo) || 0;
+        const clickable = n > 0;
+        const tags = rolesOf(m);
+        const persos = (m.persos || []).map(p => `${p.classe} ${p.role}`).join(" · ") || m.classe || "";
+        return `<div class="member${clickable ? " haswins" : ""}"${clickable
+            ? ` data-pseudo="${esc(m.pseudo)}" tabindex="0" role="button" title="Voir les faits d'armes de ${esc(m.pseudo)}"`
+            : ""}>
+          <div class="avatar">${esc((m.pseudo || "?").trim().charAt(0).toUpperCase())}</div>
+          <div class="who"><b>${esc(m.pseudo)}</b>${persos ? `<span>${esc(persos)}</span>` : ""}
+            ${tags.length ? `<span class="xtras">${tags.map(r => `<span>${esc(r)}</span>`).join("")}</span>` : ""}
+          </div>
+          ${n ? `<span class="fcount">🏆 ${n}</span>` : ""}
+        </div>`;
+      }).join("") + '</div>';
 
     // clic sur un membre décoré → ses faits d'armes
     const openFor = el => {
