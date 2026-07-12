@@ -203,27 +203,32 @@
 
     <div class="card">
       <h2 id="faFormTitle">Ajouter un fait d'armes</h2>
-      <p class="help" style="margin-top:-8px">Les faits d'armes s'affichent sur la page d'accueil, du plus récent au plus ancien. Exemple : « Nythraxis, Fléau de Thornpeak — vaincu à 5 joueurs en mode normal ».</p>
+      <p class="help" style="margin-top:-8px">Tout se choisit en cliquant : la portée, le type, puis le boss ou le donjon (listes tirées du Codex, toujours à jour du patch). Le titre se remplit tout seul — il ne se tape à la main que pour un fait PvP ou « Autre ».</p>
       <div class="grid2">
         <div>
           <label for="gDate">Date</label>
           <input id="gDate" type="date">
         </div>
         <div>
-          <label for="gType">Type</label>
-          <select id="gType">
-            <option>Boss</option>
-            <option>Donjon</option>
-            <option>PvP</option>
-            <option>Autre</option>
-          </select>
+          <label>Portée</label>
+          <div id="gPortee" class="chkgrid"></div>
         </div>
       </div>
-      <label for="gTitre">Titre</label>
-      <input id="gTitre" type="text" placeholder="Nythraxis, Fléau de Thornpeak">
-      <label for="gDesc">Détail</label>
+      <label>Type</label>
+      <div id="gTypes" class="chkgrid"></div>
+      <div id="gCibleWrap" class="hidden">
+        <label id="gCibleLabel">Quel boss ?</label>
+        <div id="gCibles" class="chkgrid"></div>
+      </div>
+      <label for="gTitre">Titre <span style="font-weight:400;color:var(--faint)">(rempli automatiquement quand tu cliques une cible)</span></label>
+      <input id="gTitre" type="text" placeholder="Clique un boss ci-dessus, ou tape un titre libre">
+      <label>Options</label>
+      <div id="gTags" class="chkgrid"></div>
+      <label for="gDesc">Commentaire <span style="font-weight:400;color:var(--faint)">(facultatif)</span></label>
       <textarea id="gDesc" placeholder="Vaincu à 5 joueurs en mode normal."></textarea>
-      <label>Membres qui y ont participé</label>
+      <label for="gDescEn">Commentaire en anglais <span style="font-weight:400;color:var(--faint)">(facultatif — affiché sur la version anglaise du site ; sinon c'est le français qui s'affiche)</span></label>
+      <textarea id="gDescEn" placeholder="Defeated with 5 players in normal mode."></textarea>
+      <label>Membres qui y ont participé <span id="gMembresHint" style="font-weight:400;color:var(--faint)"></span></label>
       <div id="gMembres" class="chkgrid"><p class="sub" style="margin:0">Ajoute d'abord des membres pour pouvoir les cocher ici.</p></div>
       <div class="row">
         <button class="btn btn-primary" id="faAddBtn">+ Ajouter aux faits d'armes</button>
@@ -502,9 +507,11 @@
         const i = faits().indexOf(g);
         const who = (g.membres || []).length
           ? `<br><span class="meta">👥 ${g.membres.map(escapeHtml).join(", ")}</span>` : "";
+        const portee = `<span class="type ${g.portee === "perso" ? "t-pvp" : "t-social"}">${g.portee === "perso" ? "perso" : "guilde"}</span>`;
+        const tags = (g.tags || []).map(t => `<span class="type t-raid">${escapeHtml(FA_TAGS[t] || t)}</span>`).join("");
         return `<div class="ev">
           <span class="d">${humanDate(g.date)}</span>
-          <span><span class="t">${escapeHtml(g.titre || "")}</span><span class="type ${cls}">${g.type || ""}</span><br><span class="meta">${escapeHtml(g.desc || "")}</span>${who}</span>
+          <span><span class="t">${escapeHtml(g.titre || "")}</span><span class="type ${cls}">${g.type || ""}</span>${portee}${tags}<br><span class="meta">${escapeHtml(g.desc || "")}</span>${who}</span>
           <span class="row" style="flex-wrap:nowrap">
             <button class="btn btn-ghost" style="padding:6px 12px;font-size:0.82rem" data-faedit="${i}">Modifier</button>
             <button class="btn btn-danger" data-fai="${i}">Supprimer</button>
@@ -747,6 +754,83 @@
 
   // ---- Faits d'armes : ajout / modification / suppression ----
   const FA_TYPE_CLASS = { "Boss": "t-raid", "Donjon": "t-hero", "PvP": "t-pvp", "Autre": "t-social" };
+  const FA_TYPES = ["Boss", "Donjon", "PvP", "Autre"];
+  // Options cliquables : clé stable dans le JSON, libellé français ici.
+  // (la page d'accueil porte la traduction anglaise de chaque clé)
+  const FA_TAGS = {
+    world_first:  "🌍 World first",
+    server_first: "🥇 Premier du serveur",
+    heroic:       "🔥 Héroïque",
+    deathless:    "😇 Sans mort",
+    solo:         "🗡️ En solo",
+  };
+  const FA_PORTEES = [["guilde", "🏰 Guilde"], ["perso", "👤 Personnel"]];
+
+  // Boss et donjons du jeu, tirés du Codex (mêmes données que la page Builds) :
+  // les listes cliquables sont donc toujours à jour du patch.
+  const onLocal = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
+  const CODEX_DATA = onLocal ? "/wocc-knowledge-base/data" : "https://reptile-new.github.io/wocc-knowledge-base/data";
+  let BOSSES = [];  // { ref:"mob|id", name, lvl, wb }
+  let PLACES = [];  // { ref:"dungeon|id" ou "delve|id", name, delve }
+
+  async function loadGameData() {
+    try {
+      const asList = x => !x ? [] : Array.isArray(x) ? x : Object.values(x);
+      const [mobs, dgs, dvs] = await Promise.all(
+        ["MOBS", "DUNGEONS", "DELVES"].map(f =>
+          fetch(`${CODEX_DATA}/${f}.json`).then(r => r.ok ? r.json() : null).catch(() => null))
+      );
+      BOSSES = asList(mobs).filter(m => m.boss)
+        .sort((a, b) => (a.minLevel || 0) - (b.minLevel || 0) || a.name.localeCompare(b.name))
+        .map(m => ({ ref: "mob|" + m.id, name: m.name, lvl: m.minLevel, wb: !!m.worldBoss }));
+      PLACES = [
+        ...asList(dgs).map(d => ({ ref: "dungeon|" + d.id, name: d.name, delve: false })),
+        ...asList(dvs).map(d => ({ ref: "delve|" + d.id, name: d.name, delve: true })),
+      ];
+    } catch (e) { /* Codex injoignable : la saisie libre du titre marche toujours */ }
+    renderFaForm();
+  }
+
+  // Sélection en cours du formulaire (le titre et les textes restent des champs).
+  let faSel = { portee: "guilde", type: "Boss", codex: null, tags: [] };
+
+  function renderFaForm() {
+    // portée : guilde ou personnel
+    $("gPortee").innerHTML = FA_PORTEES.map(([v, l]) =>
+      `<label class="chk"><input type="radio" name="gPortee" value="${v}"${faSel.portee === v ? " checked" : ""}> ${l}</label>`).join("");
+    document.querySelectorAll("#gPortee input").forEach(r => r.addEventListener("change", () => {
+      faSel.portee = r.value;
+      $("gMembresHint").textContent = faSel.portee === "perso" ? "(au moins un, pour un fait personnel)" : "(facultatif)";
+    }));
+    $("gMembresHint").textContent = faSel.portee === "perso" ? "(au moins un, pour un fait personnel)" : "(facultatif)";
+    // type
+    $("gTypes").innerHTML = FA_TYPES.map(t =>
+      `<label class="chk"><input type="radio" name="gType" value="${t}"${faSel.type === t ? " checked" : ""}> ${t}</label>`).join("");
+    document.querySelectorAll("#gTypes input").forEach(r => r.addEventListener("change", () => {
+      faSel.type = r.value;
+      faSel.codex = null;
+      renderFaForm();
+    }));
+    // cibles cliquables selon le type
+    const list = faSel.type === "Boss" ? BOSSES : faSel.type === "Donjon" ? PLACES : [];
+    $("gCibleWrap").classList.toggle("hidden", !list.length);
+    if (list.length) {
+      $("gCibleLabel").textContent = faSel.type === "Boss" ? "Quel boss ? (clique — ⭐ = world boss)" : "Quel donjon ?";
+      $("gCibles").innerHTML = list.map(c =>
+        `<label class="chk"><input type="radio" name="gCible" value="${escapeHtml(c.ref)}"${faSel.codex === c.ref ? " checked" : ""}> ${c.wb ? "⭐ " : ""}${escapeHtml(c.name)}${c.lvl ? ` <span style="color:var(--faint);font-size:0.78em">niv ${c.lvl}</span>` : ""}${c.delve ? ' <span style="color:var(--faint);font-size:0.78em">délve</span>' : ""}</label>`).join("");
+      document.querySelectorAll("#gCibles input").forEach(r => r.addEventListener("change", () => {
+        faSel.codex = r.value;
+        const c = list.find(x => x.ref === r.value);
+        if (c) $("gTitre").value = c.name; // le nom du jeu (en anglais) devient le titre
+      }));
+    }
+    // options
+    $("gTags").innerHTML = Object.entries(FA_TAGS).map(([k, l]) =>
+      `<label class="chk"><input type="checkbox" value="${k}"${faSel.tags.includes(k) ? " checked" : ""}> ${l}</label>`).join("");
+    document.querySelectorAll("#gTags input").forEach(c => c.addEventListener("change", () => {
+      faSel.tags = [...document.querySelectorAll("#gTags input:checked")].map(x => x.value);
+    }));
+  }
 
   function setFaFormMode() {
     const editing = faEditIndex !== null;
@@ -760,9 +844,16 @@
     if (!g) return;
     faEditIndex = i;
     $("gDate").value = g.date || "";
-    $("gType").value = g.type || "Autre";
+    faSel = {
+      portee: g.portee === "perso" ? "perso" : "guilde",
+      type: FA_TYPES.includes(g.type) ? g.type : "Autre",
+      codex: g.codex || null,
+      tags: [...(g.tags || [])],
+    };
     $("gTitre").value = g.titre || "";
     $("gDesc").value = g.desc || "";
+    $("gDescEn").value = g.desc_en || "";
+    renderFaForm();
     renderMemberChecks(g.membres || []);
     setFaFormMode();
     $("faFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -770,8 +861,10 @@
 
   function cancelEditFait() {
     faEditIndex = null;
-    $("gTitre").value = ""; $("gDesc").value = "";
+    faSel = { portee: "guilde", type: "Boss", codex: null, tags: [] };
+    $("gTitre").value = ""; $("gDesc").value = ""; $("gDescEn").value = "";
     $("gDate").value = new Date().toISOString().slice(0, 10);
+    renderFaForm();
     renderMemberChecks([]);
     setFaFormMode();
   }
@@ -779,16 +872,23 @@
   async function submitFait() {
     clearMsg($("dashMsg"));
     const date = $("gDate").value;
-    const type = $("gType").value;
     const titre = $("gTitre").value.trim();
     const desc = $("gDesc").value.trim();
-    if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre.", "err"); return; }
+    const descEn = $("gDescEn").value.trim();
     const membresFait = checkedMembers();
+    if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre (clique un boss ou un donjon, ou tape un titre).", "err"); return; }
+    if (faSel.portee === "perso" && !membresFait.length) {
+      msg($("dashMsg"), "Un fait d'armes personnel doit citer au moins un membre — coche-le en bas du formulaire.", "err"); return;
+    }
+    const entry = { date, type: faSel.type, portee: faSel.portee, titre, desc, membres: membresFait };
+    if (faSel.codex) entry.codex = faSel.codex;
+    if (faSel.tags.length) entry.tags = [...faSel.tags];
+    if (descEn) entry.desc_en = descEn;
     const editing = faEditIndex !== null;
     const backup = editing ? faits()[faEditIndex] : null;
     $("faAddBtn").disabled = true; $("faAddBtn").textContent = "Enregistrement…";
-    if (editing) faits()[faEditIndex] = { date, type, titre, desc, membres: membresFait };
-    else faits().push({ date, type, titre, desc, membres: membresFait });
+    if (editing) faits()[faEditIndex] = entry;
+    else faits().push(entry);
     try {
       await save(FILES.faits, "faits d'armes : " + (editing ? "modification" : "ajout") + " « " + titre + " »");
       msg($("dashMsg"), (editing ? "Fait d'armes modifié" : "Fait d'armes ajouté") + " ✓ Le site se met à jour dans ~1 min.", "ok");
@@ -831,6 +931,7 @@
     setMbFormMode();
     setFaFormMode();
     renderPersos();
+    renderFaForm();
     render();
   }
 
@@ -868,6 +969,9 @@
     localStorage.removeItem("clauderie_token");
     location.reload();
   });
+
+  // listes de boss / donjons du Codex (indépendant de la connexion)
+  loadGameData();
 
   // auto-login si jeton mémorisé
   (function () {
