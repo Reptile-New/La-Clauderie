@@ -62,9 +62,12 @@ site) :
 - **Référence** : un id du jeu ou un nom (insensible aux accents ; un nom
   partiel suffit s'il est sans ambiguïté).
 - **Toujours à jour, zéro maintenance** : les fiches lisent les JSON du
-  [Codex](https://github.com/Reptile-New/wocc-knowledge-base) en direct (même
-  domaine GitHub Pages), et le Codex se régénère tout seul à chaque release du
-  jeu. Rien à copier, rien à synchroniser.
+  [Codex](https://github.com/Reptile-New/wocc-knowledge-base). Sur
+  laclauderie.fr ils sont servis par le domaine lui-même (`/data/`, copiés par
+  le déploiement — voir « Mise en ligne ») ; ailleurs (miroir GitHub Pages,
+  dev local) ils sont lus directement sur le GitHub Pages du Codex. Le Codex
+  se régénère tout seul à chaque release du jeu. Rien à copier, rien à
+  synchroniser.
 - Le script est inclus sur toutes les pages ; la fiche s'ouvre au-dessus des
   modales existantes, avec navigation interne (une fiche peut mener à une
   autre, bouton « ← » pour revenir) et un lien « Fiche complète dans le
@@ -115,6 +118,22 @@ push sur `main` :
 
 Les mises à jour faites depuis l'espace officiers arrivent donc sur
 laclauderie.fr toutes seules, comme avant (~1 à 2 min).
+
+### Le Codex sur laclauderie.fr/codex/
+
+Le **Codex WoCC** reste développé dans son propre repo
+([wocc-knowledge-base](https://github.com/Reptile-New/wocc-knowledge-base)),
+mais il est **servi sur le domaine** : cliquer « 📚 Codex » dans la barre de
+navigation reste sur <https://laclauderie.fr/codex/>, sans détour par GitHub.
+Concrètement, le workflow `deploy-ovh.yml` embarque à chaque passage une copie
+du repo du Codex (public) : sa page sous `www/codex/` et ses données JSON sous
+`www/data/`. Comme le Codex se met à jour tout seul à chaque release du jeu,
+le workflow tourne aussi périodiquement (toutes les 6 h) pour rafraîchir la
+copie — et un lancement manuel (**Actions → Deploy La Clauderie sur OVH →
+Run workflow**) la rafraîchit immédiatement si besoin. Sur le miroir GitHub
+Pages et en dev local, les liens « Codex » sont repointés automatiquement
+(par `assets/codex-popup.js`) vers l'adresse du Codex propre à cet
+environnement.
 
 ### Configuration OVH (une seule fois)
 

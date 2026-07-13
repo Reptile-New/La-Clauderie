@@ -781,7 +781,10 @@
   // Boss et donjons du jeu, tirés du Codex (mêmes données que la page Builds) :
   // les listes cliquables sont donc toujours à jour du patch.
   const onLocal = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
-  const CODEX_DATA = onLocal ? "/wocc-knowledge-base/data" : "https://reptile-new.github.io/wocc-knowledge-base/data";
+  const onLaclauderie = /(^|\.)laclauderie\.fr$/.test(location.hostname);
+  const CODEX_DATA = onLaclauderie ? "/data"
+    : onLocal ? "/wocc-knowledge-base/data"
+    : "https://reptile-new.github.io/wocc-knowledge-base/data";
   let BOSSES = [];  // { ref:"mob|id", name, lvl, wb }
   let PLACES = [];  // { ref:"dungeon|id" ou "delve|id", name, delve }
 

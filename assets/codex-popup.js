@@ -32,17 +32,23 @@ const T = pair => pair[LANG];
 /* ---------- configuration ---------- */
 
 const GH_PAGES = 'https://reptile-new.github.io/wocc-knowledge-base';
+// Sur laclauderie.fr, le Codex est copié sur l'hébergement à chaque
+// déploiement : la page sous /codex/, les JSON sous /data/ — tout se lit en
+// même origine, sans jamais quitter le domaine.
 // En local (python3 -m http.server à la racine du dossier parent), le repo
 // du codex est servi sous le même hôte : on garde des chemins relatifs au host.
-// Partout ailleurs (laclauderie.fr, GitHub Pages…), on lit les JSON du Codex
+// Partout ailleurs (miroir GitHub Pages…), on lit les JSON du Codex
 // directement sur son GitHub Pages, qui autorise les requêtes cross-origin.
 const onLocal = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
+const onLaclauderie = /(^|\.)laclauderie\.fr$/.test(location.hostname);
 const DATA_BASE = window.CODEX_DATA_BASE ||
-  (onLocal ? '/wocc-knowledge-base/data' : GH_PAGES + '/data');
-const CODEX_SITE = GH_PAGES + '/site/index.html';
+  (onLaclauderie ? '/data' : onLocal ? '/wocc-knowledge-base/data' : GH_PAGES + '/data');
+const CODEX_SITE = onLaclauderie ? '/codex/'
+  : onLocal ? '/wocc-knowledge-base/site/index.html'
+  : GH_PAGES + '/site/index.html';
 // Racine du site de la guilde : « / » sur laclauderie.fr, « /La-Clauderie/ »
 // ailleurs (GitHub Pages, dev local) — pour les liens internes des fiches.
-const SITE_BASE = /(^|\.)laclauderie\.fr$/.test(location.hostname) ? '/' : '/La-Clauderie/';
+const SITE_BASE = onLaclauderie ? '/' : '/La-Clauderie/';
 
 const FILES = ['ITEMS','MOBS','NPCS','QUESTS','DUNGEONS','DELVES','ITEM_SETS',
                'WORLD_BOSSES','ZONES','HEROIC_BOSS_LOOT','ABILITIES','TALENTS','_meta'];
@@ -757,8 +763,19 @@ function enhance(root) {
     if (!el.title) el.title = T({ fr: 'Voir la fiche', en: 'View the sheet' });
   });
 }
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => enhance());
-else enhance();
+/* Les liens de navigation vers le Codex sont écrits pour laclauderie.fr
+   (« /codex/ ») ; ailleurs (miroir GitHub Pages, dev local), on les repointe
+   vers l'adresse du Codex propre à l'environnement. */
+function fixCodexLinks() {
+  if (onLaclauderie) return;
+  document.querySelectorAll('a[href^="/codex/"]').forEach(a => {
+    a.setAttribute('href', CODEX_SITE + a.getAttribute('href').slice('/codex/'.length));
+  });
+}
+
+const boot = () => { enhance(); fixCodexLinks(); };
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
 
 window.CodexPopup = { open: openRef, enhance };
 

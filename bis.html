@@ -174,7 +174,7 @@
       <a href="index.html" data-en="Home">Accueil</a>
       <a href="bis.html" class="cur">⚔️ Builds</a>
       <a href="patch-notes.html" data-en="📜 What&#39;s new">📜 Nouveautés</a>
-      <a href="https://reptile-new.github.io/wocc-knowledge-base/">📚 Codex</a>
+      <a href="/codex/">📚 Codex</a>
     </nav>
   </div>
 </div>
@@ -8032,7 +8032,11 @@ function iconFor(item) {
 }
 
 // Fiche détaillée de l'objet dans le codex WoCC (drops, vendeurs, panoplies…)
-const CODEX = "https://reptile-new.github.io/wocc-knowledge-base/site/index.html";
+// Sur laclauderie.fr le Codex est servi sur le domaine (« /codex/ ») ; en
+// local il est sous le même hôte ; ailleurs, sur son GitHub Pages.
+const CODEX = /(^|\.)laclauderie\.fr$/.test(location.hostname) ? "/codex/"
+  : /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname) ? "/wocc-knowledge-base/site/index.html"
+  : "https://reptile-new.github.io/wocc-knowledge-base/site/index.html";
 const ITEM_REG = {};
 const ilink = it => { ITEM_REG[it.id] = it;
   return `<a class="ilink" href="${CODEX}#item/${it.id}" data-iid="${it.id}" title="${LANG === "en" ? "View item details" : "Voir le détail de l'objet"}">${it.name}</a>`; };
