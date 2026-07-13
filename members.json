@@ -136,6 +136,16 @@
           "role": "DPS"
         }
       ]
+    },
+    {
+      "pseudo": "Drogunard",
+      "roles": [],
+      "persos": [
+        {
+          "classe": "Druide",
+          "role": "Heal"
+        }
+      ]
     }
   ]
 }
