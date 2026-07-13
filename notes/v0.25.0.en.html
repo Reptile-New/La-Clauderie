@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>What's new in v0.25.0 — La Clauderie</title>
+<meta name="description" content="Everything new in World of ClaudeCraft v0.25.0, with the exact rules.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="What&#39;s new in v0.25.0 — La Clauderie">
+<meta property="og:description" content="Everything new in World of ClaudeCraft v0.25.0, with the exact rules.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.25.0.en.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.25.0.en.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') !== 'en') location.replace('v0.25.0.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" aria-label="Navigation du site">
+      <a href="../index.html" data-en="Home">Accueil</a>
+      <a href="../bis.html">⚔️ Builds</a>
+      <a href="../patch-notes.html" class="cur" data-en="📜 What&#39;s new">📜 Nouveautés</a>
+      <a href="/codex/">📚 Codex</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Release notes</p>
+    <h1>What's new in <span class="v">v0.25.0</span></h1>
+    <p class="lede">The biggest endgame update since v0.23.0: the heroic Nythraxis raid and its Deathless Court, a real signature ability for all 27 specializations, 192 achievements in the Book of Deeds and the Honor & Warfare PvP progression. Click a bubble for the detailed rules.</p>
+    <div class="meta">
+      <span><b>Released</b> July 14, 2026</span>
+      <span><b>350</b> commits</span>
+      <span><b>Progression, endgame, PvP</b> & presentation</span>
+    </div>
+    <div class="hint">💡 Click a feature to open its detailed rules — and the <span data-codex="term|proc">underlined words</span> for their definition.</div>
+  </header>
+
+  <!-- 1 HEROIC RAID -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>The heroic Nythraxis raid — read before the next raid night</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="court" tabindex="0" role="button" aria-label="Details: The Deathless Court">
+        <h3>The Deathless Court <span class="chip c-raid">Raid</span></h3>
+        <p>The <span data-codex="mob|Nythraxis">Nythraxis</span> raid (10 players) gets its heroic tier: after Deathless Rage, <strong class="hl">three spirits</strong> join the fight.</p>
+        <span class="more-link">The three spirits' mechanics</span>
+      </div>
+      <div class="card more" data-detail="hloot25" tabindex="0" role="button" aria-label="Details: Heroic raid loot">
+        <h3>Heroic raid loot <span class="chip c-epic">Loot</span></h3>
+        <p>Set pieces upgraded to <span data-codex="term|ilvl">ilvl</span> 33, legendaries to ilvl 37 (<span data-codex="term|proc">procs</span> preserved), and <strong class="hl">an exclusive weapon on every kill</strong>.</p>
+        <span class="more-link">All the rewards</span>
+      </div>
+      <div class="card more" data-detail="lootqol" tabindex="0" role="button" aria-label="Details: Fairer loot and lockout">
+        <h3>Fairer loot & <span data-codex="term|lockout">lockout</span> <span class="chip c-new">QoL</span></h3>
+        <p>A disconnected winner no longer loses their item: it <strong class="hl">returns to the corpse</strong>. Eligible ghosts can reclaim their loot.</p>
+        <span class="more-link">The new rules</span>
+      </div>
+      <div class="card">
+        <h3>Key takeaways for raid nights</h3>
+        <ul>
+          <li>Still <strong class="hl">10 players</strong> — same comp, a difficulty above.</li>
+          <li><span data-codex="mob|Spirit of Malric">Malric</span>'s heal only stops on a <strong class="hl">real interrupt</strong> — good thing every class has one now (section 02).</li>
+          <li><span data-codex="mob|Spirit of Voss">Voss</span> ignores taunts: crowd control is back on duty.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 TALENTS 2.0 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Talents 2.0 — every spec gets its signature ability</h2></div>
+    <p class="sec-sub">Picking one of the 27 specializations now grants a real dedicated ability and a mastery that changes how it plays — 24 new abilities in total.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="sigs" tabindex="0" role="button" aria-label="Details: The 27 signature abilities">
+        <h3>27 signatures <span class="chip c-new">Classes</span></h3>
+        <p>From <span data-codex="ability|Holy Shock">Holy Shock</span> to <span data-codex="ability|Chain Heal">Chain Heal</span> to <span data-codex="ability|Dread Aspect">Dread Aspect</span>: your spec's defining ability, straight into the spellbook.</p>
+        <span class="more-link">The full list by class</span>
+      </div>
+      <div class="card more" data-detail="kicks" tabindex="0" role="button" aria-label="Details: An interrupt for every class">
+        <h3>An interrupt for every class <span class="chip c-bal">Combat</span></h3>
+        <p><span data-codex="ability|Jawcrack">Jawcrack</span>, <span data-codex="ability|Boot">Boot</span>, <span data-codex="ability|Spellbreak">Spellbreak</span>… seven classes get their dedicated spell interrupt.</p>
+        <span class="more-link">Who interrupts what, and for how long</span>
+      </div>
+      <div class="card">
+        <h3>Also in combat</h3>
+        <ul>
+          <li>Casts finally respect <strong class="hl">spell haste</strong> correctly.</li>
+          <li>Multi-buff abilities stop evicting their companion auras.</li>
+          <li>Masteries scale with level (automatically rebaked as you level up).</li>
+          <li>The trees' <strong class="hl">choice rows</strong> will arrive in a later phase.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 BOOK OF DEEDS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Book of Deeds — achievements have arrived</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="deeds" tabindex="0" role="button" aria-label="Details: The Book of Deeds">
+        <h3>192 achievements <span class="chip c-new">System</span></h3>
+        <p><span class="kbd">Shift+Z</span> opens the book: <strong class="hl">2,365 Renown</strong> to earn across progression, combat, dungeons, delves, PvP, exploration… and hidden feats.</p>
+        <span class="more-link">The full tour of the system</span>
+      </div>
+      <div class="card">
+        <h3>19 titles to show off</h3>
+        <ul>
+          <li>Titles render <strong class="hl">everywhere</strong>: nameplates, target frames, chat, friends and guild rosters, inspect cards, leaderboards.</li>
+          <li>3 badge borders for the character sheet.</li>
+          <li>Public Renown board with self rank and percentile.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Retroactive, without the spam</h3>
+        <ul>
+          <li>Progress you already made is <strong class="hl">credited automatically</strong> — no wall of banners on first login.</li>
+          <li>New lifetime counters start from the release.</li>
+          <li>Three Chronicler NPCs in the world, including <span data-codex="npc|Saul the Chronicler">Saul the Chronicler</span>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 PVP -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>PvP — Honor & Warfare</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="honor" tabindex="0" role="button" aria-label="Details: Persistent Honor">
+        <h3>Persistent Honor <span class="chip c-pvp">Currency</span></h3>
+        <p>Ranked Arena wins, Fiesta combat and match results award <strong class="hl">Honor</strong> that never expires.</p>
+        <span class="more-link">How you earn it</span>
+      </div>
+      <div class="card more" data-detail="fury" tabindex="0" role="button" aria-label="Details: FURY, the quartermaster">
+        <h3><span data-codex="npc|FURY">FURY</span>, quartermaster <span class="chip c-epic">Vendor</span></h3>
+        <p>40 epic <span data-codex="term|ilvl">ilvl</span> 28 pieces: 4 complete sets, rings, necklaces and 3 weapons — paid in Honor.</p>
+        <span class="more-link">The catalogue and prices</span>
+      </div>
+      <div class="card">
+        <h3>Warfare rating</h3>
+        <ul>
+          <li>Every PvP piece carries <strong class="hl">offensive and defensive Warfare</strong>: more damage dealt to players, less damage taken from players.</li>
+          <li>Separate internal caps for offense and defense.</li>
+          <li><strong class="hl">No effect in PvE</strong> — the site's raid BiS is unchanged.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 STORE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>WOC Store & Season 1 Armory</h2></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>The chest becomes the store</h3>
+        <ul>
+          <li>The chest opens on a combined <strong class="hl">Store + Daily Rewards</strong> experience (the Daily Rewards tab stays right beside it).</li>
+          <li><strong class="hl">Claudium</strong> packs with Card, SOL and WOC purchase rails, shown based on availability.</li>
+          <li>Purely cosmetic: none of it grants in-game power.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>28 weapon skins, account-wide</h3>
+        <ul>
+          <li>Eight weapon families: sword, axe, mace, dagger, staff, wand, bow, crossbow.</li>
+          <li>Four collections — <strong class="hl">Guildmark, Emberwrought, Hoarfrost, Fallen Star</strong> — from uncommon to legendary presentation.</li>
+          <li>Ownership is <strong class="hl">account-wide</strong>, with a loadout per weapon type.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 PROFESSIONS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Professions & gathering</h2></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Gathering (really) levels you up</h3>
+        <ul>
+          <li>Gathering and crafting now grant <strong class="hl">character XP</strong>, through the normal progression path.</li>
+          <li>Rewards scale with content level, with a <strong class="hl">green-to-gray</strong> falloff: trivial farming grants nothing.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Nodes in every zone</h3>
+        <ul>
+          <li>Every leveling zone now has <strong class="hl">ore, wood and herb</strong> nodes.</li>
+          <li>Mirefen gets a complete spread, Thornpeak its very first nodes.</li>
+          <li>In Eastbrook, ore points toward the Copper Dig.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 THE REST -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>The rest of the update</h2></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Social & safety</h3>
+        <ul>
+          <li><strong class="hl">Personal mute</strong>: hides a player's public chat and overhead bubble, without breaking the friendship.</li>
+          <li>Names in chat are <strong class="hl">clickable</strong> (and tappable on mobile).</li>
+          <li><span class="kbd">/play</span> entry goes online-only, with first-class <strong class="hl">Discord</strong> login.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Sound & visuals</h3>
+        <ul>
+          <li>New <strong class="hl">SFX Studio</strong> (internal tool) and hot-deployable sound packs.</li>
+          <li>Rabbits, squirrels, songbirds, fish, gathering nodes, the mailbox and delve props move to <strong class="hl">optimized GLBs</strong> — lighter, smoother.</li>
+          <li>All 5 equippable bags plus the backpack get real painted 128px art.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Localization</h3>
+        <ul>
+          <li><strong class="hl">7,217 localized keys</strong> (151,557 locale rows in total).</li>
+          <li>All 21 non-English languages remain at <strong class="hl">zero pending entries</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Stability & tech</h3>
+        <ul>
+          <li>Lost-pet route recovery is bounded to <strong class="hl">96 yards</strong>.</li>
+          <li>Automatic WebSocket reconnection when the mobile app returns to the foreground.</li>
+          <li>Production CPU incident capture with correlated evidence.</li>
+          <li>Full validation: <strong class="hl">13,383 tests passed</strong> across 1,060 files.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compiled for <strong>La Clauderie</strong> — data and rules from the official v0.25.0 release notes.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← All updates</a> · <a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Close">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    court: {
+      title: "The Deathless Court",
+      summary: "The Nythraxis raid's heroic tier (10 players) adds the Deathless Court encounter: three elite spirits enter the fight after Deathless Rage.",
+      body: `
+        <h4>The three spirits</h4>
+        <ul>
+          <li><b><span data-codex="mob|Spirit of Malric">Spirit of Malric</span></b> — holds position and channels <b>Malric's Mending</b>, an escalating heal that only breaks on a <b>real interrupt</b>. THE priority of the fight.</li>
+          <li><b><span data-codex="mob|Spirit of Aldren">Spirit of Aldren</span></b> — the Court's warrior spirit, handled in melee.</li>
+          <li><b><span data-codex="mob|Spirit of Voss">Spirit of Voss</span></b> — <b>untauntable</b>, but crowd-controllable: roots, stuns and slows are back on duty.</li>
+        </ul>
+        <h4>How to prepare</h4>
+        <ul>
+          <li>Plan an <b>interrupt rotation</b> on Malric — every class now has a dedicated interrupt (see the Talents 2.0 section).</li>
+          <li>Assign a crowd-control player to Voss rather than a tank.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">For the guild: normal Nythraxis is already on our record — the Deathless Court is the goal of the next raid nights.</p>`
+    },
+    hloot25: {
+      title: "Heroic raid loot",
+      summary: "The heroic kill upgrades existing rewards and adds exclusive weapons.",
+      body: `
+        <h4>The upgrades</h4>
+        <ul>
+          <li>The raid's <b>set pieces</b> upgrade to <span data-codex="term|ilvl">item level</span> <b>33</b> on heroic.</li>
+          <li><b>Legendaries</b> upgrade to ilvl <b>37</b> — keeping their <span data-codex="term|proc">procs</span>: <span data-codex="item|Heartwood of the Deathless Crown">Heartwood of the Deathless Crown</span> keeps Deathbloom/Lifebloom, <span data-codex="item|Thronebane, Last Oath of Thornpeak">Thronebane, Last Oath of Thornpeak</span> keeps its chain arc.</li>
+        </ul>
+        <h4>The three exclusive heroic weapons</h4>
+        <p>On <b>every heroic kill</b>, one of the three drops:</p>
+        <ul>
+          <li><b><span data-codex="item|Deathless Greatblade">Deathless Greatblade</span></b> — the two-hander for Strength wearers (warrior, paladin, shaman).</li>
+          <li><b><span data-codex="item|Scepter of the Deathless Court">Scepter of the Deathless Court</span></b> — the casters' scepter (mage, priest, warlock, druid).</li>
+          <li><b><span data-codex="item|Stormcaller's Focus">Stormcaller's Focus</span></b> — the paladin/shaman hybrid focus.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">The site's <span data-codex="term|bis">BiS</span> will be recomputed on the new data — the Builds pages follow the Codex automatically.</p>`
+    },
+    lootqol: {
+      title: "Fairer loot & lockout",
+      summary: "Three fixes that prevent end-of-night drama.",
+      body: `
+        <ul>
+          <li>The <span data-codex="term|lockout">lockout</span> roster is clipped to the raid's <b>own instance slot</b> — no more ghost locks.</li>
+          <li>If a Need/Greed or master-loot winner is <b>disconnected</b>, the item <b>returns to the corpse</b> instead of being destroyed.</li>
+          <li><b>Eligible ghosts</b> can reclaim raid loot — dying on the kill no longer costs you the drop.</li>
+        </ul>`
+    },
+    sigs: {
+      title: "The 27 signature abilities",
+      summary: "Every specialization gets its defining ability and a mastery that shapes its playstyle. Click an ability name for its sheet.",
+      body: `
+        <h4>Warrior</h4>
+        <ul>
+          <li><b>Battlecraft (DPS)</b> — <span data-codex="ability|Maiming Strike">Maiming Strike</span> · Sharpened Blades mastery: +15% melee ability damage, +25% critical damage.</li>
+          <li><b>Bloodrush (DPS)</b> — <span data-codex="ability|Bloodletting">Bloodletting</span> · Bloodletter mastery: +10% crit, +10% melee ability damage.</li>
+          <li><b>Ironguard (Tank)</b> — <span data-codex="ability|Shieldcrack">Shieldcrack</span> · Recompense mastery: +50% threat, +20% armor.</li>
+        </ul>
+        <h4>Paladin</h4>
+        <ul>
+          <li><b>Sacrament (Heal)</b> — <span data-codex="ability|Holy Shock">Holy Shock</span> · Kindled Faith mastery: critical heals heal for double.</li>
+          <li><b>Vigil (Tank)</b> — <span data-codex="ability|Hallowed Wall">Hallowed Wall</span> · Oathward mastery: +50% threat, +20% armor. Plus <span data-codex="ability|Sacred Goad">Sacred Goad</span>, the 30-yard taunt.</li>
+          <li><b>Requital (DPS)</b> — <span data-codex="ability|Crusader Strike">Crusader Strike</span> · Blood Debt mastery: +20% Holy and physical ability damage.</li>
+        </ul>
+        <h4>Shaman</h4>
+        <ul>
+          <li><b>Thundercall (DPS)</b> — <span data-codex="ability|Primal Mastery">Primal Mastery</span> (your next spell becomes instant) · Earthen Fury mastery.</li>
+          <li><b>Warspirit (DPS)</b> — <span data-codex="ability|Ancestral Strike">Ancestral Strike</span> · Skyrend mastery: +10% attack speed and physical ability damage.</li>
+          <li><b>Spiritmend (Heal)</b> — <span data-codex="ability|Chain Heal">Chain Heal</span>, with deterministic injured-target bounces · Cleansing Tides mastery: healing spells cost 20% less mana.</li>
+        </ul>
+        <h4>Druid</h4>
+        <ul>
+          <li><b>Moongrove (DPS)</b> — <span data-codex="ability|Moonwing Form">Moonwing Form</span> · Moonrage mastery: +15% spell damage, +10% haste.</li>
+          <li><b>Wildfang (Tank)</b> — <span data-codex="ability|Primal Surge">Primal Surge</span> · Primal Heart mastery: +15% physical and bleed damage, +20% threat.</li>
+          <li><b>Groveheart (Heal)</b> — <span data-codex="ability|Swiftmend">Swiftmend</span> · Grove's Gift mastery: heal-over-time effects heal 25% more.</li>
+        </ul>
+        <h4>Priest</h4>
+        <ul>
+          <li><b>Doctrine (Heal)</b> — <span data-codex="ability|Anointing">Anointing</span> · Fixed Purpose mastery: shields absorb 30% more, +8% max health.</li>
+          <li><b>Benison (Heal)</b> — <span data-codex="ability|Holy Nova">Holy Nova</span> · Grave Mercy mastery: +20% to all healing.</li>
+          <li><b>Vespers (DPS)</b> — <span data-codex="ability|Gloamveil Form">Gloamveil Form</span> · Gloamveil mastery: +15% damage-over-time, +10% spell damage.</li>
+        </ul>
+        <h4>Mage</h4>
+        <ul>
+          <li><b>Aethermancy (DPS)</b> — <span data-codex="ability|Aether Surge">Aether Surge</span> · Aetheric Flux mastery: +15% spell damage, +10% haste.</li>
+          <li><b>Pyromancy (DPS)</b> — <span data-codex="ability|Flashfire">Flashfire</span> · Afterflame mastery: spell crits deal double damage, +2% crit.</li>
+          <li><b>Cryomancy (DPS)</b> — <span data-codex="ability|Icy Veins">Icy Veins</span> · Brittlebreak mastery: +25% Frost spell damage, +10% armor.</li>
+        </ul>
+        <h4>Warlock</h4>
+        <ul>
+          <li><b>Hexcraft (DPS)</b> — <span data-codex="ability|Veinleech">Veinleech</span> · Creeping Rot mastery: +20% damage-over-time damage.</li>
+          <li><b>Pactbound (DPS)</b> — <span data-codex="ability|Dread Aspect">Dread Aspect</span> (demonic transformation, 20 s) · Fiendlore mastery: 20% of damage taken is redirected to your demon.</li>
+          <li><b>Ruination (DPS)</b> — <span data-codex="ability|Conflagrate">Conflagrate</span> · Desolation mastery: Fire crits deal double damage, +2% crit.</li>
+        </ul>
+        <h4>Rogue</h4>
+        <ul>
+          <li><b>Knifework (DPS)</b> — <span data-codex="ability|Killer's Calm">Killer's Calm</span> (guaranteed critical next attack) · Redhanded mastery: +20% bleeds, +3% crit.</li>
+          <li><b>Thuggery (DPS)</b> — <span data-codex="ability|Mirrored Blades">Mirrored Blades</span> · Scrapper's Edge mastery: +10% attack speed.</li>
+          <li><b>Skulduggery (DPS)</b> — <span data-codex="ability|Red Ribbon">Red Ribbon</span> · False Face mastery: +40% critical damage, +10% Agility.</li>
+        </ul>
+        <h4>Hunter</h4>
+        <ul>
+          <li><b>Packlord (DPS)</b> — <span data-codex="ability|Howling Rage">Howling Rage</span> · Packbond mastery: +35% pet damage, +8% max health.</li>
+          <li><b>Coldsight (DPS)</b> — <span data-codex="ability|Sureflight Aura">Sureflight Aura</span> · Iron Aim mastery: +20% ranged ability damage, +3% crit.</li>
+          <li><b>Fieldcraft (DPS)</b> — <span data-codex="ability|Wyvern Sting">Wyvern Sting</span> · Quickblood mastery: +15% Agility and physical ability damage.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Newly granted abilities land straight in the spellbook and action bar — nothing to do on your side.</p>`
+    },
+    kicks: {
+      title: "An interrupt for every class",
+      summary: "Seven classes get their dedicated spell interrupt — the essential tool of the Deathless Court.",
+      body: `
+        <h4>Who interrupts what</h4>
+        <ul>
+          <li><b>Warrior</b> — <span data-codex="ability|Jawcrack">Jawcrack</span>: interrupts and locks the school for <b>4 s</b>.</li>
+          <li><b>Rogue</b> — <span data-codex="ability|Boot">Boot</span>: interrupts and locks the school for <b>4 s</b>.</li>
+          <li><b>Mage</b> — <span data-codex="ability|Spellbreak">Spellbreak</span>: counters the cast and locks the school for <b>6 s</b>.</li>
+          <li><b>Hunter</b> — <span data-codex="ability|Hushing Shot">Hushing Shot</span>: a snap shot that interrupts from range, <b>4 s</b>.</li>
+          <li><b>Paladin</b> — <span data-codex="ability|Reproach">Reproach</span>: interrupts and locks the school for <b>4 s</b>.</li>
+          <li><b>Druid</b> — <span data-codex="ability|Headbutt">Headbutt</span>: a lunging headbutt, <b>4 s</b>.</li>
+          <li><b>Warlock</b> — <span data-codex="ability|Gag Order">Gag Order</span>: silences mid-cast, <b>5 s</b>.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">For the guild: on <span data-codex="mob|Spirit of Malric">Malric</span>, set the interrupt rotation order before the pull — the channeled heal keeps escalating until it's cut.</p>`
+    },
+    deeds: {
+      title: "The Book of Deeds",
+      summary: "192 achievements, 2,365 Renown, and a book you can open anywhere — Shift+Z in game.",
+      body: `
+        <h4>The book</h4>
+        <ul>
+          <li>Opens with <span class="kbd">Shift+Z</span>, from the side menu, the character sheet, the mobile “More” tray — or at the three Chronicler NPCs.</li>
+          <li>Browse by category: progression, combat, dungeons, delves, Chronicles, collection, PvP, social, exploration and <b>hidden feats</b>.</li>
+          <li>Search, Earned/Unearned filters, nearly-complete suggestions, recent unlocks and <b>global rarity percentages</b>.</li>
+          <li>A <b>five-deed watchlist</b> feeds an on-screen HUD tracker.</li>
+        </ul>
+        <h4>The rewards</h4>
+        <ul>
+          <li><b>19 titles</b> rendered on nameplates, target frames, chat, rosters, inspect cards and leaderboards.</li>
+          <li><b>3 badge borders</b> for the character sheet.</li>
+          <li>Account-level Renown board: 50 Renown entry floor, self rank and percentile. Banned accounts are excluded.</li>
+        </ul>
+        <h4>Good to know</h4>
+        <ul>
+          <li>Existing progress is <b>credited retroactively</b>, without an avalanche of banners; lifetime counters start from v0.25.0.</li>
+          <li>The wiki publishes <b>183 public deeds</b> (hidden criteria stay hidden).</li>
+          <li>Optional Steam link: 72 mirrored achievements after a verified link — purely cosmetic, Steam is never a login provider.</li>
+        </ul>`
+    },
+    honor: {
+      title: "Persistent Honor",
+      summary: "The PvP currency arrives: earned by fighting, and it never expires.",
+      body: `
+        <h4>How you earn it</h4>
+        <ul>
+          <li><b>Ranked Arena wins</b>, <b>Fiesta</b> combat and match results award persistent Honor.</li>
+          <li>Built-in anti-farm: <b>diminishing returns</b> against repeat opponents, and <b>daily tapering</b> of Arena gains.</li>
+        </ul>
+        <h4>What it buys</h4>
+        <ul>
+          <li>Everything is sold by <b><span data-codex="npc|FURY">FURY</span></b>, the Honor Quartermaster — see the catalogue sheet.</li>
+        </ul>`
+    },
+    fury: {
+      title: "FURY — the catalogue",
+      summary: "40 epic ilvl 28 pieces, bind-on-pickup, each carrying offensive and defensive Warfare.",
+      body: `
+        <h4>The 4 sets (7 pieces each — 500 Honor per piece)</h4>
+        <ul>
+          <li><b><span data-codex="item|Furyforged Warplate">Furyforged</span></b> — mail, Strength/Stamina: warrior, paladin, melee shaman.</li>
+          <li><b><span data-codex="item|Stormbound Hauberk">Stormbound</span></b> — mail, Intellect/Spirit: caster shaman and paladin.</li>
+          <li><b><span data-codex="item|Ashstalker Harness">Ashstalker</span></b> — leather, Agility: rogue, hunter, druid.</li>
+          <li><b><span data-codex="item|Cinderweave Raiment">Cinderweave</span></b> — cloth, Intellect: mage, priest, warlock.</li>
+        </ul>
+        <h4>Jewelry & weapons</h4>
+        <ul>
+          <li><b>6 rings</b> (150 Honor) and <b>3 necklaces</b> (225 Honor) — every supported slot is covered, including neck and both fingers.</li>
+          <li><b>3 weapons at 800 Honor</b>: <span data-codex="item|Final Argument Greatblade">Final Argument Greatblade</span> (Strength), <span data-codex="item|First-Blood Razor">First-Blood Razor</span> (Agility dagger) and <span data-codex="item|Emberglass Warstaff">Emberglass Warstaff</span> (Intellect staff).</li>
+        </ul>
+        <h4>Warfare in numbers</h4>
+        <ul>
+          <li>Armor pieces: <b>17 / 17</b> offensive/defensive Warfare. Weapons: <b>20 / 20</b>.</li>
+          <li>Warfare only works <b>between players</b>: nothing changes in dungeons or raids.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Everything is <span data-codex="term|soulbound">soulbound</span> on purchase — no reselling at the auction house.</p>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>
