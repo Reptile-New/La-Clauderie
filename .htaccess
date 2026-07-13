@@ -12,19 +12,21 @@ AddDefaultCharset UTF-8
   Header set X-Frame-Options "SAMEORIGIN"
   # Les liens sortants ne transmettent que le domaine, pas l'URL complète.
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+  # Le navigateur retient (1 an) que le site est en HTTPS et n'essaie plus
+  # jamais le HTTP. Envoyé uniquement sur les réponses HTTPS, comme le veut
+  # la spec.
+  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
 </IfModule>
 
 RewriteEngine On
 
-# www.laclauderie.fr → laclauderie.fr
-RewriteCond %{HTTP_HOST} ^www\.laclauderie\.fr$ [NC]
-RewriteRule ^(.*)$ http://laclauderie.fr/$1 [R=301,L]
+# http → https (certificat Let's Encrypt OVH actif — vérifié).
+# Le nom de domaine canonique est forcé au passage : http://www.… arrive
+# directement sur https://laclauderie.fr en une seule redirection.
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
 
-# http → https désactivé temporairement : le certificat Let's Encrypt
-# fourni par OVH n'est pas encore actif, la redirection forcée casse
-# l'accès au site tant qu'il n'est pas généré. À réactiver une fois le
-# certificat actif (onglet SSL de l'hébergement OVH) :
-#
-# RewriteCond %{HTTPS} !=on
-# RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
+# https://www.laclauderie.fr → https://laclauderie.fr
+RewriteCond %{HTTP_HOST} ^www\.laclauderie\.fr$ [NC]
+RewriteRule ^(.*)$ https://laclauderie.fr/$1 [R=301,L]
 
