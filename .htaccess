@@ -4,6 +4,16 @@
 
 AddDefaultCharset UTF-8
 
+# En-têtes de sécurité (sans effet si mod_headers est absent, grâce au IfModule).
+<IfModule mod_headers.c>
+  # Empêche le navigateur de « deviner » un type de fichier différent de celui annoncé.
+  Header set X-Content-Type-Options "nosniff"
+  # Le site ne s'affiche pas dans une iframe d'un autre site (anti-clickjacking).
+  Header set X-Frame-Options "SAMEORIGIN"
+  # Les liens sortants ne transmettent que le domaine, pas l'URL complète.
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
 RewriteEngine On
 
 # www.laclauderie.fr → laclauderie.fr
