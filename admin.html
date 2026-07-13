@@ -156,6 +156,10 @@
       <input id="fTitre" type="text" placeholder="Raid — Nythraxis, Fléau de Thornpeak">
       <label for="fDesc">Description</label>
       <textarea id="fDesc" placeholder="Compo full, flasks obligatoires."></textarea>
+      <label for="fTitreEn">Titre en anglais <span style="font-weight:400;color:var(--faint)">(facultatif — affiché sur la version anglaise du site)</span></label>
+      <input id="fTitreEn" type="text" placeholder="Raid — Nythraxis, Scourge of Thornpeak">
+      <label for="fDescEn">Description en anglais <span style="font-weight:400;color:var(--faint)">(facultatif)</span></label>
+      <textarea id="fDescEn" placeholder="Full comp, flasks mandatory."></textarea>
       <div class="row">
         <button class="btn btn-primary" id="addBtn">+ Ajouter au calendrier</button>
         <button class="btn btn-ghost hidden" id="cancelEditBtn">Annuler la modification</button>
@@ -540,6 +544,8 @@
     $("fType").value = e.type || "Social";
     $("fTitre").value = e.titre || "";
     $("fDesc").value = e.desc || "";
+    $("fTitreEn").value = e.titre_en || "";
+    $("fDescEn").value = e.desc_en || "";
     setEvFormMode();
     $("evFormTitle").scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -547,6 +553,7 @@
   function cancelEditEvent() {
     evEditIndex = null;
     $("fHeure").value = ""; $("fTitre").value = ""; $("fDesc").value = "";
+    $("fTitreEn").value = ""; $("fDescEn").value = "";
     $("fDate").value = new Date().toISOString().slice(0, 10);
     setEvFormMode();
   }
@@ -558,12 +565,17 @@
     const type = $("fType").value;
     const titre = $("fTitre").value.trim();
     const desc = $("fDesc").value.trim();
+    const titreEn = $("fTitreEn").value.trim();
+    const descEn = $("fDescEn").value.trim();
     if (!date || !titre) { msg($("dashMsg"), "Il faut au moins une date et un titre.", "err"); return; }
+    const entry = { date, heure, type, titre, desc };
+    if (titreEn) entry.titre_en = titreEn;
+    if (descEn) entry.desc_en = descEn;
     const editing = evEditIndex !== null;
     const backup = editing ? events()[evEditIndex] : null;
     $("addBtn").disabled = true; $("addBtn").textContent = "Enregistrement…";
-    if (editing) events()[evEditIndex] = { date, heure, type, titre, desc };
-    else events().push({ date, heure, type, titre, desc });
+    if (editing) events()[evEditIndex] = entry;
+    else events().push(entry);
     try {
       await save(FILES.events, "calendrier : " + (editing ? "modification" : "ajout") + " « " + titre + " »");
       msg($("dashMsg"), (editing ? "Event modifié" : "Event ajouté") + " ✓ Le site se met à jour dans ~1 min.", "ok");
