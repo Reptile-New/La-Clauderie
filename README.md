@@ -163,5 +163,6 @@ secrets du repo :
 
 - 🌐 Site : <https://laclauderie.fr>
 - 🎮 Jeu : <https://worldofclaudecraft.com/>
-- 💬 Discord officiel (salon **#france**) : <https://discord.gg/GjhnUsBtw>
+- 💬 Discord officiel de World of ClaudeCraft (salon **#france**) : <https://discord.gg/C2W4Ta2ssC>
+  — la guilde n'a pas (encore) de Discord attitré, on se retrouve là-bas
 - 📚 Codex WoCC : <https://github.com/Reptile-New/wocc-knowledge-base>
