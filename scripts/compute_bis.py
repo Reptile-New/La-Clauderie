@@ -40,10 +40,54 @@ _MOBS = _load('MOBS', {})
 _NPCS = _load('NPCS', {})
 _QUESTS = _load('QUESTS', {})
 _HEROIC = _load('HEROIC_BOSS_LOOT', {})
+_DUNGEONS = _load('DUNGEONS', {})
 
-SOURCES = {}  # iid -> liste de lignes prêtes à afficher
+# --- obtenabilité des jumelles héroïques (port de loot/loot_roll.ts) ----------
+# Le jeu n'échange un drop contre sa variante « heroic_<id> » que si :
+#   1. le mob meurt dans une instance en difficulté héroïque — les 4 donjons
+#      5-joueurs et l'arène du raid Nythraxis (dungeon_difficulty.ts) ; les
+#      élites du monde ouvert et le boss mondial Thunzharr, jamais ;
+#   2. l'ilvl de la variante dépasse celui de la base (item_level.ts : niveau
+#      de la source + bonus de qualité, +3 si raid). Variante = source 27 si la
+#      base est au butin de Nythraxis, sinon 22 ; base = niveau max du mob
+#      (+3 pour le raid). D'où « raid epics, already ilvl 29, are left as-is » :
+#      les pièces de set du boss mondial (ilvl 29) ne s'échangent jamais.
+# Une jumelle qui ne satisfait pas les deux conditions n'existe pas en jeu :
+# hors du pool BiS, et pas de provenance « Butin héroïque ».
+_HEROIC_INSTANCES = {'hollow_crypt', 'sunken_bastion', 'drowned_temple',
+                     'gravewyrm_sanctum', 'nythraxis_boss_arena'}
+_RAID_BOSS = 'nythraxis_scourge_of_thornpeak'
+_INSTANCE_MOBS = {  # boss finaux + mini-boss scripté (zone1.ts), hors spawns
+    'morthen', 'vael_the_mistcaller', 'ysolei', 'korzul_the_gravewyrm',
+    _RAID_BOSS, 'wraithbinder_maldrec',
+}
+for _did, _dg in _DUNGEONS.items():
+    if _did in _HEROIC_INSTANCES:
+        _INSTANCE_MOBS.update(_sp['mobId'] for _sp in _dg.get('spawns', []))
+
+_RAID_BASES = {_l['itemId'] for _l in _MOBS.get(_RAID_BOSS, {}).get('loot', [])
+               if isinstance(_l, dict) and _l.get('itemId')}
+
+def _heroic_obtainable(hid):
+    base = hid[len('heroic_'):]
+    variant_src = 27 if base in _RAID_BASES else 22
+    ok = False
+    for _m in _MOBS.values():
+        if _m['id'] not in _INSTANCE_MOBS: continue
+        if not any(isinstance(_l, dict) and _l.get('itemId') == base for _l in _m.get('loot', [])): continue
+        base_src = (_m.get('maxLevel') or 0) + (3 if _m['id'] == _RAID_BOSS else 0)
+        if variant_src > base_src: ok = True
+    return ok
+
+HEROIC_OK = {i for i in ITEMS if i.startswith('heroic_') and i[len('heroic_'):] in ITEMS
+             and _heroic_obtainable(i)}
+UNOBTAINABLE = {i for i in ITEMS if i.startswith('heroic_') and i[len('heroic_'):] in ITEMS
+                and i not in HEROIC_OK}
+
+SOURCES = {}  # iid -> liste de lignes prêtes à afficher (dédupliquées)
 def _add(iid, line):
-    SOURCES.setdefault(iid, []).append(line)
+    if line not in SOURCES.setdefault(iid, []):
+        SOURCES[iid].append(line)
 for _m in _MOBS.values():
     for _l in _m.get('loot', []):
         if isinstance(_l, dict) and _l.get('itemId'):
@@ -61,14 +105,17 @@ for _n in _NPCS.values():
 for _q in _QUESTS.values():
     for _iid in set((_q.get('itemRewards') or {}).values()):
         _add(_iid, f"Récompense de quête : « {_q['name']} »")
-# Jumelles héroïques (« heroic_<id> », v0.25) : le jeu monte l'objet en ilvl au
-# kill héroïque, les données n'ont donc aucune table de butin pour ces ids —
-# on dérive la provenance de l'objet de base (sans le % : le taux héroïque
-# n'est pas dans les données).
-for _iid in ITEMS:
-    if _iid.startswith('heroic_') and _iid not in SOURCES:
-        for _line in SOURCES.get(_iid[len('heroic_'):], []):
-            _add(_iid, _line.split(' · ')[0].replace('Butin :', 'Butin héroïque :'))
+# Jumelles héroïques obtenables : le jeu échange le drop en place au kill
+# héroïque (loot_roll.ts), donc même mob et même taux que la base — mais
+# uniquement pour les mobs des instances héroïques (jamais le monde ouvert).
+for _iid in sorted(HEROIC_OK):
+    _base = _iid[len('heroic_'):]
+    for _m in _MOBS.values():
+        if _m['id'] not in _INSTANCE_MOBS: continue
+        for _l in _m.get('loot', []):
+            if isinstance(_l, dict) and _l.get('itemId') == _base:
+                pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
+                _add(_iid, f"Butin héroïque : {_m['name']}{pct}")
 
 LVL = 20
 CLASSES = {
@@ -223,6 +270,7 @@ def candidates(cls, role):
         sl = slot_key(it)
         if sl not in ('mainhand','helmet','shoulder','chest','waist','legs','gloves','feet','neck','ring'): continue
         if it.get('kind') not in ('armor','weapon'): continue
+        if iid in UNOBTAINABLE: continue   # jumelle héroïque que le jeu ne droppe jamais
         if not can_equip(cls, it): continue
         if sl == 'ring':
             pool['ring1'].append(iid); pool['ring2'].append(iid)
@@ -257,7 +305,8 @@ def optimize(cls, role):
     # pièces de sets pertinentes pour la classe
     class_sets = {}
     for sid in SETS:
-        pieces = [iid for iid,it in ITEMS.items() if it.get('set')==sid and can_equip(cls,it)]
+        pieces = [iid for iid,it in ITEMS.items() if it.get('set')==sid and can_equip(cls,it)
+                  and iid not in UNOBTAINABLE]
         # v0.25 : chaque pièce de set a une jumelle « heroic_<id> » (même set,
         # même slot, stats toutes ≥ — dominance vérifiée sur les données). On
         # ne force que la variante dominante, sinon l'énumération des
@@ -312,13 +361,16 @@ def optimize(cls, role):
             if not changed: break
         v=evaluate(cls,role,equip)
         if best is None or v>best[0]: best=(v,dict(equip))
-    # alternatives : meilleur remplaçant par slot dans le build final
+    # alternatives : meilleur remplaçant par slot dans le build final. La
+    # jumelle normale/héroïque du même objet est exclue : « Alt. » doit
+    # proposer un objet différent, pas le même un cran en dessous.
     score, equip = best
     alts={}
     for sl in SLOTS:
         cur=equip[sl]; bs=None
         for iid in pool[sl]:
             if iid==cur: continue
+            if iid==f'heroic_{cur}' or cur==f'heroic_{iid}': continue
             if sl not in ('ring1','ring2') and iid in equip.values(): continue
             if sl in ('ring1','ring2') and iid in (equip['ring1'],equip['ring2']): continue
             e2=dict(equip); e2[sl]=iid
