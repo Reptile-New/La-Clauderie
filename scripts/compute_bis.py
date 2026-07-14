@@ -61,6 +61,14 @@ for _n in _NPCS.values():
 for _q in _QUESTS.values():
     for _iid in set((_q.get('itemRewards') or {}).values()):
         _add(_iid, f"Récompense de quête : « {_q['name']} »")
+# Jumelles héroïques (« heroic_<id> », v0.25) : le jeu monte l'objet en ilvl au
+# kill héroïque, les données n'ont donc aucune table de butin pour ces ids —
+# on dérive la provenance de l'objet de base (sans le % : le taux héroïque
+# n'est pas dans les données).
+for _iid in ITEMS:
+    if _iid.startswith('heroic_') and _iid not in SOURCES:
+        for _line in SOURCES.get(_iid[len('heroic_'):], []):
+            _add(_iid, _line.split(' · ')[0].replace('Butin :', 'Butin héroïque :'))
 
 LVL = 20
 CLASSES = {
@@ -250,6 +258,13 @@ def optimize(cls, role):
     class_sets = {}
     for sid in SETS:
         pieces = [iid for iid,it in ITEMS.items() if it.get('set')==sid and can_equip(cls,it)]
+        # v0.25 : chaque pièce de set a une jumelle « heroic_<id> » (même set,
+        # même slot, stats toutes ≥ — dominance vérifiée sur les données). On
+        # ne force que la variante dominante, sinon l'énumération des
+        # configurations explose ; les versions normales restent dans le pool
+        # (elles ressortent en « Alt. »).
+        ps = set(pieces)
+        pieces = [iid for iid in pieces if f'heroic_{iid}' not in ps]
         if len(pieces) >= 2: class_sets[sid]=pieces
     # configurations : pour chaque set, sous-ensembles de pièces (0 ou >=2)
     def subsets(pieces):
