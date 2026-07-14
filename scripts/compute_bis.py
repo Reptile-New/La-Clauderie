@@ -83,6 +83,10 @@ HEROIC_OK = {i for i in ITEMS if i.startswith('heroic_') and i[len('heroic_'):] 
              and _heroic_obtainable(i)}
 UNOBTAINABLE = {i for i in ITEMS if i.startswith('heroic_') and i[len('heroic_'):] in ITEMS
                 and i not in HEROIC_OK}
+# S'y ajoutent, une fois toutes les provenances construites (plus bas), les
+# équipements « héritage » : définis dans les données mais placés nulle part
+# dans le jeu (ex. Crossroads Saber) — un BiS ne doit rien recommander
+# d'impossible à obtenir. Rempli après la construction de SOURCES.
 
 SOURCES = {}  # iid -> liste de lignes prêtes à afficher (dédupliquées)
 def _add(iid, line):
@@ -102,6 +106,40 @@ for _bid, _entries in _HEROIC.items():
 for _n in _NPCS.values():
     for _iid in _n.get('vendorItems', []):
         _add(_iid, f"Vendu par {_n['name']}")
+# Quartier-maître héroïque : bijoux payés en Heroic Marks (heroic_vendor.ts) —
+# la seule source des cous/anneaux épiques hors butin.
+_VEX = _MOBS.get('heroic_quartermaster', {}).get('name') or 'Quartermaster Vex'
+for _o in _load('HEROIC_VENDOR_STOCK', []):
+    _add(_o['itemId'], f"Vendu par {_VEX} · {_o['marks']} Heroic Marks")
+# Boutiques de delve (payées en Marks, shop.ts) et reliquaire « bountiful » du
+# rite final du Drowned Litany (drowned_litany_loot.ts, 3 % — les trois épiques).
+_DELVE_NAMES = {d['id']: d['name'] for d in _load('DELVES', {}).values()}
+for _did, _entries in _load('DELVE_SHOPS', {}).items():
+    for _o in _entries:
+        _add(_o['itemId'], f"Boutique du delve {_DELVE_NAMES.get(_did, _did)} · {_o['marks']} marks")
+for _iid in ('blackwater_vanguard_chest', 'siltstep_leggings', 'sunken_reliquary_hood'):
+    _add(_iid, f"Reliquaire bountiful du delve {_DELVE_NAMES.get('drowned_litany', 'The Drowned Litany')} · 3 %")
+for _iid in ('deacon_reliquary_helm', 'varric_shadow_cowl', 'reliquary_plate_chest', 'reliquary_cloth_chest',
+             'reliquary_leather_chest', 'reliquary_gloves_rog', 'reliquary_legs', 'reliquary_helm', 'reliquary_shoulder'):
+    _add(_iid, f"Coffre verrouillé (crochetage) du delve {_DELVE_NAMES.get('collapsed_reliquary', 'The Collapsed Reliquary')}")
+for _iid in ('siltguard_helm', 'bulwark_rusted_pauldrons', 'nhalias_bell_maul', 'reedstalker_jerkin', 'mirejaw_fang_knife',
+             'widow_silk_hood', 'cantors_drowned_sash', 'corpse_candle_focus', 'nhalias_litany_rod'):
+    _add(_iid, f"Reliquaire du rite final du delve {_DELVE_NAMES.get('drowned_litany', 'The Drowned Litany')}")
+# Fabrication (ALL_RECIPES), équipement de départ (CLASSES) et stock permanent
+# du Marché mondial (market.ts, seedHouseListings — table inline du jeu).
+for _r in _load('ALL_RECIPES', []):
+    if _r.get('resultItemId'):
+        _add(_r['resultItemId'], f"Fabrication : {_r.get('professionId', 'métier')}")
+_FRCLS = {'warrior':'Guerrier','paladin':'Paladin','shaman':'Chaman','druid':'Druide','priest':'Prêtre',
+          'mage':'Mage','warlock':'Démoniste','rogue':'Voleur','hunter':'Chasseur'}
+for _cid, _c in _load('CLASSES', {}).items():
+    for _iid in (_c.get('startWeapon'), _c.get('startChest')):
+        if _iid: _add(_iid, f"Équipement de départ ({_FRCLS.get(_cid, _cid)})")
+for _iid in ('roadwardens_helm', 'wayfarers_hood', 'acolytes_circlet', 'reinforced_pauldrons', 'embroidered_mantle',
+             'sturdy_belt', 'silk_sash', 'roughspun_gloves', 'outrider_brigandine', 'caravan_quilted_vest',
+             'outrider_legguards', 'pilgrims_leggings', 'outrider_sabatons', 'tradesman_hatchet', 'drovers_staff',
+             'caravan_warden_dirk', 'greyjaw_pelt_cloak', 'oiled_boots', 'quilted_trousers'):
+    _add(_iid, "Marché mondial (stock permanent de la maison)")
 for _q in _QUESTS.values():
     for _iid in set((_q.get('itemRewards') or {}).values()):
         _add(_iid, f"Récompense de quête : « {_q['name']} »")
@@ -116,6 +154,13 @@ for _iid in sorted(HEROIC_OK):
             if isinstance(_l, dict) and _l.get('itemId') == _base:
                 pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
                 _add(_iid, f"Butin héroïque : {_m['name']}{pct}")
+
+# Héritage : équipement (arme/armure) sans AUCUNE provenance connue — ni butin,
+# ni vendeur, ni quête, ni delve, ni marché, ni départ de classe. Vérifié dans
+# le code du jeu v0.25.0 : ces objets ne sont placés nulle part. Hors du pool.
+UNOBTAINABLE |= {iid for iid, it in ITEMS.items()
+                 if it.get('kind') in ('armor', 'weapon')
+                 and iid not in SOURCES and not iid.startswith('heroic_')}
 
 LVL = 20
 CLASSES = {
@@ -361,16 +406,16 @@ def optimize(cls, role):
             if not changed: break
         v=evaluate(cls,role,equip)
         if best is None or v>best[0]: best=(v,dict(equip))
-    # alternatives : meilleur remplaçant par slot dans le build final. La
-    # jumelle normale/héroïque du même objet est exclue : « Alt. » doit
-    # proposer un objet différent, pas le même un cran en dessous.
+    # alternatives : le deuxième meilleur objet du slot, strictement — jumelle
+    # normale/héroïque du même objet comprise (le badge « héroïque » du site
+    # permet de comparer les deux versions, et on sait quoi porter en
+    # attendant le kill héroïque).
     score, equip = best
     alts={}
     for sl in SLOTS:
         cur=equip[sl]; bs=None
         for iid in pool[sl]:
             if iid==cur: continue
-            if iid==f'heroic_{cur}' or cur==f'heroic_{iid}': continue
             if sl not in ('ring1','ring2') and iid in equip.values(): continue
             if sl in ('ring1','ring2') and iid in (equip['ring1'],equip['ring2']): continue
             e2=dict(equip); e2[sl]=iid
