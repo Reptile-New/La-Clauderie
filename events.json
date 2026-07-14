@@ -1,13 +1,3 @@
 {
-  "events": [
-    {
-      "date": "2026-07-09",
-      "heure": "18h",
-      "type": "Social",
-      "titre": "Découverte de la nouvelle MAJJJJJ !!!",
-      "desc": "On a clean tous les donjons en héroïque plusieurs fois.",
-      "titre_en": "Checking out the new PATCHHHH!!!",
-      "desc_en": "We cleared every dungeon on heroic, several times."
-    }
-  ]
+  "events": []
 }
