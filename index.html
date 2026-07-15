@@ -205,13 +205,7 @@
 <div class="topbar">
   <div class="row">
     <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
-    <nav class="topnav" aria-label="Navigation du site">
-      <a href="index.html" class="cur" data-en="Home">Accueil</a>
-      <a href="bis.html">⚔️ Builds</a>
-      <a href="metiers.html" data-en="🌿 Professions">🌿 Métiers</a>
-      <a href="patch-notes.html" data-en="📜 What&#39;s new">📜 Nouveautés</a>
-      <a href="/codex/">📚 Codex</a>
-    </nav>
+    <nav class="topnav" data-guild-nav data-current="home" aria-label="Navigation du site"></nav>
   </div>
 </div>
 
@@ -301,6 +295,7 @@
   </div>
 </footer>
 
+<script src="assets/nav.js"></script>
 <script src="assets/lang.js"></script>
 <script>
   const $ = id => document.getElementById(id);

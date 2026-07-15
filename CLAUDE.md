@@ -57,6 +57,23 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 > l'éditer à la main. La page se suffit à elle-même (données embarquées) pour
 > marcher aussi bien sur OVH que sur GitHub Pages (où `/data/` n'est pas servi).
 
+## 🧭 La barre de navigation — source de vérité UNIQUE
+
+Les onglets du site (Accueil, Builds, Métiers, Nouveautés, Codex) sont définis
+**à un seul endroit** : `assets/nav.js` (tableau `TABS`). Toutes les pages —
+`index.html`, `bis.html`, `metiers.html`, `patch-notes.html`, `notes/*.html` —
+et **la page Codex** (`../wocc-knowledge-base/site/index.html`) partagent cette
+liste. Pour ajouter / renommer / réordonner un onglet : **modifier uniquement
+`assets/nav.js`**, jamais les barres page par page.
+
+- Chaque page a juste `<nav class="topnav" data-guild-nav data-current="X"></nav>`
+  (ou `class="gb-nav"` sur le Codex) que `nav.js` remplit. `data-current` = l'id
+  de l'onglet actif. `nav.js` gère les chemins selon l'hôte (racine du domaine,
+  Pages, `/codex/`, `notes/`) et préserve le bouton FR/EN existant.
+- Le Codex charge `nav.js` depuis `https://laclauderie.fr/assets/nav.js` (une
+  seule copie, servie par le déploiement du site) — donc il ne peut plus « rater »
+  un nouvel onglet.
+
 ## Branche & déploiement
 - Développer sur `claude/site-update-6uhdmv`, merger sur `main` (source du déploiement).
 - La knowledge base (`Reptile-New/wocc-knowledge-base`, repo public) fournit `data/`
