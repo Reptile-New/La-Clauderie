@@ -11,6 +11,7 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 |---|---|
 | `index.html` | Accueil : Discord, guides, puis 3 onglets — Calendrier (à venir + passés), Membres, Faits d'armes |
 | `bis.html` | Builds par classe et rôle : spé, talents, rotation et best-in-slot (généré par `scripts/compute_bis.py`) |
+| `metiers.html` | Récolte & Métiers : où récolter (minerai/bois/herbes/pêche) par zone et toutes les recettes par métier (généré par `scripts/build_craft.py`, données embarquées, à jour à chaque version) |
 | `assets/codex-popup.js` | Fiches incrustées : ouvre objets, sorts, talents, monstres, PNJ, quêtes et glossaire **dans la page**, à partir des données du Codex (voir plus bas) |
 | `admin.html` | Espace officiers : gérer le calendrier, les membres et les faits d'armes |
 | `patch-notes.html` | Historique de **toutes** les mises à jour du jeu, la plus récente en premier |

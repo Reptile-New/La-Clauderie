@@ -1,0 +1,1596 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Récolte & Métiers — La Clauderie</title>
+<meta name="description" content="Où récolter (minerai, bois, herbes, pêche) et toutes les recettes d'artisanat de World of ClaudeCraft, par zone et par métier.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="Récolte & Métiers — La Clauderie">
+<meta property="og:description" content="Où récolter et toutes les recettes d'artisanat de World of ClaudeCraft, par zone et par métier.">
+<meta property="og:url" content="https://laclauderie.fr/metiers.html">
+<link rel="canonical" href="https://laclauderie.fr/metiers.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-common: #dfe3ea; --q-uncommon: #4cc94c; --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --ore: #d98a52; --wood: #9c7b4c; --herb: #58c46a; --fish: #58b6c9;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(88,196,106,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 1000px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 680px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(34px, 6vw, 60px) 0 clamp(18px, 3vw, 28px); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 12px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.1rem, 6vw, 3.2rem); line-height: 1; margin: 0 0 12px; }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.15rem); max-width: 62ch; margin: 0; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 8px; margin: 26px 0 6px; border-bottom: 1px solid var(--line-soft); }
+  .tab { appearance: none; background: none; border: none; border-bottom: 2px solid transparent; color: var(--dim); font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; padding: 10px 6px; margin-bottom: -1px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .tab:hover { color: var(--text); }
+  .tab[aria-selected="true"] { color: var(--gold-bright); border-bottom-color: var(--gold); }
+  .tab .n { font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); }
+
+  section.view { padding: 22px 0 40px; }
+  section.view[hidden] { display: none; }
+
+  /* Zone / profession blocks */
+  .block { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 13px; padding: 20px clamp(16px,3vw,24px); margin-bottom: 16px; }
+  .block-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  .block-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; }
+  .lvl { font-family: var(--font-mono); font-size: 0.76rem; color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent); border-radius: 5px; padding: 2px 8px; }
+  .sub { color: var(--faint); font-family: var(--font-mono); font-size: 0.76rem; }
+
+  .cols { display: grid; gap: 13px; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); margin-top: 16px; }
+  .node { background: var(--bg-modal); border: 1px solid var(--line-soft); border-radius: 10px; padding: 14px 15px; }
+  .node h3 { margin: 0 0 8px; font-size: 1rem; font-family: var(--font-display); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .node .ico { font-size: 1.05rem; }
+  .node.ore h3 { color: var(--ore); } .node.wood h3 { color: var(--wood); }
+  .node.herb h3 { color: var(--herb); } .node.fish h3 { color: var(--fish); }
+  .node .meta { font-family: var(--font-mono); font-size: 0.76rem; color: var(--dim); margin-bottom: 8px; }
+  .node .meta b { color: var(--text); }
+  .coords { display: flex; flex-wrap: wrap; gap: 5px; }
+  .coord { font-family: var(--font-mono); font-size: 0.72rem; color: var(--dim); background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 5px; padding: 1px 6px; }
+  .catch { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid var(--line-soft); font-size: 0.9rem; }
+  .catch:first-of-type { border-top: none; }
+  .catch .pct { font-family: var(--font-mono); font-size: 0.78rem; color: var(--gold-bright); }
+
+  /* Recipes */
+  .recipe { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 11px 0; border-top: 1px solid var(--line-soft); }
+  .recipe:first-of-type { border-top: none; }
+  .recipe .res { font-weight: 600; }
+  .recipe .cnt { color: var(--faint); font-family: var(--font-mono); font-size: 0.8rem; }
+  .recipe .rlvl { font-family: var(--font-mono); font-size: 0.72rem; color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); border-radius: 4px; padding: 1px 6px; }
+  .recipe .arrow { color: var(--faint); }
+  .recipe .reags { color: var(--dim); font-size: 0.9rem; }
+  .recipe .reags .r { white-space: nowrap; }
+  .recipe .reags .sep { color: var(--faint); margin: 0 3px; }
+
+  .q-common { color: var(--q-common); } .q-uncommon { color: var(--q-uncommon); }
+  .q-rare { color: var(--q-rare); } .q-epic { color: var(--q-epic); } .q-legendary { color: var(--q-legendary); }
+
+  .empty { color: var(--faint); font-style: italic; padding: 30px 0; }
+  footer { border-top: 1px solid var(--line-soft); padding: 26px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; margin-top: 10px; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" aria-label="Navigation du site">
+      <a href="index.html" data-en="Home">Accueil</a>
+      <a href="bis.html">⚔️ Builds</a>
+      <a href="metiers.html" class="cur" data-en="🌿 Professions">🌿 Métiers</a>
+      <a href="patch-notes.html" data-en="📜 What&#39;s new">📜 Nouveautés</a>
+      <a href="/codex/">📚 Codex</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow" data-en="Gathering &amp; crafting">Récolte &amp; artisanat</p>
+    <h1 data-en="Gathering &amp; Professions">Récolte &amp; Métiers</h1>
+    <p class="lede" data-en="Where to gather — ore, wood, herbs and fishing — by zone, and every crafting recipe by profession. Straight from the game's real data (the Codex), kept up to date each patch.">Où récolter — minerai, bois, herbes et pêche — zone par zone, et toutes les recettes d'artisanat métier par métier. Directement issu des données réelles du jeu (le Codex), à jour à chaque version.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" id="tab-recolte" role="tab" aria-selected="true" aria-controls="view-recolte" data-en="🌾 Gathering">🌾 Récolte</button>
+    <button class="tab" id="tab-metiers" role="tab" aria-selected="false" aria-controls="view-metiers" data-en="🔨 Crafting">🔨 Métiers</button>
+  </div>
+
+  <section class="view" id="view-recolte" role="tabpanel" aria-labelledby="tab-recolte"></section>
+  <section class="view" id="view-metiers" role="tabpanel" aria-labelledby="tab-metiers" hidden></section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p data-en="Compiled for La Clauderie from the game's official data — updated automatically each patch.">Compilé pour La Clauderie à partir des données officielles du jeu — mis à jour automatiquement à chaque version.</p>
+    <p style="margin-top:8px"><a href="index.html" data-en="Home">Accueil</a> · <a href="/codex/">📚 Codex</a></p>
+  </div>
+</footer>
+
+<!-- Données générées par scripts/build_craft.py (données réelles de la knowledge base). NE PAS éditer à la main. -->
+<script>
+const CRAFT = {
+ "zones": [
+  {
+   "id": "eastbrook_vale",
+   "name": "Eastbrook Vale",
+   "range": [
+    1,
+    7
+   ],
+   "nodes": {
+    "ore": {
+     "fr": "Minerai",
+     "en": "Ore",
+     "type": "ore",
+     "count": 3,
+     "levels": [
+      4
+     ],
+     "pos": [
+      {
+       "x": -70,
+       "z": -53
+      },
+      {
+       "x": -73,
+       "z": -49
+      },
+      {
+       "x": -67,
+       "z": -57
+      }
+     ]
+    },
+    "wood": {
+     "fr": "Bois",
+     "en": "Wood",
+     "type": "wood",
+     "count": 3,
+     "levels": [
+      4
+     ],
+     "pos": [
+      {
+       "x": -62,
+       "z": 8
+      },
+      {
+       "x": -57,
+       "z": -6
+      },
+      {
+       "x": -68,
+       "z": 18
+      }
+     ]
+    },
+    "herb": {
+     "fr": "Herbe",
+     "en": "Herb",
+     "type": "herb",
+     "count": 3,
+     "levels": [
+      4
+     ],
+     "pos": [
+      {
+       "x": -86,
+       "z": 90
+      },
+      {
+       "x": -92,
+       "z": 80
+      },
+      {
+       "x": -80,
+       "z": 95
+      }
+     ]
+    }
+   },
+   "fishing": [
+    {
+     "name": "Raw Mirror Trout",
+     "q": "common",
+     "id": "raw_mirror_trout",
+     "pct": 45
+    },
+    {
+     "name": "Raw River Perch",
+     "q": "common",
+     "id": "raw_river_perch",
+     "pct": 30
+    },
+    {
+     "name": "Tangled Weed",
+     "q": "poor",
+     "id": "tangled_weed",
+     "pct": 12
+    },
+    {
+     "name": "Glimmerfin Koi",
+     "q": "uncommon",
+     "id": "glimmerfin_koi",
+     "pct": 3
+    }
+   ]
+  },
+  {
+   "id": "mirefen_marsh",
+   "name": "Mirefen Marsh",
+   "range": [
+    6,
+    13
+   ],
+   "nodes": {
+    "ore": {
+     "fr": "Minerai",
+     "en": "Ore",
+     "type": "ore",
+     "count": 3,
+     "levels": [
+      10
+     ],
+     "pos": [
+      {
+       "x": 40,
+       "z": 340
+      },
+      {
+       "x": -30,
+       "z": 360
+      },
+      {
+       "x": 35,
+       "z": 345
+      }
+     ]
+    },
+    "wood": {
+     "fr": "Bois",
+     "en": "Wood",
+     "type": "wood",
+     "count": 3,
+     "levels": [
+      10
+     ],
+     "pos": [
+      {
+       "x": 10,
+       "z": 330
+      },
+      {
+       "x": -15,
+       "z": 355
+      },
+      {
+       "x": -20,
+       "z": 315
+      }
+     ]
+    },
+    "herb": {
+     "fr": "Herbe",
+     "en": "Herb",
+     "type": "herb",
+     "count": 3,
+     "levels": [
+      10
+     ],
+     "pos": [
+      {
+       "x": 60,
+       "z": 385
+      },
+      {
+       "x": -45,
+       "z": 452
+      },
+      {
+       "x": 30,
+       "z": 355
+      }
+     ]
+    }
+   },
+   "fishing": [
+    {
+     "name": "Raw Marsh Pike",
+     "q": "common",
+     "id": "raw_marsh_pike",
+     "pct": 40
+    },
+    {
+     "name": "Raw Bog Eel",
+     "q": "common",
+     "id": "raw_bog_eel",
+     "pct": 30
+    },
+    {
+     "name": "Tangled Weed",
+     "q": "poor",
+     "id": "tangled_weed",
+     "pct": 9
+    },
+    {
+     "name": "Soggy Boot",
+     "q": "poor",
+     "id": "soggy_boot",
+     "pct": 8
+    },
+    {
+     "name": "Glimmerfin Koi",
+     "q": "uncommon",
+     "id": "glimmerfin_koi",
+     "pct": 3
+    }
+   ]
+  },
+  {
+   "id": "thornpeak_heights",
+   "name": "Thornpeak Heights",
+   "range": [
+    13,
+    20
+   ],
+   "nodes": {
+    "ore": {
+     "fr": "Minerai",
+     "en": "Ore",
+     "type": "ore",
+     "count": 2,
+     "levels": [
+      17
+     ],
+     "pos": [
+      {
+       "x": 90,
+       "z": 608
+      },
+      {
+       "x": 78,
+       "z": 630
+      }
+     ]
+    },
+    "wood": {
+     "fr": "Bois",
+     "en": "Wood",
+     "type": "wood",
+     "count": 2,
+     "levels": [
+      17
+     ],
+     "pos": [
+      {
+       "x": -55,
+       "z": 765
+      },
+      {
+       "x": -82,
+       "z": 782
+      }
+     ]
+    },
+    "herb": {
+     "fr": "Herbe",
+     "en": "Herb",
+     "type": "herb",
+     "count": 2,
+     "levels": [
+      17
+     ],
+     "pos": [
+      {
+       "x": 18,
+       "z": 648
+      },
+      {
+       "x": -18,
+       "z": 678
+      }
+     ]
+    }
+   },
+   "fishing": [
+    {
+     "name": "Raw Frostgill Trout",
+     "q": "common",
+     "id": "raw_frostgill_trout",
+     "pct": 40
+    },
+    {
+     "name": "Raw Slatefin Carp",
+     "q": "common",
+     "id": "raw_stonescale_carp",
+     "pct": 30
+    },
+    {
+     "name": "Tangled Weed",
+     "q": "poor",
+     "id": "tangled_weed",
+     "pct": 14
+    },
+    {
+     "name": "Glimmerfin Koi",
+     "q": "uncommon",
+     "id": "glimmerfin_koi",
+     "pct": 4
+    }
+   ]
+  }
+ ],
+ "professions": [
+  {
+   "id": "alchemy",
+   "fr": "Alchimie",
+   "en": "Alchemy",
+   "recipes": [
+    {
+     "result": "Minor Healing Potion",
+     "q": "common",
+     "id": "minor_healing_potion",
+     "count": 1,
+     "level": 1,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 1
+      },
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Elixir of the Bear",
+     "q": "uncommon",
+     "id": "elixir_of_the_bear",
+     "count": 1,
+     "level": 15,
+     "trivial": 50,
+     "reagents": [
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 2
+      },
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tailoring",
+   "fr": "Couture",
+   "en": "Tailoring",
+   "recipes": [
+    {
+     "result": "Eastbrook Wool Trousers",
+     "q": "common",
+     "id": "eastbrook_wool_trousers",
+     "count": 1,
+     "level": 8,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cooking",
+   "fr": "Cuisine",
+   "en": "Cooking",
+   "recipes": [
+    {
+     "result": "Salted Jerky",
+     "q": "common",
+     "id": "tough_jerky",
+     "count": 1,
+     "level": 1,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "weaponcrafting",
+   "fr": "Forge d’armes",
+   "en": "Weaponcrafting",
+   "recipes": [
+    {
+     "result": "Eastbrook Arming Sword",
+     "q": "common",
+     "id": "eastbrook_arming_sword",
+     "count": 1,
+     "level": 10,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 2
+      },
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Gravewyrm Gauntlets",
+     "q": "rare",
+     "id": "gravewyrm_gauntlets",
+     "count": 1,
+     "level": 15,
+     "trivial": 50,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 3
+      },
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "armorcrafting",
+   "fr": "Forge d’armures",
+   "en": "Armorcrafting",
+   "recipes": [
+    {
+     "result": "Eastbrook Chainmail Vest",
+     "q": "common",
+     "id": "eastbrook_chain_vest",
+     "count": 1,
+     "level": 10,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 3
+      }
+     ]
+    },
+    {
+     "result": "Boundstone Helm",
+     "q": "rare",
+     "id": "boundstone_helm",
+     "count": 1,
+     "level": 15,
+     "trivial": 50,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 4
+      },
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "engineering",
+   "fr": "Ingénierie",
+   "en": "Engineering",
+   "recipes": [
+    {
+     "result": "Arcanite Mining Pick",
+     "q": "epic",
+     "id": "arcanite_mining_pick",
+     "count": 1,
+     "level": 20,
+     "trivial": 200,
+     "reagents": [
+      {
+       "name": "Arcanite Bar",
+       "q": "epic",
+       "id": "arcanite_bar",
+       "count": 2
+      },
+      {
+       "name": "Thorium Mining Pick",
+       "q": "rare",
+       "id": "thorium_mining_pick",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Ashwood Axe",
+     "q": "rare",
+     "id": "ashwood_axe",
+     "count": 1,
+     "level": 20,
+     "trivial": 125,
+     "reagents": [
+      {
+       "name": "Ashwood Log",
+       "q": "rare",
+       "id": "ashwood_log",
+       "count": 4
+      },
+      {
+       "name": "Ironbark Axe",
+       "q": "uncommon",
+       "id": "ironbark_axe",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Elderwood Axe",
+     "q": "epic",
+     "id": "elderwood_axe",
+     "count": 1,
+     "level": 20,
+     "trivial": 200,
+     "reagents": [
+      {
+       "name": "Elderwood Log",
+       "q": "epic",
+       "id": "elderwood_log",
+       "count": 2
+      },
+      {
+       "name": "Ashwood Axe",
+       "q": "rare",
+       "id": "ashwood_axe",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Goldleaf Sickle",
+     "q": "rare",
+     "id": "goldleaf_sickle",
+     "count": 1,
+     "level": 20,
+     "trivial": 125,
+     "reagents": [
+      {
+       "name": "Goldleaf Herb",
+       "q": "rare",
+       "id": "goldleaf_herb",
+       "count": 4
+      },
+      {
+       "name": "Silverleaf Sickle",
+       "q": "uncommon",
+       "id": "silverleaf_sickle",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Sunpetal Sickle",
+     "q": "epic",
+     "id": "sunpetal_sickle",
+     "count": 1,
+     "level": 20,
+     "trivial": 200,
+     "reagents": [
+      {
+       "name": "Sunpetal Herb",
+       "q": "epic",
+       "id": "sunpetal_herb",
+       "count": 2
+      },
+      {
+       "name": "Goldleaf Sickle",
+       "q": "rare",
+       "id": "goldleaf_sickle",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Thorium Mining Pick",
+     "q": "rare",
+     "id": "thorium_mining_pick",
+     "count": 1,
+     "level": 20,
+     "trivial": 125,
+     "reagents": [
+      {
+       "name": "Thorium Ore",
+       "q": "rare",
+       "id": "thorium_ore",
+       "count": 4
+      },
+      {
+       "name": "Mithril Mining Pick",
+       "q": "uncommon",
+       "id": "mithril_mining_pick",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leatherworking",
+   "fr": "Travail du cuir",
+   "en": "Leatherworking",
+   "recipes": [
+    {
+     "result": "Tanned Leather Jerkin",
+     "q": "common",
+     "id": "tanned_leather_jerkin",
+     "count": 1,
+     "level": 9,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 2
+      },
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+};
+ "zones": [
+  {
+   "id": "eastbrook_vale",
+   "name": "Eastbrook Vale",
+   "range": [
+    1,
+    7
+   ],
+   "nodes": {
+    "ore": {
+     "fr": "Minerai",
+     "en": "Ore",
+     "type": "ore",
+     "count": 3,
+     "levels": [
+      4
+     ],
+     "pos": [
+      {
+       "x": -70,
+       "z": -53
+      },
+      {
+       "x": -73,
+       "z": -49
+      },
+      {
+       "x": -67,
+       "z": -57
+      }
+     ]
+    },
+    "wood": {
+     "fr": "Bois",
+     "en": "Wood",
+     "type": "wood",
+     "count": 3,
+     "levels": [
+      4
+     ],
+     "pos": [
+      {
+       "x": -62,
+       "z": 8
+      },
+      {
+       "x": -57,
+       "z": -6
+      },
+      {
+       "x": -68,
+       "z": 18
+      }
+     ]
+    },
+    "herb": {
+     "fr": "Herbe",
+     "en": "Herb",
+     "type": "herb",
+     "count": 3,
+     "levels": [
+      4
+     ],
+     "pos": [
+      {
+       "x": -86,
+       "z": 90
+      },
+      {
+       "x": -92,
+       "z": 80
+      },
+      {
+       "x": -80,
+       "z": 95
+      }
+     ]
+    }
+   },
+   "fishing": [
+    {
+     "name": "Raw Mirror Trout",
+     "q": "common",
+     "id": "raw_mirror_trout",
+     "pct": 45
+    },
+    {
+     "name": "Raw River Perch",
+     "q": "common",
+     "id": "raw_river_perch",
+     "pct": 30
+    },
+    {
+     "name": "Tangled Weed",
+     "q": "poor",
+     "id": "tangled_weed",
+     "pct": 12
+    },
+    {
+     "name": "Glimmerfin Koi",
+     "q": "uncommon",
+     "id": "glimmerfin_koi",
+     "pct": 3
+    }
+   ]
+  },
+  {
+   "id": "mirefen_marsh",
+   "name": "Mirefen Marsh",
+   "range": [
+    6,
+    13
+   ],
+   "nodes": {
+    "ore": {
+     "fr": "Minerai",
+     "en": "Ore",
+     "type": "ore",
+     "count": 3,
+     "levels": [
+      10
+     ],
+     "pos": [
+      {
+       "x": 40,
+       "z": 340
+      },
+      {
+       "x": -30,
+       "z": 360
+      },
+      {
+       "x": 35,
+       "z": 345
+      }
+     ]
+    },
+    "wood": {
+     "fr": "Bois",
+     "en": "Wood",
+     "type": "wood",
+     "count": 3,
+     "levels": [
+      10
+     ],
+     "pos": [
+      {
+       "x": 10,
+       "z": 330
+      },
+      {
+       "x": -15,
+       "z": 355
+      },
+      {
+       "x": -20,
+       "z": 315
+      }
+     ]
+    },
+    "herb": {
+     "fr": "Herbe",
+     "en": "Herb",
+     "type": "herb",
+     "count": 3,
+     "levels": [
+      10
+     ],
+     "pos": [
+      {
+       "x": 60,
+       "z": 385
+      },
+      {
+       "x": -45,
+       "z": 452
+      },
+      {
+       "x": 30,
+       "z": 355
+      }
+     ]
+    }
+   },
+   "fishing": [
+    {
+     "name": "Raw Marsh Pike",
+     "q": "common",
+     "id": "raw_marsh_pike",
+     "pct": 40
+    },
+    {
+     "name": "Raw Bog Eel",
+     "q": "common",
+     "id": "raw_bog_eel",
+     "pct": 30
+    },
+    {
+     "name": "Tangled Weed",
+     "q": "poor",
+     "id": "tangled_weed",
+     "pct": 9
+    },
+    {
+     "name": "Soggy Boot",
+     "q": "poor",
+     "id": "soggy_boot",
+     "pct": 8
+    },
+    {
+     "name": "Glimmerfin Koi",
+     "q": "uncommon",
+     "id": "glimmerfin_koi",
+     "pct": 3
+    }
+   ]
+  },
+  {
+   "id": "thornpeak_heights",
+   "name": "Thornpeak Heights",
+   "range": [
+    13,
+    20
+   ],
+   "nodes": {
+    "ore": {
+     "fr": "Minerai",
+     "en": "Ore",
+     "type": "ore",
+     "count": 2,
+     "levels": [
+      17
+     ],
+     "pos": [
+      {
+       "x": 90,
+       "z": 608
+      },
+      {
+       "x": 78,
+       "z": 630
+      }
+     ]
+    },
+    "wood": {
+     "fr": "Bois",
+     "en": "Wood",
+     "type": "wood",
+     "count": 2,
+     "levels": [
+      17
+     ],
+     "pos": [
+      {
+       "x": -55,
+       "z": 765
+      },
+      {
+       "x": -82,
+       "z": 782
+      }
+     ]
+    },
+    "herb": {
+     "fr": "Herbe",
+     "en": "Herb",
+     "type": "herb",
+     "count": 2,
+     "levels": [
+      17
+     ],
+     "pos": [
+      {
+       "x": 18,
+       "z": 648
+      },
+      {
+       "x": -18,
+       "z": 678
+      }
+     ]
+    }
+   },
+   "fishing": [
+    {
+     "name": "Raw Frostgill Trout",
+     "q": "common",
+     "id": "raw_frostgill_trout",
+     "pct": 40
+    },
+    {
+     "name": "Raw Slatefin Carp",
+     "q": "common",
+     "id": "raw_stonescale_carp",
+     "pct": 30
+    },
+    {
+     "name": "Tangled Weed",
+     "q": "poor",
+     "id": "tangled_weed",
+     "pct": 14
+    },
+    {
+     "name": "Glimmerfin Koi",
+     "q": "uncommon",
+     "id": "glimmerfin_koi",
+     "pct": 4
+    }
+   ]
+  }
+ ],
+ "professions": [
+  {
+   "id": "alchemy",
+   "fr": "Alchimie",
+   "en": "Alchemy",
+   "recipes": [
+    {
+     "result": "Minor Healing Potion",
+     "q": "common",
+     "id": "minor_healing_potion",
+     "count": 1,
+     "level": 1,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 1
+      },
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Elixir of the Bear",
+     "q": "uncommon",
+     "id": "elixir_of_the_bear",
+     "count": 1,
+     "level": 15,
+     "trivial": 50,
+     "reagents": [
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 2
+      },
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tailoring",
+   "fr": "Couture",
+   "en": "Tailoring",
+   "recipes": [
+    {
+     "result": "Eastbrook Wool Trousers",
+     "q": "common",
+     "id": "eastbrook_wool_trousers",
+     "count": 1,
+     "level": 8,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cooking",
+   "fr": "Cuisine",
+   "en": "Cooking",
+   "recipes": [
+    {
+     "result": "Salted Jerky",
+     "q": "common",
+     "id": "tough_jerky",
+     "count": 1,
+     "level": 1,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "weaponcrafting",
+   "fr": "Forge d’armes",
+   "en": "Weaponcrafting",
+   "recipes": [
+    {
+     "result": "Eastbrook Arming Sword",
+     "q": "common",
+     "id": "eastbrook_arming_sword",
+     "count": 1,
+     "level": 10,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 2
+      },
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Gravewyrm Gauntlets",
+     "q": "rare",
+     "id": "gravewyrm_gauntlets",
+     "count": 1,
+     "level": 15,
+     "trivial": 50,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 3
+      },
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "armorcrafting",
+   "fr": "Forge d’armures",
+   "en": "Armorcrafting",
+   "recipes": [
+    {
+     "result": "Eastbrook Chainmail Vest",
+     "q": "common",
+     "id": "eastbrook_chain_vest",
+     "count": 1,
+     "level": 10,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 3
+      }
+     ]
+    },
+    {
+     "result": "Boundstone Helm",
+     "q": "rare",
+     "id": "boundstone_helm",
+     "count": 1,
+     "level": 15,
+     "trivial": 50,
+     "reagents": [
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 4
+      },
+      {
+       "name": "Linen Scrap",
+       "q": "poor",
+       "id": "linen_scrap",
+       "count": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "engineering",
+   "fr": "Ingénierie",
+   "en": "Engineering",
+   "recipes": [
+    {
+     "result": "Arcanite Mining Pick",
+     "q": "epic",
+     "id": "arcanite_mining_pick",
+     "count": 1,
+     "level": 20,
+     "trivial": 200,
+     "reagents": [
+      {
+       "name": "Arcanite Bar",
+       "q": "epic",
+       "id": "arcanite_bar",
+       "count": 2
+      },
+      {
+       "name": "Thorium Mining Pick",
+       "q": "rare",
+       "id": "thorium_mining_pick",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Ashwood Axe",
+     "q": "rare",
+     "id": "ashwood_axe",
+     "count": 1,
+     "level": 20,
+     "trivial": 125,
+     "reagents": [
+      {
+       "name": "Ashwood Log",
+       "q": "rare",
+       "id": "ashwood_log",
+       "count": 4
+      },
+      {
+       "name": "Ironbark Axe",
+       "q": "uncommon",
+       "id": "ironbark_axe",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Elderwood Axe",
+     "q": "epic",
+     "id": "elderwood_axe",
+     "count": 1,
+     "level": 20,
+     "trivial": 200,
+     "reagents": [
+      {
+       "name": "Elderwood Log",
+       "q": "epic",
+       "id": "elderwood_log",
+       "count": 2
+      },
+      {
+       "name": "Ashwood Axe",
+       "q": "rare",
+       "id": "ashwood_axe",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Goldleaf Sickle",
+     "q": "rare",
+     "id": "goldleaf_sickle",
+     "count": 1,
+     "level": 20,
+     "trivial": 125,
+     "reagents": [
+      {
+       "name": "Goldleaf Herb",
+       "q": "rare",
+       "id": "goldleaf_herb",
+       "count": 4
+      },
+      {
+       "name": "Silverleaf Sickle",
+       "q": "uncommon",
+       "id": "silverleaf_sickle",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Sunpetal Sickle",
+     "q": "epic",
+     "id": "sunpetal_sickle",
+     "count": 1,
+     "level": 20,
+     "trivial": 200,
+     "reagents": [
+      {
+       "name": "Sunpetal Herb",
+       "q": "epic",
+       "id": "sunpetal_herb",
+       "count": 2
+      },
+      {
+       "name": "Goldleaf Sickle",
+       "q": "rare",
+       "id": "goldleaf_sickle",
+       "count": 1
+      }
+     ]
+    },
+    {
+     "result": "Thorium Mining Pick",
+     "q": "rare",
+     "id": "thorium_mining_pick",
+     "count": 1,
+     "level": 20,
+     "trivial": 125,
+     "reagents": [
+      {
+       "name": "Thorium Ore",
+       "q": "rare",
+       "id": "thorium_ore",
+       "count": 4
+      },
+      {
+       "name": "Mithril Mining Pick",
+       "q": "uncommon",
+       "id": "mithril_mining_pick",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leatherworking",
+   "fr": "Travail du cuir",
+   "en": "Leatherworking",
+   "recipes": [
+    {
+     "result": "Tanned Leather Jerkin",
+     "q": "common",
+     "id": "tanned_leather_jerkin",
+     "count": 1,
+     "level": 9,
+     "trivial": 25,
+     "reagents": [
+      {
+       "name": "Twitching Spider Leg",
+       "q": "poor",
+       "id": "spider_leg",
+       "count": 2
+      },
+      {
+       "name": "Bone Fragments",
+       "q": "poor",
+       "id": "bone_fragments",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+};
+</script>
+
+<script>
+(function () {
+  const T = (fr, en) => (window.LANG === 'en' ? en : fr);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  // Nom d'objet cliquable (fiche Codex incrustée) — même mécanisme que les pages Nouveautés.
+  const item = (o) => `<span data-codex="item|${esc(o.id)}" class="q-${esc(o.q||'common')}">${esc(o.name || o.result)}</span>`;
+
+  const NODE_ICO = { ore: '⛏️', wood: '🪵', herb: '🌿' };
+
+  function renderRecolte() {
+    const zones = CRAFT.zones || [];
+    if (!zones.length) return '<p class="empty">' + T('Aucune donnée de récolte.', 'No gathering data.') + '</p>';
+    return zones.map(z => {
+      const rng = z.range ? `<span class="lvl">${T('niv.', 'lvl')} ${z.range[0]}–${z.range[1]}</span>` : '';
+      const cols = [];
+      ['ore', 'wood', 'herb'].forEach(t => {
+        const n = z.nodes && z.nodes[t];
+        if (!n) return;
+        const lv = n.levels && n.levels.length ? n.levels.join(', ') : '?';
+        const coords = (n.pos || []).map(p => `<span class="coord">${p.x}, ${p.z}</span>`).join('');
+        cols.push(`<div class="node ${t}">
+          <h3><span class="ico">${NODE_ICO[t]}</span>${T(n.fr, n.en)}</h3>
+          <div class="meta"><b>${n.count}</b> ${T('nœud' + (n.count > 1 ? 's' : ''), 'node' + (n.count > 1 ? 's' : ''))} · ${T('niveau', 'level')} <b>${lv}</b></div>
+          <div class="coords">${coords}</div>
+        </div>`);
+      });
+      if (z.fishing && z.fishing.length) {
+        const rows = z.fishing.map(c => `<div class="catch">${item(c)}<span class="pct">${c.pct}%</span></div>`).join('');
+        cols.push(`<div class="node fish">
+          <h3><span class="ico">🎣</span>${T('Pêche', 'Fishing')}</h3>
+          <div class="meta">${T('Prises du plan d’eau', 'Catches from the water')}</div>
+          ${rows}
+        </div>`);
+      }
+      return `<div class="block">
+        <div class="block-head"><h2>${esc(z.name)}</h2>${rng}</div>
+        <div class="cols">${cols.join('')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderMetiers() {
+    const profs = CRAFT.professions || [];
+    if (!profs.length) return '<p class="empty">' + T('Aucune recette.', 'No recipes.') + '</p>';
+    return profs.map(p => {
+      const rows = (p.recipes || []).map(r => {
+        const cnt = (r.count && r.count > 1) ? `<span class="cnt">×${r.count}</span>` : '';
+        const lvl = (r.level != null) ? `<span class="rlvl">${T('niv.', 'lvl')} ${r.level}</span>` : '';
+        const reags = (r.reagents || []).map(rg =>
+          `<span class="r">${rg.count}× ${item(rg)}</span>`).join('<span class="sep">·</span>');
+        return `<div class="recipe">
+          ${lvl}
+          <span class="res">${item({ id: r.id, q: r.q, name: r.result })}</span>${cnt}
+          <span class="arrow">←</span>
+          <span class="reags">${reags}</span>
+        </div>`;
+      }).join('');
+      return `<div class="block">
+        <div class="block-head"><h2>${esc(T(p.fr, p.en))}</h2><span class="sub">${(p.recipes || []).length} ${T('recette' + (p.recipes.length > 1 ? 's' : ''), 'recipe' + (p.recipes.length > 1 ? 's' : ''))}</span></div>
+        ${rows}
+      </div>`;
+    }).join('');
+  }
+
+  const vR = document.getElementById('view-recolte');
+  const vM = document.getElementById('view-metiers');
+  vR.innerHTML = renderRecolte();
+  vM.innerHTML = renderMetiers();
+
+  const tabR = document.getElementById('tab-recolte');
+  const tabM = document.getElementById('tab-metiers');
+  function select(which) {
+    const isR = which === 'recolte';
+    tabR.setAttribute('aria-selected', isR); tabM.setAttribute('aria-selected', !isR);
+    vR.hidden = !isR; vM.hidden = isR;
+    if (location.hash !== (isR ? '' : '#metiers')) history.replaceState(null, '', isR ? location.pathname : '#metiers');
+  }
+  tabR.addEventListener('click', () => select('recolte'));
+  tabM.addEventListener('click', () => select('metiers'));
+  if (location.hash === '#metiers') select('metiers');
+
+  // Fiches Codex incrustées (si la donnée /data/ est servie, comme sur laclauderie.fr).
+  if (window.CodexPopup) { CodexPopup.enhance(vR); CodexPopup.enhance(vM); }
+})();
+</script>
+<script src="assets/lang.js"></script>
+<script src="assets/codex-popup.js" defer></script>
+</body>
+</html>

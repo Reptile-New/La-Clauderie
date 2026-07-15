@@ -41,6 +41,7 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 |---|---|---|
 | Données du Codex | `wocc-knowledge-base` → `update-knowledge-base.yml` | ~5 min après chaque tag du jeu |
 | **Builds / BiS** (`bis.html`) | `update-bis.yml` → `compute_bis.py` + `inject_bis.py` | toutes les 6 h (+ manuel) |
+| **Récolte & Métiers** (`metiers.html`) | `update-bis.yml` → `build_craft.py` + `inject_craft.py` | toutes les 6 h (+ manuel) |
 | Classement guilde (`guild.json`) | `update-guild-rank.yml` | toutes les 3 h |
 | Déploiement (OVH + Pages) | `deploy-ovh.yml` / `deploy-pages.yml` | à chaque push `main` + 6 h |
 | Rappel « version manquante » | `check-game-version.yml` ouvre une issue | toutes les 6 h |
@@ -49,6 +50,12 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 > éditer le bloc `const BIS = {…}` de `bis.html` à la main — c'est
 > `scripts/compute_bis.py` (données réelles de la KB) réinjecté par
 > `scripts/inject_bis.py` qui le produit, et le workflow le refait tout seul.
+>
+> Idem pour **`metiers.html`** (Récolte & Métiers) : le bloc `const CRAFT = {…}`
+> est produit par `scripts/build_craft.py` + `scripts/inject_craft.py` à partir
+> de `GATHER_NODES`, `FISHING_TABLES`, `ALL_RECIPES` et `ZONES` de la KB. Ne pas
+> l'éditer à la main. La page se suffit à elle-même (données embarquées) pour
+> marcher aussi bien sur OVH que sur GitHub Pages (où `/data/` n'est pas servi).
 
 ## Branche & déploiement
 - Développer sur `claude/site-update-6uhdmv`, merger sur `main` (source du déploiement).

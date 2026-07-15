@@ -1,14 +1,14 @@
-# Recalcule le BiS (page Builds) à partir des données réelles du jeu, sans IA
-# ni intervention humaine. Tourne toutes les 6 h : récupère la knowledge base
+# Recalcule les pages « mécaniques » du site à partir des données réelles du
+# jeu, sans IA ni intervention humaine : le BiS (page Builds) et les données de
+# la page Récolte & Métiers. Tourne toutes les 6 h : récupère la knowledge base
 # (repo public wocc-knowledge-base, déjà régénérée tout seule à chaque nouvelle
-# version du jeu), lance compute_bis.py, réinjecte le résultat dans bis.html et
-# ne commite QUE si quelque chose a changé. Le calcul est 100 % déterministe —
-# c'est la partie « mécanique » de la mise à jour du site, désormais automatique.
+# version du jeu), régénère bis.html + metiers.html et ne commite QUE si quelque
+# chose a changé. 100 % déterministe — la partie « à calculer, pas à rédiger ».
 #
 # La rédaction des pages « Nouveautés » (notes/vX.Y.Z.html) reste éditoriale :
 # le workflow « Alerte nouvelle version du jeu » ouvre une issue de rappel quand
 # une version n'y est pas encore.
-name: Recalcul du BiS (Builds)
+name: Recalcul BiS + Récolte/Métiers
 
 on:
   schedule:
@@ -45,29 +45,33 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Recalculer le BiS et l'injecter dans bis.html
-        id: bis
+      - name: Régénérer bis.html et metiers.html
+        id: gen
         run: |
           set -euo pipefail
+          # BiS (Builds)
           python3 scripts/compute_bis.py wocc-knowledge-base/data > bis_new.json
           python3 scripts/inject_bis.py wocc-knowledge-base/data bis.html bis_new.json
-          rm -f bis_new.json
-          if git diff --quiet -- bis.html; then
-            echo "Le BiS est déjà à jour."
+          # Récolte & Métiers
+          python3 scripts/build_craft.py wocc-knowledge-base/data > craft.json
+          python3 scripts/inject_craft.py metiers.html craft.json
+          rm -f bis_new.json craft.json
+          if git diff --quiet -- bis.html metiers.html; then
+            echo "BiS et Récolte/Métiers déjà à jour."
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Commiter le nouveau BiS
-        if: steps.bis.outputs.changed == 'true'
+      - name: Commiter les pages régénérées
+        if: steps.gen.outputs.changed == 'true'
         run: |
           set -euo pipefail
           tag=$(python3 -c "import json;print(json.load(open('wocc-knowledge-base/data/_meta.json'))['tag'])")
           git config user.name "clauderie-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add bis.html
-          git commit -m "Builds : recalcul automatique du BiS sur les données $tag"
+          git add bis.html metiers.html
+          git commit -m "Builds + Récolte/Métiers : recalcul automatique sur les données $tag"
           # Secours si un autre workflow a poussé sur main entre-temps.
           for i in 1 2 3 4; do
             git push && break || { echo "push échoué, rebase et nouvelle tentative ($i)…"; git pull --rebase origin main; }
@@ -76,7 +80,7 @@ jobs:
       # Un push au GITHUB_TOKEN ne déclenche pas les workflows « on: push » —
       # on relance donc les publications explicitement (OVH + GitHub Pages).
       - name: Publier le site
-        if: steps.bis.outputs.changed == 'true'
+        if: steps.gen.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
