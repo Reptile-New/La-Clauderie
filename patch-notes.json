@@ -2,6 +2,28 @@
   "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français). Champ page_en : la page de notes en anglais (notes/vX.Y.Z.en.html) ; la version anglaise du site l'utilise.",
   "versions": [
     {
+      "version": "v0.26.0",
+      "date": "2026-07-15",
+      "titre": "Le Dungeon Finder, le Hit Rating et un cooldown de tank par classe",
+      "resume": "Mise à jour « files & confort » : le Dungeon Finder (Maj+I) pour se grouper d'un clic sur les donjons et le raid, la stat Hit Rating et un butin héroïque enrichi, un vrai cooldown défensif pour chaque tank, le client Windows signé, la récolte cliquable et le rengainement d'arme.",
+      "temps_forts": [
+        "Dungeon Finder : file par rôle FIFO sur les 4 donjons, l'héroïque et Nythraxis",
+        "Hit Rating (10 = +1 % de touche) et pénalités héroïques ramenées à ~26 % / 25 %",
+        "Un cooldown de tank par classe : Ironhold, Sacred Bulwark, Primal Reflexes",
+        "Client Windows signé, récolte cliquable et rengainement d'arme (Z)"
+      ],
+      "page": "notes/v0.26.0.html",
+      "titre_en": "The Dungeon Finder, Hit Rating and a tank cooldown per class",
+      "resume_en": "A “queues & comfort” update: the Dungeon Finder (Shift+I) to group up in one click for dungeons and the raid, the Hit Rating stat and beefed-up heroic loot, a real defensive cooldown for every tank, the signed Windows client, clickable gathering and weapon sheathing.",
+      "temps_forts_en": [
+        "Dungeon Finder: role-based FIFO queue for the 4 dungeons, heroic and Nythraxis",
+        "Hit Rating (10 = +1% hit) and heroic penalties cut to ~26% / 25%",
+        "A tank cooldown per class: Ironhold, Sacred Bulwark, Primal Reflexes",
+        "Signed Windows client, clickable gathering and weapon sheathing (Z)"
+      ],
+      "page_en": "notes/v0.26.0.en.html"
+    },
+    {
       "version": "v0.25.0",
       "date": "2026-07-14",
       "titre": "Le raid héroïque Nythraxis, les 27 sorts signature et le Book of Deeds",

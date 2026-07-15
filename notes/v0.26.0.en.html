@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>What's new in v0.26.0 — La Clauderie</title>
+<meta name="description" content="Everything new in World of ClaudeCraft v0.26.0, with the exact rules.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="What&#39;s new in v0.26.0 — La Clauderie">
+<meta property="og:description" content="Everything new in World of ClaudeCraft v0.26.0, with the exact rules.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.26.0.en.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.26.0.en.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') !== 'en') location.replace('v0.26.0.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" aria-label="Navigation du site">
+      <a href="../index.html" data-en="Home">Accueil</a>
+      <a href="../bis.html">⚔️ Builds</a>
+      <a href="../patch-notes.html" class="cur" data-en="📜 What&#39;s new">📜 Nouveautés</a>
+      <a href="/codex/">📚 Codex</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Release notes</p>
+    <h1>What's new in <span class="v">v0.26.0</span></h1>
+    <p class="lede">A “queues & comfort” update: the Dungeon Finder to group up in one click, Hit Rating and beefed-up heroic loot, a real defensive cooldown for every tank, the signed Windows client, clickable gathering and weapon sheathing. Click a bubble for the detailed rules.</p>
+    <div class="meta">
+      <span><b>Released</b> July 15, 2026</span>
+      <span><b>131</b> commits</span>
+      <span><b>Queues, endgame</b> &amp; comfort</span>
+    </div>
+    <div class="hint">💡 Click a feature to open its detailed rules — and the <span data-codex="term|proc">underlined words</span> for their definition.</div>
+  </header>
+
+  <!-- 1 DUNGEON FINDER -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>The Dungeon Finder — group up in one click</h2></div>
+    <p class="sec-sub">A new window (<span class="kbd">Shift+I</span>) to queue for dungeons and the raid without going through chat. Matching stays deterministic: no randomness, the simulation keeps its integrity.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="finder" tabindex="0" role="button" aria-label="Details: catalog and Quick Match">
+        <h3>Catalog &amp; Quick Match <span class="chip c-new">System</span></h3>
+        <p>The <strong class="hl">four normal dungeons</strong>, their heroic variants and the <span data-codex="mob|Nythraxis">Nythraxis</span> raid — role-based queue, <strong class="hl">FIFO</strong> order.</p>
+        <span class="more-link">How the queue works</span>
+      </div>
+      <div class="card more" data-detail="premade" tabindex="0" role="button" aria-label="Details: the Premade Board">
+        <h3>The Premade Board <span class="chip c-util">Group</span></h3>
+        <p>Group leaders <strong class="hl">publish their listing</strong>; everyone else applies from a board instead of spamming chat.</p>
+        <span class="more-link">Publish and join</span>
+      </div>
+      <div class="card">
+        <h3>Good to know</h3>
+        <ul>
+          <li>Group proposal: <strong class="hl">30 seconds</strong> to accept.</li>
+          <li>Declining = a <strong class="hl">60 s lockout</strong> before re-queuing.</li>
+          <li>Matching is <strong class="hl">deterministic</strong> — same queue, same result, no randomness.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 HIT RATING & HEROIC LOOT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Hit Rating &amp; beefed-up heroic loot</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="hit" tabindex="0" role="button" aria-label="Details: Hit Rating">
+        <h3>Hit Rating <span class="chip c-bal">Stat</span></h3>
+        <p>A new stat: <strong class="hl">10 Hit Rating = +1% hit chance</strong>, reducing misses and resists against higher-level enemies.</p>
+        <span class="more-link">What it changes</span>
+      </div>
+      <div class="card more" data-detail="hpen" tabindex="0" role="button" aria-label="Details: reduced heroic penalties">
+        <h3>Heroic made readable <span class="chip c-raid">Dungeons</span></h3>
+        <p>Above-level penalties in Heroic drop from <strong class="hl">44% / 43%</strong> to roughly <strong class="hl">26% / 25%</strong>.</p>
+        <span class="more-link">The new numbers</span>
+      </div>
+      <div class="card">
+        <h3>Richer heroic loot</h3>
+        <ul>
+          <li>All <strong class="hl">ilvl 31</strong> heroic gear gains additional combat ratings.</li>
+          <li><span data-codex="mob|Nythraxis">Nythraxis</span> heroic pieces carry <strong class="hl">dual ratings</strong>, marking quality steps.</li>
+          <li>Four retired heroic items are <strong class="hl">restored</strong> for players still holding them.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 TANK COOLDOWNS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>A defensive cooldown for every tank</h2></div>
+    <p class="sec-sub">All three tank classes finally get their dedicated survival button — enough to soak the big hits of the Deathless Court.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="tankcd" tabindex="0" role="button" aria-label="Details: the three tank cooldowns">
+        <h3>The 3 cooldowns <span class="chip c-plate">Tank</span></h3>
+        <p><span data-codex="ability|Ironhold">Ironhold</span>, <span data-codex="ability|Sacred Bulwark">Sacred Bulwark</span>, <span data-codex="ability|Primal Reflexes">Primal Reflexes</span> — one per class, each with its own flavor.</p>
+        <span class="more-link">Effects, durations and cooldowns</span>
+      </div>
+      <div class="card">
+        <h3>Also on threat</h3>
+        <ul>
+          <li>Taunts now <strong class="hl">bypass the impact resist roll</strong>: no more “resisted” taunt against a higher-level enemy.</li>
+          <li>Immediate takeover even at a level gap — the tank stays in control of its target.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Why it matters</h3>
+        <ul>
+          <li>On the <strong class="hl">Deathless Court</strong> (v0.25.0 heroic raid), every tank now has a way to survive a burst window.</li>
+          <li>The druid's <span data-codex="ability|Primal Reflexes">Primal Reflexes</span> stays <strong class="hl">usable while shapeshifted</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 WINDOWS CLIENT & COMFORT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Windows client &amp; quality of life</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>Signed Windows client <span class="chip c-util">App</span></h3>
+        <ul>
+          <li>A <strong class="hl">signed</strong> installer via the “Download for Windows” button.</li>
+          <li>Authenticode signing (Azure Key Vault): <strong class="hl">no more SmartScreen</strong> “unknown publisher” warning.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Clickable gathering</h3>
+        <ul>
+          <li>Mining, Logging and Herbalism nodes are <strong class="hl">clickable within 5 yards</strong>.</li>
+          <li><strong class="hl">Per-player</strong> respawn timers now sync correctly online.</li>
+        </ul>
+      </div>
+      <div class="card more" data-detail="sheath" tabindex="0" role="button" aria-label="Details: weapon sheathing">
+        <h3>Weapon sheathing <span class="chip c-new">Comfort</span></h3>
+        <p><span class="kbd">Z</span> stows the weapon on your back, each family with its own animation. It auto-draws on combat actions.</p>
+        <span class="more-link">The details</span>
+      </div>
+    </div>
+    <div class="grid cols-2" style="margin-top:13px">
+      <div class="card">
+        <h3>Bags &amp; equipment</h3>
+        <ul>
+          <li><strong class="hl">Drag</strong> a bag item onto the paperdoll to equip it directly.</li>
+          <li><strong class="hl">Right-click</strong> to equip/use, <strong class="hl">Shift+right-click</strong> to destroy.</li>
+          <li>Action-bar consumables <strong class="hl">persist through respec and relog</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Interface &amp; settings</h3>
+        <ul>
+          <li>Keybind repair: <strong class="hl">Q/E</strong> strafe restored, Damage Meters rebound to <span class="kbd">Shift+H</span>.</li>
+          <li>XP floaters bumped to <strong class="hl">20px</strong> with a 1800ms lifetime.</li>
+          <li>The attack button becomes <strong class="hl">removable</strong> from the Interface options.</li>
+          <li>Tooltips always show <strong class="hl">class restrictions</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 SOCIAL -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Social &amp; community</h2></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>5 new Discord flairs</h3>
+        <ul>
+          <li>Five Discord roles grant a <strong class="hl">colored nameplate tag</strong> in game: <strong class="hl">Senior Mod, Junior Mod, Content Creator, LEGEND, SHILL</strong>.</li>
+          <li>Your own nameplate shows <strong class="hl">by default</strong> for new accounts.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Chat &amp; presentation</h3>
+        <ul>
+          <li>Mob combat chatter routes to the <strong class="hl">Combat Log</strong> tab.</li>
+          <li>Community Discord invite <strong class="hl">consolidated</strong>.</li>
+          <li>Chat colors match the active send channel, with sticky selection.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 COMBAT & WORLD -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Combat, quests &amp; fixes</h2></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Combat</h3>
+        <ul>
+          <li>Stealth gating fixed for <span data-codex="ability|Gut Punch">Gut Punch</span>, <span data-codex="ability|Ambush">Ambush</span>, <span data-codex="ability|Garrote">Garrote</span> and <span data-codex="ability|Sap">Sap</span>.</li>
+          <li><span data-codex="ability|Sureflight Aura">Sureflight Aura</span> no longer double-stacks: a second source replaces the first.</li>
+          <li>Rare-mob quest drops credit <strong class="hl">damage contributors</strong>, not just tap ownership.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Quests &amp; world</h3>
+        <ul>
+          <li>Quest prerequisites resolve <strong class="hl">immediately after turn-in</strong>, without reopening the dialog.</li>
+          <li>Corrected directions for “The Bound Guardian”.</li>
+          <li>Movement intent clears on arena respawn and companion revive.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 THE REST -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>The rest of the update</h2></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Rendering &amp; audio</h3>
+        <ul>
+          <li><strong class="hl">11 GLB models</strong> replaced in The Drowned Litany (marsh and maze props, a dungeon door).</li>
+          <li>Heroic Nythraxis phase-2 spirits now use the <strong class="hl">correct models</strong>.</li>
+          <li>New <strong class="hl">reptile voice family</strong> (7 takes); mob crits trigger a hurt cue.</li>
+          <li>Collision fixes and the Bell Rope puzzle now completable in The Drowned Litany.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Server &amp; operations</h3>
+        <ul>
+          <li>Realm admission cap: <span class="kbd">MAX_PLAYERS_PER_REALM</span> env var (default 5,000).</li>
+          <li>Same-account lease takeover: <strong class="hl">immediate reconnect</strong>, no TTL wait.</li>
+          <li><strong class="hl">Full-jitter</strong> exponential backoff (20-attempt cap) and self-clocked keepalive.</li>
+          <li>In-game restart countdown broadcast (10, 5, 2, 1 min then 30, 10, 0 s).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Mobile &amp; browser</h3>
+        <ul>
+          <li>Fixes for <strong class="hl">Firefox pointer lock and mouselook</strong>.</li>
+          <li>Mobile camera released cleanly when an OS gesture interrupts.</li>
+          <li>Death-screen buttons now <strong class="hl">multi-touch</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Localization &amp; toolchain</h3>
+        <ul>
+          <li><strong class="hl">7,400 registry keys</strong> across 21 locales, zero pending rows outside English.</li>
+          <li>A <strong class="hl">2,095-row fill</strong>, including Dungeon Finder keys.</li>
+          <li>Generated <span class="kbd">TranslationKey</span> union: TypeScript compile time <strong class="hl">halved</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compiled for <strong>La Clauderie</strong> — data and rules from the official v0.26.0 release notes.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← All updates</a> · <a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Close">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    finder: {
+      title: "Catalog & Quick Match",
+      summary: "The Dungeon Finder (Shift+I) gathers all group content into one window, with a role-based queue and deterministic matching.",
+      body: `
+        <h4>The catalog</h4>
+        <ul>
+          <li>The <b>four normal dungeons</b>, their <b>heroic variants</b> and the <span data-codex="mob|Nythraxis">Nythraxis</span> raid — all listed in one place.</li>
+          <li>You pick your role (tank, healer, DPS) before queuing.</li>
+        </ul>
+        <h4>Quick Match</h4>
+        <ul>
+          <li><b>FIFO</b> queue (first in, first served): no randomness, the simulation keeps its integrity.</li>
+          <li>When a group forms, a <b>proposal</b> appears: <b>30 seconds</b> to accept.</li>
+          <li>Declining triggers a <b>60-second lockout</b> before re-queuing.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">For the guild: no more shouting “LFM” in chat — everyone queues for the same content and the group forms itself.</p>`
+    },
+    premade: {
+      title: "The Premade Board",
+      summary: "A listing board for hand-built groups, alongside the automatic queue.",
+      body: `
+        <ul>
+          <li>Group <b>leaders publish</b> their listing (target content, spots left) on a shared board.</li>
+          <li>Other players <b>apply</b> from that board instead of spamming general chat.</li>
+          <li>Ideal when you want to pick your comp rather than let the queue decide.</li>
+        </ul>`
+    },
+    hit: {
+      title: "Hit Rating",
+      summary: "A new combat stat that reduces misses and resists, especially against higher-level enemies.",
+      body: `
+        <h4>The rule</h4>
+        <ul>
+          <li><b>10 Hit Rating = +1% hit chance.</b></li>
+          <li>Cuts down on <b>misses</b> and <b>partial resists</b> — valuable when striking above your level.</li>
+        </ul>
+        <h4>Where to find it</h4>
+        <ul>
+          <li>On <b>ilvl 31</b> heroic gear, now credited with additional combat ratings.</li>
+          <li>On <span data-codex="mob|Nythraxis">Nythraxis</span> heroic pieces, which carry a dual progression rating.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">The site's <span data-codex="term|bis">BiS</span> is recomputed on the new data — the Builds pages follow the Codex automatically.</p>`
+    },
+    hpen: {
+      title: "Heroic made readable",
+      summary: "Above-level damage penalties in Heroic difficulty are sharply reduced.",
+      body: `
+        <ul>
+          <li>Offensive penalty: from <b>44%</b> down to roughly <b>26%</b>.</li>
+          <li>Defensive penalty: from <b>43%</b> down to roughly <b>25%</b>.</li>
+          <li>Combined with <b>Hit Rating</b>, Heroic becomes far less punishing when tackled at content level.</li>
+        </ul>`
+    },
+    tankcd: {
+      title: "The tank defensive cooldowns",
+      summary: "A dedicated survival button per tank class — exact effects and cooldowns.",
+      body: `
+        <h4>The three cooldowns</h4>
+        <ul>
+          <li><b>Warrior — <span data-codex="ability|Ironhold">Ironhold</span></b>: <b>-40% damage taken for 8 s</b>, <b>3 min</b> cooldown.</li>
+          <li><b>Paladin — <span data-codex="ability|Sacred Bulwark">Sacred Bulwark</span></b>: the next hit that would kill you is <b>denied</b>, restoring you to <b>35% HP</b>, <b>3 min</b> cooldown.</li>
+          <li><b>Druid — <span data-codex="ability|Primal Reflexes">Primal Reflexes</span></b>: <b>+50% dodge for 6 s</b>, <b>60 s</b> cooldown, <b>usable while shapeshifted</b>.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">For the guild: assign these cooldowns to the Deathless Court's burst windows — every tank now has a way to eat a big hit.</p>`
+    },
+    sheath: {
+      title: "Weapon sheathing",
+      summary: "Pure visual comfort: stow your weapon with one key.",
+      body: `
+        <ul>
+          <li><span class="kbd">Z</span> stows the weapon on your back; each <b>weapon family</b> has its own animation.</li>
+          <li>Drawing triggers <b>automatically</b> on the first combat action.</li>
+          <li>The state <b>persists through relog</b> and is visible to other players.</li>
+        </ul>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>

@@ -182,7 +182,7 @@
 
 <div class="wrap">
   <header class="page">
-    <p class="eyebrow" data-en="Class guide · Patch v0.25.0">Guide de classe · Patch v0.25.0</p>
+    <p class="eyebrow" data-en="Class guide · Patch v0.26.0">Guide de classe · Patch v0.26.0</p>
     <h1>Builds</h1>
     <p class="lede" data-en="Pick your class, then your role: the recommended specialisation and talents (with the why), the rotation, then the best gear in the game — set bonuses included, both rings covered. Click an item, talent or spell to open its sheet without leaving the page.">Choisis ta classe puis ton rôle : la spécialisation et les talents recommandés (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
   </header>
@@ -198,7 +198,7 @@
 
 <footer>
   <div class="wrap">
-    <p data-en="Gear optimised on the game&#39;s real data (tag v0.25.0) with the patch&#39;s combat formulas: each item&#39;s value is measured within the full loadout, set bonuses and procs included — that&#39;s why some set pieces beat “better” standalone items. <b style=&quot;color:var(--dim)&quot;>Alt.</b> = best replacement if you&#39;re missing the piece. <b style=&quot;color:var(--dim)&quot;>equippable*</b> = the tooltip lists other classes, but the game only restricts armor by its type (cloth/leather/mail). The game has no “unique” items: wearing <b style=&quot;color:var(--dim)&quot;>two copies of the same ring</b> is allowed (verified in the equipment code) — hence the doubled rings. <b style=&quot;color:var(--dim)&quot;>FURY</b> = bought with PvP Honor (v0.25): its Warfare rating does nothing in PvE, but the raw stats sometimes win the slot anyway.">Panoplies optimisées sur les données réelles du jeu (tag v0.25.0) avec les formules de combat du patch : la valeur de chaque objet est mesurée dans la panoplie complète, bonus de sets et procs compris — c'est pour ça que certaines pièces de set battent des objets « meilleurs » pris isolément. <b style="color:var(--dim)">Alt.</b> = meilleur remplaçant si la pièce te manque. <b style="color:var(--dim)">équipable*</b> = le tooltip cite d'autres classes, mais le jeu ne restreint les armures que par type (tissu/cuir/mailles). Le jeu n'a pas d'objets « uniques » : porter <b style="color:var(--dim)">deux exemplaires du même anneau</b> est autorisé (vérifié dans le code d'équipement) — d'où les anneaux doublés. <b style="color:var(--dim)">FURY</b> = acheté avec l'Honor PvP (v0.25) : son Warfare ne sert à rien en PvE, mais les stats brutes gagnent parfois quand même l'emplacement.</p>
+    <p data-en="Gear optimised on the game&#39;s real data (tag v0.26.0) with the patch&#39;s combat formulas: each item&#39;s value is measured within the full loadout, set bonuses and procs included — that&#39;s why some set pieces beat “better” standalone items. <b style=&quot;color:var(--dim)&quot;>Alt.</b> = best replacement if you&#39;re missing the piece. <b style=&quot;color:var(--dim)&quot;>equippable*</b> = the tooltip lists other classes, but the game only restricts armor by its type (cloth/leather/mail). The game has no “unique” items: wearing <b style=&quot;color:var(--dim)&quot;>two copies of the same ring</b> is allowed (verified in the equipment code) — hence the doubled rings. <b style=&quot;color:var(--dim)&quot;>FURY</b> = bought with PvP Honor (v0.25): its Warfare rating does nothing in PvE, but the raw stats sometimes win the slot anyway.">Panoplies optimisées sur les données réelles du jeu (tag v0.26.0) avec les formules de combat du patch : la valeur de chaque objet est mesurée dans la panoplie complète, bonus de sets et procs compris — c'est pour ça que certaines pièces de set battent des objets « meilleurs » pris isolément. <b style="color:var(--dim)">Alt.</b> = meilleur remplaçant si la pièce te manque. <b style="color:var(--dim)">équipable*</b> = le tooltip cite d'autres classes, mais le jeu ne restreint les armures que par type (tissu/cuir/mailles). Le jeu n'a pas d'objets « uniques » : porter <b style="color:var(--dim)">deux exemplaires du même anneau</b> est autorisé (vérifié dans le code d'équipement) — d'où les anneaux doublés. <b style="color:var(--dim)">FURY</b> = acheté avec l'Honor PvP (v0.25) : son Warfare ne sert à rien en PvE, mais les stats brutes gagnent parfois quand même l'emplacement.</p>
     <p style="margin-top:8px"><a href="index.html" data-en="← Back to the site">← Retour au site</a></p>
   </div>
 </footer>
@@ -846,25 +846,6 @@ const BIS = {
      },
      "waist": {
       "best": {
-       "name": "Furyforged Girdle",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "armor": 200,
-        "str": 6,
-        "sta": 8
-       },
-       "w": null,
-       "sp": null,
-       "id": "furyforged_girdle",
-       "score": 30.7,
-       "xclass": false,
-       "slot": "waist",
-       "src": [
-        "Vendu par FURY"
-       ]
-      },
-      "alt": {
        "name": "Gravescale Girdle",
        "q": "epic",
        "set": null,
@@ -881,6 +862,25 @@ const BIS = {
        "slot": "waist",
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
+      },
+      "alt": {
+       "name": "Furyforged Girdle",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 200,
+        "str": 3,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "furyforged_girdle",
+       "score": 24.7,
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Vendu par FURY"
        ]
       }
      },
@@ -945,22 +945,22 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Furyforged Gauntlets",
+       "name": "Gravewyrm Claws",
        "q": "epic",
        "set": null,
        "stats": {
-        "armor": 200,
-        "str": 6,
-        "sta": 8
+        "armor": 224,
+        "str": 9,
+        "sta": 6
        },
        "w": null,
        "sp": null,
-       "id": "furyforged_gauntlets",
-       "score": 30.7,
+       "id": "gravewyrm_claws",
+       "score": 33.7,
        "xclass": false,
        "slot": "gloves",
        "src": [
-        "Vendu par FURY"
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
        ]
       }
      },
@@ -1007,115 +1007,115 @@ const BIS = {
      },
      "neck": {
       "best": {
-       "name": "Razorwind Torque",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 7
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "razorwind_torque",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Medallion of the Final Oath",
+       "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 7
+        "str": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "final_oath_medallion",
-       "score": 13.0,
+       "id": "medallion_of_endless_profit",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Last-Step Signet",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 5,
-        "sta": 7
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "last_step_signet",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Iron Vow Band",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 5,
-        "sta": 7
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "iron_vow_band",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Last-Step Signet",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 5,
-        "sta": 7
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "last_step_signet",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Iron Vow Band",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 5,
-        "sta": 7
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "iron_vow_band",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -1132,7 +1132,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4567.8
+    "score": 4500.5
    },
    "dps": {
     "picks": {
@@ -1448,45 +1448,27 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Tideworn Warboots",
+       "name": "Shadowpulse Slippers",
        "q": "epic",
        "set": null,
        "stats": {
-        "armor": 212,
-        "str": 8,
-        "sta": 6
+        "armor": 44,
+        "int": 8,
+        "spi": 6
        },
        "w": null,
        "sp": null,
-       "id": "tideworn_warboots",
-       "score": 31.7,
-       "xclass": false,
+       "id": "shadowpulse_slippers",
+       "score": 17.7,
+       "xclass": true,
        "slot": "feet",
        "src": [
-        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
        ]
       }
      },
      "neck": {
       "best": {
-       "name": "Swiftfang Talisman",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 6,
-        "agi": 6
-       },
-       "w": null,
-       "sp": null,
-       "id": "swiftfang_talisman",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
-      },
-      "alt": {
        "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
@@ -1503,20 +1485,38 @@ const BIS = {
        "src": [
         "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
+      },
+      "alt": {
+       "name": "Yumi's Keepsake Locket",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 7,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -1525,36 +1525,36 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -1563,21 +1563,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -1594,7 +1594,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 70.2
+    "score": 76.7
    }
   }
  },
@@ -1775,25 +1775,6 @@ const BIS = {
      },
      "waist": {
       "best": {
-       "name": "Furyforged Girdle",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "armor": 200,
-        "str": 6,
-        "sta": 8
-       },
-       "w": null,
-       "sp": null,
-       "id": "furyforged_girdle",
-       "score": 30.7,
-       "xclass": false,
-       "slot": "waist",
-       "src": [
-        "Vendu par FURY"
-       ]
-      },
-      "alt": {
        "name": "Gravescale Girdle",
        "q": "epic",
        "set": null,
@@ -1810,6 +1791,25 @@ const BIS = {
        "slot": "waist",
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
+      },
+      "alt": {
+       "name": "Furyforged Girdle",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 200,
+        "str": 3,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "furyforged_girdle",
+       "score": 24.7,
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Vendu par FURY"
        ]
       }
      },
@@ -1874,22 +1874,22 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Furyforged Gauntlets",
+       "name": "Gravewyrm Claws",
        "q": "epic",
        "set": null,
        "stats": {
-        "armor": 200,
-        "str": 6,
-        "sta": 8
+        "armor": 224,
+        "str": 9,
+        "sta": 6
        },
        "w": null,
        "sp": null,
-       "id": "furyforged_gauntlets",
-       "score": 30.7,
+       "id": "gravewyrm_claws",
+       "score": 33.7,
        "xclass": false,
        "slot": "gloves",
        "src": [
-        "Vendu par FURY"
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
        ]
       }
      },
@@ -1936,115 +1936,115 @@ const BIS = {
      },
      "neck": {
       "best": {
-       "name": "Razorwind Torque",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 7
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "razorwind_torque",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Medallion of the Final Oath",
+       "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 7
+        "str": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "final_oath_medallion",
-       "score": 13.0,
+       "id": "medallion_of_endless_profit",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Last-Step Signet",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 5,
-        "sta": 7
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "last_step_signet",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Iron Vow Band",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 5,
-        "sta": 7
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "iron_vow_band",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Last-Step Signet",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 5,
-        "sta": 7
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "last_step_signet",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Iron Vow Band",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 5,
-        "sta": 7
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "iron_vow_band",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -2061,7 +2061,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4527.4
+    "score": 4460.2
    },
    "heal": {
     "picks": {
@@ -2090,43 +2090,42 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Stormcaller's Focus",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 14,
+        "spi": 9
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 31,
+        "max": 52,
+        "speed": 2.5
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "stormcallers_focus",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
      "helmet": {
       "best": {
-       "name": "Wraithfire Cowl",
+       "name": "Galecall Crown",
        "q": "epic",
-       "set": "Wraithfire Regalia",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 105,
-        "sta": 7,
-        "int": 13
+        "armor": 225,
+        "sta": 8,
+        "int": 12
        },
        "w": null,
        "sp": null,
-       "id": "heroic_soulflame_cowl",
-       "score": 28.8,
+       "id": "heroic_stormcallers_crown",
+       "score": 38.8,
        "xclass": true,
        "slot": "helmet",
        "src": [
@@ -2135,18 +2134,18 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Wraithfire Cowl",
+       "name": "Galecall Crown",
        "q": "epic",
-       "set": "Wraithfire Regalia",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 105,
-        "int": 11,
-        "sta": 6
+        "armor": 225,
+        "int": 10,
+        "sta": 7
        },
        "w": null,
        "sp": null,
-       "id": "soulflame_cowl",
-       "score": 25.8,
+       "id": "stormcallers_crown",
+       "score": 35.8,
        "xclass": true,
        "slot": "helmet",
        "src": [
@@ -2157,41 +2156,43 @@ const BIS = {
      },
      "shoulder": {
       "best": {
-       "name": "Mournweave Soulspire Mantle",
+       "name": "Galecall Spaulders",
        "q": "epic",
-       "set": "Mournweave Raiment",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 70,
-        "int": 10,
-        "spi": 5
+        "armor": 190,
+        "sta": 8,
+        "int": 9
        },
        "w": null,
        "sp": null,
-       "id": "heroic_necromancers_soulspire_mantle",
-       "score": 20.8,
+       "id": "heroic_stormcallers_spaulders",
+       "score": 32.8,
        "xclass": true,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Korzul the Gravewyrm · 4 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 17 %"
        ]
       },
       "alt": {
-       "name": "Mournweave Soulspire Mantle",
+       "name": "Galecall Spaulders",
        "q": "epic",
-       "set": "Mournweave Raiment",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 70,
-        "int": 9,
-        "spi": 5
+        "armor": 190,
+        "int": 8,
+        "sta": 7
        },
        "w": null,
        "sp": null,
-       "id": "necromancers_soulspire_mantle",
-       "score": 19.8,
+       "id": "stormcallers_spaulders",
+       "score": 30.8,
        "xclass": true,
        "slot": "shoulder",
        "src": [
-        "Butin : Korzul the Gravewyrm · 4 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
        ]
       }
      },
@@ -2237,6 +2238,25 @@ const BIS = {
      },
      "waist": {
       "best": {
+       "name": "Galecall Waistguard",
+       "q": "epic",
+       "set": "Galecall Vestments",
+       "stats": {
+        "armor": 110,
+        "int": 8,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "stormcallers_waistguard",
+       "score": 22.2,
+       "xclass": true,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
+      },
+      "alt": {
        "name": "Wraithfire Cord",
        "q": "epic",
        "set": "Wraithfire Regalia",
@@ -2253,25 +2273,6 @@ const BIS = {
        "slot": "waist",
        "src": [
         "Butin : Thunzharr, the Waking Peak · 8 %"
-       ]
-      },
-      "alt": {
-       "name": "Sash of the Sunken Court",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "armor": 48,
-        "int": 9,
-        "sta": 6
-       },
-       "w": null,
-       "sp": null,
-       "id": "sash_of_the_sunken_court",
-       "score": 19.0,
-       "xclass": true,
-       "slot": "waist",
-       "src": [
-        "Butin héroïque : Vael the Fogbinder · 33 %"
        ]
       }
      },
@@ -2318,25 +2319,6 @@ const BIS = {
      },
      "gloves": {
       "best": {
-       "name": "Wraithfire Gloves",
-       "q": "epic",
-       "set": "Wraithfire Regalia",
-       "stats": {
-        "armor": 60,
-        "int": 8,
-        "sta": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "soulflame_gloves",
-       "score": 18.0,
-       "xclass": true,
-       "slot": "gloves",
-       "src": [
-        "Butin : Thunzharr, the Waking Peak · 8 %"
-       ]
-      },
-      "alt": {
        "name": "Wyrmchoir Handwraps",
        "q": "epic",
        "set": null,
@@ -2353,6 +2335,25 @@ const BIS = {
        "slot": "gloves",
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
+      },
+      "alt": {
+       "name": "Galecall Handguards",
+       "q": "epic",
+       "set": "Galecall Vestments",
+       "stats": {
+        "armor": 130,
+        "int": 8,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "stormcallers_handguards",
+       "score": 23.8,
+       "xclass": true,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
        ]
       }
      },
@@ -2416,22 +2417,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Cinder-Sigil Pendant",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
@@ -2455,22 +2455,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Ashen Focus Ring",
+       "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
+        "int": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
+       "id": "nielas_coldlight_band",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
@@ -2516,16 +2515,16 @@ const BIS = {
     "sets": [
      {
       "name": "Mournweave Raiment",
-      "pieces": 4,
-      "bonus": 4
+      "pieces": 3,
+      "bonus": 3
      },
      {
-      "name": "Wraithfire Regalia",
+      "name": "Galecall Vestments",
       "pieces": 3,
       "bonus": 3
      }
     ],
-    "score": 101.0
+    "score": 121.8
    },
    "dps": {
     "picks": {
@@ -2841,45 +2840,27 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Tideworn Warboots",
+       "name": "Shadowpulse Slippers",
        "q": "epic",
        "set": null,
        "stats": {
-        "armor": 212,
-        "str": 8,
-        "sta": 6
+        "armor": 44,
+        "int": 8,
+        "spi": 6
        },
        "w": null,
        "sp": null,
-       "id": "tideworn_warboots",
-       "score": 31.7,
-       "xclass": false,
+       "id": "shadowpulse_slippers",
+       "score": 17.7,
+       "xclass": true,
        "slot": "feet",
        "src": [
-        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
        ]
       }
      },
      "neck": {
       "best": {
-       "name": "Swiftfang Talisman",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 6,
-        "agi": 6
-       },
-       "w": null,
-       "sp": null,
-       "id": "swiftfang_talisman",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
-      },
-      "alt": {
        "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
@@ -2896,20 +2877,38 @@ const BIS = {
        "src": [
         "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
+      },
+      "alt": {
+       "name": "Yumi's Keepsake Locket",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 7,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -2918,36 +2917,36 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -2956,21 +2955,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -2987,7 +2986,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 70.0
+    "score": 76.5
    }
   }
  },
@@ -3021,44 +3020,43 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Stormcaller's Focus",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 14,
+        "spi": 9
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 31,
+        "max": 52,
+        "speed": 2.5
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "stormcallers_focus",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
      "helmet": {
       "best": {
-       "name": "Wraithfire Cowl",
+       "name": "Galecall Crown",
        "q": "epic",
-       "set": "Wraithfire Regalia",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 105,
-        "sta": 7,
-        "int": 13
+        "armor": 225,
+        "sta": 8,
+        "int": 12
        },
        "w": null,
        "sp": null,
-       "id": "heroic_soulflame_cowl",
-       "score": 28.8,
-       "xclass": true,
+       "id": "heroic_stormcallers_crown",
+       "score": 38.8,
+       "xclass": false,
        "slot": "helmet",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %",
@@ -3066,19 +3064,19 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Wraithfire Cowl",
+       "name": "Galecall Crown",
        "q": "epic",
-       "set": "Wraithfire Regalia",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 105,
-        "int": 11,
-        "sta": 6
+        "armor": 225,
+        "int": 10,
+        "sta": 7
        },
        "w": null,
        "sp": null,
-       "id": "soulflame_cowl",
-       "score": 25.8,
-       "xclass": true,
+       "id": "stormcallers_crown",
+       "score": 35.8,
+       "xclass": false,
        "slot": "helmet",
        "src": [
         "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
@@ -3088,41 +3086,43 @@ const BIS = {
      },
      "shoulder": {
       "best": {
-       "name": "Mournweave Soulspire Mantle",
+       "name": "Galecall Spaulders",
        "q": "epic",
-       "set": "Mournweave Raiment",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 70,
-        "int": 10,
-        "spi": 5
+        "armor": 190,
+        "sta": 8,
+        "int": 9
        },
        "w": null,
        "sp": null,
-       "id": "heroic_necromancers_soulspire_mantle",
-       "score": 20.8,
-       "xclass": true,
+       "id": "heroic_stormcallers_spaulders",
+       "score": 32.8,
+       "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Korzul the Gravewyrm · 4 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 17 %"
        ]
       },
       "alt": {
-       "name": "Mournweave Soulspire Mantle",
+       "name": "Galecall Spaulders",
        "q": "epic",
-       "set": "Mournweave Raiment",
+       "set": "Galecall Vestments",
        "stats": {
-        "armor": 70,
-        "int": 9,
-        "spi": 5
+        "armor": 190,
+        "int": 8,
+        "sta": 7
        },
        "w": null,
        "sp": null,
-       "id": "necromancers_soulspire_mantle",
-       "score": 19.8,
-       "xclass": true,
+       "id": "stormcallers_spaulders",
+       "score": 30.8,
+       "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Korzul the Gravewyrm · 4 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin : Nythraxis, Scourge of Thornpeak · 17 %"
        ]
       }
      },
@@ -3168,6 +3168,25 @@ const BIS = {
      },
      "waist": {
       "best": {
+       "name": "Galecall Waistguard",
+       "q": "epic",
+       "set": "Galecall Vestments",
+       "stats": {
+        "armor": 110,
+        "int": 8,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "stormcallers_waistguard",
+       "score": 22.2,
+       "xclass": false,
+       "slot": "waist",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
+       ]
+      },
+      "alt": {
        "name": "Wraithfire Cord",
        "q": "epic",
        "set": "Wraithfire Regalia",
@@ -3184,25 +3203,6 @@ const BIS = {
        "slot": "waist",
        "src": [
         "Butin : Thunzharr, the Waking Peak · 8 %"
-       ]
-      },
-      "alt": {
-       "name": "Sash of the Sunken Court",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "armor": 48,
-        "int": 9,
-        "sta": 6
-       },
-       "w": null,
-       "sp": null,
-       "id": "sash_of_the_sunken_court",
-       "score": 19.0,
-       "xclass": true,
-       "slot": "waist",
-       "src": [
-        "Butin héroïque : Vael the Fogbinder · 33 %"
        ]
       }
      },
@@ -3249,25 +3249,6 @@ const BIS = {
      },
      "gloves": {
       "best": {
-       "name": "Wraithfire Gloves",
-       "q": "epic",
-       "set": "Wraithfire Regalia",
-       "stats": {
-        "armor": 60,
-        "int": 8,
-        "sta": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "soulflame_gloves",
-       "score": 18.0,
-       "xclass": true,
-       "slot": "gloves",
-       "src": [
-        "Butin : Thunzharr, the Waking Peak · 8 %"
-       ]
-      },
-      "alt": {
        "name": "Wyrmchoir Handwraps",
        "q": "epic",
        "set": null,
@@ -3284,6 +3265,25 @@ const BIS = {
        "slot": "gloves",
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
+      },
+      "alt": {
+       "name": "Galecall Handguards",
+       "q": "epic",
+       "set": "Galecall Vestments",
+       "stats": {
+        "armor": 130,
+        "int": 8,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "stormcallers_handguards",
+       "score": 23.8,
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Thunzharr, the Waking Peak · 8 %"
        ]
       }
      },
@@ -3347,22 +3347,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Cinder-Sigil Pendant",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
@@ -3386,22 +3385,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Ashen Focus Ring",
+       "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
+        "int": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
+       "id": "nielas_coldlight_band",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
@@ -3447,16 +3445,16 @@ const BIS = {
     "sets": [
      {
       "name": "Mournweave Raiment",
-      "pieces": 4,
-      "bonus": 4
+      "pieces": 3,
+      "bonus": 3
      },
      {
-      "name": "Wraithfire Regalia",
+      "name": "Galecall Vestments",
       "pieces": 3,
       "bonus": 3
      }
     ],
-    "score": 114.4
+    "score": 137.6
    },
    "dps": {
     "picks": {
@@ -3772,22 +3770,22 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Tideworn Warboots",
+       "name": "Shadowpulse Slippers",
        "q": "epic",
        "set": null,
        "stats": {
-        "armor": 212,
-        "str": 8,
-        "sta": 6
+        "armor": 44,
+        "int": 8,
+        "spi": 6
        },
        "w": null,
        "sp": null,
-       "id": "tideworn_warboots",
-       "score": 31.7,
-       "xclass": false,
+       "id": "shadowpulse_slippers",
+       "score": 17.7,
+       "xclass": true,
        "slot": "feet",
        "src": [
-        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
        ]
       }
      },
@@ -3811,16 +3809,16 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Swiftfang Talisman",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "agi": 6
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "swiftfang_talisman",
+       "id": "yumis_keepsake_locket",
        "score": 12.0,
        "xclass": false,
        "slot": "neck",
@@ -3831,16 +3829,16 @@ const BIS = {
      },
      "ring1": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -3849,36 +3847,36 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -3887,21 +3885,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -3918,7 +3916,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 65.9
+    "score": 71.8
    }
   }
  },
@@ -4061,25 +4059,6 @@ const BIS = {
      },
      "chest": {
       "best": {
-       "name": "Ashstalker Harness",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "armor": 155,
-        "agi": 9,
-        "sta": 11
-       },
-       "w": null,
-       "sp": null,
-       "id": "ashstalker_harness",
-       "score": 32.9,
-       "xclass": false,
-       "slot": "chest",
-       "src": [
-        "Vendu par FURY"
-       ]
-      },
-      "alt": {
        "name": "Nightfang Harness",
        "q": "epic",
        "set": "Nightfang Vestments",
@@ -4097,26 +4076,45 @@ const BIS = {
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 5 %"
        ]
+      },
+      "alt": {
+       "name": "Nightfang Harness",
+       "q": "epic",
+       "set": "Nightfang Vestments",
+       "stats": {
+        "armor": 170,
+        "agi": 12,
+        "sta": 6
+       },
+       "w": null,
+       "sp": null,
+       "id": "wyrmshadow_harness",
+       "score": 32.2,
+       "xclass": true,
+       "slot": "chest",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 5 %"
+       ]
       }
      },
      "waist": {
       "best": {
-       "name": "Ashstalker Waistband",
+       "name": "Direfang Waistband",
        "q": "epic",
-       "set": null,
+       "set": "Direfang Pelt",
        "stats": {
-        "armor": 90,
-        "agi": 6,
-        "sta": 8
+        "armor": 95,
+        "agi": 8,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "ashstalker_waistband",
-       "score": 21.5,
+       "id": "nighttalon_waistband",
+       "score": 20.9,
        "xclass": false,
        "slot": "waist",
        "src": [
-        "Vendu par FURY"
+        "Butin : Thunzharr, the Waking Peak · 8 %"
        ]
       },
       "alt": {
@@ -4180,41 +4178,41 @@ const BIS = {
      },
      "gloves": {
       "best": {
-       "name": "Direfang Grips",
+       "name": "Nightfang Talongrips",
        "q": "epic",
-       "set": "Direfang Pelt",
+       "set": "Nightfang Vestments",
        "stats": {
         "armor": 110,
-        "agi": 8,
-        "sta": 5
+        "agi": 10,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "nighttalon_grips",
-       "score": 22.2,
-       "xclass": false,
+       "id": "heroic_wyrmshadow_talongrips",
+       "score": 23.2,
+       "xclass": true,
        "slot": "gloves",
        "src": [
-        "Butin : Thunzharr, the Waking Peak · 8 %"
+        "Butin héroïque : Korzul the Gravewyrm · 4 %"
        ]
       },
       "alt": {
-       "name": "Ashstalker Grips",
+       "name": "Nightfang Talongrips",
        "q": "epic",
-       "set": null,
+       "set": "Nightfang Vestments",
        "stats": {
-        "armor": 95,
-        "agi": 6,
-        "sta": 8
+        "armor": 110,
+        "agi": 9,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "ashstalker_grips",
-       "score": 21.9,
-       "xclass": false,
+       "id": "wyrmshadow_talongrips",
+       "score": 22.2,
+       "xclass": true,
        "slot": "gloves",
        "src": [
-        "Vendu par FURY"
+        "Butin : Korzul the Gravewyrm · 4 %"
        ]
       }
      },
@@ -4260,115 +4258,115 @@ const BIS = {
      },
      "neck": {
       "best": {
-       "name": "Razorwind Torque",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 7
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "razorwind_torque",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Medallion of the Final Oath",
+       "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 7
+        "str": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "final_oath_medallion",
-       "score": 13.0,
+       "id": "medallion_of_endless_profit",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Last-Step Signet",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 5,
-        "sta": 7
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "last_step_signet",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Iron Vow Band",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 5,
-        "sta": 7
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "iron_vow_band",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Last-Step Signet",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 5,
-        "sta": 7
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "last_step_signet",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       },
       "alt": {
-       "name": "Iron Vow Band",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 5,
-        "sta": 7
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "iron_vow_band",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -4378,9 +4376,14 @@ const BIS = {
       "name": "Direfang Pelt",
       "pieces": 3,
       "bonus": 3
+     },
+     {
+      "name": "Nightfang Vestments",
+      "pieces": 3,
+      "bonus": 3
      }
     ],
-    "score": 4361.7
+    "score": 4233.2
    },
    "heal": {
     "picks": {
@@ -4409,26 +4412,25 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Scepter of the Deathless Court",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 13,
+        "spi": 10
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 29,
+        "max": 51,
+        "speed": 2.4
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "scepter_of_the_deathless_court",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
@@ -4495,22 +4497,23 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Mournweave Soulspire Mantle",
+       "name": "Wraithfire Mantle",
        "q": "epic",
-       "set": "Mournweave Raiment",
+       "set": "Wraithfire Regalia",
        "stats": {
-        "armor": 70,
-        "int": 9,
-        "spi": 5
+        "armor": 92,
+        "sta": 7,
+        "int": 10
        },
        "w": null,
        "sp": null,
-       "id": "necromancers_soulspire_mantle",
-       "score": 19.8,
+       "id": "heroic_soulflame_mantle",
+       "score": 24.7,
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Korzul the Gravewyrm · 4 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %",
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 17 %"
        ]
       }
      },
@@ -4735,22 +4738,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Cinder-Sigil Pendant",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
@@ -4774,16 +4776,16 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Niela's Coldlight Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 7,
-        "sta": 4
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "nielas_coldlight_band",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -4812,16 +4814,16 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Niela's Coldlight Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 7,
-        "sta": 4
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "nielas_coldlight_band",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -4843,54 +4845,54 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 115.4
+    "score": 132.9
    },
    "dps": {
     "picks": {
      "mainhand": {
       "best": {
-       "name": "Gravecaller's Broadblade",
-       "q": "rare",
+       "name": "Heartwood of the Deathless Crown",
+       "q": "legendary",
        "set": null,
        "stats": {
-        "str": 4,
-        "sta": 3
+        "sta": 14,
+        "int": 16,
+        "spi": 19
        },
        "w": {
-        "min": 9,
-        "max": 16,
-        "speed": 2.4
+        "min": 43,
+        "max": 70,
+        "speed": 3.2
        },
        "sp": null,
-       "id": "gravecaller_blade",
-       "score": 9.6,
+       "id": "heroic_deathless_heartwood",
+       "score": 57.8,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Récompense de quête : « Into the Hollow »"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 3 %"
        ]
       },
       "alt": {
-       "name": "First-Blood Razor",
+       "name": "Scepter of the Deathless Court",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 9,
-        "sta": 11
+        "int": 13,
+        "spi": 10
        },
        "w": {
-        "min": 20,
-        "max": 31,
-        "speed": 1.7,
-        "dagger": true
+        "min": 29,
+        "max": 51,
+        "speed": 2.4
        },
        "sp": null,
-       "id": "first_blood_razor",
-       "score": 27.5,
+       "id": "scepter_of_the_deathless_court",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Vendu par FURY"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
@@ -5236,21 +5238,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
@@ -5274,21 +5276,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "The Unbroken Circle",
+       "name": "Oath of the Round Table",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 6,
-        "sta": 6
+        "sta": 6,
+        "str": 5
        },
        "w": null,
        "sp": null,
-       "id": "unbroken_circle",
-       "score": 12.0,
+       "id": "oath_of_the_round_table",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -5305,7 +5307,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 74.5
+    "score": 82.9
    }
   }
  },
@@ -5339,26 +5341,25 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Scepter of the Deathless Court",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 13,
+        "spi": 10
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 29,
+        "max": 51,
+        "speed": 2.4
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "scepter_of_the_deathless_court",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
@@ -5665,22 +5666,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Cinder-Sigil Pendant",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
@@ -5742,22 +5742,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Ashen Focus Ring",
+       "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
+        "int": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
+       "id": "nielas_coldlight_band",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -5774,7 +5773,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 120.5
+    "score": 138.8
    },
    "dps": {
     "picks": {
@@ -5803,26 +5802,25 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Scepter of the Deathless Court",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 13,
+        "spi": 10
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 29,
+        "max": 51,
+        "speed": 2.4
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "scepter_of_the_deathless_court",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
@@ -6131,37 +6129,36 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Cinder-Sigil Pendant",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Niela's Coldlight Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 7,
-        "sta": 4
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "nielas_coldlight_band",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -6170,37 +6167,36 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Ashen Focus Ring",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
      "ring2": {
       "best": {
-       "name": "Niela's Coldlight Band",
+       "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 7,
-        "sta": 4
+        "int": 6,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "nielas_coldlight_band",
+       "id": "architects_cornerstone",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -6209,22 +6205,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Ashen Focus Ring",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
+       "id": "sutils_gambit",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -6241,7 +6236,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 77.9
+    "score": 90.4
    }
   }
  },
@@ -6275,26 +6270,25 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Scepter of the Deathless Court",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 13,
+        "spi": 10
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 29,
+        "max": 51,
+        "speed": 2.4
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "scepter_of_the_deathless_court",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
@@ -6384,6 +6378,25 @@ const BIS = {
      },
      "chest": {
       "best": {
+       "name": "Shroud of the Gravewyrm",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 90,
+        "int": 12,
+        "spi": 10
+       },
+       "w": null,
+       "sp": null,
+       "id": "shroud_of_the_gravewyrm",
+       "score": 29.5,
+       "xclass": false,
+       "slot": "chest",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 33 %"
+       ]
+      },
+      "alt": {
        "name": "Mournweave Starshroud",
        "q": "epic",
        "set": "Mournweave Raiment",
@@ -6400,25 +6413,6 @@ const BIS = {
        "slot": "chest",
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 5 %"
-       ]
-      },
-      "alt": {
-       "name": "Mournweave Starshroud",
-       "q": "epic",
-       "set": "Mournweave Raiment",
-       "stats": {
-        "armor": 92,
-        "int": 11,
-        "spi": 7
-       },
-       "w": null,
-       "sp": null,
-       "id": "necromancers_starshroud",
-       "score": 25.7,
-       "xclass": false,
-       "slot": "chest",
-       "src": [
-        "Butin : Korzul the Gravewyrm · 5 %"
        ]
       }
      },
@@ -6603,27 +6597,44 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Cinder-Sigil Pendant",
+       "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
+        "agi": 7,
+        "sta": 5
        },
        "w": null,
        "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
      "ring1": {
       "best": {
+       "name": "The Architect's Cornerstone",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 6,
+        "spi": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false,
+       "slot": "ring",
+       "src": [
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
+       ]
+      },
+      "alt": {
        "name": "Niela's Coldlight Band",
        "q": "epic",
        "set": null,
@@ -6640,57 +6651,38 @@ const BIS = {
        "src": [
         "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
-      },
-      "alt": {
-       "name": "The Architect's Cornerstone",
+      }
+     },
+     "ring2": {
+      "best": {
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "spi": 5
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "architects_cornerstone",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
         "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
-      }
-     },
-     "ring2": {
-      "best": {
-       "name": "Ashen Focus Ring",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
-       },
-       "w": null,
-       "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "ring",
-       "src": [
-        "Vendu par FURY"
-       ]
       },
       "alt": {
-       "name": "The Architect's Cornerstone",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "int": 6,
-        "spi": 5
+        "agi": 7,
+        "sta": 4
        },
        "w": null,
        "sp": null,
-       "id": "architects_cornerstone",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -6703,8 +6695,8 @@ const BIS = {
     "sets": [
      {
       "name": "Mournweave Raiment",
-      "pieces": 3,
-      "bonus": 3
+      "pieces": 2,
+      "bonus": 2
      },
      {
       "name": "Wraithfire Regalia",
@@ -6712,7 +6704,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 81.3
+    "score": 94.5
    }
   }
  },
@@ -6746,26 +6738,25 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Heartwood of the Deathless Crown",
-       "q": "legendary",
+       "name": "Scepter of the Deathless Court",
+       "q": "epic",
        "set": null,
        "stats": {
-        "spi": 17,
-        "sta": 13,
-        "int": 14
+        "int": 13,
+        "spi": 10
        },
        "w": {
-        "min": 42,
-        "max": 68,
-        "speed": 3.2
+        "min": 29,
+        "max": 51,
+        "speed": 2.4
        },
        "sp": null,
-       "id": "deathless_heartwood",
-       "score": 52.6,
+       "id": "scepter_of_the_deathless_court",
+       "score": 31.3,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
        ]
       }
      },
@@ -7056,25 +7047,6 @@ const BIS = {
      },
      "neck": {
       "best": {
-       "name": "Cinder-Sigil Pendant",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 6,
-        "sta": 5,
-        "spi": 2
-       },
-       "w": null,
-       "sp": null,
-       "id": "cinder_sigil_pendant",
-       "score": 13.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par FURY"
-       ]
-      },
-      "alt": {
        "name": "Zense Meridian",
        "q": "epic",
        "set": null,
@@ -7091,29 +7063,28 @@ const BIS = {
        "src": [
         "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
+      },
+      "alt": {
+       "name": "Yumi's Keepsake Locket",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 7,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "yumis_keepsake_locket",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Ashen Focus Ring",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 6,
-        "sta": 4,
-        "spi": 2
-       },
-       "w": null,
-       "sp": null,
-       "id": "ashen_focus_ring",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "ring",
-       "src": [
-        "Vendu par FURY"
-       ]
-      },
-      "alt": {
        "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
@@ -7124,6 +7095,24 @@ const BIS = {
        "w": null,
        "sp": null,
        "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false,
+       "slot": "ring",
+       "src": [
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
+       ]
+      },
+      "alt": {
+       "name": "Zyzz's Deathless Signet",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "spi": 6,
+        "int": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -7134,24 +7123,6 @@ const BIS = {
      },
      "ring2": {
       "best": {
-       "name": "Niela's Coldlight Band",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "int": 7,
-        "sta": 4
-       },
-       "w": null,
-       "sp": null,
-       "id": "nielas_coldlight_band",
-       "score": 11.0,
-       "xclass": false,
-       "slot": "ring",
-       "src": [
-        "Vendu par Quartermaster Vex · 12 Heroic Marks"
-       ]
-      },
-      "alt": {
        "name": "The Architect's Cornerstone",
        "q": "epic",
        "set": null,
@@ -7162,6 +7133,24 @@ const BIS = {
        "w": null,
        "sp": null,
        "id": "architects_cornerstone",
+       "score": 11.0,
+       "xclass": false,
+       "slot": "ring",
+       "src": [
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
+       ]
+      },
+      "alt": {
+       "name": "Zyzz's Deathless Signet",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "spi": 6,
+        "int": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -7183,7 +7172,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 80.7
+    "score": 94.4
    }
   }
  },
@@ -7526,24 +7515,6 @@ const BIS = {
      },
      "neck": {
       "best": {
-       "name": "Swiftfang Talisman",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 6,
-        "agi": 6
-       },
-       "w": null,
-       "sp": null,
-       "id": "swiftfang_talisman",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
-      },
-      "alt": {
        "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
@@ -7554,6 +7525,24 @@ const BIS = {
        "w": null,
        "sp": null,
        "id": "yumis_keepsake_locket",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
+      },
+      "alt": {
+       "name": "Medallion of Endless Profit",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 7,
+        "sta": 5
+       },
+       "w": null,
+       "sp": null,
+       "id": "medallion_of_endless_profit",
        "score": 12.0,
        "xclass": false,
        "slot": "neck",
@@ -7582,21 +7571,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Fleetblood Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "fleetblood_band",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
@@ -7620,21 +7609,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Fleetblood Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "fleetblood_band",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -7651,7 +7640,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 68.8
+    "score": 77.7
    }
   }
  },
@@ -8012,21 +8001,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Razorwind Torque",
+       "name": "Zense Meridian",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 7
+        "int": 7,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "razorwind_torque",
-       "score": 13.0,
+       "id": "zense_meridian",
+       "score": 12.0,
        "xclass": false,
        "slot": "neck",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
       }
      },
@@ -8050,21 +8039,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Fleetblood Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "fleetblood_band",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      },
@@ -8088,21 +8077,21 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Fleetblood Band",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "agi": 6,
-        "sta": 6
+        "spi": 6,
+        "int": 5
        },
        "w": null,
        "sp": null,
-       "id": "fleetblood_band",
-       "score": 12.0,
+       "id": "zyzzs_deathless_signet",
+       "score": 11.0,
        "xclass": false,
        "slot": "ring",
        "src": [
-        "Vendu par FURY"
+        "Vendu par Quartermaster Vex · 12 Heroic Marks"
        ]
       }
      }
@@ -8119,7 +8108,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 73.5
+    "score": 83.5
    }
   }
  }
