@@ -71,6 +71,17 @@ function money(copper) {
   return parts.join(' ');
 }
 const pct = x => x == null ? '' : (x >= 0.995 ? '100 %' : (x * 100).toFixed(x < 0.01 ? 1 : 0) + ' %');
+/* Un objet occupe souvent plusieurs emplacements d'une même table de butin
+   (ex. Nythraxis liste une pièce 4× à 16-17 %). On combine en probabilité d'en
+   obtenir AU MOINS UN sur le kill : 1 − Π(1 − chance_i) — une seule ligne, la
+   vraie chance. Sans ça, la même source apparaissait en double. */
+const combinePct = chances => {
+  const cs = chances.filter(c => c != null);
+  if (!cs.length) return '';
+  let p = 1;
+  for (const c of cs) p *= (1 - c);
+  return pct(1 - p);
+};
 
 /* ---------- libellés (fr / en selon LANG) ---------- */
 
@@ -392,6 +403,11 @@ function itemSheet(it) {
   const body = [];
   if (it.weapon) body.push(`<div class="cxp-dps">${((it.weapon.min + it.weapon.max) / 2 / (it.weapon.speed || 1)).toFixed(1)} DPS — ${it.weapon.min}–${it.weapon.max} ${T({ fr: 'dégâts, vitesse', en: 'damage, speed' })} ${it.weapon.speed ?? '—'}</div>`);
   const stats = Object.entries(it.stats || {}).map(([k,v]) => `+${v} ${STAT_FR[k] || k}`);
+  // Combat ratings + puissance des sorts : stockés HORS de it.stats dans les
+  // données, ils étaient invisibles (ex. le Hit Rating ajouté en v0.26).
+  const HIT_LBL = T({ fr: 'Précision', en: 'Hit rating' });
+  for (const [key, lbl] of [['hitRating', HIT_LBL], ['critRating', STAT_FR.crit], ['hasteRating', STAT_FR.haste], ['spellPower', STAT_FR.sp]])
+    if (it[key]) stats.push(`+${it[key]} ${lbl}`);
   if (stats.length) body.push(`<div class="cxp-stats">${stats.join('<br>')}</div>`);
   const HP_U = T({ fr: 'PV', en: 'HP' });
   body.push(kvGrid([
@@ -417,8 +433,18 @@ function itemSheet(it) {
     body.push(section(T({ fr: 'Panoplie', en: 'Item set' }), ul([`<li>${xlink('set', byId.set[it.set])}</li>`])));
 
   const src = [];
-  for (const d of (refs.droppedBy[it.id] || []))
-    src.push(`<li>${T({ fr: 'Butin', en: 'Loot' })}${d.heroic ? ` <b class="cxp-hero">${T({ fr: 'héroïque', en: 'heroic' })}</b>` : ''}${T({ fr: ' : ', en: ': ' })}${xlink('mob', d.mob)}${d.chance != null ? ` <span class="cxp-dim">· ${pct(d.chance)}</span>` : ''}</li>`);
+  // Agrégé par monstre (un objet peut occuper plusieurs slots de la table) :
+  // une seule ligne par source, avec la chance combinée.
+  const byMob = new Map();
+  for (const d of (refs.droppedBy[it.id] || [])) {
+    const key = (d.mob.id || d.mob.name) + '|' + (d.heroic ? 'h' : 'n');
+    if (!byMob.has(key)) byMob.set(key, { mob: d.mob, heroic: d.heroic, chances: [] });
+    byMob.get(key).chances.push(d.chance);
+  }
+  for (const g of byMob.values()) {
+    const ch = combinePct(g.chances);
+    src.push(`<li>${T({ fr: 'Butin', en: 'Loot' })}${g.heroic ? ` <b class="cxp-hero">${T({ fr: 'héroïque', en: 'heroic' })}</b>` : ''}${T({ fr: ' : ', en: ': ' })}${xlink('mob', g.mob)}${ch ? ` <span class="cxp-dim">· ${ch}</span>` : ''}</li>`);
+  }
   for (const n of (refs.soldBy[it.id] || []))
     src.push(`<li>${T({ fr: 'Vendu par', en: 'Sold by' })} ${xlink('npc', n)}${it.buyValue ? ` <span class="cxp-dim">· ${money(it.buyValue)}</span>` : ''}</li>`);
   for (const qq of (refs.rewardOf[it.id] || []))
@@ -508,10 +534,25 @@ function mobSheet(m) {
   const abilities = Object.keys(MOB_ABILITY_FR).filter(k => m[k]);
   if (abilities.length)
     body.push(section(T({ fr: 'Capacités', en: 'Abilities' }), `<p>${abilities.map(k => `<span class="cxp-chip">${MOB_ABILITY_FR[k]}</span>`).join(' ')}</p>`));
-  const loot = (m.loot || []).filter(l => l.itemId && byId.item[l.itemId])
-    .map(l => `<li>${xlink('item', byId.item[l.itemId], null, 'q-' + (byId.item[l.itemId].quality || 'common'))}${l.chance != null ? ` <span class="cxp-dim">· ${pct(l.chance)}</span>` : ''}</li>`);
-  const hloot = ((D.HEROIC_BOSS_LOOT || {})[m.id] || []).filter(l => l.itemId && byId.item[l.itemId])
-    .map(l => `<li>${xlink('item', byId.item[l.itemId], null, 'q-' + (byId.item[l.itemId].quality || 'common'))} <b class="cxp-hero">${T({ fr: 'héroïque', en: 'heroic' })}</b>${l.chance != null ? ` <span class="cxp-dim">· ${pct(l.chance)}</span>` : ''}</li>`);
+  // Butin agrégé par objet (un objet peut occuper plusieurs slots) : une ligne
+  // par objet, avec la chance combinée d'en obtenir au moins un.
+  const groupLoot = entries => {
+    const by = new Map();
+    for (const l of (entries || [])) {
+      if (!l.itemId || !byId.item[l.itemId]) continue;
+      if (!by.has(l.itemId)) by.set(l.itemId, []);
+      by.get(l.itemId).push(l.chance);
+    }
+    return by;
+  };
+  const loot = [...groupLoot(m.loot).entries()].map(([iid, chs]) => {
+    const ch = combinePct(chs);
+    return `<li>${xlink('item', byId.item[iid], null, 'q-' + (byId.item[iid].quality || 'common'))}${ch ? ` <span class="cxp-dim">· ${ch}</span>` : ''}</li>`;
+  });
+  const hloot = [...groupLoot((D.HEROIC_BOSS_LOOT || {})[m.id]).entries()].map(([iid, chs]) => {
+    const ch = combinePct(chs);
+    return `<li>${xlink('item', byId.item[iid], null, 'q-' + (byId.item[iid].quality || 'common'))} <b class="cxp-hero">${T({ fr: 'héroïque', en: 'heroic' })}</b>${ch ? ` <span class="cxp-dim">· ${ch}</span>` : ''}</li>`;
+  });
   body.push(section(T({ fr: 'Butin', en: 'Loot' }), ul([...loot, ...hloot])));
   body.push(section(T({ fr: 'Où le trouver', en: 'Where to find it' }), ul((refs.mobDungeons[m.id] || []).map(d => `<li>${xlink('dungeon', d)}</li>`))));
   body.push(section(T({ fr: 'Quêtes qui le ciblent', en: 'Quests that target it' }), ul((refs.killedFor[m.id] || []).map(q => `<li>${xlink('quest', q)}</li>`))));

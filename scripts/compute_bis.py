@@ -92,17 +92,34 @@ SOURCES = {}  # iid -> liste de lignes prêtes à afficher (dédupliquées)
 def _add(iid, line):
     if line not in SOURCES.setdefault(iid, []):
         SOURCES[iid].append(line)
-for _m in _MOBS.values():
-    for _l in _m.get('loot', []):
+
+# Un même objet occupe souvent PLUSIEURS emplacements de la table de butin d'un
+# boss (ex. Nythraxis liste une épaulière 4× à 16-17 %). On agrège par source
+# pour n'afficher qu'UNE ligne, avec la probabilité d'en obtenir au moins un sur
+# le kill : 1 − Π(1 − chance_i). Sans ça, on voyait la même source en double.
+def _pct_combined(chances):
+    cs = [c for c in chances if c]
+    if not cs:
+        return ''
+    p = 1.0
+    for c in cs:
+        p *= (1 - c)
+    return f" · {round((1 - p) * 100)} %"
+
+def _loot_by_item(entries):
+    by = {}
+    for _l in entries or []:
         if isinstance(_l, dict) and _l.get('itemId'):
-            pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
-            _add(_l['itemId'], f"Butin : {_m['name']}{pct}")
+            by.setdefault(_l['itemId'], []).append(_l.get('chance'))
+    return by
+
+for _m in _MOBS.values():
+    for _iid, _chs in _loot_by_item(_m.get('loot')).items():
+        _add(_iid, f"Butin : {_m['name']}{_pct_combined(_chs)}")
 for _bid, _entries in _HEROIC.items():
     _bname = _MOBS.get(_bid, {}).get('name', _bid)
-    for _l in _entries:
-        if _l.get('itemId'):
-            pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
-            _add(_l['itemId'], f"Butin héroïque : {_bname}{pct}")
+    for _iid, _chs in _loot_by_item(_entries).items():
+        _add(_iid, f"Butin héroïque : {_bname}{_pct_combined(_chs)}")
 for _n in _NPCS.values():
     for _iid in _n.get('vendorItems', []):
         _add(_iid, f"Vendu par {_n['name']}")
@@ -150,10 +167,10 @@ for _iid in sorted(HEROIC_OK):
     _base = _iid[len('heroic_'):]
     for _m in _MOBS.values():
         if _m['id'] not in _INSTANCE_MOBS: continue
-        for _l in _m.get('loot', []):
-            if isinstance(_l, dict) and _l.get('itemId') == _base:
-                pct = f" · {round(_l['chance']*100)} %" if _l.get('chance') else ''
-                _add(_iid, f"Butin héroïque : {_m['name']}{pct}")
+        _chs = [_l.get('chance') for _l in _m.get('loot', [])
+                if isinstance(_l, dict) and _l.get('itemId') == _base]
+        if _chs:
+            _add(_iid, f"Butin héroïque : {_m['name']}{_pct_combined(_chs)}")
 
 # Héritage : équipement (arme/armure) sans AUCUNE provenance connue — ni butin,
 # ni vendeur, ni quête, ni delve, ni marché, ni départ de classe. Vérifié dans
@@ -454,10 +471,18 @@ def item_export(iid, cls):
     sc+=(it.get('stats') or {}).get('armor',0)/12
     if it.get('weapon'):
         w=it['weapon']; sc+=(w['min']+w['max'])/2/w['speed']*0.5
+    # Stats affichées = les stats de base PLUS les combat ratings, qui sont
+    # stockés à part dans les données (hitRating/critRating/hasteRating) et
+    # étaient donc invisibles (ex. le Hit Rating ajouté en v0.26). La puissance
+    # des sorts reste dans son champ 'sp' (affiché séparément par la page).
+    disp = dict(it.get('stats') or {})
+    for _src_key, _disp_key in (('hitRating', 'hit'), ('critRating', 'crit'), ('hasteRating', 'haste')):
+        if it.get(_src_key):
+            disp[_disp_key] = it[_src_key]
     return {
         'name': it['name'], 'q': it.get('quality','common'),
         'set': SETS[it['set']]['name'] if it.get('set') else None,
-        'stats': it.get('stats') or {}, 'w': it.get('weapon'),
+        'stats': disp, 'w': it.get('weapon'),
         'sp': it.get('spellPower'), 'id': iid, 'score': round(sc,1),
         'xclass': bool(it.get('armorType') and it.get('requiredClass') and cls not in it['requiredClass']),
         'slot': it.get('slot'), 'src': SOURCES.get(iid, []),
