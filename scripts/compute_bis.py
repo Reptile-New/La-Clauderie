@@ -411,6 +411,29 @@ def optimize(cls, role):
     # permet de comparer les deux versions, et on sait quoi porter en
     # attendant le kill héroïque).
     score, equip = best
+
+    # Résolution finale de la paire d'anneaux. Le jeu autorise DEUX FOIS le même
+    # anneau (pas d'objets « uniques » — vérifié dans equipment_rules.ts), donc
+    # le vrai BiS double le meilleur anneau dès que c'est au moins aussi bon.
+    # Le remplissage glouton, lui, n'a aucune préférence : quand deux anneaux de
+    # même budget donnent un objectif STRICTEMENT identique (fréquent), il pouvait
+    # afficher deux anneaux différents au lieu d'en doubler un. On tranche ici en
+    # explorant toutes les paires (doublons compris) et en préférant, à objectif
+    # égal, la paire DOUBLÉE (puis le meilleur itemScore). On ne garde deux
+    # anneaux différents que si le mélange est strictement meilleur.
+    rings = pool['ring1']
+    if rings:
+        best_ring = None  # (objectif, est_doublé, itemScore) -> (a,b)
+        for a in rings:
+            for b in rings:
+                e = dict(equip); e['ring1'] = a; e['ring2'] = b
+                v = evaluate(cls, role, e)
+                key = (round(v, 6), a == b, iscore(a) if a == b else -1.0)
+                if best_ring is None or key > best_ring[0]:
+                    best_ring = (key, (a, b))
+        equip['ring1'], equip['ring2'] = best_ring[1]
+        score = evaluate(cls, role, equip)
+
     alts={}
     for sl in SLOTS:
         cur=equip[sl]; bs=None
