@@ -1,0 +1,7 @@
+# Cache de bytecode Python (créé quand on lance/importe les scripts localement)
+__pycache__/
+*.pyc
+
+# Fichiers temporaires générés par les scripts BiS / Récolte-Métiers
+bis_new.json
+craft.json
