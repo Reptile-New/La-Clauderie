@@ -228,13 +228,14 @@ def slot_key(it):
 def sheet(cls, role, equip):
     cd = CLASSES[cls]
     s = {k: cd['base'][k] + cd['per'][k]*(LVL-1) for k in ('str','agi','sta','int','spi','armor')}
-    sp_flat = 0; crit_r = 0; haste_r = 0
+    sp_flat = 0; crit_r = 0; haste_r = 0; hit_r = 0
     counts = {}
     for slot, iid in equip.items():
         if not iid: continue
         it = ITEMS[iid]
         if it.get('set'): counts[it['set']] = counts.get(it['set'],0)+1
         sp_flat += it.get('spellPower',0); crit_r += it.get('critRating',0); haste_r += it.get('hasteRating',0)
+        hit_r += it.get('hitRating',0)
         for k,v in (it.get('stats') or {}).items():
             if k in s: s[k] += v
     ap_bonus = 0; procs = []
@@ -246,6 +247,7 @@ def sheet(cls, role, equip):
                     s[k] += e.get(k,0)
                 sp_flat += e.get('sp',0); ap_bonus += e.get('ap',0)
                 crit_r += e.get('critRating',0); haste_r += e.get('hasteRating',0)
+                hit_r += e.get('hitRating',0)
                 if 'proc' in e: procs.append(e['proc'])
     s['armor'] += 2*s['agi']
     bear = (cls=='druid' and role=='tank'); cat = (cls=='druid' and role=='dps')
@@ -260,11 +262,16 @@ def sheet(cls, role, equip):
     sp = max(0, round(s['int']*0.5 + sp_flat))
     crit = 0.05 + s['agi']*0.0005 + crit_r/1000
     haste = haste_r/1000
+    # Hit (v0.26, port de types.ts/entity.ts) : hitFractionFromRating = rating /
+    # (HIT_RATING_PER_PCT × 100) = rating/1000. La fraction se SOUSTRAIT du miss
+    # (swingMissChance) et du resist des sorts (spell_resist.ts) ; les soins ne
+    # ratent jamais. Le hit n'a pas de suppression au-dessus du niveau (contrairement au crit).
+    hit = hit_r/1000
     hp = cd['hp'][0] + cd['hp'][1]*(LVL-1) + min(s['sta'],20) + max(0,s['sta']-20)*10
     if bear: hp = round(hp*1.15)
     mana = cd['mana'][0] + cd['mana'][1]*(LVL-1) + min(s['int'],20) + max(0,s['int']-20)*15
     w = ITEMS[equip['mainhand']]['weapon'] if equip.get('mainhand') and ITEMS[equip['mainhand']].get('weapon') else {'min':1,'max':2,'speed':2}
-    return dict(stats=s, ap=ap, rap=rap, sp=sp, crit=crit, haste=haste, hp=hp, mana=mana, w=w, procs=procs, counts=counts)
+    return dict(stats=s, ap=ap, rap=rap, sp=sp, crit=crit, haste=haste, hit=hit, hp=hp, mana=mana, w=w, procs=procs, counts=counts)
 
 # --- valorisation des procs de set (espérance, hypothèses documentées) -------
 def proc_value(p, sh, kind):
@@ -293,30 +300,41 @@ def proc_value(p, sh, kind):
     return ('none', 0)
 
 # --- objectifs par rôle -------------------------------------------------------
+# Point de fonctionnement du BiS : boss héroïque, +3 niveaux au-dessus du
+# joueur (le « Heroic +3 above-level penalty » de entity.ts). Notes v0.26 :
+# les pénalités passent à ≈ 26 % de miss (mêlée/distance) et ≈ 25 % de resist
+# (sorts). Le hit s'y soustrait, l'efficacité étant plafonnée à 100 % (cap :
+# 260 de rating en mêlée, 250 pour les sorts — au-delà, un point de hit ne
+# vaut RIEN, et l'optimiseur doit le savoir). Les soins ne ratent jamais.
+MISS_HEROIC = 0.26
+RESIST_HEROIC = 0.25
+
 def objective(cls, role, sh):
     bonus = {'ap':0,'sp':0,'haste':0,'dps':0,'mana_pct':0}
     for p in sh['procs']:
         k,v = proc_value(p, sh, role)
         if k in bonus: bonus[k]+=v
     crit=sh['crit']; haste=sh['haste']+bonus['haste']
+    land_m = min(1.0, (1 - MISS_HEROIC) + sh['hit'])    # coups de mêlée/distance qui touchent
+    land_s = min(1.0, (1 - RESIST_HEROIC) + sh['hit'])  # sorts non résistés
     if role=='dps':
         if cls in ('mage','warlock') or (cls=='priest'):
             spd=(60+(sh['sp']+bonus['sp'])*0.714)/2.5*(1+haste)*(1+0.5*crit)
-            return spd
+            return spd*land_s
         if cls=='hunter':
             w=sh['w']; avg=0.6*(w['min']+w['max'])/2
             per=avg+(sh['rap']+bonus['ap'])/14*w['speed']
-            return (per/w['speed'])*(1+haste)*(1+crit)+bonus['dps']
+            return ((per/w['speed'])*(1+haste)*(1+crit)+bonus['dps'])*land_m
         if cls=='druid':  # félin : l'arme ne compte que par ses stats
-            return ((sh['ap']+bonus['ap'])/14)*(1+haste)*(1+crit)*3.0+bonus['dps']
+            return (((sh['ap']+bonus['ap'])/14)*(1+haste)*(1+crit)*3.0+bonus['dps'])*land_m
         w=sh['w']; avg=(w['min']+w['max'])/2
         per=avg+(sh['ap']+bonus['ap'])/14*w['speed']
-        return (per/w['speed'])*(1+haste)*(1+crit)+bonus['dps']
+        return ((per/w['speed'])*(1+haste)*(1+crit)+bonus['dps'])*land_m
     if role=='tank':
         mit=min(0.75, sh['stats']['armor']/(sh['stats']['armor']+85*LVL+400))
         ehp=sh['hp']/(1-mit)
         w=sh['w']; avg=(w['min']+w['max'])/2
-        threat=(avg+(sh['ap']+bonus['ap'])/14*w['speed'])/w['speed']*(1+haste)*(1+crit)
+        threat=(avg+(sh['ap']+bonus['ap'])/14*w['speed'])/w['speed']*(1+haste)*(1+crit)*land_m
         return ehp + 6.0*threat   # l'EHP domine, la menace départage
     if role=='heal':
         hps=(80+(sh['sp']+bonus['sp'])*0.714)/2.5*(1+haste)*(1+0.5*crit)
