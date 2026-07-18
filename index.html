@@ -234,6 +234,11 @@
         <p data-en="Talents, rotation and the best gear for your class and role — tank, heal or DPS — based on the real patch data.">Talents, rotation et meilleur équipement pour ta classe et ton rôle — tank, heal ou DPS — sur les vraies données du patch.</p>
         <span class="go" data-en="See the builds">Voir les builds</span>
       </a>
+      <a class="navcard" href="metiers.html">
+        <h3>⛏️ Récolte &amp; Métiers</h3>
+        <p data-en="Where to gather in each zone, every crafting recipe, and the profession guides (archetypes, enchanting).">Où récolter zone par zone, toutes les recettes d'artisanat, et les guides métiers (archétypes, enchantement).</p>
+        <span class="go" data-en="See the professions">Voir les métiers</span>
+      </a>
       <a class="navcard" href="patch-notes.html">
         <h3 id="pnTitle" data-en="📜 Game updates">📜 Nouveautés du jeu</h3>
         <p id="pnDesc" data-en="Every update explained in detail — the latest as well as all the previous ones.">Chaque mise à jour expliquée en détail — la dernière comme toutes les précédentes.</p>
@@ -498,7 +503,10 @@
       "Chef de raid": "Raid leader", "Officier": "Officer", "Trésorier": "Treasurer",
       "Recruteur": "Recruiter", "Ambianceur": "Morale officer",
     };
-    const roleLbl = r => LANG === "en" ? (ROLE_EN[r] || r) : r;
+    // Certains rôles sont saisis en anglais dans roles.json — traduction inverse
+    // pour la version française de la page.
+    const ROLE_FR = { "Raid leader": "Chef de raid", "Event manager": "Responsable events" };
+    const roleLbl = r => LANG === "en" ? (ROLE_EN[r] || r) : (ROLE_FR[r] || r);
     $("membersBox").innerHTML = '<div class="members">' + list
       .slice()
       .sort((a, b) => (a.pseudo || "").localeCompare(b.pseudo || "", "fr"))

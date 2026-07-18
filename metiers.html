@@ -956,6 +956,7 @@ const CRAFT = {
 };
 </script>
 
+<script src="assets/lang.js"></script>
 <script>
 (function () {
   const T = (fr, en) => (window.LANG === 'en' ? en : fr);
@@ -1020,6 +1021,41 @@ const CRAFT = {
     }).join('');
   }
 
+  // --- Guide Métiers 2.0 (archétypes) — section ÉDITORIALE -------------------
+  // Le système d'archétypes (v0.27.0) n'a aucun export dans la KB : paires,
+  // quête, Masterwork et recettes combo vivent dans le code du jeu
+  // (src/sim/professions/archetype.ts, masterwork.ts, content/recipes.ts).
+  // Rédigé à la main — à revérifier à chaque MAJ qui touche les métiers.
+  function renderArchetypes() {
+    return `<div class="block">
+      <div class="block-head"><h2>🧭 ${T('Métiers 2.0 — choisir son archétype', 'Professions 2.0 — picking your archetype')}</h2><span class="lvl">${T('guide v0.27', 'v0.27 guide')}</span></div>
+      <p style="color:var(--dim);font-size:0.93rem;margin:8px 0 0">${T(
+        'Depuis la v0.27, on ne monte plus ses métiers librement : la quête « A Craft to Call Your Own » de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook (récolter 3 filons de minerai) fait choisir une <b style="color:var(--text)">paire de métiers voisins</b> qui deviennent tes deux majeurs — et donnent ton titre d’artisan (Smith, Bladewright, Arcanist…). L’opposé de chaque majeur devient automatiquement un <b style="color:var(--text)">hobby</b>, plafonné à rare. On peut changer plus tard via les quêtes « Making Amends » et « A Different Pastime » (coût croissant à chaque changement).',
+        'Since v0.27 you no longer level professions freely: Smith Haldren’s quest “A Craft to Call Your Own” in Eastbrook (harvest 3 ore veins) has you pick a <b style="color:var(--text)">pair of adjacent professions</b> that become your two majors — and grant your artisan title (Smith, Bladewright, Arcanist…). The opposite of each major automatically becomes a <b style="color:var(--text)">hobby</b>, capped at rare. You can change later via the “Making Amends” and “A Different Pastime” quests (cost grows with each change).')}</p>
+      <div class="cols">
+        <div class="node wood">
+          <h3><span class="ico">🎯</span>${T('Qualité & Masterwork', 'Quality & Masterwork')}</h3>
+          <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
+            'Fini la loterie : chaque craft réussi sort à la <b style="color:var(--text)">qualité annoncée</b>. Le seul hasard restant est le proc <b style="color:var(--text)">Masterwork</b> — une copie bonus de la stat principale, un palier au-dessus : 3 % de base, +1 % par palier de compétence au-dessus du requis, +2 % avec un réactif signé, +3 % au seuil de spécialisation (75), plafonné à <b style="color:var(--text)">15 %</b>.',
+            'No more lottery: every successful craft comes out at the <b style="color:var(--text)">declared quality</b>. The only luck left is the <b style="color:var(--text)">Masterwork</b> proc — a bonus copy of the primary stat, one tier higher: 3% base, +1% per skill tier above the requirement, +2% with a signed reagent, +3% at the specialization threshold (75), capped at <b style="color:var(--text)">15%</b>.')}</p>
+        </div>
+        <div class="node ore">
+          <h3><span class="ico">🤝</span>${T('Les recettes combo', 'Combo recipes')}</h3>
+          <div class="meta">${T('réservées à la paire active exacte — absentes de la liste ci-dessous', 'require the exact active pair — missing from the list below')}</div>
+          <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
+            'Trois recettes exigent d’avoir la bonne paire : <b style="color:var(--text)">Ironbound Warplate Helm</b> et <b style="color:var(--text)">Forgeguard Bulwark Gauntlets</b> (Armures + Armes, le titre Smith) et <b style="color:var(--text)">Volatile Flux Elixir</b> (Alchimie + Ingénierie). Elles ne figurent pas encore dans les données du Codex, donc pas dans la liste des recettes plus bas.',
+            'Three recipes require the right pair: <b style="color:var(--text)">Ironbound Warplate Helm</b> and <b style="color:var(--text)">Forgeguard Bulwark Gauntlets</b> (Armorcrafting + Weaponcrafting, the Smith title) and <b style="color:var(--text)">Volatile Flux Elixir</b> (Alchemy + Engineering). They are not in the Codex data yet, hence missing from the recipe list below.')}</p>
+        </div>
+        <div class="node fish">
+          <h3><span class="ico">⚠️</span>${T('Métiers encore vides', 'Still-empty professions')}</h3>
+          <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
+            '<b style="color:var(--text)">Inscription et Joaillerie n’ont AUCUN contenu en v0.27</b> — pas une recette, pas une mécanique dans le code du jeu. Ils sont pourtant sélectionnables dans les paires : Arcanist (Inscription + Enchantement) n’a que l’enchantement de fonctionnel, Bladewright (Joaillerie + Armes) tourne à moitié. À savoir avant de s’engager — changer de paire coûte de plus en plus cher.',
+            '<b style="color:var(--text)">Inscription and Jewelcrafting have NO content in v0.27</b> — not one recipe, not one mechanic in the game code. Yet they are selectable in pairs: Arcanist (Inscription + Enchanting) only has Enchanting working, Bladewright (Jewelcrafting + Weaponcrafting) runs at half power. Know this before committing — changing pairs gets ever more expensive.')}</p>
+        </div>
+      </div>
+    </div>`;
+  }
+
   // --- Guide Enchantement — section ÉDITORIALE -------------------------------
   // L'enchantement n'a aucune recette dans ALL_RECIPES de la KB (tout est dans
   // le code du jeu, enchants connus d'office) : le pipeline build_craft.py ne
@@ -1062,7 +1098,7 @@ const CRAFT = {
   const vR = document.getElementById('view-recolte');
   const vM = document.getElementById('view-metiers');
   vR.innerHTML = renderRecolte();
-  vM.innerHTML = renderMetiers() + renderEnchant();
+  vM.innerHTML = renderArchetypes() + renderMetiers() + renderEnchant();
 
   const tabR = document.getElementById('tab-recolte');
   const tabM = document.getElementById('tab-metiers');
@@ -1081,7 +1117,6 @@ const CRAFT = {
 })();
 </script>
 <script src="assets/nav.js"></script>
-<script src="assets/lang.js"></script>
 <script src="assets/codex-popup.js" defer></script>
 </body>
 </html>

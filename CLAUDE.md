@@ -55,11 +55,11 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 | Quoi | Mécanisme | Fréquence |
 |---|---|---|
 | Données du Codex | `wocc-knowledge-base` → `update-knowledge-base.yml` | ~5 min après chaque tag du jeu |
-| **Builds / BiS** (`bis.html`) | `update-bis.yml` → `compute_bis.py` + `inject_bis.py` | toutes les 15 min (commit seulement si les données changent) |
-| **Récolte & Métiers** (`metiers.html`) | `update-bis.yml` → `build_craft.py` + `inject_craft.py` | toutes les 15 min (idem) |
+| **Builds / BiS** (`bis.html`) | `update-bis.yml` → `compute_bis.py` + `inject_bis.py` | cron 15 min (throttlé ~1 h par GitHub ; commit seulement si les données changent) |
+| **Récolte & Métiers** (`metiers.html`) | `update-bis.yml` → `build_craft.py` + `inject_craft.py` | idem |
 | **Rédaction des « Nouveautés »** | Routine Claude « Veille nouvelle version WoCC » (session fraîche qui suit la procédure ⚡ ci-dessus) | toutes les heures |
 | Classement guilde (`guild.json`) | `update-guild-rank.yml` | toutes les 3 h |
-| Déploiement (OVH + Pages) | `deploy-ovh.yml` / `deploy-pages.yml` | à chaque push `main` + 6 h |
+| Déploiement (OVH + Pages) | `deploy-ovh.yml` / `deploy-pages.yml` | à chaque push `main` (+ cron 6 h côté OVH, pour rafraîchir la copie du Codex) |
 | Rappel « version manquante » (filet de secours) | `check-game-version.yml` ouvre une issue | toutes les heures |
 
 > Le **BiS est déterministe** : il ne se rédige pas, il se calcule. Ne jamais

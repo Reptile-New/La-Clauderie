@@ -10,8 +10,9 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 | Fichier | Rôle |
 |---|---|
 | `index.html` | Accueil : Discord, guides, puis 3 onglets — Calendrier (à venir + passés), Membres, Faits d'armes |
-| `bis.html` | Builds par classe et rôle : spé, talents, rotation et best-in-slot (généré par `scripts/compute_bis.py`) |
-| `metiers.html` | Récolte & Métiers : où récolter (minerai/bois/herbes/pêche) par zone et toutes les recettes par métier (généré par `scripts/build_craft.py`, données embarquées, à jour à chaque version) |
+| `bis.html` | Builds par classe et rôle : spé, talents, rotation (éditorial, bloc `BUILDS`) et best-in-slot (bloc `BIS`, recalculé automatiquement par `update-bis.yml` → `scripts/compute_bis.py`) |
+| `metiers.html` | Récolte & Métiers : où récolter (minerai/bois/herbes/pêche) par zone et toutes les recettes par métier (bloc `CRAFT` recalculé automatiquement par `update-bis.yml` → `scripts/build_craft.py`, données embarquées) + guide Enchantement éditorial |
+| `assets/nav.js` | La barre de navigation de TOUTES les pages (site + Codex) — source de vérité unique des onglets |
 | `assets/codex-popup.js` | Fiches incrustées : ouvre objets, sorts, talents, monstres, PNJ, quêtes et glossaire **dans la page**, à partir des données du Codex (voir plus bas) |
 | `admin.html` | Espace officiers : gérer le calendrier, les membres et les faits d'armes |
 | `patch-notes.html` | Historique de **toutes** les mises à jour du jeu, la plus récente en premier |
@@ -28,19 +29,30 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 À chaque nouvelle version du jeu, on ajoute ses nouveautés au site **sans toucher
 aux versions précédentes** — l'historique se construit au fil du temps :
 
-1. **Créer `notes/vX.Y.Z.html`** sur le modèle de la version la plus récente du
-   dossier `notes/` : mêmes sections (bulles résumées + fiches détaillées au
-   clic), avec le contenu de la nouvelle mise à jour.
+1. **Créer `notes/vX.Y.Z.html` ET `notes/vX.Y.Z.en.html`** sur le modèle de la
+   version la plus récente du dossier `notes/` : mêmes sections (bulles
+   résumées + fiches détaillées au clic), avec le contenu de la nouvelle mise
+   à jour. Les deux pages se redirigent l'une vers l'autre selon la langue
+   choisie (scripts en tête de fichier — adapter le numéro de version).
 2. **Ajouter une entrée en tête de `patch-notes.json`** : version, date, titre,
-   résumé, temps forts, et le chemin `notes/vX.Y.Z.html`.
+   résumé, temps forts, le chemin `notes/vX.Y.Z.html`, et les variantes
+   anglaises (`titre_en`, `resume_en`, `temps_forts_en`, `page_en`).
 
-C'est tout : la page « Nouveautés du jeu » et la carte de l'accueil (qui affiche
-toujours la dernière version) se mettent à jour automatiquement.
+La page « Nouveautés du jeu » et la carte de l'accueil (qui affiche toujours la
+dernière version) se mettent à jour automatiquement.
 
 3. **Marquer les mots cliquables** (voir la section « Fiches incrustées ») :
    dans la nouvelle page, entourer les termes techniques et les noms d'objets,
    monstres, PNJ, quêtes… d'un `<span data-codex="…">` pour qu'un clic ouvre
    leur fiche sans quitter le site.
+4. **Mettre à jour le guide « Spé & talents »** (`const BUILDS` de `bis.html`)
+   pour les classes touchées par la mise à jour — c'est la partie éditoriale de
+   la page Builds ; l'équipement (`const BIS`), lui, est recalculé tout seul
+   par `.github/workflows/update-bis.yml`.
+
+> En pratique, une Routine Claude fait tout cela automatiquement à chaque
+> nouvelle version (procédure détaillée dans `CLAUDE.md`) — cette section sert
+> de référence si on doit le faire à la main.
 
 ## Fiches incrustées (codex-popup.js)
 
@@ -75,9 +87,10 @@ site) :
   Codex » quand elle existe là-bas.
 
 > **Rappel automatique** : le workflow `.github/workflows/check-game-version.yml`
-> vérifie toutes les 6 h si une nouvelle version du jeu est sortie. Si ses
+> vérifie toutes les heures si une nouvelle version du jeu est sortie. Si ses
 > nouveautés manquent sur le site, il ouvre une issue sur le repo pour le
-> signaler (une seule par version).
+> signaler (une seule par version). C'est un filet de secours : la rédaction
+> elle-même est normalement assurée par la Routine Claude (voir `CLAUDE.md`).
 
 ## Gérer le calendrier, les membres et les faits d'armes (pour les officiers)
 
