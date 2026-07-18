@@ -2,6 +2,28 @@
   "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français). Champ page_en : la page de notes en anglais (notes/vX.Y.Z.en.html) ; la version anglaise du site l'utilise.",
   "versions": [
     {
+      "version": "v0.27.0",
+      "date": "2026-07-18",
+      "titre": "Le Guerrier refondu, le Mage soigneur et les Métiers 2.0",
+      "resume": "La plus grosse mise à jour à ce jour (440 commits) : le Guerrier reconstruit avec trois spécialisations et ses postures, le Mage réinventé — dont la Chronomancie, une vraie spé de soin —, les rangées de choix des Talents 2.0 pour les neuf classes, les Métiers 2.0 (archétypes, qualité déterministe, Masterwork, enchants Greater), le mini-jeu Card Duel, le wallet Solana/USDC et des donjons héroïques rééquilibrés.",
+      "temps_forts": [
+        "Guerrier : 3 spécialisations (Battlecraft, Bloodrush, Ironguard) et le retour des postures",
+        "Mage : la Chronomancie soigne en infligeant des dégâts — Cryomancie et Pyromancie refaites",
+        "Métiers 2.0 : archétypes par paires, craft déterministe, proc Masterwork et enchants Greater",
+        "Card Duel chez le Card Master, wallet Solana/USDC, trash héroïque -25 %"
+      ],
+      "page": "notes/v0.27.0.html",
+      "titre_en": "The Warrior redesign, the healer Mage and Professions 2.0",
+      "resume_en": "The biggest update to date (440 commits): the Warrior rebuilt with three specializations and stances, the Mage reworked — including Chronomancy, a true healing spec —, Talents 2.0 choice rows for all nine classes, Professions 2.0 (archetypes, deterministic quality, Masterwork, Greater enchants), the Card Duel minigame, the Solana/USDC wallet and rebalanced heroic dungeons.",
+      "temps_forts_en": [
+        "Warrior: 3 specializations (Battlecraft, Bloodrush, Ironguard) and the return of stances",
+        "Mage: Chronomancy heals by dealing damage — Cryomancy and Pyromancy rebuilt",
+        "Professions 2.0: paired archetypes, deterministic crafting, Masterwork proc and Greater enchants",
+        "Card Duel at the Card Master, Solana/USDC wallet, heroic trash hits 25% softer"
+      ],
+      "page_en": "notes/v0.27.0.en.html"
+    },
+    {
       "version": "v0.26.0",
       "date": "2026-07-15",
       "titre": "Le Dungeon Finder, le Hit Rating et un cooldown de tank par classe",
