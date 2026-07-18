@@ -1,6 +1,6 @@
 # Recalcule les pages « mécaniques » du site à partir des données réelles du
 # jeu, sans IA ni intervention humaine : le BiS (page Builds) et les données de
-# la page Récolte & Métiers. Tourne toutes les 6 h : récupère la knowledge base
+# la page Récolte & Métiers. Tourne toutes les 15 min : récupère la knowledge base
 # (repo public wocc-knowledge-base, déjà régénérée tout seule à chaque nouvelle
 # version du jeu), régénère bis.html + metiers.html et ne commite QUE si quelque
 # chose a changé. 100 % déterministe — la partie « à calculer, pas à rédiger ».
@@ -12,7 +12,7 @@ name: Recalcul BiS + Récolte/Métiers
 
 on:
   schedule:
-    - cron: '41 */6 * * *'   # décalé des autres crons du repo
+    - cron: '11,26,41,56 * * * *'   # toutes les 15 min, décalé des autres crons ; ne commite que si les données ont changé
   workflow_dispatch: {}
 
 # Concurrence partagée avec les autres écritures sur main pour éviter les

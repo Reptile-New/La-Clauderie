@@ -1,12 +1,14 @@
-# Vérifie toutes les 6 h si une nouvelle version de World of ClaudeCraft est
+# Vérifie toutes les heures si une nouvelle version de World of ClaudeCraft est
 # sortie. Si ses nouveautés ne sont pas encore sur le site (absentes de
 # patch-notes.json), ouvre une issue pour le rappeler — une seule par version.
+# Filet de sécurité : la rédaction elle-même est normalement faite par la
+# Routine Claude horaire (voir CLAUDE.md) ; l'issue ne sert que si elle échoue.
 
 name: Alerte nouvelle version du jeu
 
 on:
   schedule:
-    - cron: "23 */6 * * *"
+    - cron: "23 * * * *"
   workflow_dispatch: {}
 
 permissions:

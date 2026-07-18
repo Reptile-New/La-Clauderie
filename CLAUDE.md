@@ -5,9 +5,16 @@ Site statique de guilde pour *World of ClaudeCraft*. Déployé sur
 
 ## ⚡ Quand l'utilisateur dit « il y a une nouvelle MAJ »
 
-C'est la **seule** intervention manuelle attendue. Tout le reste est automatisé
-(voir plus bas) — **ne le refais pas**. Ta tâche se limite à la partie
-rédactionnelle des « Nouveautés » :
+> **Normalement, même ça, c'est automatique** : une Routine Claude horaire
+> (« Veille nouvelle version WoCC ») détecte toute version absente de
+> `patch-notes.json` et déroule elle-même la procédure ci-dessous. Si
+> l'utilisateur le demande à la main, c'est pour publier tout de suite sans
+> attendre le prochain passage — même procédure. Avant de commencer, vérifier
+> que la version n'est pas déjà en tête de `patch-notes.json` sur `origin/main`
+> (la Routine est peut-être passée avant toi) ; si c'est le cas, ne rien refaire.
+
+Tout le reste est automatisé (voir plus bas) — **ne le refais pas**. Ta tâche
+se limite à la partie rédactionnelle des « Nouveautés » :
 
 1. **Trouver le contenu de la version.** Récupérer les notes de version du jeu
    (`https://github.com/levy-street/world-of-claudecraft/releases/tag/vX.Y.Z`).
@@ -40,11 +47,12 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 | Quoi | Mécanisme | Fréquence |
 |---|---|---|
 | Données du Codex | `wocc-knowledge-base` → `update-knowledge-base.yml` | ~5 min après chaque tag du jeu |
-| **Builds / BiS** (`bis.html`) | `update-bis.yml` → `compute_bis.py` + `inject_bis.py` | toutes les 6 h (+ manuel) |
-| **Récolte & Métiers** (`metiers.html`) | `update-bis.yml` → `build_craft.py` + `inject_craft.py` | toutes les 6 h (+ manuel) |
+| **Builds / BiS** (`bis.html`) | `update-bis.yml` → `compute_bis.py` + `inject_bis.py` | toutes les 15 min (commit seulement si les données changent) |
+| **Récolte & Métiers** (`metiers.html`) | `update-bis.yml` → `build_craft.py` + `inject_craft.py` | toutes les 15 min (idem) |
+| **Rédaction des « Nouveautés »** | Routine Claude « Veille nouvelle version WoCC » (session fraîche qui suit la procédure ⚡ ci-dessus) | toutes les heures |
 | Classement guilde (`guild.json`) | `update-guild-rank.yml` | toutes les 3 h |
 | Déploiement (OVH + Pages) | `deploy-ovh.yml` / `deploy-pages.yml` | à chaque push `main` + 6 h |
-| Rappel « version manquante » | `check-game-version.yml` ouvre une issue | toutes les 6 h |
+| Rappel « version manquante » (filet de secours) | `check-game-version.yml` ouvre une issue | toutes les heures |
 
 > Le **BiS est déterministe** : il ne se rédige pas, il se calcule. Ne jamais
 > éditer le bloc `const BIS = {…}` de `bis.html` à la main — c'est
