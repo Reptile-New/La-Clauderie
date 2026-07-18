@@ -72,6 +72,11 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 > de `GATHER_NODES`, `FISHING_TABLES`, `ALL_RECIPES` et `ZONES` de la KB. Ne pas
 > l'éditer à la main. La page se suffit à elle-même (données embarquées) pour
 > marcher aussi bien sur OVH que sur GitHub Pages (où `/data/` n'est pas servi).
+> **Exception éditoriale** : la fonction `renderEnchant()` (guide Enchantement)
+> dans le second `<script>` de `metiers.html` est rédigée à la main — ce métier
+> n'a aucune recette dans la KB (tout vit dans le code du jeu,
+> `src/sim/professions/enchanting.ts`). À revérifier à chaque MAJ qui touche
+> l'enchantement.
 
 ## 🧭 La barre de navigation — source de vérité UNIQUE
 

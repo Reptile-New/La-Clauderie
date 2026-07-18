@@ -1020,10 +1020,49 @@ const CRAFT = {
     }).join('');
   }
 
+  // --- Guide Enchantement — section ÉDITORIALE -------------------------------
+  // L'enchantement n'a aucune recette dans ALL_RECIPES de la KB (tout est dans
+  // le code du jeu, enchants connus d'office) : le pipeline build_craft.py ne
+  // le voit pas. Ce guide est donc rédigé à la main, vérifié dans le code du
+  // jeu (src/sim/professions/enchanting.ts, tag v0.27.0). À revérifier à
+  // chaque MAJ qui touche l'enchantement.
+  function renderEnchant() {
+    return `<div class="block">
+      <div class="block-head"><h2>🪄 ${T('Enchantement', 'Enchanting')}</h2><span class="lvl">${T('guide v0.27', 'v0.27 guide')}</span><span class="sub">${T('pas de recettes : tout est connu d’office', 'no recipes: everything is known from the start')}</span></div>
+      <p style="color:var(--dim);font-size:0.93rem;margin:8px 0 0">${T(
+        'Le métier le plus simple à monter : rien à apprendre, pas de formateur. Désenchanter et enchanter donnent chacun <b style="color:var(--text)">+1 point par action</b> — pas de recettes grises, pas de gain dégressif. Se prend en majeur avec l’Inscription (titre Arcanist) via la quête de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook.',
+        'The easiest profession to level: nothing to learn, no trainer. Disenchanting and enchanting each grant <b style="color:var(--text)">+1 point per action</b> — no grey recipes, no diminishing gains. Taken as a major alongside Inscription (Arcanist title) via <span data-codex="npc|Smith Haldren">Smith Haldren</span>’s quest in Eastbrook.')}</p>
+      <div class="cols">
+        <div class="node herb">
+          <h3><span class="ico">✨</span>${T('Les matériaux', 'The materials')}</h3>
+          <div class="meta">${T('uniquement via désenchantement — rien ne s’achète', 'from disenchanting only — nothing is sold anywhere')}</div>
+          <div class="catch">${item({ id: 'arcane_dust', name: 'Arcane Dust' })}<span class="pct">${T('vert / blanc', 'green / white')}</span></div>
+          <div class="catch">${item({ id: 'arcane_essence', name: 'Arcane Essence', q: 'rare' })}<span class="pct">${T('bleu', 'blue')}</span></div>
+          <div class="catch">${item({ id: 'arcane_shard', name: 'Arcane Shard', q: 'epic' })}<span class="pct">${T('épique / légendaire', 'epic / legendary')}</span></div>
+          <div class="meta" style="margin-top:8px">${T('~3-6 par pièce selon niveau et qualité — garde tes épiques inutiles !', '~3-6 per item by level and quality — keep your spare epics!')}</div>
+        </div>
+        <div class="node ore">
+          <h3><span class="ico">🔁</span>${T('La boucle efficace', 'The efficient loop')}</h3>
+          <div class="meta">${T('≈ 2 points par objet vert', '≈ 2 points per green item')}</div>
+          <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
+            '1. Désenchante un vert pas cher (+1 pt, 3-6 poussières).<br>2. Pose un enchant de base — 3-5 poussières — sur une pièce de tes sacs (+1 pt).<br>3. Répète : farm les verts en donjon et à l’hôtel des ventes.',
+            '1. Disenchant a cheap green (+1 pt, 3-6 dust).<br>2. Apply a base enchant — 3-5 dust — on a bagged item (+1 pt).<br>3. Repeat: farm greens in dungeons and at the auction house.')}</p>
+          <div class="meta" style="margin-top:8px">${T('Palier 75 : spécialisation (haut fait + bonus Masterwork). Enchants « Greater » (5 gros slots) : 1 Shard + 2-3 Essences.', 'Skill 75: specialization (deed + Masterwork bonus). “Greater” enchants (5 key slots): 1 Shard + 2-3 Essences.')}</div>
+        </div>
+        <div class="node fish">
+          <h3><span class="ico">⚠️</span>${T('Les pièges', 'The traps')}</h3>
+          <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
+            '• La pièce à enchanter doit être <b style="color:var(--text)">dans les sacs, pas équipée</b>.<br>• <b style="color:var(--text)">Pas de ré-enchant</b> : une pièce enchantée l’est pour de bon.<br>• Attention au « vendre le junk » : poussières, essences et shards peuvent y passer.<br>• Enchanter une pièce Masterwork ne fait rien perdre (bonus cumulés).',
+            '• The item to enchant must be <b style="color:var(--text)">in your bags, not equipped</b>.<br>• <b style="color:var(--text)">No re-enchanting</b>: an enchanted piece stays that way.<br>• Careful with “sell all junk”: dust, essences and shards can get liquidated.<br>• Enchanting a Masterwork piece loses nothing (bonuses stack).')}</p>
+        </div>
+      </div>
+    </div>`;
+  }
+
   const vR = document.getElementById('view-recolte');
   const vM = document.getElementById('view-metiers');
   vR.innerHTML = renderRecolte();
-  vM.innerHTML = renderMetiers();
+  vM.innerHTML = renderMetiers() + renderEnchant();
 
   const tabR = document.getElementById('tab-recolte');
   const tabM = document.getElementById('tab-metiers');
