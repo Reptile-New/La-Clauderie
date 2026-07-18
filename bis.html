@@ -177,7 +177,7 @@
 
 <div class="wrap">
   <header class="page">
-    <p class="eyebrow" data-en="Class guide · Patch v0.26.0">Guide de classe · Patch v0.26.0</p>
+    <p class="eyebrow" data-en="Class guide · Patch v0.27.0">Guide de classe · Patch v0.27.0</p>
     <h1>Builds</h1>
     <p class="lede" data-en="Pick your class, then your role: the recommended specialisation and talents (with the why), the rotation, then the best gear in the game — set bonuses included, both rings covered. Click an item, talent or spell to open its sheet without leaving the page.">Choisis ta classe puis ton rôle : la spécialisation et les talents recommandés (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
   </header>
@@ -193,7 +193,7 @@
 
 <footer>
   <div class="wrap">
-    <p data-en="Gear optimised on the game&#39;s real data (tag v0.26.0) with the patch&#39;s combat formulas: each item&#39;s value is measured within the full loadout, set bonuses and procs included — that&#39;s why some set pieces beat “better” standalone items. <b style=&quot;color:var(--dim)&quot;>Alt.</b> = best replacement if you&#39;re missing the piece. <b style=&quot;color:var(--dim)&quot;>equippable*</b> = the tooltip lists other classes, but the game only restricts armor by its type (cloth/leather/mail). The game has no “unique” items: wearing <b style=&quot;color:var(--dim)&quot;>two copies of the same ring</b> is allowed (verified in the equipment code) — hence the doubled rings. <b style=&quot;color:var(--dim)&quot;>FURY</b> = bought with PvP Honor (v0.25): its Warfare rating does nothing in PvE, but the raw stats sometimes win the slot anyway.">Panoplies optimisées sur les données réelles du jeu (tag v0.26.0) avec les formules de combat du patch : la valeur de chaque objet est mesurée dans la panoplie complète, bonus de sets et procs compris — c'est pour ça que certaines pièces de set battent des objets « meilleurs » pris isolément. <b style="color:var(--dim)">Alt.</b> = meilleur remplaçant si la pièce te manque. <b style="color:var(--dim)">équipable*</b> = le tooltip cite d'autres classes, mais le jeu ne restreint les armures que par type (tissu/cuir/mailles). Le jeu n'a pas d'objets « uniques » : porter <b style="color:var(--dim)">deux exemplaires du même anneau</b> est autorisé (vérifié dans le code d'équipement) — d'où les anneaux doublés. <b style="color:var(--dim)">FURY</b> = acheté avec l'Honor PvP (v0.25) : son Warfare ne sert à rien en PvE, mais les stats brutes gagnent parfois quand même l'emplacement.</p>
+    <p data-en="Gear optimised on the game&#39;s real data (tag v0.27.0) with the patch&#39;s combat formulas: each item&#39;s value is measured within the full loadout, set bonuses and procs included — that&#39;s why some set pieces beat “better” standalone items. <b style=&quot;color:var(--dim)&quot;>Alt.</b> = best replacement if you&#39;re missing the piece. <b style=&quot;color:var(--dim)&quot;>equippable*</b> = the tooltip lists other classes, but the game only restricts armor by its type (cloth/leather/mail). The game has no “unique” items: wearing <b style=&quot;color:var(--dim)&quot;>two copies of the same ring</b> is allowed (verified in the equipment code) — hence the doubled rings. <b style=&quot;color:var(--dim)&quot;>FURY</b> = bought with PvP Honor (v0.25): its Warfare rating does nothing in PvE, but the raw stats sometimes win the slot anyway.">Panoplies optimisées sur les données réelles du jeu (tag v0.27.0) avec les formules de combat du patch : la valeur de chaque objet est mesurée dans la panoplie complète, bonus de sets et procs compris — c'est pour ça que certaines pièces de set battent des objets « meilleurs » pris isolément. <b style="color:var(--dim)">Alt.</b> = meilleur remplaçant si la pièce te manque. <b style="color:var(--dim)">équipable*</b> = le tooltip cite d'autres classes, mais le jeu ne restreint les armures que par type (tissu/cuir/mailles). Le jeu n'a pas d'objets « uniques » : porter <b style="color:var(--dim)">deux exemplaires du même anneau</b> est autorisé (vérifié dans le code d'équipement) — d'où les anneaux doublés. <b style="color:var(--dim)">FURY</b> = acheté avec l'Honor PvP (v0.25) : son Warfare ne sert à rien en PvE, mais les stats brutes gagnent parfois quand même l'emplacement.</p>
     <p style="margin-top:8px"><a href="index.html" data-en="← Back to the site">← Retour au site</a></p>
   </div>
 </footer>
@@ -672,6 +672,30 @@ const BIS = {
     "picks": {
      "mainhand": {
       "best": {
+       "name": "Bonewrought Greatsword",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 25,
+        "sta": 21,
+        "hit": 65,
+        "crit": 20
+       },
+       "w": {
+        "min": 45,
+        "max": 75,
+        "speed": 3.4
+       },
+       "sp": null,
+       "id": "heroic_bonewrought_greatsword",
+       "score": 54.8,
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
+       ]
+      },
+      "alt": {
        "name": "Thronebane, Last Oath of Thornpeak",
        "q": "legendary",
        "set": null,
@@ -695,29 +719,6 @@ const BIS = {
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 3 %"
        ]
-      },
-      "alt": {
-       "name": "Thronebane, Last Oath of Thornpeak",
-       "q": "legendary",
-       "set": null,
-       "stats": {
-        "str": 15,
-        "agi": 15,
-        "sta": 14
-       },
-       "w": {
-        "min": 46,
-        "max": 74,
-        "speed": 2.8
-       },
-       "sp": null,
-       "id": "kingsbane_last_oath",
-       "score": 54.7,
-       "xclass": false,
-       "slot": "mainhand",
-       "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
-       ]
       }
      },
      "helmet": {
@@ -739,7 +740,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -759,7 +760,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -782,7 +783,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -802,7 +803,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -1143,7 +1144,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4500.5
+    "score": 4558.4
    },
    "dps": {
     "picks": {
@@ -1174,26 +1175,27 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Thronebane, Last Oath of Thornpeak",
-       "q": "legendary",
+       "name": "Bonewrought Greatsword",
+       "q": "epic",
        "set": null,
        "stats": {
-        "str": 15,
-        "agi": 15,
-        "sta": 14
+        "str": 25,
+        "sta": 21,
+        "hit": 65,
+        "crit": 20
        },
        "w": {
-        "min": 46,
-        "max": 74,
-        "speed": 2.8
+        "min": 45,
+        "max": 75,
+        "speed": 3.4
        },
        "sp": null,
-       "id": "kingsbane_last_oath",
-       "score": 54.7,
+       "id": "heroic_bonewrought_greatsword",
+       "score": 54.8,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
        ]
       }
      },
@@ -1216,7 +1218,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -1236,7 +1238,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -1259,7 +1261,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -1279,7 +1281,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -1631,6 +1633,30 @@ const BIS = {
     "picks": {
      "mainhand": {
       "best": {
+       "name": "Bonewrought Greatsword",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 25,
+        "sta": 21,
+        "hit": 65,
+        "crit": 20
+       },
+       "w": {
+        "min": 45,
+        "max": 75,
+        "speed": 3.4
+       },
+       "sp": null,
+       "id": "heroic_bonewrought_greatsword",
+       "score": 54.8,
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
+       ]
+      },
+      "alt": {
        "name": "Thronebane, Last Oath of Thornpeak",
        "q": "legendary",
        "set": null,
@@ -1654,29 +1680,6 @@ const BIS = {
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 3 %"
        ]
-      },
-      "alt": {
-       "name": "Thronebane, Last Oath of Thornpeak",
-       "q": "legendary",
-       "set": null,
-       "stats": {
-        "str": 15,
-        "agi": 15,
-        "sta": 14
-       },
-       "w": {
-        "min": 46,
-        "max": 74,
-        "speed": 2.8
-       },
-       "sp": null,
-       "id": "kingsbane_last_oath",
-       "score": 54.7,
-       "xclass": false,
-       "slot": "mainhand",
-       "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
-       ]
       }
      },
      "helmet": {
@@ -1698,7 +1701,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -1718,7 +1721,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -1741,7 +1744,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -1761,7 +1764,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -2102,7 +2105,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4460.2
+    "score": 4518.1
    },
    "heal": {
     "picks": {
@@ -2176,7 +2179,7 @@ const BIS = {
        "xclass": true,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -2196,7 +2199,7 @@ const BIS = {
        "xclass": true,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -2219,7 +2222,7 @@ const BIS = {
        "xclass": true,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -2239,7 +2242,7 @@ const BIS = {
        "xclass": true,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -2610,26 +2613,27 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Thronebane, Last Oath of Thornpeak",
-       "q": "legendary",
+       "name": "Bonewrought Greatsword",
+       "q": "epic",
        "set": null,
        "stats": {
-        "str": 15,
-        "agi": 15,
-        "sta": 14
+        "str": 25,
+        "sta": 21,
+        "hit": 65,
+        "crit": 20
        },
        "w": {
-        "min": 46,
-        "max": 74,
-        "speed": 2.8
+        "min": 45,
+        "max": 75,
+        "speed": 3.4
        },
        "sp": null,
-       "id": "kingsbane_last_oath",
-       "score": 54.7,
+       "id": "heroic_bonewrought_greatsword",
+       "score": 54.8,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
        ]
       }
      },
@@ -2652,7 +2656,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -2672,7 +2676,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -2695,7 +2699,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -2715,7 +2719,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -3135,7 +3139,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -3155,7 +3159,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -3178,7 +3182,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -3198,7 +3202,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -3569,26 +3573,27 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Thronebane, Last Oath of Thornpeak",
-       "q": "legendary",
+       "name": "Bonewrought Greatsword",
+       "q": "epic",
        "set": null,
        "stats": {
-        "str": 15,
-        "agi": 15,
-        "sta": 14
+        "str": 25,
+        "sta": 21,
+        "hit": 65,
+        "crit": 20
        },
        "w": {
-        "min": 46,
-        "max": 74,
-        "speed": 2.8
+        "min": 45,
+        "max": 75,
+        "speed": 3.4
        },
        "sp": null,
-       "id": "kingsbane_last_oath",
-       "score": 54.7,
+       "id": "heroic_bonewrought_greatsword",
+       "score": 54.8,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
        ]
       }
      },
@@ -3611,7 +3616,7 @@ const BIS = {
        "xclass": true,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -3631,7 +3636,7 @@ const BIS = {
        "xclass": true,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -3654,7 +3659,7 @@ const BIS = {
        "xclass": true,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -3674,7 +3679,7 @@ const BIS = {
        "xclass": true,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 31 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -4093,7 +4098,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -4113,7 +4118,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -4136,7 +4141,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -4156,7 +4161,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -4568,7 +4573,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -4588,7 +4593,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -4630,7 +4635,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -5045,7 +5050,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -5065,7 +5070,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -5088,7 +5093,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -5108,7 +5113,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -5528,7 +5533,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -5548,7 +5553,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -5590,7 +5595,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -6005,7 +6010,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -6025,7 +6030,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -6048,7 +6053,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -6068,7 +6073,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -6488,7 +6493,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -6508,7 +6513,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -6531,7 +6536,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -6551,7 +6556,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -6971,7 +6976,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       },
       "alt": {
@@ -6991,7 +6996,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 30 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 26 %"
        ]
       }
      },
@@ -7014,7 +7019,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -7034,7 +7039,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -7453,7 +7458,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -7473,7 +7478,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -7496,7 +7501,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -7516,7 +7521,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -7890,26 +7895,27 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Thronebane, Last Oath of Thornpeak",
-       "q": "legendary",
+       "name": "Direfang Greatblade",
+       "q": "epic",
        "set": null,
        "stats": {
-        "str": 15,
-        "agi": 15,
-        "sta": 14
+        "agi": 25,
+        "sta": 21,
+        "hit": 65,
+        "crit": 20
        },
        "w": {
-        "min": 46,
-        "max": 74,
-        "speed": 2.8
+        "min": 40,
+        "max": 66,
+        "speed": 3
        },
        "sp": null,
-       "id": "kingsbane_last_oath",
-       "score": 54.7,
+       "id": "heroic_direfang_greatblade",
+       "score": 54.8,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -7932,7 +7938,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -7952,7 +7958,7 @@ const BIS = {
        "xclass": false,
        "slot": "helmet",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
@@ -7975,7 +7981,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       },
       "alt": {
@@ -7995,7 +8001,7 @@ const BIS = {
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin : Nythraxis, Scourge of Thornpeak · 51 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 45 %"
        ]
       }
      },
