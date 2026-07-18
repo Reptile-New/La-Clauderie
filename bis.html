@@ -9055,7 +9055,7 @@ function renderBuild() {
   box.innerHTML = `
     <div class="bsec">
       <h2 class="bsec-h">🧠 ${T({ fr: "Spé & talents", en: "Spec & talents" })}</h2>
-      <div class="bspec"><b><span data-codex="spec|${spec.replace(/"/g, "&quot;")}">${spec}</span></b><span class="bmastery">${loc(b.mastery)}</span><p>${loc(b.pourquoi)}</p></div>
+      <div class="bspec"><b><span data-codex="spec|${spec.split(" — ")[0].replace(/"/g, "&quot;")}">${spec}</span></b><span class="bmastery">${loc(b.mastery)}</span><p>${loc(b.pourquoi)}</p></div>
       <div class="bstats">${T({ fr: "Priorité de stats : ", en: "Stat priority: " })}<b>${loc(b.stats)}</b></div>
       <ol class="btalents">${talents}</ol>
       <p class="bt-cap">${T({
