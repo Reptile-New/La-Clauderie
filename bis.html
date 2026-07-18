@@ -8374,7 +8374,7 @@ const SET_BONUS_FR = LANG === "en"
   : { 2:"bonus 2 pièces", 3:"bonus 3 pièces", 4:"bonus 4 pièces" };
 // Champ rédactionnel bilingue ({fr,en}) ou simple chaîne.
 const loc = v => (v && typeof v === "object" && !Array.isArray(v)) ? v[LANG] : v;
-const TREE_LBL = t => LANG === "en" ? ({ "spé": "spec", "classe": "class" }[t] || t) : t;
+const TREE_LBL = t => LANG === "en" ? ({ "spé": "spec", "classe": "class" }[t] || t.replace(/^niv\./, "lvl")) : t;
 // Les chaînes « source » du BIS sont générées en français par compute_bis.py :
 // on les traduit au vol côté anglais.
 function trSrc(s) {

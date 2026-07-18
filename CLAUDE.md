@@ -30,6 +30,14 @@ se limite à la partie rédactionnelle des « Nouveautés » :
 3. **Ajouter une entrée en tête de `patch-notes.json`** (version, date, titre,
    resume, temps_forts, page + variantes `_en` et `page_en`). L'accueil et la
    page Nouveautés se mettent à jour tout seuls à partir de ce fichier.
+3bis. **Mettre à jour le guide « Spé & talents » (`const BUILDS` de `bis.html`)**
+   pour les classes touchées par la MAJ : choix par rangée de talents (format
+   `["Option", "niv. X", {fr, en}]`), maîtrise, rotation, astuce — en vérifiant
+   chaque nom contre `TALENTS.json` / `ABILITIES.json` de la KB. C'est la
+   partie ÉDITORIALE de la page Builds : le recalcul automatique ne couvre que
+   le bloc `const BIS` (l'équipement). Si la MAJ ajoute un rôle à une classe
+   (ex. Mage soigneur en v0.27.0), ajouter aussi ce rôle dans `ROLES` de
+   `scripts/compute_bis.py` pour que l'onglet et le BiS existent.
 4. **Commit sur `claude/site-update-6uhdmv`, puis merge direct sur `main`**
    (fast-forward : `git push origin claude/site-update-6uhdmv:main`). Le déploiement
    part tout seul. **Ne pas ouvrir de PR** sauf demande explicite.

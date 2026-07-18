@@ -193,7 +193,8 @@ CLASSES = {
 }
 ROLES = {
     'warrior': ['tank','dps'], 'paladin': ['tank','heal','dps'], 'shaman': ['heal','dps'],
-    'druid': ['tank','heal','dps'], 'priest': ['heal','dps'], 'mage': ['dps'],
+    # mage : la Chronomancie (v0.27.0) fait du Mage un vrai soigneur.
+    'druid': ['tank','heal','dps'], 'priest': ['heal','dps'], 'mage': ['dps','heal'],
     'warlock': ['dps'], 'rogue': ['dps'], 'hunter': ['dps'],
 }
 MAIL = {'warrior','paladin','shaman'}; LEATHER = {'druid','rogue','hunter'}
