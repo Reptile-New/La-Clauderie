@@ -51,13 +51,17 @@ const CODEX_SITE = onLaclauderie ? '/codex/'
 const SITE_BASE = onLaclauderie ? '/' : '/La-Clauderie/';
 
 const FILES = ['ITEMS','MOBS','NPCS','QUESTS','DUNGEONS','DELVES','ITEM_SETS',
-               'WORLD_BOSSES','ZONES','HEROIC_BOSS_LOOT','ABILITIES','TALENTS','_meta'];
+               'WORLD_BOSSES','ZONES','HEROIC_BOSS_LOOT','HEROIC_VENDOR_STOCK',
+               'DELVE_SHOPS','ABILITIES','TALENTS','_meta'];
 
 /* ---------- petits helpers ---------- */
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g,
   c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fold = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+// Normalise aussi les apostrophes typographiques (’ ‘) en apostrophe droite :
+// les alias du glossaire en utilisent, et un data-codex saisi avec l'une ou
+// l'autre doit matcher pareil.
+const fold = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'").toLowerCase().trim();
 const asList = x => !x ? [] : Array.isArray(x) ? x : Object.values(x);
 
 function money(copper) {
@@ -89,11 +93,11 @@ const QUALITY_FR = LANG === 'en'
   ? { poor:'Poor', common:'Common', uncommon:'Uncommon', rare:'Rare', epic:'Epic', legendary:'Legendary' }
   : { poor:'Médiocre', common:'Commun', uncommon:'Inhabituel', rare:'Rare', epic:'Épique', legendary:'Légendaire' };
 const KIND_FR = LANG === 'en'
-  ? { weapon:'Weapon', armor:'Armor', bag:'Bag', food:'Food', drink:'Drink', tool:'Tool', junk:'Junk', potion:'Potion', elixir:'Elixir', quest:'Quest item' }
-  : { weapon:'Arme', armor:'Armure', bag:'Sac', food:'Nourriture', drink:'Boisson', tool:'Outil', junk:'Camelote', potion:'Potion', elixir:'Élixir', quest:'Objet de quête' };
+  ? { weapon:'Weapon', armor:'Armor', bag:'Bag', food:'Food', drink:'Drink', tool:'Tool', junk:'Junk', potion:'Potion', elixir:'Elixir', quest:'Quest item', held_offhand:'Held in off-hand' }
+  : { weapon:'Arme', armor:'Armure', bag:'Sac', food:'Nourriture', drink:'Boisson', tool:'Outil', junk:'Camelote', potion:'Potion', elixir:'Élixir', quest:'Objet de quête', held_offhand:'Tenu en main gauche' };
 const SLOT_FR = LANG === 'en'
-  ? { mainhand:'Main hand', chest:'Chest', feet:'Feet', legs:'Legs', helmet:'Head', shoulder:'Shoulders', waist:'Waist', gloves:'Hands' }
-  : { mainhand:'Main droite', chest:'Torse', feet:'Pieds', legs:'Jambes', helmet:'Tête', shoulder:'Épaules', waist:'Taille', gloves:'Mains' };
+  ? { mainhand:'Main hand', offhand:'Off hand', chest:'Chest', feet:'Feet', legs:'Legs', helmet:'Head', shoulder:'Shoulders', waist:'Waist', gloves:'Hands', neck:'Neck', ring:'Ring', ring1:'Ring', ring2:'Ring' }
+  : { mainhand:'Main droite', offhand:'Main gauche', chest:'Torse', feet:'Pieds', legs:'Jambes', helmet:'Tête', shoulder:'Épaules', waist:'Taille', gloves:'Mains', neck:'Cou', ring:'Anneau', ring1:'Anneau', ring2:'Anneau' };
 const ARMORTYPE_FR = LANG === 'en'
   ? { cloth:'Cloth', leather:'Leather', mail:'Mail' }
   : { cloth:'Tissu', leather:'Cuir', mail:'Mailles' };
@@ -213,7 +217,7 @@ const GLOSSARY_FR = {
   soulbound: { title: 'Soulbound (lié à l’âme)', def: `Un objet <b>soulbound</b> est lié définitivement au personnage qui l'a ramassé : impossible de le donner, de l'échanger ou de le vendre à un autre joueur. C'est le cas de la plupart des butins de donjon et des <span data-codex="term|heroic marks">Heroic Marks</span>.` },
   ilvl: { title: 'ilvl (niveau d’objet)', def: `Le <b>niveau d'objet</b> (item level) mesure la puissance globale d'une pièce d'équipement : plus il est haut, plus l'objet porte de statistiques. Deux objets de même rareté peuvent avoir des ilvl différents — en héroïque, les épiques montent par exemple à l'ilvl 28.` },
   proc: { title: 'Proc', def: `Un <b>proc</b> est un effet qui se déclenche aléatoirement quand une condition est remplie — souvent « à chaque coup critique, X % de chances de… ». Les bonus 4 pièces des sets épiques et les armes légendaires fonctionnent ainsi. Voir aussi <span data-codex="term|icd">ICD</span>.` },
-  icd: { title: 'ICD (temps de recharge interne)', def: `L'<b>Internal CooldDown</b> d'un <span data-codex="term|proc">proc</span> est le délai minimum entre deux déclenchements. Un proc « 50 %, ICD 15 s » ne peut jamais se re-déclencher moins de 15 secondes après le précédent, même avec de la chance.` },
+  icd: { title: 'ICD (temps de recharge interne)', def: `L'<b>Internal Cooldown</b> d'un <span data-codex="term|proc">proc</span> est le délai minimum entre deux déclenchements. Un proc « 50 %, ICD 15 s » ne peut jamais se re-déclencher moins de 15 secondes après le précédent, même avec de la chance.` },
   dot: { title: 'DoT (dégâts sur la durée)', def: `Un <b>DoT</b> (<i>damage over time</i>) inflige ses dégâts par petites touches régulières pendant plusieurs secondes — poisons, saignements, malédictions. L'inverse pour les soins s'appelle un <span data-codex="term|hot">HoT</span>.` },
   hot: { title: 'HoT (soins sur la durée)', def: `Un <b>HoT</b> (<i>heal over time</i>) soigne par petites touches régulières pendant plusieurs secondes, plutôt qu'en une seule fois. Idéal à poser sur le tank <i>avant</i> que les dégâts n'arrivent.` },
   buff: { title: 'Buff', def: `Un <b>buff</b> est un effet positif temporaire posé sur un personnage (plus de force, plus de vitesse…). L'effet négatif équivalent, posé par un ennemi, est un <b>debuff</b>. Depuis la v0.24.0, les 6 buffs de groupe ne se cumulent plus entre lanceurs : le plus récent remplace l'ancien.` },
@@ -276,7 +280,7 @@ let dataPromise = null;
 const D = {};                 // D.ITEMS = [...], etc.
 const byId = {};              // byId.item['swiftfang_talisman'] = {...}
 const byName = {};            // byName.item[fold(name)] = entité
-const refs = { droppedBy:{}, soldBy:{}, rewardOf:{}, neededBy:{}, killedFor:{}, npcQuests:{}, mobDungeons:{}, setPieces:{} };
+const refs = { droppedBy:{}, soldBy:{}, rewardOf:{}, neededBy:{}, killedFor:{}, npcQuests:{}, mobDungeons:{}, setPieces:{}, vendorStock:{}, delveShop:{} };
 let talentIndex = null;       // fold(name|id) -> { node, cls, choice? }
 let specIndex = null;         // fold(name|id) -> { spec, cls }
 
@@ -287,6 +291,11 @@ function ensureData() {
     FILES.forEach((f, i) => D[f] = res[i]);
     if (!D.ITEMS) throw new Error('Codex injoignable');
     buildIndexes();
+  }).catch(err => {
+    // Ne pas mettre l'échec en cache : sans ça, un premier clic hors ligne
+    // condamnait tous les suivants jusqu'au rechargement de la page.
+    dataPromise = null;
+    throw err;
   });
 }
 
@@ -320,6 +329,25 @@ function buildIndexes() {
         talentIndex[fold(ch.name)] ??= { node, cls, choice: ch };
       }
     }
+    // Talents 2.0 (v0.27.0) : les rangées de choix arrivent sous tree.rows
+    // ({ level, theme|decision, options: [...] }) — on les présente comme des
+    // talents « au choix » classiques pour garder les mêmes fiches.
+    (tree.rows || []).forEach((row, i) => {
+      const node = {
+        id: `${cls}_row_${row.level ?? i + 1}`,
+        name: row.theme || row.decision || `${T({ fr: 'Rangée', en: 'Row' })} ${i + 1}`,
+        kind: 'choice',
+        tree: 'class',
+        level: row.level,
+        choices: row.options || [],
+      };
+      talentIndex[fold(node.id)] = { node, cls };
+      talentIndex[fold(node.name)] ??= { node, cls };
+      for (const ch of node.choices) {
+        talentIndex[fold(ch.id)] = { node, cls, choice: ch };
+        talentIndex[fold(ch.name)] ??= { node, cls, choice: ch };
+      }
+    });
     for (const s of (tree.specs || [])) {
       specIndex[fold(s.id)] = { spec: s, cls };
       specIndex[fold(s.name)] ??= { spec: s, cls };
@@ -337,6 +365,16 @@ function buildIndexes() {
   for (const n of asList(D.NPCS))
     for (const it of (n.vendorItems || []))
       (refs.soldBy[it] ??= []).push(n);
+  // Stock du quartier-maître héroïque (bijoux payés en Heroic Marks) et
+  // boutiques de delve : sans eux, ces objets affichaient à tort
+  // « Source non répertoriée ».
+  for (const e of asList(D.HEROIC_VENDOR_STOCK))
+    if (e && e.itemId) refs.vendorStock[e.itemId] = e.marks;
+  for (const [delveId, entries] of Object.entries(D.DELVE_SHOPS || {})) {
+    const dv = byId.delve[delveId];
+    for (const e of (entries || []))
+      if (e && e.itemId) (refs.delveShop[e.itemId] ??= []).push({ delve: dv, marks: e.marks, gate: e.gate });
+  }
   for (const q of asList(D.QUESTS)) {
     for (const cls in (q.itemRewards || {})) {
       const arr = (refs.rewardOf[q.itemRewards[cls]] ??= []);
@@ -406,12 +444,25 @@ function itemSheet(it) {
   // Combat ratings + puissance des sorts : stockés HORS de it.stats dans les
   // données, ils étaient invisibles (ex. le Hit Rating ajouté en v0.26).
   const HIT_LBL = T({ fr: 'Précision', en: 'Hit rating' });
-  for (const [key, lbl] of [['hitRating', HIT_LBL], ['critRating', STAT_FR.crit], ['hasteRating', STAT_FR.haste], ['spellPower', STAT_FR.sp]])
+  for (const [key, lbl] of [['hitRating', HIT_LBL], ['critRating', STAT_FR.crit], ['hasteRating', STAT_FR.haste], ['spellPower', STAT_FR.sp],
+                            ['pvpOffenseRating', T({ fr: 'Offense JcJ', en: 'PvP offense' })], ['pvpDefenseRating', T({ fr: 'Défense JcJ', en: 'PvP defense' })]])
     if (it[key]) stats.push(`+${it[key]} ${lbl}`);
+  if (it.shield && it.blockValue) stats.push(`${it.blockValue} ${T({ fr: 'points de blocage', en: 'block value' })}`);
   if (stats.length) body.push(`<div class="cxp-stats">${stats.join('<br>')}</div>`);
+  if (it.use) {
+    const PROF_FR = LANG === 'en'
+      ? { mining:'mining', herbalism:'herbalism', skinning:'skinning', fishing:'fishing' }
+      : { mining:'minage', herbalism:'herboristerie', skinning:'dépeçage', fishing:'pêche' };
+    const useLbl = it.use.type === 'fishing' ? T({ fr: 'Canne à pêche', en: 'Fishing pole' })
+      : it.use.type === 'gatherTool' ? `${T({ fr: 'Outil de récolte', en: 'Gathering tool' })} — ${PROF_FR[it.use.professionId] || it.use.professionId}${it.use.tier ? `, ${T({ fr: 'palier', en: 'tier' })} ${it.use.tier}` : ''}`
+      : it.use.type === 'skinSelect' ? T({ fr: 'Débloque un choix d’apparence', en: 'Unlocks an appearance choice' })
+      : it.use.type === 'mechChroma' ? T({ fr: 'Coloris de monture mécanique', en: 'Mechanical mount chroma' })
+      : null;
+    if (useLbl) body.push(`<p class="cxp-note">${T({ fr: 'Utilisation : ', en: 'Use: ' })}${useLbl}</p>`);
+  }
   const HP_U = T({ fr: 'PV', en: 'HP' });
   body.push(kvGrid([
-    [T({ fr: 'Type', en: 'Type' }), KIND_FR[it.kind]],
+    [T({ fr: 'Type', en: 'Type' }), it.shield ? T({ fr: 'Bouclier', en: 'Shield' }) : KIND_FR[it.kind]],
     [T({ fr: 'Emplacement', en: 'Slot' }), it.slot && SLOT_FR[it.slot]],
     [T({ fr: 'Armure', en: 'Armor' }), it.armorType && ARMORTYPE_FR[it.armorType]],
     [T({ fr: 'Contenance', en: 'Capacity' }), it.bagSlots && `${it.bagSlots} ${T({ fr: 'emplacements', en: 'slots' })}`],
@@ -445,8 +496,21 @@ function itemSheet(it) {
     const ch = combinePct(g.chances);
     src.push(`<li>${T({ fr: 'Butin', en: 'Loot' })}${g.heroic ? ` <b class="cxp-hero">${T({ fr: 'héroïque', en: 'heroic' })}</b>` : ''}${T({ fr: ' : ', en: ': ' })}${xlink('mob', g.mob)}${ch ? ` <span class="cxp-dim">· ${ch}</span>` : ''}</li>`);
   }
-  for (const n of (refs.soldBy[it.id] || []))
-    src.push(`<li>${T({ fr: 'Vendu par', en: 'Sold by' })} ${xlink('npc', n)}${it.buyValue ? ` <span class="cxp-dim">· ${money(it.buyValue)}</span>` : ''}</li>`);
+  for (const n of (refs.soldBy[it.id] || [])) {
+    const price = it.buyValue ? money(it.buyValue)
+      : it.priceHonor ? `${it.priceHonor} ${T({ fr: 'points d’honneur', en: 'honor points' })}` : '';
+    src.push(`<li>${T({ fr: 'Vendu par', en: 'Sold by' })} ${xlink('npc', n)}${price ? ` <span class="cxp-dim">· ${price}</span>` : ''}</li>`);
+  }
+  if (refs.vendorStock[it.id] != null) {
+    const vex = byId.npc['heroic_quartermaster'];
+    const who = vex ? xlink('npc', vex) : T({ fr: 'le quartier-maître héroïque', en: 'the heroic quartermaster' });
+    src.push(`<li>${T({ fr: 'Vendu par', en: 'Sold by' })} ${who} <span class="cxp-dim">· ${refs.vendorStock[it.id]} <span class="cxp-x" data-codex="term|heroic marks">Heroic Marks</span></span></li>`);
+  }
+  for (const s of (refs.delveShop[it.id] || [])) {
+    const gate = s.gate === 'heroicClear' ? T({ fr: ' (après le clear héroïque)', en: ' (after a heroic clear)' })
+      : /^clears:/.test(s.gate || '') ? T({ fr: ` (après ${s.gate.split(':')[1]} clears)`, en: ` (after ${s.gate.split(':')[1]} clears)` }) : '';
+    src.push(`<li>${T({ fr: 'Boutique de delve : ', en: 'Delve shop: ' })}${s.delve ? xlink('delve', s.delve) : ''} <span class="cxp-dim">· ${s.marks} Marks${gate}</span></li>`);
+  }
   for (const qq of (refs.rewardOf[it.id] || []))
     src.push(`<li>${T({ fr: 'Récompense de quête : ', en: 'Quest reward: ' })}${xlink('quest', qq)}</li>`);
   body.push(section(T({ fr: 'Où l’obtenir', en: 'Where to get it' }), src.length ? ul(src) : `<p class="cxp-dim">${T({ fr: 'Source non répertoriée (fabrication, récolte ou delve).', en: 'Source not listed (crafting, gathering or delve).' })}</p>`));
@@ -492,6 +556,7 @@ function talentSheet({ node, cls, choice }) {
     body.push(`<p class="cxp-dim">${T({ fr: 'Option du talent au choix', en: 'Option of the choice talent' })} « ${xlink('talent', node)} ».</p>`);
   } else {
     if (node.description) body.push(`<p class="cxp-desc">${esc(node.description)}</p>`);
+    if (node.level) body.push(`<p class="cxp-dim">${T({ fr: `Rangée débloquée au niveau ${node.level}.`, en: `Row unlocked at level ${node.level}.` })}</p>`);
     if (node.maxRank > 1) body.push(`<p class="cxp-dim">${T({ fr: `Jusqu'à ${node.maxRank} rangs.`, en: `Up to ${node.maxRank} ranks.` })}</p>`);
     if (node.kind === 'choice' && node.choices)
       body.push(section(T({ fr: 'Talent au choix — une seule option', en: 'Choice talent — pick one option' }), ul(node.choices.map(ch =>
@@ -708,12 +773,22 @@ const CSS = `
 
 let dlg = null;
 let stack = [];      // pile de fiches pour le bouton « ← »
+let styleDone = false;
 
-function ensureDialog() {
-  if (dlg) return dlg;
+// La feuille de style contient aussi l'affordance des [data-codex] (pointillé
+// doré + curseur) : elle doit être présente dès le chargement, pas seulement au
+// premier clic — sinon rien n'indique quels mots sont cliquables.
+function ensureStyle() {
+  if (styleDone) return;
+  styleDone = true;
   const style = document.createElement('style');
   style.textContent = CSS;
   document.head.appendChild(style);
+}
+
+function ensureDialog() {
+  if (dlg) return dlg;
+  ensureStyle();
   dlg = document.createElement('dialog');
   dlg.className = 'cxp';
   dlg.setAttribute('aria-label', T({ fr: 'Fiche du Codex', en: 'Codex sheet' }));
@@ -814,7 +889,17 @@ function fixCodexLinks() {
   });
 }
 
-const boot = () => { enhance(); fixCodexLinks(); };
+const boot = () => {
+  ensureStyle();
+  enhance();
+  fixCodexLinks();
+  // Les pages injectent des [data-codex] après leurs fetch (accueil, builds…) :
+  // on ré-applique enhance() sur les ajouts pour garder l'accès clavier.
+  new MutationObserver(muts => {
+    for (const m of muts) for (const n of m.addedNodes)
+      if (n.nodeType === 1 && (n.matches?.('[data-codex]') || n.querySelector?.('[data-codex]'))) { enhance(n); return; }
+  }).observe(document.body, { childList: true, subtree: true });
+};
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
 

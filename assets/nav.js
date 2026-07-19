@@ -40,8 +40,17 @@
            : inNotes ? '../'
            : '';
 
+  // Le Codex n'est copié sous /codex/ que sur laclauderie.fr. Ailleurs (miroir
+  // GitHub Pages du site, dev local), on pointe directement le Codex là où il
+  // vit — sans dépendre du repointage de codex-popup.js, absent de certaines
+  // pages futures.
+  var onLocal = /^(localhost|127\.|0\.0\.0\.0)/.test(host);
+  var codexHref = onDomain ? '/codex/'
+    : onLocal ? '/wocc-knowledge-base/site/index.html'
+    : 'https://reptile-new.github.io/wocc-knowledge-base/site/index.html';
+
   function hrefFor(tab) {
-    if (tab.id === 'codex') return inCodex ? null : '/codex/';
+    if (tab.id === 'codex') return inCodex ? null : codexHref;
     if (tab.id === 'home')  return inCodex ? root : (root + 'index.html');
     return root + tab.file;
   }
