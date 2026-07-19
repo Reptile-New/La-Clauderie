@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>What's new in v0.27.2 — La Clauderie</title>
+<meta name="description" content="Everything new in World of ClaudeCraft v0.27.2, with the exact rules.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="What&#39;s new in v0.27.2 — La Clauderie">
+<meta property="og:description" content="Everything new in World of ClaudeCraft v0.27.2, with the exact rules.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.27.2.en.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.27.2.en.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') !== 'en') location.replace('v0.27.2.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" data-guild-nav data-current="news" aria-label="Site navigation"></nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Release notes</p>
+    <h1>What's new in <span class="v">v0.27.2</span></h1>
+    <p class="lede">A balance and stability patch: the Fury Warrior recalibrated (the v0.27.1 hotfix, documented here), the iPhone world-entry crash fixed, ghosts finding their way back into the Crypt, and a much lighter server. Click a bubble for the detailed rules.</p>
+    <div class="meta">
+      <span><b>Released</b> July 19, 2026</span>
+      <span><b>Since</b> v0.27.0 (v0.27.1 was never tagged)</span>
+      <span><b>Balance</b> &amp; stability</span>
+    </div>
+    <div class="hint">💡 Click a feature to open its detailed rules — and the <span data-codex="term|proc">underlined words</span> for their definition.</div>
+  </header>
+  <!-- 1 FURY WARRIOR -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>The Fury Warrior recalibrated</h2></div>
+    <p class="sec-sub">The fury overpower incident is over: every excessive damage source is fixed at its root, without touching the core gameplay. Saved builds survive — Anger Management and Colossal Might keep their slots.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="rage" tabindex="0" role="button" aria-label="Details: reduced rage generation">
+        <h3>Rage flows slower <span class="chip c-bal">Balance</span></h3>
+        <p><span data-codex="ability|Twinstrike">Twinstrike</span> generates <strong class="hl">4 rage</strong> (down from 8), <span data-codex="ability|Bladed Gyre">Bladed Gyre</span> generates <strong class="hl">none at all</strong>, and <span data-codex="talent|Anger Management">Anger Management</span> is trimmed.</p>
+        <span class="more-link">The four axes of the nerf</span>
+      </div>
+      <div class="card more" data-detail="twohand" tabindex="0" role="button" aria-label="Details: two-handers re-budgeted">
+        <h3>Two-handers re-budgeted <span class="chip c-plate">All classes</span></h3>
+        <p>The two-hand stat budget drops from <strong class="hl">2.0× to 1.3×</strong> the one-hand line, offset by a <strong class="hl">+15% weapon DPS premium</strong>. Four epics are re-statted in place.</p>
+        <span class="more-link">The four affected weapons</span>
+      </div>
+      <div class="card">
+        <h3>Worth remembering</h3>
+        <ul>
+          <li><span data-codex="talent|Titan's Grip">Titan's Grip</span> has a real cost now: <strong class="hl">-12% physical damage</strong> while dual-wielding two-handers.</li>
+          <li><span data-codex="talent|Colossal Might">Colossal Might</span> is capped: <strong class="hl">at most 10 s of reduction per 30 s</strong>, with a visible aura — no more <span data-codex="ability|Recklessness">Recklessness</span> and <span data-codex="ability|Avatar">Avatar</span> at an effective 78 s.</li>
+          <li><span data-codex="ability|Red Harvest">Red Harvest</span> itself is unchanged: the rage income funding it is what shrank.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 CROSS-CUTTING MECHANICS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Haste, group buffs &amp; druid</h2></div>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="haste" tabindex="0" role="button" aria-label="Details: melee haste becomes additive">
+        <h3>Melee haste stacks additively <span class="chip c-bal">Mechanics</span></h3>
+        <p>Melee haste sources now <strong class="hl">add up</strong>, mirroring how spell haste has always worked: Bloodlust + <span data-codex="ability|Wildfang Rally">Wildfang Rally</span> + Enrage = <strong class="hl">1.6×</strong>, not 1.71×.</p>
+        <span class="more-link">The exact math</span>
+      </div>
+      <div class="card">
+        <h3>Wildfang Rally deduplicated</h3>
+        <ul>
+          <li>A second hunter's cast <strong class="hl">replaces</strong> the first copy instead of doubling the buff on every ally.</li>
+          <li>A new guard test enforces that <strong class="hl">every current and future group attack buff</strong> is either exhaustion-gated or deduplicated.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Nature's Fury goes quiet</h3>
+        <ul>
+          <li>The druid aura re-announced itself <strong class="hl">every second</strong> (sound, swirl, combat-log line) for the whole party.</li>
+          <li>The announcement now fires <strong class="hl">exactly once, on the real first application</strong> — uptime, crit value and radius unchanged.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 WORLD & MOBILE FIXES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>A stable iPhone &amp; the road back to the Crypt</h2></div>
+    <div class="grid cols-2">
+      <div class="card more" data-detail="ios" tabindex="0" role="button" aria-label="Details: the iOS world-entry crash fix">
+        <h3>The iOS world-entry crash, fixed <span class="chip c-util">Mobile</span></h3>
+        <p>Entering the world on an iPhone above the Low preset could <strong class="hl">kill the process</strong> and loop back to the start screen. Three mechanisms fix it — without hiding anything a player acts on.</p>
+        <span class="more-link">Memory profile, prewarm and crash guard</span>
+      </div>
+      <div class="card more" data-detail="crypt" tabindex="0" role="button" aria-label="Details: ghost corpse-runs back into the Abandoned Crypt">
+        <h3>Ghosts can re-enter the Crypt <span class="chip c-raid">Raid</span></h3>
+        <p>Dying in the Abandoned Crypt (the <span data-codex="mob|Nythraxis">Nythraxis</span> raid) and releasing your spirit made the instance <strong class="hl">unreachable by corpse-run</strong>. The entrance collider is pulled back.</p>
+        <span class="more-link">What exactly was blocking</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SERVER & TECH -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Server &amp; tech</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>Group frames: linear cost</h3>
+        <ul>
+          <li>Party and raid frames are built <strong class="hl">once per group</strong> and shared across recipients, no longer once per viewer.</li>
+          <li>A 10-player raid drops from <strong class="hl">100 projections to 10</strong> per broadcast — semantics identical, pinned by tests.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Timers: the v2 wire</h3>
+        <ul>
+          <li>Aura, cooldown and charge timers are sent as <strong class="hl">absolute deadlines</strong>, cached server-side and aged locally by the client.</li>
+          <li>An ordinary tick re-serializes <strong class="hl">nothing</strong>; legacy clients keep the old wire — rolling deploys stay safe.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Rendering: three.js back to 0.165</h3>
+        <ul>
+          <li>The renderer library returns to the version <strong class="hl">used from launch through v0.26</strong> (a mid-July dependency bump is reverted).</li>
+          <li>A full compatibility audit found <strong class="hl">no code depending</strong> on the newer APIs — rendering is intended to be identical.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compiled for <strong>La Clauderie</strong> — data and rules from the official v0.27.2 release notes.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← All updates</a> · <a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Close">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    rage: {
+      title: "Fury: rage flows slower",
+      summary: "Fury's rage came from several compounding sources — each is addressed at its root.",
+      body: `
+        <h4>The four axes</h4>
+        <ul>
+          <li><b>Auto-attack</b> rage returns to the shared classic scale: the hidden warrior-only bonus multiplier is deleted.</li>
+          <li><span data-codex="ability|Twinstrike">Twinstrike</span> generates <b>4 rage</b>, down from 8.</li>
+          <li><span data-codex="ability|Bladed Gyre">Bladed Gyre</span> no longer generates <b>any rage</b> — it stays free to cast and keeps Bladed Echo.</li>
+          <li><span data-codex="talent|Anger Management">Anger Management</span> is trimmed to <b>+10%</b> auto-attack rage and <b>+5%</b> ability rage (from +25% / +15%).</li>
+        </ul>
+        <h4>What about Red Harvest?</h4>
+        <ul>
+          <li><span data-codex="ability|Red Harvest">Red Harvest</span> (80 rage) is <b>unchanged</b>: the income funding it is what shrank.</li>
+          <li><span data-codex="talent|Colossal Might">Colossal Might</span> is capped at <b>10 s of cooldown reduction per 30 s window</b>, with the accumulator shown as a visible aura. Uncapped, sustained Red Harvest spam collapsed <span data-codex="ability|Recklessness">Recklessness</span> and <span data-codex="ability|Avatar">Avatar</span> (180 s) to an effective 78 s.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">All changed tooltips, row descriptions and the fury spec text ship localized in every locale; Anger Management and Colossal Might keep their row ids — saved talent picks survive.</p>`
+    },
+    twohand: {
+      title: "Two-handers re-budgeted (all classes)",
+      summary: "The two-hand stat budget drops below a mainhand-plus-offhand pair, in exchange for a codified weapon-DPS premium.",
+      body: `
+        <h4>The new rule</h4>
+        <ul>
+          <li>Stat budget: <b>1.3×</b> the one-hand line (down from 2.0×) — deliberately below the <b>1.75×</b> a mainhand plus offhand pair carries.</li>
+          <li>In exchange, two-handers carry a codified <b>+15% weapon DPS premium</b>.</li>
+          <li>This affects <b>every class</b> that uses two-handers, not just warriors.</li>
+        </ul>
+        <h4>The four re-statted epics (same item ids, existing copies update automatically)</h4>
+        <ul>
+          <li><span data-codex="item|Deathless Greatblade">Deathless Greatblade</span>: 46 → <b>30 stat points</b>, weapon damage raised to <b>52–78</b>.</li>
+          <li><span data-codex="item|Wyrmfang Greatblade">Wyrmfang Greatblade</span>: 36 → <b>23</b>, damage raised to <b>33–53</b>.</li>
+          <li><span data-codex="item|Bonewrought Greatsword">Bonewrought Greatsword</span>: 40 → <b>26</b>.</li>
+          <li><span data-codex="item|Direfang Greatblade">Direfang Greatblade</span>: 40 → <b>26</b>.</li>
+          <li>Heroic variants <b>re-derive</b> with the same premium.</li>
+        </ul>
+        <h4>Titan's Grip</h4>
+        <ul>
+          <li>While dual-wielding with a two-hander in <b>either hand</b>: <b>-12% physical damage</b> dealt. Spells and non-physical damage unaffected; solo two-hander and dual one-hander loadouts untouched.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">The Builds page's <span data-codex="term|bis">BiS</span> is recalculated automatically on the new stats.</p>`
+    },
+    haste: {
+      title: "Melee haste becomes additive",
+      summary: "Melee haste sources now stack additively, exactly like spell haste always has.",
+      body: `
+        <ul>
+          <li>Before: Bloodlust 30% × <span data-codex="ability|Wildfang Rally">Wildfang Rally</span> 5% × Enrage 25% <b>compounded</b> → 1.71× attack speed.</li>
+          <li>Now: they <b>add up</b> → <b>1.6×</b>.</li>
+          <li>Any single haste source is <b>numerically identical</b> to before; slows keep their own multiplicative axis.</li>
+        </ul>`
+    },
+    ios: {
+      title: "iOS: the world-entry crash, dissected",
+      summary: "Above the Low preset, entering the world on an iPhone could exceed the WebView memory budget: process killed, back to the start screen, crashing again in a loop.",
+      body: `
+        <h4>1. A constrained-memory graphics profile (iOS and Android)</h4>
+        <ul>
+          <li>Smaller shadow maps (<b>1536</b> on Medium, <b>2048</b> on High/Ultra), composer MSAA off on High/Ultra, pixel ratio capped at <b>1.48</b> on every tier.</li>
+          <li>Sky backdrop mip chains disabled (roughly <b>44MB</b> of estimated GPU memory); only the starting biome's environment map is prefiltered at entry, the other two follow at 30 and 40 s.</li>
+        </ul>
+        <h4>2. A bounded prewarm</h4>
+        <ul>
+          <li><b>5 s</b> total budget on constrained devices (desktop keeps 12 s), <b>2.5 s</b> for shader compiles, at most <b>12 nearby characters</b> built at entry — the rest stream in during play.</li>
+        </ul>
+        <h4>3. An anti-loop crash guard</h4>
+        <ul>
+          <li>A probe detects that the <b>previous entry attempt crashed</b>: the preset steps down exactly one tier, Auto is pinned away from the crashed tier, and the next boot lands on the start screen instead of re-crashing.</li>
+          <li>A <b>dismissable</b> "Graphics lowered" banner, localized across all 20 non-English locales.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Also fixed: the Ultra-to-High startup clamp now covers iOS Safari, and opening the More tray on Medium no longer kills the process. Every trim sheds cosmetic sharpness only — no tier hides or delays information a player acts on.</p>`
+    },
+    crypt: {
+      title: "Corpse-run: back into the Abandoned Crypt",
+      summary: "A ghost re-enters the instance only by walking within the door's 2-yard proximity trigger — and the entrance rock stopped every approach just outside it.",
+      body: `
+        <ul>
+          <li>The entrance's <b>rock-mound collider</b> bled about <b>1.6 yards</b> past the portal: every collision-resolved approach stopped short of the trigger.</li>
+          <li>Mine props now support <b>per-entry collider tuning</b>, and the Crypt entrance's collider hugs the visible rock pile. Only this entrance changed, with no visual change.</li>
+          <li>Clicking the door while dead is still <b>refused by design</b> — the walk-in path is the fix. Covered by an end-to-end ghost corpse-run test.</li>
+        </ul>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/nav.js"></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>

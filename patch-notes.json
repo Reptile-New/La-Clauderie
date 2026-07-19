@@ -2,6 +2,28 @@
   "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français). Champ page_en : la page de notes en anglais (notes/vX.Y.Z.en.html) ; la version anglaise du site l'utilise.",
   "versions": [
     {
+      "version": "v0.27.2",
+      "date": "2026-07-19",
+      "titre": "Le Guerrier Fureur recalibré et l'iPhone stabilisé",
+      "resume": "Patch d'équilibrage et de stabilité qui regroupe tout depuis la v0.27.0 : la fin de l'incident « fury overpower » (rage réduite, deux-mains re-budgétées, Titan's Grip à -12 %, Colossal Might plafonné), la hâte de mêlée qui devient additive, le crash d'entrée en jeu sur iPhone corrigé avec un garde-fou anti-boucle, le corpse-run réparé vers la Crypte abandonnée et deux gros gains de performance serveur.",
+      "temps_forts": [
+        "Fureur : Twinstrike à 4 de rage, Bladed Gyre sans rage, Anger Management réduit, Colossal Might plafonné",
+        "Deux-mains re-budgétées pour toutes les classes (1,3× les stats, +15 % de DPS d'arme) — 4 épiques re-stattées",
+        "iPhone : plus de crash d'entrée en jeu — profil mémoire contraint, préchauffage borné et garde-fou",
+        "Les fantômes peuvent de nouveau rejoindre leur corps dans la Crypte abandonnée (raid Nythraxis)"
+      ],
+      "page": "notes/v0.27.2.html",
+      "titre_en": "The Fury Warrior recalibrated and the iPhone stabilized",
+      "resume_en": "A balance and stability patch rolling up everything since v0.27.0: the end of the fury overpower incident (reduced rage income, re-budgeted two-handers, Titan's Grip at -12%, Colossal Might capped), melee haste turning additive, the iOS world-entry crash fixed with an anti-loop crash guard, the corpse-run into the Abandoned Crypt repaired, and two big server performance wins.",
+      "temps_forts_en": [
+        "Fury: Twinstrike at 4 rage, Bladed Gyre generates none, Anger Management trimmed, Colossal Might capped",
+        "Two-handers re-budgeted for every class (1.3× stats, +15% weapon DPS premium) — 4 epics re-statted",
+        "iPhone: no more world-entry crash — constrained-memory profile, bounded prewarm and crash guard",
+        "Ghosts can corpse-run back into the Abandoned Crypt (the Nythraxis raid)"
+      ],
+      "page_en": "notes/v0.27.2.en.html"
+    },
+    {
       "version": "v0.27.0",
       "date": "2026-07-18",
       "titre": "Le Guerrier refondu, le Mage soigneur et les Métiers 2.0",
@@ -66,6 +88,48 @@
         "PvP: persistent Honor and 40 ilvl 28 epic pieces from FURY"
       ],
       "page_en": "notes/v0.25.0.en.html"
+    },
+    {
+      "version": "v0.24.2",
+      "date": "2026-07-12",
+      "titre": "Récompenses héroïques fiabilisées et butin mobile réparé",
+      "resume": "Patch de fiabilité : un kill de boss final héroïque ne peut plus poser un verrou sans payer la Heroic Mark, le butin du corps ou le jet Need/Greed — les Marks tombent à la mort du boss, l'éligibilité est gelée avant la sauvegarde. Les invites de jet se réconcilient côté serveur, l'écran court des téléphones n'affiche que l'actionnable, et les positions de cadres héritées de la refonte annulée sont nettoyées une bonne fois.",
+      "temps_forts": [
+        "Heroic Marks payées directement à la mort du boss final, sur la même frontière de reset que le lockout",
+        "Plus aucun scénario « verrouillé sans récompense » : relâche, changement de groupe, déconnexion couverts",
+        "Jets Need/Greed fiables sur mobile — et le bouton Sacs au-dessus du rail de jets",
+        "Reset unique des positions de cadres sauvées pendant la refonte v0.24.0"
+      ],
+      "page": "notes/v0.24.2.html",
+      "titre_en": "Heroic rewards made reliable and mobile loot repaired",
+      "resume_en": "A reliability patch: a heroic final-boss kill can no longer persist a lockout while losing the Heroic Mark, corpse loot or Need/Greed award — Marks are paid at boss death and eligibility is frozen before the save. Roll prompts reconcile server-side, short phone screens show only what's actionable, and frame positions left over from the reverted overhaul are cleaned up once and for all.",
+      "temps_forts_en": [
+        "Heroic Marks awarded directly at final-boss death, on the same reset boundary as the lockout",
+        "No more lockout-without-reward scenarios: releasing, party changes and logout all covered",
+        "Reliable Need/Greed rolls on mobile — with Bags above the roll rail",
+        "One-time reset of frame positions saved during the v0.24.0 overhaul"
+      ],
+      "page_en": "notes/v0.24.2.en.html"
+    },
+    {
+      "version": "v0.24.1",
+      "date": "2026-07-11",
+      "titre": "Le retour de l'interface classique (rollback de la refonte)",
+      "resume": "Hotfix de stabilité desktop : la refonte d'interface embarquée dans la v0.24.0 avait sérieusement dégradé l'expérience sur ordinateur. Ses 195 commits sont annulés d'un bloc — fenêtres, réglages, marchands, talents et HUD reviennent à l'identique — tout en préservant le travail postérieur comme le désencombrement des nameplates.",
+      "temps_forts": [
+        "La refonte d'interface (195 commits) annulée en un seul rollback cohérent",
+        "Retour à l'identique des fenêtres, réglages, marchands, talents et du HUD d'avant",
+        "Nameplates poolées et améliorations de rendu préservées"
+      ],
+      "page": "notes/v0.24.1.html",
+      "titre_en": "The classic interface returns (overhaul rollback)",
+      "resume_en": "A desktop stability hotfix: the interface overhaul that shipped with v0.24.0 significantly regressed the desktop experience. Its 195 commits are rolled back as one block — windows, settings, vendors, talents and the HUD return exactly as before — while preserving later work such as the pooled nameplate decluttering.",
+      "temps_forts_en": [
+        "The interface overhaul (195 commits) undone in one coherent rollback",
+        "Windows, settings, vendors, talents and the HUD return exactly as before",
+        "Pooled nameplates and rendering improvements preserved"
+      ],
+      "page_en": "notes/v0.24.1.en.html"
     },
     {
       "version": "v0.24.0",
