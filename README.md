@@ -128,7 +128,7 @@ push sur `main` :
 
 | Workflow | Destination |
 |---|---|
-| `.github/workflows/deploy-ovh.yml` | **laclauderie.fr** (hébergement OVH, envoi par FTPS) |
+| `.github/workflows/deploy-ovh.yml` | **laclauderie.fr** (hébergement OVH, envoi par FTP — le serveur OVH refuse le FTPS explicite, vérifié le 19/07/2026) |
 | `.github/workflows/deploy-pages.yml` | `https://reptile-new.github.io/La-Clauderie/` (miroir GitHub Pages, utile en secours) |
 
 Les mises à jour faites depuis l'espace officiers arrivent donc sur

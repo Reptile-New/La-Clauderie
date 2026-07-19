@@ -86,8 +86,9 @@ jobs:
           server: ${{ secrets.OVH_FTP_SERVER }}
           username: ${{ secrets.OVH_FTP_USERNAME }}
           password: ${{ secrets.OVH_FTP_PASSWORD }}
-          # FTPS (FTP sur TLS) : OVH le supporte, et le README le promet —
-          # en « ftp » simple, identifiants et fichiers partaient en clair.
-          protocol: ftps
+          # FTP simple : tenté en FTPS le 19/07/2026, mais ce serveur OVH
+          # répond « 500 This security scheme is not implemented » à AUTH TLS.
+          # Si OVH active le FTPS explicite un jour, repasser à ftps.
+          protocol: ftp
           local-dir: _site/
           server-dir: www/
