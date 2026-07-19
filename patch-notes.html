@@ -139,7 +139,10 @@
     .then(data => {
       const list = (data.versions || [])
         .slice()
-        .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+        // Tri par date, puis par numéro de version (semver) : deux versions
+        // publiées le même jour (ex. un hotfix) restent dans le bon ordre.
+        .sort((a, b) => (b.date || "").localeCompare(a.date || "")
+          || (b.version || "").localeCompare(a.version || "", undefined, { numeric: true }));
       const box = document.getElementById("versions");
       if (!list.length) {
         box.innerHTML = '<div class="empty">' + T({ fr: "Aucune note de version pour le moment.", en: "No patch notes yet." }) + '</div>';

@@ -23,7 +23,8 @@ se limite à la partie rédactionnelle des « Nouveautés » :
    scaffolding modal, mêmes classes). N'adapter que : version, méta, hero,
    sections (bulles + fiches détaillées au clic) et le dict `DETAILS`.
    - Marquer les termes/objets/sorts/monstres cliquables avec
-     `<span data-codex="type|Nom">…</span>` (types : `term|ability|item|mob|npc`).
+     `<span data-codex="type|Nom">…</span>` (types usuels : `term|ability|item|mob|npc` ;
+     `codex-popup.js` accepte aussi `talent|spec|quest|dungeon|delve|set|zone`).
      Vérifier que les noms existent dans `../wocc-knowledge-base/data/*.json`.
    - La page FR redirige vers `.en.html` si `lang=en` (et inversement) — garder
      les deux scripts de redirection en tête de fichier.
@@ -73,10 +74,10 @@ avant de t'appuyer dessus pour le BiS ou les liens Codex.
 > l'éditer à la main. La page se suffit à elle-même (données embarquées) pour
 > marcher aussi bien sur OVH que sur GitHub Pages (où `/data/` n'est pas servi).
 > **Exception éditoriale** : la fonction `renderEnchant()` (guide Enchantement)
-> dans le second `<script>` de `metiers.html` est rédigée à la main — ce métier
-> n'a aucune recette dans la KB (tout vit dans le code du jeu,
-> `src/sim/professions/enchanting.ts`). À revérifier à chaque MAJ qui touche
-> l'enchantement.
+> dans le second `<script>` de `metiers.html` est rédigée à la main. Depuis
+> l'audit de juillet 2026, la KB extrait le registre du jeu dans
+> `data/ENCHANTS.json` (source : `src/sim/content/enchants.ts`) — s'en servir
+> pour VÉRIFIER le guide à chaque MAJ qui touche l'enchantement.
 
 ## 🧭 La barre de navigation — source de vérité UNIQUE
 

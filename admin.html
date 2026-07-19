@@ -304,6 +304,12 @@
 
   async function login(tok) {
     for (const f of Object.values(FILES)) await loadFile(f, tok);
+    // Affiche qui est connecté sous le titre (l'élément #who restait vide).
+    fetch("https://api.github.com/user", {
+      headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json" },
+    }).then(r => r.ok ? r.json() : null).then(u => {
+      if (u && u.login) $("who").textContent = "Connecté en tant que " + u.login;
+    }).catch(() => {});
     // migration douce : les anciens membres avaient un rôle unique (champ role)
     // et une classe en texte libre (champ classe, remplacé par la liste persos)
     membres().forEach(m => {
@@ -609,7 +615,7 @@
     }
   }
 
-  // ---- Rôles de guilde : créer / renommer / réordonner / supprimer ----
+  // ---- Rôles de guilde : créer / renommer / supprimer ----
   async function saveRoles(commitMsg, alsoMembers) {
     await save(FILES.roles, commitMsg);
     if (alsoMembers) await save(FILES.membres, commitMsg);
@@ -637,7 +643,7 @@
   async function renameRole(i) {
     const old = roles()[i];
     if (old == null) return;
-    const nom = (prompt("Nouveau nom pour le rôle « " + old + "  » :", old) || "").trim();
+    const nom = (prompt("Nouveau nom pour le rôle « " + old + " » :", old) || "").trim();
     if (!nom || nom === old) return;
     if (roles().some((r, j) => j !== i && r.toLowerCase() === nom.toLowerCase())) {
       msg($("dashMsg"), "Le rôle « " + nom + " » existe déjà.", "err"); return;

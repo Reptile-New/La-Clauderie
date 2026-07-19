@@ -20,7 +20,7 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 | `patch-notes.json` | La liste des mises à jour (alimente l'historique **et** la carte de l'accueil) |
 | `events.json` | Les données du calendrier (modifiées via l'espace officiers) |
 | `members.json` | Les membres de la guilde : pseudo, rôles, classe (modifiés via l'espace officiers) |
-| `roles.json` | Les rôles de guilde (Maître de guilde, Officier, Head manager…), dans l'ordre d'affichage |
+| `roles.json` | Les rôles de guilde (Maître de guilde, Officier, Head manager…) — l'ordre sert uniquement à colorer les pastilles de l'espace officiers |
 | `guild.json` | Les infos de la guilde (classement serveur, **mis à jour automatiquement toutes les 3 h** par `update-guild-rank.yml` depuis l'API du jeu) |
 | `achievements.json` | Les faits d'armes, avec les membres participants (modifiés via l'espace officiers) |
 
@@ -63,7 +63,7 @@ site) :
 ```html
 <span data-codex="item|Swiftfang Talisman">Swiftfang Talisman</span>
 <span data-codex="ability|Mending Light">Mending Light</span>   <!-- sort -->
-<span data-codex="talent|Seething Fury">Seething Fury</span>
+<span data-codex="ability|Seething Fury">Seething Fury</span>  <!-- talent|Nom marche aussi (rangées Talents 2.0) -->
 <span data-codex="mob|Thunzharr">Thunzharr</span>
 <span data-codex="term|soulbound">soulbound</span>              <!-- glossaire FR -->
 <span data-codex="auto|Oathbrand">Oathbrand</span>              <!-- devine le type -->
@@ -96,9 +96,10 @@ site) :
 
 Tout se fait depuis **`admin.html`** (lien « Espace officiers » en bas du site),
 avec des formulaires simples — **aucun code à toucher** : les events du
-calendrier, le classement serveur de la guilde, les rôles de guilde (création,
-renommage, ordre d'affichage), les membres (pseudo, classe, un ou plusieurs
-rôles à cocher), et les faits d'armes en cochant les membres participants.
+calendrier, les rôles de guilde (création, renommage, suppression), les membres
+(pseudo, classe, un ou plusieurs rôles à cocher), et les faits d'armes en
+cochant les membres participants. Le classement serveur, lui, est relevé
+automatiquement toutes les 3 h par `update-guild-rank.yml`.
 
 > Les events passés ne disparaissent plus : ils restent visibles sur l'accueil
 > dans la section « Événements passés », pour montrer l'activité de la guilde.

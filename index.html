@@ -384,7 +384,8 @@
     }
   });
 
-  // ---- Distinctions : classement serveur (géré depuis l'espace officiers) ----
+  // ---- Distinctions : classement serveur (relevé automatiquement par le
+  // workflow update-guild-rank.yml, toutes les 3 h) ----
   getJson("guild.json", { guilde: {} }).then(data => {
     const n = (data.guilde || {}).classementServeur;
     if (!n || n < 1) return;
@@ -545,7 +546,10 @@
   getJson("patch-notes.json", { versions: [] }).then(data => {
     const list = (data.versions || [])
       .slice()
-      .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+      // Tri par date, puis par numéro de version (semver) : deux versions
+      // publiées le même jour (ex. un hotfix) restent dans le bon ordre.
+      .sort((a, b) => (b.date || "").localeCompare(a.date || "")
+        || (b.version || "").localeCompare(a.version || "", undefined, { numeric: true }));
     if (!list.length) return;
     const last = list[0];
     $("pnTitle").textContent = T({ fr: "📜 Nouveautés — ", en: "📜 What's new — " }) + last.version;
