@@ -216,9 +216,9 @@
 // Builds recommandés par La Clauderie — rédigés à partir des vraies données
 // du patch (TALENTS.json / ABILITIES.json de la knowledge base). À réviser à
 // chaque mise à jour du jeu qui touche talents ou sorts.
-// RÈGLE : 11 points de talent maximum par personnage. Chaque build en dépense
-// exactement 11, dans un ordre qui respecte les paliers (2/5/8 points dépensés)
-// et les prérequis des arbres.
+// RÈGLE (Talents 2.0, v0.27) : un choix par rangée de talents, rangées
+// débloquées aux niveaux 5/8/11/14/17/20 — chaque build liste donc ses six
+// choix (plus la posture pour le Guerrier).
 // I18N : les champs rédactionnels sont bilingues ({ fr, en }) ; les noms de
 // talents, sorts et objets restent en anglais (les noms du jeu) partout.
 const BUILDS = {
@@ -235,13 +235,13 @@ const BUILDS = {
     ["Double Charge", "niv. 5", { fr: "Onrush stocke 2 utilisations — un engage + un rattrapage d'add sans attendre.", en: "Onrush stores 2 uses — one engage + one add pickup with no waiting." }],
     ["Second Wind", "niv. 8", { fr: "1,5 % PV max/s sous 35 % : de la survie passive qui soulage le heal sur chaque pack.", en: "1.5% max HP/s below 35%: passive survivability that eases the healer's job on every pack." }],
     ["Storm Bolt", "niv. 11", { fr: "lance ton arme pour stun à distance — et v0.27 l'exempte des rendements décroissants PvP. Stoppe un cast quand Jawcrack est en CD.", en: "hurl your weapon for a ranged stun — and v0.27 exempts it from PvP diminishing returns. Stops a cast when Jawcrack is on CD." }],
-    ["Anger Management", "niv. 14", { fr: "+25 % de rage sur les autos, +15 % sur les capacités : plus de rage = plus de Shieldcrack et un Iron Resolve plus gros (4 dégâts absorbés/rage).", en: "+25% rage from autos, +15% from abilities: more rage = more Shieldcrack and a bigger Iron Resolve (4 damage absorbed per rage)." }],
+    ["Anger Management", "niv. 14", { fr: "+10 % de rage sur les autos, +5 % sur les capacités (recalibré v0.27.2) : plus de rage = plus de Shieldcrack et un Iron Resolve plus gros (4 dégâts absorbés/rage).", en: "+10% rage from autos, +5% from abilities (recalibrated in v0.27.2): more rage = more Shieldcrack and a bigger Iron Resolve (4 damage absorbed per rage)." }],
     ["Avatar", "niv. 17", { fr: "colosse 20 s : brise tous les contrôles sur toi + un gros burst de menace au pull, là où on perd les packs.", en: "colossus for 20s: breaks all control on you + a big threat burst on the pull, exactly where packs get lost." }],
     ["Sanguine Aura", "niv. 20", { fr: "le capstone soutien : ton arme imprégnée de sang profite à toi et à tes mêlées — plutôt qu'un burst dont un tank n'a pas besoin.", en: "the support capstone: your blood-imbued weapon benefits you and your melee allies — rather than a burst a tank doesn't need." }]
    ],
    rotation: [
     ["Onrush", { fr: "l'engage — charge 8-25 yd, stun 1 s et 9 rage pour démarrer.", en: "the engage — 8-25 yd charge, 1s stun and 9 rage to get going." }],
-    ["Shieldcrack", { fr: "ton sort signature (15 rage) : la grosse menace, à chaque cooldown.", en: "your signature spell (15 rage): the big threat hit, on every cooldown." }],
+    ["Shieldcrack", { fr: "ton sort signature (génère 15 rage) : la grosse menace, à chaque cooldown.", en: "your signature spell (generates 15 rage): the big threat hit, on every cooldown." }],
     ["Armor Shear ×5", { fr: "monte les 5 stacks (−25 armure/stack), puis entretiens — tout le groupe en profite.", en: "build the 5 stacks (−25 armor/stack), then keep them up — the whole group benefits." }],
     ["Revenge", { fr: "gratuit après une esquive ou une parade : à caser dès que ça s'allume.", en: "free after a dodge or parry: weave it in whenever it lights up." }],
     ["Quaking Blow", { fr: "en AoE : dégâts de zone + ralentit la vitesse d'attaque du pack.", en: "in AoE: area damage + slows the pack's attack speed." }],
@@ -266,7 +266,7 @@ const BUILDS = {
     ["Piercing Howl", "niv. 11", { fr: "le slow AoE (−50 % à 15 yd pendant 8 s) — contrôle les packs qui bougent sans coûter ton GCD de stun.", en: "the AoE slow (−50% within 15 yd for 8s) — controls scattering packs without costing you a stun." }],
     ["Battle Rhythm", "niv. 14", { fr: "une capacité sur trois génère +20 % de rage et tape plus fort : plus de Red Harvest à 80 rage, plus d'Enrage garanti.", en: "every third ability generates 20% more rage and hits harder: more 80-rage Red Harvests, more guaranteed Enrage." }],
     ["Recklessness", "niv. 17", { fr: "+50 % de génération de rage sur la fenêtre : tu enchaînes les Red Harvest — le burst de boss du build.", en: "+50% rage generation for the window: you chain Red Harvests — the build's boss burst." }],
-    ["Bladestorm", "niv. 20", { fr: "le capstone AoE : tourbillon d'acier à 8 yd, avec Bladed Gyre tu domines les packs de donjon. Colossal Might si tu ne joues que du monocible.", en: "the AoE capstone: a whirling storm of steel within 8 yd — with Bladed Gyre you own dungeon packs. Colossal Might if you only ever play single-target." }]
+    ["Bladestorm", "niv. 20", { fr: "le capstone AoE : tourbillon d'acier à 8 yd, avec Bladed Gyre tu domines les packs de donjon. Colossal Might si tu ne joues que du monocible (plafonné v0.27.2 : 10 s de réduction de CD max par 30 s).", en: "the AoE capstone: a whirling storm of steel within 8 yd — with Bladed Gyre you own dungeon packs. Colossal Might if you only ever play single-target (capped in v0.27.2: at most 10s of CD reduction per 30s)." }]
    ],
    rotation: [
     ["Onrush", { fr: "l'engage — et 9 rage pour lancer la machine.", en: "the engage — and 9 rage to start the engine." }],
@@ -277,8 +277,8 @@ const BUILDS = {
     ["Early Grave", { fr: "l'exécution sous 20 % PV — prioritaire sur tout le reste.", en: "the execute below 20% HP — takes priority over everything else." }],
     ["Jawcrack", { fr: "l'interrupt gratuit : les casts, c'est aussi ton boulot.", en: "the free interrupt: casts are your job too." }]
    ],
-   astuce: { fr: "Iron Bellow avant le pull (30 min, un seul guerrier le pose). Si le heal est sous l'eau, Furious Mending : pendant sa durée, Bloodletting te soigne 20 % PV max. Et garde Valor Roar (+20 % PV max groupe) pour les phases de burst ennemi.",
-             en: "Iron Bellow before the pull (30 min, only one warrior needs to apply it). If the healer is drowning, Furious Mending: while it lasts, Bloodletting heals you for 20% max HP. And keep Valor Roar (+20% group max HP) for enemy burst phases." }
+   astuce: { fr: "Iron Bellow avant le pull (30 min, un seul guerrier le pose). Si le heal est sous l'eau, Furious Mending : pendant sa durée, Bloodletting te soigne 20 % PV max. Garde Valor Roar (+20 % PV max groupe) pour les phases de burst ennemi. Et depuis la v0.27.2, Titan's Grip coûte cher : deux armes à deux mains = −12 % de dégâts physiques — le double une-main (1,75× de budget de stats) est redevenu la référence.",
+             en: "Iron Bellow before the pull (30 min, only one warrior needs to apply it). If the healer is drowning, Furious Mending: while it lasts, Bloodletting heals you for 20% max HP. Keep Valor Roar (+20% group max HP) for enemy burst phases. And since v0.27.2, Titan's Grip has a real price: two two-handers = −12% physical damage — dual one-handers (1.75× stat budget) are back as the baseline." }
   }
  },
  paladin: {
@@ -414,7 +414,7 @@ const BUILDS = {
  druid: {
   tank: {
    spec: { fr: "Wildfang (feral) — ours", en: "Wildfang (feral) — bear" },
-   mastery: { fr: "Primal Heart (v0.25) : +15 % dégâts physiques et saignements, +20 % menace", en: "Primal Heart (v0.25): +15% physical & bleed damage, +20% threat" },
+   mastery: { fr: "Primal Heart (v0.27) : +15 % dégâts physiques et saignements, +20 % menace, +15 % armure", en: "Primal Heart (v0.27): +15% physical & bleed damage, +20% threat, +15% armor" },
    pourquoi: { fr: "Le tank à esquive : moins d'armure de plaques, mais une réserve de PV et une agilité énormes en forme de Bruin.",
                en: "The dodge tank: less plate armor, but a huge HP pool and massive agility in Bruin form." },
    stats: { fr: "Armure > Endurance > Agilité > Force", en: "Armor > Stamina > Agility > Strength" },
@@ -467,7 +467,7 @@ const BUILDS = {
   },
   dps: {
    spec: { fr: "Wildfang (feral) — loup", en: "Wildfang (feral) — wolf" },
-   mastery: { fr: "Primal Heart (v0.25) : +15 % dégâts physiques et saignements, +20 % menace", en: "Primal Heart (v0.25): +15% physical & bleed damage, +20% threat" },
+   mastery: { fr: "Primal Heart (v0.27) : +15 % dégâts physiques et saignements, +20 % menace, +15 % armure", en: "Primal Heart (v0.27): +15% physical & bleed damage, +20% threat, +15% armor" },
    pourquoi: { fr: "Le DPS mêlée en forme de Loup, aligné sur le stuff Agilité du BiS ; Moongrove (balance) est l'alternative caster.",
                en: "Melee DPS in Wolf form, aligned with the BiS agility gear; Moongrove (balance) is the caster alternative." },
    stats: { fr: "Agilité > Crit > Force > Hâte", en: "Agility > Crit > Strength > Haste" },
@@ -535,15 +535,15 @@ const BUILDS = {
     ["Thoughtburn", "niv. 20", { fr: "le seul choix orienté dégâts du palier — les deux autres sont pour le heal.", en: "the only damage-oriented pick of the row — the other two are for healers." }]
    ],
    rotation: [
-    ["Gloamveil Form", { fr: "la forme signature (v0.25) : +15 % d'ombre tant que tu ne soignes pas — active-la avant tout le reste.", en: "the signature form (v0.25): +15% Shadow as long as you don't heal — turn it on before anything else." }],
+    ["Gloamveil", { fr: "la forme signature (v0.25) : +15 % d'ombre tant que tu ne soignes pas — active-la avant tout le reste.", en: "the signature form (v0.25): +15% Shadow as long as you don't heal — turn it on before anything else." }],
     ["Dirge of Decay", { fr: "le DoT, actif en permanence sur tout ce qui vit plus de 10 s.", en: "the DoT, always up on anything that lives longer than 10s." }],
     ["Mindfracture", { fr: "à chaque cooldown (8 s).", en: "on every cooldown (8s)." }],
     ["Litany of Woe", { fr: "le filler canalisé entre deux Mindfracture.", en: "the channeled filler between Mindfractures." }],
     ["Psalm of Warding", { fr: "sur toi avant un pull risqué.", en: "on yourself before a risky pull." }],
-    ["Smite", { fr: "en dessous du niveau 16, ton filler.", en: "below level 16, your filler." }]
+    ["Smite", { fr: "en dessous du niveau 14, ton filler.", en: "below level 14, your filler." }]
    ],
-   astuce: { fr: "Un prêtre ombre qui bascule 3 soins au bon moment vaut deux DPS morts — mais depuis la v0.25, soigner te sort de Gloamveil Form : choisis ton moment.",
-             en: "A shadow priest who throws 3 heals at the right moment is worth two dead DPS — but since v0.25, healing drops your Gloamveil Form: pick your moment." }
+   astuce: { fr: "Un prêtre ombre qui bascule 3 soins au bon moment vaut deux DPS morts — mais depuis la v0.25, soigner te sort de Gloamveil : choisis ton moment.",
+             en: "A shadow priest who throws 3 heals at the right moment is worth two dead DPS — but since v0.25, healing drops your Gloamveil: pick your moment." }
   }
  },
  mage: {
@@ -747,6 +747,49 @@ const BIS = {
        ]
       }
      },
+     "offhand": {
+      "best": {
+       "name": "Bonewrought Bulwark",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 680,
+        "str": 6,
+        "sta": 11,
+        "hit": 55,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_bonewrought_bulwark",
+       "score": 73.7,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
+       ]
+      },
+      "alt": {
+       "name": "Bonewrought Bulwark",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 680,
+        "sta": 10,
+        "str": 5,
+        "hit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "bonewrought_bulwark",
+       "score": 71.7,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 13 %"
+       ]
+      }
+     },
      "helmet": {
       "best": {
        "name": "Bonewrought Dreadhelm",
@@ -1170,7 +1213,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4500.5
+    "score": 5431.4
    },
    "dps": {
     "picks": {
@@ -1201,27 +1244,76 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Deathless Greatblade",
-       "q": "epic",
+       "name": "Thronebane, Last Oath of Thornpeak",
+       "q": "legendary",
        "set": null,
        "stats": {
-        "str": 18,
-        "sta": 12,
-        "hit": 65,
-        "crit": 20
+        "str": 15,
+        "agi": 15,
+        "sta": 14
        },
        "w": {
-        "min": 52,
-        "max": 78,
-        "speed": 3.4
+        "min": 46,
+        "max": 74,
+        "speed": 2.8
        },
        "sp": null,
-       "id": "deathless_greatblade",
-       "score": 39.6,
+       "id": "kingsbane_last_oath",
+       "score": 54.7,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 34 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Thronebane, Last Oath of Thornpeak",
+       "q": "legendary",
+       "set": null,
+       "stats": {
+        "str": 17,
+        "agi": 17,
+        "sta": 15,
+        "hit": 70,
+        "crit": 30
+       },
+       "w": {
+        "min": 46,
+        "max": 74,
+        "speed": 2.8
+       },
+       "sp": null,
+       "id": "heroic_kingsbane_last_oath",
+       "score": 59.7,
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      },
+      "alt": {
+       "name": "Gravewyrm Cleaver",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 13,
+        "sta": 9,
+        "crit": 50
+       },
+       "w": {
+        "min": 31,
+        "max": 52,
+        "speed": 2.6
+       },
+       "sp": null,
+       "id": "gravewyrm_cleaver",
+       "score": 30.0,
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Korzul the Gravewyrm · 34 %"
        ]
       }
      },
@@ -1557,17 +1649,17 @@ const BIS = {
      },
      "ring1": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4,
-        "hit": 25
+        "crit": 25
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -1576,17 +1668,17 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Oath of the Round Table",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "sta": 6,
-        "str": 5,
-        "hit": 25
+        "spi": 6,
+        "int": 5,
+        "haste": 25
        },
        "w": null,
        "sp": null,
-       "id": "oath_of_the_round_table",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -1648,7 +1740,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 76.4
+    "score": 82.6
    }
   }
  },
@@ -1704,6 +1796,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Bonewrought Bulwark",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 680,
+        "str": 6,
+        "sta": 11,
+        "hit": 55,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_bonewrought_bulwark",
+       "score": 73.7,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
+       ]
+      },
+      "alt": {
+       "name": "Bonewrought Bulwark",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 680,
+        "sta": 10,
+        "str": 5,
+        "hit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "bonewrought_bulwark",
+       "score": 71.7,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 13 %"
        ]
       }
      },
@@ -2130,7 +2265,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4460.2
+    "score": 5386.0
    },
    "heal": {
     "picks": {
@@ -2182,6 +2317,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -2607,7 +2785,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 121.8
+    "score": 131.5
    },
    "dps": {
     "picks": {
@@ -2638,27 +2816,70 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Deathless Greatblade",
-       "q": "epic",
+       "name": "Thronebane, Last Oath of Thornpeak",
+       "q": "legendary",
        "set": null,
        "stats": {
-        "str": 18,
-        "sta": 12,
-        "hit": 65,
-        "crit": 20
+        "str": 15,
+        "agi": 15,
+        "sta": 14
        },
        "w": {
-        "min": 52,
-        "max": 78,
-        "speed": 3.4
+        "min": 46,
+        "max": 74,
+        "speed": 2.8
        },
        "sp": null,
-       "id": "deathless_greatblade",
-       "score": 39.6,
+       "id": "kingsbane_last_oath",
+       "score": 54.7,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 34 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Bonewrought Bulwark",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 680,
+        "str": 6,
+        "sta": 11,
+        "hit": 55,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_bonewrought_bulwark",
+       "score": 73.7,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
        ]
       }
      },
@@ -2954,6 +3175,25 @@ const BIS = {
      },
      "neck": {
       "best": {
+       "name": "Swiftfang Talisman",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 6,
+        "agi": 6,
+        "hit": 25
+       },
+       "w": null,
+       "sp": null,
+       "id": "swiftfang_talisman",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
+      },
+      "alt": {
        "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
@@ -2971,40 +3211,21 @@ const BIS = {
        "src": [
         "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
-      },
-      "alt": {
-       "name": "Yumi's Keepsake Locket",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "agi": 7,
-        "sta": 5,
-        "haste": 25
-       },
-       "w": null,
-       "sp": null,
-       "id": "yumis_keepsake_locket",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4,
-        "hit": 25
+        "crit": 25
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -3013,17 +3234,17 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Oath of the Round Table",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "sta": 6,
-        "str": 5,
-        "hit": 25
+        "spi": 6,
+        "int": 5,
+        "haste": 25
        },
        "w": null,
        "sp": null,
-       "id": "oath_of_the_round_table",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -3085,7 +3306,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 76.2
+    "score": 79.5
    }
   }
  },
@@ -3145,6 +3366,49 @@ const BIS = {
        ]
       }
      },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      }
+     },
      "helmet": {
       "best": {
        "name": "Galecall Crown",
@@ -3567,7 +3831,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 137.6
+    "score": 148.3
    },
    "dps": {
     "picks": {
@@ -3598,27 +3862,70 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Deathless Greatblade",
-       "q": "epic",
+       "name": "Thronebane, Last Oath of Thornpeak",
+       "q": "legendary",
        "set": null,
        "stats": {
-        "str": 18,
-        "sta": 12,
-        "hit": 65,
-        "crit": 20
+        "str": 15,
+        "agi": 15,
+        "sta": 14
        },
        "w": {
-        "min": 52,
-        "max": 78,
-        "speed": 3.4
+        "min": 46,
+        "max": 74,
+        "speed": 2.8
        },
        "sp": null,
-       "id": "deathless_greatblade",
-       "score": 39.6,
+       "id": "kingsbane_last_oath",
+       "score": 54.7,
        "xclass": false,
        "slot": "mainhand",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 34 %"
+        "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Bonewrought Bulwark",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 680,
+        "str": 6,
+        "sta": 11,
+        "hit": 55,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_bonewrought_bulwark",
+       "score": 73.7,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 13 %"
        ]
       }
      },
@@ -3914,6 +4221,25 @@ const BIS = {
      },
      "neck": {
       "best": {
+       "name": "Swiftfang Talisman",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 6,
+        "agi": 6,
+        "hit": 25
+       },
+       "w": null,
+       "sp": null,
+       "id": "swiftfang_talisman",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
+      },
+      "alt": {
        "name": "Medallion of Endless Profit",
        "q": "epic",
        "set": null,
@@ -3931,40 +4257,21 @@ const BIS = {
        "src": [
         "Vendu par Quartermaster Vex · 16 Heroic Marks"
        ]
-      },
-      "alt": {
-       "name": "Yumi's Keepsake Locket",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "agi": 7,
-        "sta": 5,
-        "haste": 25
-       },
-       "w": null,
-       "sp": null,
-       "id": "yumis_keepsake_locket",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
       }
      },
      "ring1": {
       "best": {
-       "name": "Seal of the Nine Oaths",
+       "name": "Sutil's Gambit",
        "q": "epic",
        "set": null,
        "stats": {
-        "str": 7,
+        "agi": 7,
         "sta": 4,
-        "hit": 25
+        "crit": 25
        },
        "w": null,
        "sp": null,
-       "id": "seal_of_the_nine_oaths",
+       "id": "sutils_gambit",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -3973,17 +4280,17 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Oath of the Round Table",
+       "name": "Zyzz's Deathless Signet",
        "q": "epic",
        "set": null,
        "stats": {
-        "sta": 6,
-        "str": 5,
-        "hit": 25
+        "spi": 6,
+        "int": 5,
+        "haste": 25
        },
        "w": null,
        "sp": null,
-       "id": "oath_of_the_round_table",
+       "id": "zyzzs_deathless_signet",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -4045,7 +4352,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 71.6
+    "score": 74.6
    }
   }
  },
@@ -4101,6 +4408,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -4524,7 +4874,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 4196.5
+    "score": 4302.3
    },
    "heal": {
     "picks": {
@@ -4576,6 +4926,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -5001,7 +5394,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 132.9
+    "score": 143.5
    },
    "dps": {
     "picks": {
@@ -5053,6 +5446,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -5225,43 +5661,41 @@ const BIS = {
      },
      "legs": {
       "best": {
-       "name": "Tidewoven Trousers",
+       "name": "Nightfang Legguards",
        "q": "epic",
-       "set": null,
+       "set": "Nightfang Vestments",
        "stats": {
-        "armor": 132,
-        "agi": 12,
-        "sta": 8,
-        "hit": 40
+        "armor": 155,
+        "agi": 11,
+        "sta": 7
        },
        "w": null,
        "sp": null,
-       "id": "tidewoven_trousers",
-       "score": 31.0,
+       "id": "heroic_wyrmshadow_legguards",
+       "score": 30.9,
        "xclass": true,
        "slot": "legs",
        "src": [
-        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 33 %"
+        "Butin héroïque : Grand Necromancer Velkhar · 5 %"
        ]
       },
       "alt": {
-       "name": "Lunar Choir Leggings",
+       "name": "Nightfang Legguards",
        "q": "epic",
-       "set": null,
+       "set": "Nightfang Vestments",
        "stats": {
-        "armor": 72,
-        "int": 12,
-        "spi": 8,
-        "hit": 40
+        "armor": 155,
+        "agi": 10,
+        "sta": 6
        },
        "w": null,
        "sp": null,
-       "id": "lunar_choir_leggings",
-       "score": 26.0,
-       "xclass": false,
+       "id": "wyrmshadow_legguards",
+       "score": 28.9,
+       "xclass": true,
        "slot": "legs",
        "src": [
-        "Butin héroïque : Ysolei, Avatar of the Drowned Moon · 34 %"
+        "Butin : Grand Necromancer Velkhar · 5 %"
        ]
       }
      },
@@ -5308,6 +5742,26 @@ const BIS = {
      },
      "feet": {
       "best": {
+       "name": "Shadowpulse Slippers",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "armor": 44,
+        "int": 8,
+        "spi": 6,
+        "crit": 40
+       },
+       "w": null,
+       "sp": null,
+       "id": "shadowpulse_slippers",
+       "score": 17.7,
+       "xclass": false,
+       "slot": "feet",
+       "src": [
+        "Butin héroïque : Morthen the Gravecaller · 33 %"
+       ]
+      },
+      "alt": {
        "name": "Nightfang Treads",
        "q": "epic",
        "set": "Nightfang Vestments",
@@ -5325,48 +5779,10 @@ const BIS = {
        "src": [
         "Butin héroïque : Korgath the Bound · 5 %"
        ]
-      },
-      "alt": {
-       "name": "Nightfang Treads",
-       "q": "epic",
-       "set": "Nightfang Vestments",
-       "stats": {
-        "armor": 145,
-        "agi": 7,
-        "sta": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "wyrmshadow_treads",
-       "score": 24.1,
-       "xclass": true,
-       "slot": "feet",
-       "src": [
-        "Butin : Korgath the Bound · 5 %"
-       ]
       }
      },
      "neck": {
       "best": {
-       "name": "Medallion of Endless Profit",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 7,
-        "sta": 5,
-        "crit": 25
-       },
-       "w": null,
-       "sp": null,
-       "id": "medallion_of_endless_profit",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
-      },
-      "alt": {
        "name": "Swiftfang Talisman",
        "q": "epic",
        "set": null,
@@ -5378,6 +5794,25 @@ const BIS = {
        "w": null,
        "sp": null,
        "id": "swiftfang_talisman",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
+      },
+      "alt": {
+       "name": "Medallion of Endless Profit",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 7,
+        "sta": 5,
+        "crit": 25
+       },
+       "w": null,
+       "sp": null,
+       "id": "medallion_of_endless_profit",
        "score": 12.0,
        "xclass": false,
        "slot": "neck",
@@ -5479,7 +5914,7 @@ const BIS = {
       "bonus": 2
      }
     ],
-    "score": 79.5
+    "score": 83.2
    }
   }
  },
@@ -5539,6 +5974,49 @@ const BIS = {
        ]
       }
      },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      }
+     },
      "helmet": {
       "best": {
        "name": "Wraithfire Cowl",
@@ -5603,24 +6081,22 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Wraithfire Mantle",
+       "name": "Mournweave Soulspire Mantle",
        "q": "epic",
-       "set": "Wraithfire Regalia",
+       "set": "Mournweave Raiment",
        "stats": {
-        "armor": 92,
-        "sta": 7,
-        "int": 10,
-        "hit": 55,
-        "haste": 20
+        "armor": 70,
+        "int": 9,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "heroic_soulflame_mantle",
-       "score": 24.7,
+       "id": "necromancers_soulspire_mantle",
+       "score": 19.8,
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
+        "Butin : Korzul the Gravewyrm · 4 %"
        ]
       }
      },
@@ -5961,7 +6437,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 138.8
+    "score": 149.8
    },
    "dps": {
     "picks": {
@@ -6013,6 +6489,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -6439,7 +6958,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 81.2
+    "score": 86.2
    }
   }
  },
@@ -6499,6 +7018,49 @@ const BIS = {
        ]
       }
      },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      }
+     },
      "helmet": {
       "best": {
        "name": "Wraithfire Cowl",
@@ -6922,7 +7484,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 85.4
+    "score": 90.6
    },
    "heal": {
     "picks": {
@@ -6974,6 +7536,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -7041,24 +7646,22 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Wraithfire Mantle",
+       "name": "Mournweave Soulspire Mantle",
        "q": "epic",
-       "set": "Wraithfire Regalia",
+       "set": "Mournweave Raiment",
        "stats": {
-        "armor": 92,
-        "sta": 7,
-        "int": 10,
-        "hit": 55,
-        "haste": 20
+        "armor": 70,
+        "int": 9,
+        "spi": 5
        },
        "w": null,
        "sp": null,
-       "id": "heroic_soulflame_mantle",
-       "score": 24.7,
+       "id": "necromancers_soulspire_mantle",
+       "score": 19.8,
        "xclass": false,
        "slot": "shoulder",
        "src": [
-        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 45 %"
+        "Butin : Korzul the Gravewyrm · 4 %"
        ]
       }
      },
@@ -7399,7 +8002,7 @@ const BIS = {
       "bonus": 3
      }
     ],
-    "score": 144.4
+    "score": 155.7
    }
   }
  },
@@ -7456,6 +8059,49 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin héroïque : Nythraxis, Scourge of Thornpeak · 33 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "sta": 3,
+        "int": 8,
+        "spi": 6,
+        "crit": 55,
+        "haste": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "heroic_wraithfire_orb",
+       "score": 17.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 16 %"
+       ]
+      },
+      "alt": {
+       "name": "Wraithfire Orb",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "int": 7,
+        "spi": 5,
+        "sta": 3,
+        "crit": 20
+       },
+       "w": null,
+       "sp": null,
+       "id": "wraithfire_orb",
+       "score": 15.0,
+       "xclass": false,
+       "slot": "offhand",
+       "src": [
+        "Butin : Nythraxis, Scourge of Thornpeak · 16 %"
        ]
       }
      },
@@ -7882,7 +8528,7 @@ const BIS = {
       "bonus": 4
      }
     ],
-    "score": 84.6
+    "score": 89.8
    }
   }
  },
@@ -7938,6 +8584,56 @@ const BIS = {
        "slot": "mainhand",
        "src": [
         "Butin : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      }
+     },
+     "offhand": {
+      "best": {
+       "name": "Thronebane, Last Oath of Thornpeak",
+       "q": "legendary",
+       "set": null,
+       "stats": {
+        "str": 17,
+        "agi": 17,
+        "sta": 15,
+        "hit": 70,
+        "crit": 30
+       },
+       "w": {
+        "min": 46,
+        "max": 74,
+        "speed": 2.8
+       },
+       "sp": null,
+       "id": "heroic_kingsbane_last_oath",
+       "score": 59.7,
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Nythraxis, Scourge of Thornpeak · 3 %"
+       ]
+      },
+      "alt": {
+       "name": "Mistcaller's Fang",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "agi": 13,
+        "sta": 9,
+        "crit": 50
+       },
+       "w": {
+        "min": 22,
+        "max": 36,
+        "speed": 1.8
+       },
+       "sp": null,
+       "id": "mistcallers_fang",
+       "score": 30.1,
+       "xclass": false,
+       "slot": "mainhand",
+       "src": [
+        "Butin héroïque : Vael the Fogbinder · 34 %"
        ]
       }
      },
@@ -8150,25 +8846,6 @@ const BIS = {
      },
      "gloves": {
       "best": {
-       "name": "Direfang Grips",
-       "q": "epic",
-       "set": "Direfang Pelt",
-       "stats": {
-        "armor": 110,
-        "agi": 8,
-        "sta": 5
-       },
-       "w": null,
-       "sp": null,
-       "id": "nighttalon_grips",
-       "score": 22.2,
-       "xclass": false,
-       "slot": "gloves",
-       "src": [
-        "Butin : Thunzharr, the Waking Peak · 8 %"
-       ]
-      },
-      "alt": {
        "name": "Nightfang Talongrips",
        "q": "epic",
        "set": "Nightfang Vestments",
@@ -8185,6 +8862,25 @@ const BIS = {
        "slot": "gloves",
        "src": [
         "Butin héroïque : Korzul the Gravewyrm · 4 %"
+       ]
+      },
+      "alt": {
+       "name": "Nightfang Talongrips",
+       "q": "epic",
+       "set": "Nightfang Vestments",
+       "stats": {
+        "armor": 110,
+        "agi": 9,
+        "sta": 4
+       },
+       "w": null,
+       "sp": null,
+       "id": "wyrmshadow_talongrips",
+       "score": 22.2,
+       "xclass": false,
+       "slot": "gloves",
+       "src": [
+        "Butin : Korzul the Gravewyrm · 4 %"
        ]
       }
      },
@@ -8230,25 +8926,6 @@ const BIS = {
      },
      "neck": {
       "best": {
-       "name": "Swiftfang Talisman",
-       "q": "epic",
-       "set": null,
-       "stats": {
-        "str": 6,
-        "agi": 6,
-        "hit": 25
-       },
-       "w": null,
-       "sp": null,
-       "id": "swiftfang_talisman",
-       "score": 12.0,
-       "xclass": false,
-       "slot": "neck",
-       "src": [
-        "Vendu par Quartermaster Vex · 16 Heroic Marks"
-       ]
-      },
-      "alt": {
        "name": "Yumi's Keepsake Locket",
        "q": "epic",
        "set": null,
@@ -8260,6 +8937,25 @@ const BIS = {
        "w": null,
        "sp": null,
        "id": "yumis_keepsake_locket",
+       "score": 12.0,
+       "xclass": false,
+       "slot": "neck",
+       "src": [
+        "Vendu par Quartermaster Vex · 16 Heroic Marks"
+       ]
+      },
+      "alt": {
+       "name": "Medallion of Endless Profit",
+       "q": "epic",
+       "set": null,
+       "stats": {
+        "str": 7,
+        "sta": 5,
+        "crit": 25
+       },
+       "w": null,
+       "sp": null,
+       "id": "medallion_of_endless_profit",
        "score": 12.0,
        "xclass": false,
        "slot": "neck",
@@ -8289,17 +8985,17 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Zyzz's Deathless Signet",
+       "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
        "stats": {
-        "spi": 6,
-        "int": 5,
-        "haste": 25
+        "str": 7,
+        "sta": 4,
+        "hit": 25
        },
        "w": null,
        "sp": null,
-       "id": "zyzzs_deathless_signet",
+       "id": "seal_of_the_nine_oaths",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -8329,17 +9025,17 @@ const BIS = {
        ]
       },
       "alt": {
-       "name": "Zyzz's Deathless Signet",
+       "name": "Seal of the Nine Oaths",
        "q": "epic",
        "set": null,
        "stats": {
-        "spi": 6,
-        "int": 5,
-        "haste": 25
+        "str": 7,
+        "sta": 4,
+        "hit": 25
        },
        "w": null,
        "sp": null,
-       "id": "zyzzs_deathless_signet",
+       "id": "seal_of_the_nine_oaths",
        "score": 11.0,
        "xclass": false,
        "slot": "ring",
@@ -8352,16 +9048,16 @@ const BIS = {
     "sets": [
      {
       "name": "Direfang Pelt",
-      "pieces": 4,
-      "bonus": 4
+      "pieces": 3,
+      "bonus": 3
      },
      {
       "name": "Nightfang Vestments",
-      "pieces": 3,
-      "bonus": 3
+      "pieces": 4,
+      "bonus": 4
      }
     ],
-    "score": 74.3
+    "score": 83.5
    }
   }
  },
@@ -8856,9 +9552,9 @@ const ROLE_META = { tank:{fr:"Tank",ico:"🛡️"}, heal:{fr:"Heal",ico:"✚"}, 
 const CLS_EN = { warrior:"Warrior", paladin:"Paladin", shaman:"Shaman", druid:"Druid", priest:"Priest", mage:"Mage", warlock:"Warlock", rogue:"Rogue", hunter:"Hunter" };
 const clsLbl = (id, c) => LANG === "en" ? (CLS_EN[id] || c.fr) : c.fr;
 const SLOT_FR = LANG === "en"
-  ? { mainhand:"Weapon", helmet:"Head", shoulder:"Shoulders", chest:"Chest", waist:"Waist", legs:"Legs", gloves:"Hands", feet:"Feet", neck:"Neck", ring1:"Ring 1", ring2:"Ring 2" }
-  : { mainhand:"Arme", helmet:"Tête", shoulder:"Épaules", chest:"Torse", waist:"Ceinture", legs:"Jambes", gloves:"Mains", feet:"Pieds", neck:"Cou", ring1:"Anneau 1", ring2:"Anneau 2" };
-const SLOT_ORDER = ["mainhand","helmet","shoulder","chest","waist","legs","gloves","feet","neck","ring1","ring2"];
+  ? { mainhand:"Weapon", offhand:"Off hand", helmet:"Head", shoulder:"Shoulders", chest:"Chest", waist:"Waist", legs:"Legs", gloves:"Hands", feet:"Feet", neck:"Neck", ring:"Ring", ring1:"Ring 1", ring2:"Ring 2" }
+  : { mainhand:"Arme", offhand:"Main gauche", helmet:"Tête", shoulder:"Épaules", chest:"Torse", waist:"Ceinture", legs:"Jambes", gloves:"Mains", feet:"Pieds", neck:"Cou", ring:"Anneau", ring1:"Anneau 1", ring2:"Anneau 2" };
+const SLOT_ORDER = ["mainhand","offhand","helmet","shoulder","chest","waist","legs","gloves","feet","neck","ring1","ring2"];
 const STAT_FR = LANG === "en"
   ? { str:"Str", agi:"Agi", int:"Int", spi:"Spi", sta:"Sta", armor:"Armor", hit:"Hit rating", crit:"Crit rating", haste:"Haste rating" }
   : { str:"For", agi:"Agi", int:"Int", spi:"Esp", sta:"End", armor:"Armure", hit:"Précision", crit:"Crit", haste:"Hâte" };
@@ -8876,7 +9572,7 @@ const SET_BONUS_FR = LANG === "en"
   : { 2:"bonus 2 pièces", 3:"bonus 3 pièces", 4:"bonus 4 pièces" };
 // Champ rédactionnel bilingue ({fr,en}) ou simple chaîne.
 const loc = v => (v && typeof v === "object" && !Array.isArray(v)) ? v[LANG] : v;
-const TREE_LBL = t => LANG === "en" ? ({ "spé": "spec", "classe": "class" }[t] || t.replace(/^niv\./, "lvl")) : t;
+const TREE_LBL = t => LANG === "en" ? ({ "spé": "spec", "classe": "class", "posture": "stance" }[t] || t.replace(/^niv\./, "lvl")) : t;
 // Les chaînes « source » du BIS sont générées en français par compute_bis.py :
 // on les traduit au vol côté anglais.
 function trSrc(s) {
@@ -9057,8 +9753,8 @@ function renderBuild() {
       <div class="bstats">${T({ fr: "Priorité de stats : ", en: "Stat priority: " })}<b>${loc(b.stats)}</b></div>
       <ol class="btalents">${talents}</ol>
       <p class="bt-cap">${T({
-        fr: "Total : <b>11 points de talent</b> — le maximum — dépensés dans l'ordre de la liste pour respecter les paliers de déblocage (2, 5 et 8 points).",
-        en: "Total: <b>11 talent points</b> — the maximum — spent in list order to respect the unlock tiers (2, 5 and 8 points).",
+        fr: "Talents 2.0 (v0.27) : <b>un choix par rangée</b>, débloquées aux niveaux 5, 8, 11, 14, 17 et 20 — six choix en tout, modifiables à tout moment.",
+        en: "Talents 2.0 (v0.27): <b>one pick per row</b>, unlocked at levels 5, 8, 11, 14, 17 and 20 — six picks in total, changeable at any time.",
       })}</p>
     </div>
     <div class="bsec">

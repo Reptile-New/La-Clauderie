@@ -202,7 +202,7 @@ ARMOR_RANK = {'cloth':0,'leather':1,'mail':2}
 W_WAR = {'warrior','rogue','hunter','shaman','paladin'}
 W_CAST = {'mage','priest','warlock','shaman','paladin','druid'}
 W_ROGUE = {'rogue','hunter'}
-SLOTS = ['mainhand','helmet','shoulder','chest','waist','legs','gloves','feet','neck','ring1','ring2']
+SLOTS = ['mainhand','offhand','helmet','shoulder','chest','waist','legs','gloves','feet','neck','ring1','ring2']
 
 def max_armor(cls): return 2 if cls in MAIL else 1 if cls in LEATHER else 0
 
@@ -345,14 +345,41 @@ def objective(cls, role, sh):
     return 0
 
 # --- candidats par slot --------------------------------------------------------
+# Main gauche (port d'equipment_rules.ts v0.27.2) : le slot accepte
+#   1. les boucliers (kind armor + shield) et les objets « tenus en main
+#      gauche » (kind held_offhand) — éligibilité par requiredClass SEULEMENT
+#      (le jeu ignore l'armorType pour ces deux familles) ;
+#   2. une arme à une main en double manche — voleur (toujours) et guerrier
+#      Fureur (donc rôle dps) uniquement. Titan's Grip (deux-mains en main
+#      gauche, Fureur) n'est pas modélisé : depuis la v0.27.2 il coûte −12 %
+#      de dégâts physiques et le modèle ne compte de toute façon que l'arme
+#      principale dans le swing — le double une-main reste la référence.
+# Le modèle valorise la main gauche par ses stats (armure du bouclier
+# comprise) ; les swings de la main gauche ne sont pas simulés.
+def _dual_wield(cls, role):
+    return cls == 'rogue' or (cls == 'warrior' and role == 'dps')
+
 def candidates(cls, role):
     pool = {sl: [] for sl in SLOTS}
     for iid, it in ITEMS.items():
         sl = slot_key(it)
-        if sl not in ('mainhand','helmet','shoulder','chest','waist','legs','gloves','feet','neck','ring'): continue
-        if it.get('kind') not in ('armor','weapon'): continue
+        if sl not in ('mainhand','offhand','helmet','shoulder','chest','waist','legs','gloves','feet','neck','ring'): continue
+        if it.get('kind') not in ('armor','weapon','held_offhand'): continue
         if iid in UNOBTAINABLE: continue   # jumelle héroïque que le jeu ne droppe jamais
+        if sl == 'offhand':
+            rc = it.get('requiredClass')
+            if rc and cls not in rc: continue
+            # Un bouclier chez qui double-manche (fury/voleur) sacrifierait la
+            # main gauche offensive : on le réserve aux rôles qui ne double-
+            # manchent pas (le modèle ne simule pas les swings et croirait
+            # sinon le bouclier « gratuit »).
+            if it.get('shield') and _dual_wield(cls, role): continue
+            pool[sl].append(iid)
+            continue
         if not can_equip(cls, it): continue
+        if sl == 'mainhand' and it.get('kind') == 'weapon' and _dual_wield(cls, role) \
+           and it.get('hand') != 'twohand':
+            pool['offhand'].append(iid)   # arme une-main aussi jouable en main gauche
         if sl == 'ring':
             pool['ring1'].append(iid); pool['ring2'].append(iid)
         else:
@@ -360,6 +387,11 @@ def candidates(cls, role):
     return pool
 
 def evaluate(cls, role, equip):
+    # Interdit par le jeu : une main gauche avec une arme à deux mains en main
+    # droite (hors Titan's Grip, non modélisé — cf. candidates()).
+    mh, oh = equip.get('mainhand'), equip.get('offhand')
+    if oh and mh and ITEMS[mh].get('hand') == 'twohand':
+        return -1e9
     return objective(cls, role, sheet(cls, role, equip))
 
 # Départage des ex æquo : la puissance des sorts étant arrondie (0.5×Int),
@@ -418,30 +450,40 @@ def optimize(cls, role):
             if sl is None or equip[sl]: ok=False; break
             equip[sl]=iid; used.add(iid)
         if not ok: continue
-        # remplissage glouton multi-passes des slots libres
-        free=[sl for sl in SLOTS if not equip[sl]]
-        for sl in free:
-            bs=None
-            for iid in pool[sl]:
-                equip[sl]=iid
-                v=evaluate(cls,role,equip)
-                if better(v,iid,bs): bs=(v,iid)
-            equip[sl]=bs[1] if bs else None
-        for _ in range(4):  # passes de raffinement (slots libres uniquement)
-            changed=False
-            for sl in free:
-                cur=equip[sl]
-                bs=(evaluate(cls,role,equip),cur)
+        # Remplissage glouton multi-passes des slots libres. La main gauche
+        # couple deux slots (bouclier/orbe interdits avec une deux-mains) : un
+        # seul passage glouton peut rester coincé sur « deux-mains seule » ou
+        # « main gauche d'abord » selon l'ordre. On explore donc les DEUX
+        # variantes — offhand remplie en premier, et pas d'offhand du tout —
+        # et on garde la meilleure.
+        def fill(free_order, allow_offhand):
+            eq = dict(equip)
+            order = [sl for sl in free_order if allow_offhand or sl != 'offhand']
+            for sl in order:
+                bs=None
                 for iid in pool[sl]:
-                    if iid==cur: continue
-                    equip[sl]=iid
-                    v=evaluate(cls,role,equip)
+                    eq[sl]=iid
+                    v=evaluate(cls,role,eq)
                     if better(v,iid,bs): bs=(v,iid)
-                equip[sl]=bs[1]  # TOUJOURS restaurer le meilleur (bug: le slot restait sur le dernier essayé)
-                if bs[1]!=cur: changed=True
-            if not changed: break
-        v=evaluate(cls,role,equip)
-        if best is None or v>best[0]: best=(v,dict(equip))
+                eq[sl]=bs[1] if bs else None
+            for _ in range(4):  # passes de raffinement (slots libres uniquement)
+                changed=False
+                for sl in order:
+                    cur=eq[sl]
+                    bs=(evaluate(cls,role,eq),cur)
+                    for iid in pool[sl]:
+                        if iid==cur: continue
+                        eq[sl]=iid
+                        v=evaluate(cls,role,eq)
+                        if better(v,iid,bs): bs=(v,iid)
+                    eq[sl]=bs[1]  # TOUJOURS restaurer le meilleur (bug: le slot restait sur le dernier essayé)
+                    if bs[1]!=cur: changed=True
+                if not changed: break
+            return evaluate(cls,role,eq), eq
+        free=[sl for sl in SLOTS if not equip[sl]]
+        free_oh_first=(['offhand'] if 'offhand' in free else [])+[sl for sl in free if sl!='offhand']
+        for v, eq in (fill(free_oh_first, True), fill(free, False)):
+            if best is None or v>best[0]: best=(v,dict(eq))
     # alternatives : le deuxième meilleur objet du slot, strictement — jumelle
     # normale/héroïque du même objet comprise (le badge « héroïque » du site
     # permet de comparer les deux versions, et on sait quoi porter en
