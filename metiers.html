@@ -98,6 +98,8 @@
   .recipe .res { font-weight: 600; }
   .recipe .cnt { color: var(--faint); font-family: var(--font-mono); font-size: 0.8rem; }
   .recipe .rlvl { font-family: var(--font-mono); font-size: 0.72rem; color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); border-radius: 4px; padding: 1px 6px; }
+  .recipe .rtag { font-family: var(--font-mono); font-size: 0.68rem; color: var(--dim); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
+  .recipe .rtag.combo { color: var(--arcane, #58b6c9); border-color: color-mix(in srgb, currentColor 40%, transparent); }
   .recipe .arrow { color: var(--faint); }
   .recipe .reags { color: var(--dim); font-size: 0.9rem; }
   .recipe .reags .r { white-space: nowrap; }
@@ -470,7 +472,6 @@ const CRAFT = {
      "id": "minor_healing_potion",
      "count": 1,
      "level": 1,
-     "trivial": null,
      "reagents": [
       {
        "name": "Linen Scrap",
@@ -492,7 +493,6 @@ const CRAFT = {
      "id": "elixir_of_the_bear",
      "count": 1,
      "level": 15,
-     "trivial": null,
      "reagents": [
       {
        "name": "Linen Scrap",
@@ -506,7 +506,12 @@ const CRAFT = {
        "id": "spider_leg",
        "count": 2
       }
-     ]
+     ],
+     "skill": 25,
+     "combo": {
+      "fr": "Alchimie + Ingénierie",
+      "en": "Alchemy + Engineering"
+     }
     }
    ]
   },
@@ -521,7 +526,6 @@ const CRAFT = {
      "id": "eastbrook_wool_trousers",
      "count": 1,
      "level": 8,
-     "trivial": null,
      "reagents": [
       {
        "name": "Linen Scrap",
@@ -537,7 +541,6 @@ const CRAFT = {
      "id": "eastbrook_ritual_vestments",
      "count": 1,
      "level": 9,
-     "trivial": null,
      "reagents": [
       {
        "name": "Linen Scrap",
@@ -559,7 +562,6 @@ const CRAFT = {
      "id": "wardweave_cowl",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Thorium Ore",
@@ -573,7 +575,9 @@ const CRAFT = {
        "id": "linen_scrap",
        "count": 2
       }
-     ]
+     ],
+     "skill": 75,
+     "hub": true
     }
    ]
   },
@@ -588,7 +592,6 @@ const CRAFT = {
      "id": "tough_jerky",
      "count": 1,
      "level": 1,
-     "trivial": null,
      "reagents": [
       {
        "name": "Twitching Spider Leg",
@@ -611,7 +614,6 @@ const CRAFT = {
      "id": "eastbrook_arming_sword",
      "count": 1,
      "level": 10,
-     "trivial": null,
      "reagents": [
       {
        "name": "Bone Fragments",
@@ -633,7 +635,6 @@ const CRAFT = {
      "id": "gravewyrm_gauntlets",
      "count": 1,
      "level": 15,
-     "trivial": null,
      "reagents": [
       {
        "name": "Bone Fragments",
@@ -647,7 +648,12 @@ const CRAFT = {
        "id": "linen_scrap",
        "count": 3
       }
-     ]
+     ],
+     "skill": 25,
+     "combo": {
+      "fr": "Forge d’armures + Forge d’armes",
+      "en": "Armorcrafting + Weaponcrafting"
+     }
     }
    ]
   },
@@ -662,7 +668,6 @@ const CRAFT = {
      "id": "eastbrook_chain_vest",
      "count": 1,
      "level": 10,
-     "trivial": null,
      "reagents": [
       {
        "name": "Bone Fragments",
@@ -678,7 +683,6 @@ const CRAFT = {
      "id": "eastbrook_warded_leggings",
      "count": 1,
      "level": 10,
-     "trivial": null,
      "reagents": [
       {
        "name": "Bone Fragments",
@@ -700,7 +704,6 @@ const CRAFT = {
      "id": "boundstone_helm",
      "count": 1,
      "level": 15,
-     "trivial": null,
      "reagents": [
       {
        "name": "Bone Fragments",
@@ -714,7 +717,12 @@ const CRAFT = {
        "id": "linen_scrap",
        "count": 2
       }
-     ]
+     ],
+     "skill": 25,
+     "combo": {
+      "fr": "Forge d’armures + Forge d’armes",
+      "en": "Armorcrafting + Weaponcrafting"
+     }
     },
     {
      "result": "Sootscale Mantle",
@@ -722,7 +730,6 @@ const CRAFT = {
      "id": "sootscale_mantle",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Thorium Ore",
@@ -736,7 +743,9 @@ const CRAFT = {
        "id": "bone_fragments",
        "count": 2
       }
-     ]
+     ],
+     "skill": 75,
+     "hub": true
     }
    ]
   },
@@ -751,7 +760,6 @@ const CRAFT = {
      "id": "arcanite_mining_pick",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Arcanite Bar",
@@ -765,7 +773,9 @@ const CRAFT = {
        "id": "thorium_mining_pick",
        "count": 1
       }
-     ]
+     ],
+     "skill": 150,
+     "hub": true
     },
     {
      "result": "Ashwood Axe",
@@ -773,7 +783,6 @@ const CRAFT = {
      "id": "ashwood_axe",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Ashwood Log",
@@ -787,7 +796,9 @@ const CRAFT = {
        "id": "ironbark_axe",
        "count": 1
       }
-     ]
+     ],
+     "skill": 75,
+     "hub": true
     },
     {
      "result": "Elderwood Axe",
@@ -795,7 +806,6 @@ const CRAFT = {
      "id": "elderwood_axe",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Elderwood Log",
@@ -809,7 +819,9 @@ const CRAFT = {
        "id": "ashwood_axe",
        "count": 1
       }
-     ]
+     ],
+     "skill": 150,
+     "hub": true
     },
     {
      "result": "Goldleaf Sickle",
@@ -817,7 +829,6 @@ const CRAFT = {
      "id": "goldleaf_sickle",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Goldleaf Herb",
@@ -831,7 +842,9 @@ const CRAFT = {
        "id": "silverleaf_sickle",
        "count": 1
       }
-     ]
+     ],
+     "skill": 75,
+     "hub": true
     },
     {
      "result": "Sunpetal Sickle",
@@ -839,7 +852,6 @@ const CRAFT = {
      "id": "sunpetal_sickle",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Sunpetal Herb",
@@ -853,7 +865,9 @@ const CRAFT = {
        "id": "goldleaf_sickle",
        "count": 1
       }
-     ]
+     ],
+     "skill": 150,
+     "hub": true
     },
     {
      "result": "Thorium Mining Pick",
@@ -861,7 +875,6 @@ const CRAFT = {
      "id": "thorium_mining_pick",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Thorium Ore",
@@ -875,7 +888,9 @@ const CRAFT = {
        "id": "mithril_mining_pick",
        "count": 1
       }
-     ]
+     ],
+     "skill": 75,
+     "hub": true
     }
    ]
   },
@@ -890,7 +905,6 @@ const CRAFT = {
      "id": "eastbrook_druids_hide",
      "count": 1,
      "level": 9,
-     "trivial": null,
      "reagents": [
       {
        "name": "Twitching Spider Leg",
@@ -912,7 +926,6 @@ const CRAFT = {
      "id": "tanned_leather_jerkin",
      "count": 1,
      "level": 9,
-     "trivial": null,
      "reagents": [
       {
        "name": "Twitching Spider Leg",
@@ -934,7 +947,6 @@ const CRAFT = {
      "id": "duskhide_wraps",
      "count": 1,
      "level": 20,
-     "trivial": null,
      "reagents": [
       {
        "name": "Thorium Ore",
@@ -948,7 +960,9 @@ const CRAFT = {
        "id": "spider_leg",
        "count": 2
       }
-     ]
+     ],
+     "skill": 75,
+     "hub": true
     }
    ]
   }
@@ -1007,24 +1021,33 @@ const CRAFT = {
         const lvl = (r.level != null) ? `<span class="rlvl">${T('niv.', 'lvl')} ${r.level}</span>` : '';
         const reags = (r.reagents || []).map(rg =>
           `<span class="r">${rg.count}× ${item(rg)}</span>`).join('<span class="sep">·</span>');
+        // Badges Métiers 2.0 : recette combo (paire d'archétype exacte),
+        // compétence requise, station d'artisanat du hub.
+        const badges = [
+          r.combo ? `<span class="rtag combo" title="${esc(T('Réservée à la paire d’archétype', 'Requires the exact archetype pair'))}">🤝 ${esc(T(r.combo.fr, r.combo.en))}</span>` : '',
+          r.skill ? `<span class="rtag">${T('compétence', 'skill')} ${r.skill}</span>` : '',
+          r.hub ? `<span class="rtag">${T('station du hub', 'hub station')}</span>` : '',
+        ].filter(Boolean).join('');
         return `<div class="recipe">
           ${lvl}
-          <span class="res">${item({ id: r.id, q: r.q, name: r.result })}</span>${cnt}
+          <span class="res">${item({ id: r.id, q: r.q, name: r.result })}</span>${cnt}${badges}
           <span class="arrow">←</span>
           <span class="reags">${reags}</span>
         </div>`;
       }).join('');
+      const nRec = (p.recipes || []).length;
       return `<div class="block">
-        <div class="block-head"><h2>${esc(T(p.fr, p.en))}</h2><span class="sub">${(p.recipes || []).length} ${T('recette' + (p.recipes.length > 1 ? 's' : ''), 'recipe' + (p.recipes.length > 1 ? 's' : ''))}</span></div>
+        <div class="block-head"><h2>${esc(T(p.fr, p.en))}</h2><span class="sub">${nRec} ${T('recette' + (nRec > 1 ? 's' : ''), 'recipe' + (nRec > 1 ? 's' : ''))}</span></div>
         ${rows}
       </div>`;
     }).join('');
   }
 
   // --- Guide Métiers 2.0 (archétypes) — section ÉDITORIALE -------------------
-  // Le système d'archétypes (v0.27.0) n'a aucun export dans la KB : paires,
-  // quête, Masterwork et recettes combo vivent dans le code du jeu
-  // (src/sim/professions/archetype.ts, masterwork.ts, content/recipes.ts).
+  // Paires, quête et Masterwork (v0.27.0) vivent dans le code du jeu
+  // (src/sim/professions/archetype.ts, masterwork.ts) sans export KB. Les
+  // recettes combo, elles, SONT dans ALL_RECIPES depuis la v0.27.2 (champ
+  // comboRequirement, badge 🤝 dans la liste générée).
   // Rédigé à la main — à revérifier à chaque MAJ qui touche les métiers.
   function renderArchetypes() {
     return `<div class="block">
@@ -1041,10 +1064,10 @@ const CRAFT = {
         </div>
         <div class="node ore">
           <h3><span class="ico">🤝</span>${T('Les recettes combo', 'Combo recipes')}</h3>
-          <div class="meta">${T('réservées à la paire active exacte — absentes de la liste ci-dessous', 'require the exact active pair — missing from the list below')}</div>
+          <div class="meta">${T('réservées à la paire active exacte — badge 🤝 dans la liste ci-dessous', 'require the exact active pair — 🤝 badge in the list below')}</div>
           <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
-            'Trois recettes exigent d’avoir la bonne paire : <b style="color:var(--text)">Ironbound Warplate Helm</b> et <b style="color:var(--text)">Forgeguard Bulwark Gauntlets</b> (Armures + Armes, le titre Smith) et <b style="color:var(--text)">Volatile Flux Elixir</b> (Alchimie + Ingénierie). Elles ne figurent pas encore dans les données du Codex, donc pas dans la liste des recettes plus bas.',
-            'Three recipes require the right pair: <b style="color:var(--text)">Ironbound Warplate Helm</b> and <b style="color:var(--text)">Forgeguard Bulwark Gauntlets</b> (Armorcrafting + Weaponcrafting, the Smith title) and <b style="color:var(--text)">Volatile Flux Elixir</b> (Alchemy + Engineering). They are not in the Codex data yet, hence missing from the recipe list below.')}</p>
+            'Trois recettes exigent d’avoir la bonne paire : <b style="color:var(--text)">Ironbound Warplate Helm</b> (fabrique le Boundstone Helm) et <b style="color:var(--text)">Forgeguard Bulwark Gauntlets</b> (fabrique les Gravewyrm Gauntlets) — Armures + Armes, le titre Smith — et <b style="color:var(--text)">Volatile Flux Elixir</b> (fabrique l’Elixir of the Bear), Alchimie + Ingénierie. Repère-les au badge 🤝 dans la liste des recettes plus bas.',
+            'Three recipes require the right pair: <b style="color:var(--text)">Ironbound Warplate Helm</b> (crafts the Boundstone Helm) and <b style="color:var(--text)">Forgeguard Bulwark Gauntlets</b> (crafts the Gravewyrm Gauntlets) — Armorcrafting + Weaponcrafting, the Smith title — and <b style="color:var(--text)">Volatile Flux Elixir</b> (crafts the Elixir of the Bear), Alchemy + Engineering. Spot them by the 🤝 badge in the recipe list below.')}</p>
         </div>
         <div class="node fish">
           <h3><span class="ico">⚠️</span>${T('Métiers encore vides', 'Still-empty professions')}</h3>

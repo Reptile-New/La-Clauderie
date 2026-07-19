@@ -101,15 +101,27 @@ for pid in sorted(byprof, key=lambda p: PROF_FR.get(p, p)):
     recipes = []
     for r in recs:
         rid = r.get('resultItemId')
-        recipes.append({
+        rec = {
             'result': iname(rid), 'q': iqual(rid), 'id': rid,
             'count': r.get('resultCount', 1),
             'level': r.get('level'),
-            'trivial': r.get('trivialAt'),
             'reagents': [{'name': iname(rg['itemId']), 'q': iqual(rg['itemId']),
                           'id': rg['itemId'], 'count': rg.get('count', 1)}
                          for rg in r.get('reagents', [])],
-        })
+        }
+        # Métiers 2.0 (v0.27.2) : compétence requise, station du hub et
+        # recettes combo (paire d'archétype exacte exigée) — sans ces champs,
+        # les 3 combos s'affichaient comme des recettes ordinaires.
+        if r.get('skillReq'):
+            rec['skill'] = r['skillReq']
+        if r.get('requiresHubStation'):
+            rec['hub'] = True
+        combo = r.get('comboRequirement')
+        if combo:
+            a, b = combo.get('craftA'), combo.get('craftB')
+            rec['combo'] = {'fr': f"{PROF_FR.get(a, a)} + {PROF_FR.get(b, b)}",
+                            'en': f"{PROF_EN.get(a, a)} + {PROF_EN.get(b, b)}"}
+        recipes.append(rec)
     prof_out.append({
         'id': pid, 'fr': PROF_FR.get(pid, pid), 'en': PROF_EN.get(pid, pid),
         'recipes': recipes,
