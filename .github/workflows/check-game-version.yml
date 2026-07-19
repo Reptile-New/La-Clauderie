@@ -41,7 +41,7 @@ jobs:
           fi
 
           title="📜 Nouveautés $latest à ajouter au site"
-          if gh issue list --state open --json title --jq '.[].title' | grep -qF "$title"; then
+          if gh issue list --state open --limit 200 --json title --jq '.[].title' | grep -qF "$title"; then
             echo "Issue déjà ouverte pour $latest."
             exit 0
           fi

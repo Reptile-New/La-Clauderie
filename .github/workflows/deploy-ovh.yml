@@ -86,6 +86,8 @@ jobs:
           server: ${{ secrets.OVH_FTP_SERVER }}
           username: ${{ secrets.OVH_FTP_USERNAME }}
           password: ${{ secrets.OVH_FTP_PASSWORD }}
-          protocol: ftp
+          # FTPS (FTP sur TLS) : OVH le supporte, et le README le promet —
+          # en « ftp » simple, identifiants et fichiers partaient en clair.
+          protocol: ftps
           local-dir: _site/
           server-dir: www/

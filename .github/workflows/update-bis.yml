@@ -73,9 +73,19 @@ jobs:
           git add bis.html metiers.html
           git commit -m "Builds + Récolte/Métiers : recalcul automatique sur les données $tag"
           # Secours si un autre workflow a poussé sur main entre-temps.
+          # Le job doit ÉCHOUER si aucune tentative n'aboutit — sans le
+          # « exit 1 », la boucle se terminait sur le pull --rebase réussi et
+          # le job passait au vert sans avoir rien poussé.
+          pushed=false
           for i in 1 2 3 4; do
-            git push && break || { echo "push échoué, rebase et nouvelle tentative ($i)…"; git pull --rebase origin main; }
+            if git push; then pushed=true; break; fi
+            echo "push échoué, rebase et nouvelle tentative ($i)…"
+            git pull --rebase origin main
           done
+          if [ "$pushed" != "true" ]; then
+            echo "::error::Impossible de pousser après 4 tentatives."
+            exit 1
+          fi
 
       # Un push au GITHUB_TOKEN ne déclenche pas les workflows « on: push » —
       # on relance donc les publications explicitement (OVH + GitHub Pages).

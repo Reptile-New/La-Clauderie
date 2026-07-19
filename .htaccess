@@ -13,9 +13,11 @@ AddDefaultCharset UTF-8
   # Les liens sortants ne transmettent que le domaine, pas l'URL complète.
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   # Le navigateur retient (1 an) que le site est en HTTPS et n'essaie plus
-  # jamais le HTTP. Envoyé uniquement sur les réponses HTTPS, comme le veut
-  # la spec.
-  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+  # jamais le HTTP. Le header est envoyé sans condition : sur une réponse
+  # HTTP il est ignoré par les navigateurs (conforme à la spec), et l'ancien
+  # garde « env=HTTPS » dépendait d'une variable d'environnement que le
+  # front OVH ne pose pas forcément — le header pouvait ne jamais partir.
+  Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
 
 RewriteEngine On
