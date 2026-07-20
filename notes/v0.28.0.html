@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Nouveautés v0.28.0 — La Clauderie</title>
+<meta name="description" content="Toutes les nouveautés de la v0.28.0 de World of ClaudeCraft : Métiers 2.0 complets, Givre recalibré, interface enrichie — avec les règles exactes.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="Nouveautés v0.28.0 — La Clauderie">
+<meta property="og:description" content="Toutes les nouveautés de la v0.28.0 de World of ClaudeCraft : Métiers 2.0 complets, Givre recalibré, interface enrichie — avec les règles exactes.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.28.0.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.28.0.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') === 'en') location.replace('v0.28.0.en.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" data-guild-nav data-current="news" aria-label="Navigation du site"></nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Notes de version</p>
+    <h1>Nouveautés <span class="v">v0.28.0</span></h1>
+    <p class="lede">Les Métiers 2.0 sont enfin complets : la récolte produit de vrais matériaux, 54 recettes arrivent avec leurs maîtres de métier — pendant que la Cryomancie du Mage dégonfle et que les barrières se mettent à scaler. Plus une interface enrichie et un client plus endurant. Clique sur une bulle pour les règles détaillées.</p>
+    <div class="meta">
+      <span><b>Publiée</b> le 20 juil. 2026</span>
+      <span><b>Depuis</b> la v0.27.2</span>
+      <span><b>Métiers, équilibrage</b> &amp; interface</span>
+    </div>
+    <div class="hint">💡 Clique sur une nouveauté pour ouvrir ses règles détaillées — et sur les <span data-codex="term|proc">mots soulignés</span> pour leur définition.</div>
+  </header>
+  <!-- 1 MÉTIERS 2.0 -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Métiers 2.0 : la boucle est bouclée</h2></div>
+    <p class="sec-sub">La progression annoncée avec les Métiers 2.0 de la v0.27.0 est désormais complète : on récolte, on apprend par paliers auprès de maîtres installés dans le monde, on fabrique — et l'économie suit. La page Métiers du site se recalcule toute seule sur ces nouvelles données.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="gather" tabindex="0" role="button" aria-label="Détails : la récolte donne de vrais matériaux">
+        <h3>La récolte devient réelle <span class="chip c-new">Nouveau</span></h3>
+        <p>Les nœuds du monde produisent enfin de vrais matériaux — <span data-codex="item|Copper Ore">Copper Ore</span>, <span data-codex="item|Silverleaf Herb">Silverleaf Herb</span>, <span data-codex="item|Rough Hide">Rough Hide</span>… — avec <strong class="hl">veines immaculées</strong> et <strong class="hl">événements de récolte rares</strong>.</p>
+        <span class="more-link">Matériaux, veines et événements</span>
+      </div>
+      <div class="card more" data-detail="recipes" tabindex="0" role="button" aria-label="Détails : recettes, maîtres de métier et paliers">
+        <h3>De 21 à 75 recettes <span class="chip c-new">Nouveau</span></h3>
+        <p><strong class="hl">54 recettes</strong> arrivent d'un coup — 9 par métier pour six métiers — enseignées <strong class="hl">par paliers</strong> par six nouveaux maîtres de métier, et une Guilde des Métiers qui se présente par lettre.</p>
+        <span class="more-link">Paliers, maîtres et lettre de guilde</span>
+      </div>
+      <div class="card">
+        <h3>À retenir</h3>
+        <ul>
+          <li><span data-codex="item|Silkspun Satchel">Silkspun Satchel</span> : le premier sac fabricable (<strong class="hl">10 emplacements</strong>, couture).</li>
+          <li>Potions de soin et de mana, élixirs et neuf plats de cuisine rejoignent l'économie.</li>
+          <li>La fenêtre de fabrication affiche le métier, les exigences de recette, les résultats <strong class="hl">Masterwork</strong> et la <strong class="hl">signature de l'artisan</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 ÉQUILIBRAGE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Le Givre recalibré &amp; planchers de spé</h2></div>
+    <p class="sec-sub">Après le Guerrier Fureur en v0.27.2, c'est au tour du Mage Givre de voir ses multiplicateurs empilés dégonfler — pendant que les planchers de puissance passifs des spécialisations sont restaurés pour les neuf classes.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="frost" tabindex="0" role="button" aria-label="Détails : les nerfs de la Cryomancie">
+        <h3>Cryomancie : les procs dégonflent <span class="chip c-bal">Équilibrage</span></h3>
+        <p>Le <span data-codex="ability|Winterlash">Winterlash</span> instantané de <span data-codex="ability|Brain Freeze">Brain Freeze</span> ne tape plus <strong class="hl">+30 %</strong>, <span data-codex="ability|Brittle Ruin">Brittle Ruin</span> perd ses <strong class="hl">+20 %</strong> de dégâts critiques et <span data-codex="ability|Frozen Orb">Frozen Orb</span> passe à <strong class="hl">45 s</strong> de cooldown.</p>
+        <span class="more-link">Le détail des quatre nerfs</span>
+      </div>
+      <div class="card more" data-detail="barriers" tabindex="0" role="button" aria-label="Détails : les barrières du Mage re-budgétées">
+        <h3>Les barrières scalent enfin <span class="chip c-bal">Équilibrage</span></h3>
+        <p><span data-codex="ability|Frostveil">Frostveil</span> et <span data-codex="ability|Blazing Barrier">Blazing Barrier</span> absorbent moins en base (<strong class="hl">50</strong>) mais gagnent <strong class="hl">+50 % de la puissance des sorts</strong>, en trois rangs. <span data-codex="talent|Shifting Ward">Shifting Ward</span> remplace Temporal Rift.</p>
+        <span class="more-link">Nouveaux rangs et talents</span>
+      </div>
+      <div class="card">
+        <h3>À retenir</h3>
+        <ul>
+          <li><span data-codex="ability|Icebind">Icebind</span> : le root <strong class="hl">casse désormais aux dégâts cumulés</strong> — 15 % des PV max de la cible, entre 20 et 60.</li>
+          <li><span data-codex="talent|Battle Rhythm">Battle Rhythm</span> (Guerrier) devient purement ressource : <strong class="hl">plus de +5 % de dégâts</strong>, la rage bonus reste.</li>
+          <li>Les transitions scriptées de <span data-codex="mob|Nythraxis">Nythraxis</span> ne cassent plus via un simple retrait de contrôle.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 INTERFACE & SOCIAL -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Interface &amp; social</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>Une troisième barre d'action <span class="chip c-util">Interface</span></h3>
+        <ul>
+          <li>Une <strong class="hl">3ᵉ barre d'action</strong> sur desktop, et des pages d'action étendues sur mobile.</li>
+          <li>Grimoire et fenêtre Social passent en <strong class="hl">format paysage élargi</strong>.</li>
+          <li>Le World Market filtre désormais aussi la rareté <strong class="hl">Légendaire</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Le chat prend des couleurs</h3>
+        <ul>
+          <li>Les noms de joueurs sont <strong class="hl">colorés par classe</strong> dans le chat, avec un badge <strong class="hl">streamer vérifié</strong>.</li>
+          <li>Survoler un joueur affiche un <strong class="hl">tooltip d'identité</strong> avec les détails du personnage.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Des garde-fous bienvenus</h3>
+        <ul>
+          <li>La résurrection au <strong class="hl">soigneur d'esprit</strong> et les achats en <strong class="hl">Delve Marks</strong> demandent confirmation.</li>
+          <li>Le ready-check résume qui n'a <strong class="hl">pas répondu</strong> ou n'est pas prêt.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 FIABILITÉ, RENDU & AUDIO -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Fiabilité, rendu &amp; audio</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>Un client plus endurant</h3>
+        <ul>
+          <li>Audio d'ambiance et nameplates optimisés ; la grille spatiale se <strong class="hl">recycle</strong> et sert aux alliés des mécaniques de monstres.</li>
+          <li>Les chargements du démarrage (glTF, HDR, textures) <strong class="hl">réessaient</strong> sur échec passager ; l'overlay de reconnexion affiche tentatives et délais.</li>
+          <li>Firefox : la caméra <strong class="hl">tourne de nouveau</strong> après une sortie forcée du pointer-lock.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Artisan Row prend forme</h3>
+        <ul>
+          <li>L'allée des artisans et les stations de métier reçoivent leurs <strong class="hl">modèles décoratifs dédiés</strong>, avec marqueurs sur la carte.</li>
+          <li>Les armes jusque-là sans modèle porté utilisent enfin la <strong class="hl">bonne variante en main</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Du son partout</h3>
+        <ul>
+          <li>Le Card Duel gagne ses effets sonores : <strong class="hl">mélange, révélation, pose, manche et résultat</strong>.</li>
+          <li>Les mannequins d'entraînement gardent le <strong class="hl">signal de critique</strong> sans hurler comme des créatures blessées.</li>
+          <li>Le bot Discord répare les <strong class="hl">suffixes de niveau composés</strong> dans les pseudos synchronisés.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compilé pour <strong>La Clauderie</strong> — données et règles issues des notes de version officielles v0.28.0.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← Toutes les mises à jour</a> · <a href="../index.html">Accueil</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    gather: {
+      title: "La récolte devient réelle",
+      summary: "Les nœuds de récolte du monde produisent désormais de vrais matériaux de métier — ceux-là mêmes qu'exigent les 75 recettes.",
+      body: `
+        <h4>Ce qui sort des nœuds</h4>
+        <ul>
+          <li>Minerai : <span data-codex="item|Copper Ore">Copper Ore</span>, <span data-codex="item|Iron Ore">Iron Ore</span> — bois : <span data-codex="item|Ironbark Log">Ironbark Log</span> — herbes : <span data-codex="item|Silverleaf Herb">Silverleaf Herb</span> — peaux : <span data-codex="item|Rough Hide">Rough Hide</span> — soie : <span data-codex="item|Spider Silk">Spider Silk</span>.</li>
+          <li>Plus les réactifs d'atelier qui les accompagnent : <span data-codex="item|Smithing Flux">Smithing Flux</span>, <span data-codex="item|Spool of Thread">Spool of Thread</span>, <span data-codex="item|Glass Vial">Glass Vial</span>, <span data-codex="item|Cooking Salt">Cooking Salt</span>…</li>
+        </ul>
+        <h4>Veines immaculées &amp; événements rares</h4>
+        <ul>
+          <li>Certaines veines sont <b>immaculées</b> (pristine) et donnent les variantes rares — <span data-codex="item|Pristine Hide">Pristine Hide</span>, <span data-codex="item|Pristine Silk">Pristine Silk</span>, <span data-codex="item|Pristine Venom Gland">Pristine Venom Gland</span> — qu'exigent les recettes du haut du registre.</li>
+          <li>Des <b>événements de récolte rares</b> peuvent se déclencher sur un nœud ; la simulation est déterministe et couverte par les tests en ligne.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">La page Récolte &amp; Métiers du site se régénère automatiquement à partir de ces données — nœuds, tables et recettes y sont déjà.</p>`
+    },
+    recipes: {
+      title: "75 recettes, six maîtres et une lettre de guilde",
+      summary: "Le registre passe de 21 à 75 recettes, enseignées par paliers de compétence (0 à 50) par des maîtres de métier installés dans le monde.",
+      body: `
+        <h4>Les six nouveaux maîtres de métier</h4>
+        <ul>
+          <li><span data-codex="npc|Forgemistress Darva">Forgemistress Darva</span> (armes), <span data-codex="npc|Weaver Ottilie">Weaver Ottilie</span> (couture), <span data-codex="npc|Tanner Hesk">Tanner Hesk</span> (cuir), <span data-codex="npc|Alchemist Verane">Alchemist Verane</span> (alchimie), <span data-codex="npc|Cook Marlow">Cook Marlow</span> (cuisine) et <span data-codex="npc|Tinker Gizzel">Tinker Gizzel</span> (ingénierie).</li>
+          <li>Stations et maîtres sont <b>placés dans le monde</b> avec marqueurs sur la carte ; les stations mobiles se comportent correctement.</li>
+        </ul>
+        <h4>Paliers et antériorité</h4>
+        <ul>
+          <li>Les formateurs enseignent par <b>exigences de palier</b> : 9 recettes par métier, étagées de 0 à 50 de compétence.</li>
+          <li><b>Antériorité</b> : les personnages qui connaissaient déjà des recettes éligibles les conservent, sans repasser par le formateur.</li>
+        </ul>
+        <h4>La Guilde des Métiers</h4>
+        <ul>
+          <li>L'intégration passe par une <b>lettre reçue en jeu</b> qui présente la Guilde des Métiers.</li>
+        </ul>
+        <h4>Ce qui se fabrique</h4>
+        <ul>
+          <li><b>9 armes</b>, du <span data-codex="item|Copper Bearded Axe">Copper Bearded Axe</span> à l'<span data-codex="item|Arcanite War Axe">Arcanite War Axe</span>, et des pièces d'armure pour chaque archétype.</li>
+          <li>Le premier sac fabricable : <span data-codex="item|Silkspun Satchel">Silkspun Satchel</span> (10 emplacements).</li>
+          <li><b>9 potions et élixirs</b> (lignées Silverleaf, Goldleaf et Sunpetal, <span data-codex="item|Elixir of the Boar">Elixir of the Boar</span>, <span data-codex="item|Venomfire Elixir">Venomfire Elixir</span>…) et <b>9 plats</b>, du <span data-codex="item|Pan-Seared River Perch">Pan-Seared River Perch</span> au <span data-codex="item|Marlow's Grand Roast">Marlow's Grand Roast</span>.</li>
+        </ul>`
+    },
+    frost: {
+      title: "Cryomancie : la pile de multiplicateurs dégonfle",
+      summary: "Plusieurs multiplicateurs s'empilaient sur les mêmes casts de Givre — le kit garde tous ses procs, ils ne se cumulent simplement plus en burst démesuré.",
+      body: `
+        <h4>Les quatre nerfs</h4>
+        <ul>
+          <li><span data-codex="ability|Brain Freeze">Brain Freeze</span> : le <span data-codex="ability|Winterlash">Winterlash</span> rendu instantané n'inflige <b>plus +30 % de dégâts</b> — il reste instantané et sans cooldown.</li>
+          <li><span data-codex="ability|Brittle Ruin">Brittle Ruin</span> : toujours <b>50 % de chances de critique</b> contre les cibles gelées, mais ces critiques ne font plus <b>+20 % de dégâts</b>.</li>
+          <li><span data-codex="ability|Frozen Orb">Frozen Orb</span> : cooldown <b>30 → 45 s</b>, appris au niveau <b>15</b> (au lieu de 12) ; chaque pulse génère désormais <b>un Icicle</b> (au lieu de Fingers of Frost).</li>
+          <li><span data-codex="ability|Icebind">Icebind</span> : le root de 8 s <b>casse aux dégâts cumulés</b> — 15 % des PV max de la cible, plancher 20, plafond 60. Fini le pack gelé qu'on bombarde 8 s entières.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Dans la même veine, les planchers de puissance passifs des spécialisations sont restaurés pour les neuf classes : l'identité de spé garde son poids après la transition Talents 2.0.</p>`
+    },
+    barriers: {
+      title: "Les barrières du Mage : plus petites, mais elles scalent",
+      summary: "Les barrières personnelles des trois écoles sont re-budgétées : absorption de base réduite, mais un vrai coefficient de puissance des sorts — la barrière grandit enfin avec l'équipement.",
+      body: `
+        <h4>Frostveil &amp; Blazing Barrier</h4>
+        <ul>
+          <li>Rang 1 : absorbe <b>50</b> (au lieu de 130) pour <b>45 mana</b> (au lieu de 90), plus <b>50 % de ta puissance des sorts</b>.</li>
+          <li>Rangs 2 et 3 (niveaux <b>12</b> et <b>18</b>) : 90 puis 130 d'absorption de base, même coefficient.</li>
+        </ul>
+        <h4>Temporal Barrier</h4>
+        <ul>
+          <li>La barrière de la Chronomancie gagne un coefficient de <b>25 % de la puissance des sorts</b>.</li>
+        </ul>
+        <h4>Les talents suivent</h4>
+        <ul>
+          <li><span data-codex="talent|Warded">Warded</span> : le soin à la casse passe de 39 fixe à <b>10 % de tes PV max</b>.</li>
+          <li><span data-codex="talent|Shifting Ward">Shifting Ward</span> remplace Temporal Rift (rangée niv. 8) : poser ta barrière personnelle <b>brise les roots</b> qui t'affectent.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Le guide Spé &amp; talents de la page Builds est mis à jour en conséquence pour le Mage et le Guerrier.</p>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/nav.js"></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>

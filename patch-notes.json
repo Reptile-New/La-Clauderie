@@ -2,6 +2,28 @@
   "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français). Champ page_en : la page de notes en anglais (notes/vX.Y.Z.en.html) ; la version anglaise du site l'utilise.",
   "versions": [
     {
+      "version": "v0.28.0",
+      "date": "2026-07-20",
+      "titre": "Les Métiers 2.0 complets et le Givre recalibré",
+      "resume": "La boucle des métiers est enfin complète : la récolte produit de vrais matériaux (veines immaculées et événements rares compris), 54 recettes arrivent avec six maîtres de métier, des paliers de formation et une Guilde des Métiers qui se présente par lettre. Côté classes, la Cryomancie du Mage voit ses multiplicateurs empilés dégonfler et les barrières scalent désormais avec la puissance des sorts, pendant que l'interface gagne une troisième barre d'action, des tooltips de joueurs, un chat coloré par classe et des confirmations bienvenues.",
+      "temps_forts": [
+        "Métiers 2.0 : la récolte donne de vrais matériaux, le registre passe de 21 à 75 recettes, six maîtres de métier s'installent",
+        "Givre : Frozen Orb à 45 s de cooldown, plus de +30 % sur le Winterlash instantané ni de +20 % de crit sur Brittle Ruin",
+        "Les barrières du Mage re-budgétées : 50 en base mais +50 % de la puissance des sorts, en trois rangs — Shifting Ward remplace Temporal Rift",
+        "Interface : 3e barre d'action, tooltips de joueurs, chat coloré par classe, confirmations et ready-check détaillé"
+      ],
+      "page": "notes/v0.28.0.html",
+      "titre_en": "Professions 2.0 complete and Frost recalibrated",
+      "resume_en": "The professions loop is finally complete: gathering yields real materials (pristine veins and rare events included), 54 recipes arrive with six profession masters, training tiers and a Professions Guild that introduces itself by letter. On the class side, the Mage's Cryomancy sees its stacked multipliers deflate and barriers now scale with spell power, while the interface gains a third action bar, player tooltips, class-colored chat and welcome confirmations.",
+      "temps_forts_en": [
+        "Professions 2.0: gathering yields real materials, the registry grows from 21 to 75 recipes, six profession masters settle in",
+        "Frost: Frozen Orb on a 45s cooldown, no more +30% on instant Winterlash or +20% crit damage on Brittle Ruin",
+        "Mage barriers re-budgeted: 50 base but +50% of spell power, across three ranks — Shifting Ward replaces Temporal Rift",
+        "Interface: 3rd action bar, player tooltips, class-colored chat, confirmations and a detailed ready check"
+      ],
+      "page_en": "notes/v0.28.0.en.html"
+    },
+    {
       "version": "v0.27.2",
       "date": "2026-07-19",
       "titre": "Le Guerrier Fureur recalibré et l'iPhone stabilisé",

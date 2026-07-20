@@ -264,7 +264,7 @@ const BUILDS = {
     ["Pursuit", "niv. 5", { fr: "+30 % vitesse 6 s à chaque kill — en donjon tu enchaînes les cibles du pack sans jamais t'arrêter.", en: "+30% speed for 6s on every kill — in dungeons you chain pack targets without ever stopping." }],
     ["Victory Rush", "niv. 8", { fr: "après chaque kill, ta prochaine frappe te soigne : en donjon, ça tombe sur chaque pack.", en: "after every kill, your next strike heals you: in dungeons, that procs on every single pack." }],
     ["Piercing Howl", "niv. 11", { fr: "le slow AoE (−50 % à 15 yd pendant 8 s) — contrôle les packs qui bougent sans coûter ton GCD de stun.", en: "the AoE slow (−50% within 15 yd for 8s) — controls scattering packs without costing you a stun." }],
-    ["Battle Rhythm", "niv. 14", { fr: "une capacité sur trois génère +20 % de rage et tape plus fort : plus de Red Harvest à 80 rage, plus d'Enrage garanti.", en: "every third ability generates 20% more rage and hits harder: more 80-rage Red Harvests, more guaranteed Enrage." }],
+    ["Battle Rhythm", "niv. 14", { fr: "une capacité sur trois génère +20 % de rage (v0.28 retire le bonus de dégâts) : plus de Red Harvest à 80 rage, plus d'Enrage garanti.", en: "every third ability generates 20% more rage (v0.28 removed the damage bonus): more 80-rage Red Harvests, more guaranteed Enrage." }],
     ["Recklessness", "niv. 17", { fr: "+50 % de génération de rage sur la fenêtre : tu enchaînes les Red Harvest — le burst de boss du build.", en: "+50% rage generation for the window: you chain Red Harvests — the build's boss burst." }],
     ["Bladestorm", "niv. 20", { fr: "le capstone AoE : tourbillon d'acier à 8 yd, avec Bladed Gyre tu domines les packs de donjon. Colossal Might si tu ne joues que du monocible (plafonné v0.27.2 : 10 s de réduction de CD max par 30 s).", en: "the AoE capstone: a whirling storm of steel within 8 yd — with Bladed Gyre you own dungeon packs. Colossal Might if you only ever play single-target (capped in v0.27.2: at most 10s of CD reduction per 30s)." }]
    ],
@@ -550,8 +550,8 @@ const BUILDS = {
   dps: {
    spec: "Pyromancy (fire)",
    mastery: { fr: "Ignition (v0.27) : tes crits de sorts brûlent la cible pour 40 % des dégâts sur 6 s (cumulable), +2 % crit", en: "Ignition (v0.27): your spell crits burn the target for 40% of the damage over 6s (stacking), +2% crit" },
-   pourquoi: { fr: "La refonte v0.27 fait tout tourner autour du crit : chaque critique nourrit Ignition ET rapproche un Hot Streak (2 crits consécutifs = Pyrelance ou Flamestrike instant et gratuit). Cryomancie est l'alternative contrôle.",
-               en: "The v0.27 rework makes everything revolve around crit: every critical feeds Ignition AND brings a Hot Streak closer (2 consecutive crits = a free instant Pyrelance or Flamestrike). Cryomancy is the control-focused alternative." },
+   pourquoi: { fr: "La refonte v0.27 fait tout tourner autour du crit : chaque critique nourrit Ignition ET rapproche un Hot Streak (2 crits consécutifs = Pyrelance ou Flamestrike instant et gratuit). Cryomancie reste l'alternative contrôle (recalibrée v0.28 : ses procs ne s'empilent plus).",
+               en: "The v0.27 rework makes everything revolve around crit: every critical feeds Ignition AND brings a Hot Streak closer (2 consecutive crits = a free instant Pyrelance or Flamestrike). Cryomancy remains the control-focused alternative (recalibrated in v0.28: its procs no longer stack)." },
    stats: { fr: "Intelligence > Crit > Hâte", en: "Intellect > Crit > Haste" },
    talents: [
     ["Ice Floes", "niv. 5", { fr: "tes deux prochains sorts à incantation se lancent en mouvement — Cinderbolt sans t'arrêter.", en: "your next two cast-time spells can be cast while moving — Cinderbolt without stopping." }],
@@ -581,7 +581,7 @@ const BUILDS = {
    stats: { fr: "Intelligence > Hâte > Esprit", en: "Intellect > Haste > Spirit" },
    talents: [
     ["Blink While Casting", "niv. 5", { fr: "Flickerstep en plein cast sans l'interrompre : sors de l'AoE sans perdre ton soin.", en: "Flickerstep mid-cast without interrupting it: get out of the AoE without losing your heal." }],
-    ["Temporal Rift", "niv. 8", { fr: "toutes les 20 s, le prochain stun/root/silence sur toi est purgé instantanément — un heal silence, c'est un wipe.", en: "every 20s, the next stun/root/silence on you is cleansed instantly — a silenced healer is a wipe." }],
+    ["Warded", "niv. 8", { fr: "sous ta barrière tu subis −15 % de dégâts, et sa casse te soigne 10 % de tes PV max (v0.28) — Temporal Rift n'existe plus, la survie passive prend le relais.", en: "while your barrier holds you take −15% damage, and its break heals you for 10% max HP (v0.28) — Temporal Rift is gone, passive survivability takes over." }],
     ["Snap Bewitch", "niv. 11", { fr: "Bewitch instantané (CD 20 s) : tu CC l'add qui fonce sur toi sans arrêter de soigner.", en: "instant Bewitch (20s CD): you CC the add charging you without stopping your healing." }],
     ["Racing Mind", "niv. 14", { fr: "ton prochain sort à incantation devient instantané : le gros soin d'urgence, sans cast.", en: "your next cast-time spell becomes instant: the big emergency heal, with no cast." }],
     ["Mass Barrier", "niv. 17", { fr: "un bouclier sur toi et tous les alliés à 30 yd — à poser juste avant l'AoE annoncée.", en: "a shield on you and every ally within 30 yd — drop it right before the telegraphed AoE." }],
