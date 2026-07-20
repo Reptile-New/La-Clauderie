@@ -14,6 +14,7 @@ Site statique, simple : un calendrier de guilde, le Discord, et les nouveautés 
 | `metiers.html` | Récolte & Métiers : où récolter (minerai/bois/herbes/pêche) par zone et toutes les recettes par métier (bloc `CRAFT` recalculé automatiquement par `update-bis.yml` → `scripts/build_craft.py`, données embarquées) + guide Enchantement éditorial |
 | `assets/nav.js` | La barre de navigation de TOUTES les pages (site + Codex) — source de vérité unique des onglets |
 | `assets/codex-popup.js` | Fiches incrustées : ouvre objets, sorts, talents, monstres, PNJ, quêtes et glossaire **dans la page**, à partir des données du Codex (voir plus bas) |
+| `woc.html` | Tuto « Acheter des $WOC » : wallet Solana, achat de SOL/USDC, swap vers le token officiel, liaison en jeu et Claudium à ~20 % de remise — éditorial, sourcé sur la doc du jeu (README + docs/claudium-store.md, v0.27) |
 | `admin.html` | Espace officiers : gérer le calendrier, les membres et les faits d'armes |
 | `patch-notes.html` | Historique de **toutes** les mises à jour du jeu, la plus récente en premier |
 | `notes/vX.Y.Z.html` | Les nouveautés détaillées d'une version (une page par mise à jour) |

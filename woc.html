@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Acheter des $WOC — La Clauderie</title>
+<meta name="description" content="Le tuto pas à pas de la guilde pour acheter des $WOC (le token Solana de World of ClaudeCraft) et payer son Claudium moins cher.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="Acheter des $WOC — La Clauderie">
+<meta property="og:description" content="Le tuto pas à pas de la guilde pour acheter des $WOC et payer son Claudium moins cher.">
+<meta property="og:url" content="https://laclauderie.fr/woc.html">
+<link rel="canonical" href="https://laclauderie.fr/woc.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --heal: #58c46a; --dps: #e5544a; --arcane: #58b6c9;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(88,182,201,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 880px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  .hero { padding: clamp(36px, 6vw, 60px) 0 clamp(18px, 3vw, 26px); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 12px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.1rem, 6vw, 3.1rem); line-height: 1.05; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.15rem); max-width: 62ch; margin: 0; }
+
+  .notice { display: flex; gap: 12px; align-items: flex-start; background: color-mix(in srgb, var(--dps) 9%, transparent); border: 1px solid color-mix(in srgb, var(--dps) 35%, transparent); border-radius: 11px; padding: 14px 16px; margin: 22px 0 0; font-size: 0.92rem; color: var(--text); }
+  .notice.ok { background: color-mix(in srgb, var(--heal) 8%, transparent); border-color: color-mix(in srgb, var(--heal) 30%, transparent); }
+  .notice b { color: var(--gold-bright); }
+
+  .steps { padding: clamp(20px, 4vw, 34px) 0 46px; display: grid; gap: 14px; }
+  .step { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 13px; padding: 20px clamp(16px,3vw,24px); }
+  .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .step-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; flex: none; }
+  .step h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; margin: 0; }
+  .step p { color: var(--dim); font-size: 0.94rem; margin: 8px 0 0; }
+  .step ul, .step ol { margin: 10px 0 0; padding-left: 1.15em; color: var(--dim); font-size: 0.93rem; }
+  .step li { margin: 6px 0; }
+  .step li::marker { color: var(--gold); }
+  .step b, .step strong { color: var(--text); font-weight: 600; }
+  .hl { color: var(--gold-bright); }
+
+  .addr { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; background: #0e1118; border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; }
+  .addr code { font-family: var(--font-mono); font-size: 0.78rem; color: var(--gold-bright); word-break: break-all; }
+  .addr button { flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); border-radius: 7px; padding: 6px 12px; font: 600 0.78rem var(--font); cursor: pointer; }
+  .addr button:hover { color: var(--gold-bright); border-color: var(--gold); }
+
+  .faq { border-top: 1px solid var(--line-soft); padding: 26px 0 40px; }
+  .faq h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; margin: 0 0 14px; }
+  .faq details { border-bottom: 1px solid var(--line-soft); padding: 10px 0; }
+  .faq summary { cursor: pointer; font-weight: 600; color: var(--text); }
+  .faq summary:hover { color: var(--gold-bright); }
+  .faq p { color: var(--dim); font-size: 0.93rem; margin: 8px 0 4px; }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 26px 0 52px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" data-guild-nav data-current="" aria-label="Navigation du site"></nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow" data-en="World of ClaudeCraft · Guild guide">World of ClaudeCraft · Guide de la guilde</p>
+    <h1 data-en="Buying <span class='v'>$WOC</span>, step by step">Acheter des <span class="v">$WOC</span>, pas à pas</h1>
+    <p class="lede" data-en="$WOC is the game's community token on the Solana blockchain. Its main use for us: paying for Claudium (the cosmetic currency) at a service-quoted discount of about 20%. Here is the guild's honest, no-jargon walkthrough.">$WOC est le token communautaire du jeu, sur la blockchain Solana. Son intérêt principal pour nous : payer le Claudium (la monnaie cosmétique) avec une remise d'environ 20 % calculée par le jeu. Voici le tuto maison, sans jargon.</p>
+    <div class="notice">
+      <span>⚠️</span>
+      <div data-en="<b>Read me first.</b> None of this is required to play: the game is free, cosmetics give zero combat power, and the card payment works fine without any crypto. $WOC is a crypto token — its price moves, and nobody (least of all the guild) guarantees anything. Never spend more than you are comfortable losing, and never share your wallet's secret recovery phrase with anyone."><b>À lire d'abord.</b> Rien de tout ceci n'est nécessaire pour jouer : le jeu est gratuit, les cosmétiques ne donnent aucune puissance en combat, et le paiement par carte marche très bien sans crypto. $WOC est un token crypto — son cours bouge, et personne (surtout pas la guilde) ne garantit quoi que ce soit. Ne dépense jamais plus que ce que tu peux te permettre de perdre, et ne partage ta phrase secrète de récupération avec personne.</div>
+    </div>
+  </header>
+
+  <section class="steps">
+    <div class="step">
+      <div class="step-head"><span class="step-num">00</span><h2 data-en="What $WOC is — and the ONLY official address">C'est quoi, $WOC — et la SEULE adresse officielle</h2></div>
+      <p data-en="$WOC is World of ClaudeCraft's community token on <b>Solana</b>. Holding some in a linked wallet gives holder flair and Daily Rewards perks, and paying Claudium in $WOC gets the ~20% discount. On Solana anyone can create a token named « WOC » — scammers do. The only token that counts is the one at this exact address:">$WOC est le token communautaire de World of ClaudeCraft, sur <b>Solana</b>. En détenir dans un wallet lié donne un flair de holder et des bonus de Daily Rewards, et payer son Claudium en $WOC déclenche la remise d'environ 20 %. Sur Solana, n'importe qui peut créer un token nommé « WOC » — les arnaqueurs ne s'en privent pas. Le seul qui compte est celui à cette adresse exacte :</p>
+      <div class="addr">
+        <code id="wocAddr">3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth</code>
+        <button type="button" id="copyAddr" data-en="Copy">Copier</button>
+      </div>
+      <p data-en="Rule of thumb: <b>always paste this address</b> when searching the token, never trust a name-only search result.">Règle d'or : <b>colle toujours cette adresse</b> pour chercher le token, ne fais jamais confiance à une recherche par nom seul.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">01</span><h2 data-en="Install a Solana wallet">Installer un wallet Solana</h2></div>
+      <p data-en="The game recognises the standard Solana wallets: <b>Phantom</b>, <b>Solflare</b> or <b>Backpack</b>. Pick one, install it from its OFFICIAL site or app store, and follow its setup.">Le jeu reconnaît les wallets Solana standards : <b>Phantom</b>, <b>Solflare</b> ou <b>Backpack</b>. Choisis-en un, installe-le depuis son site OFFICIEL ou le store de ton téléphone, et suis sa création de compte.</p>
+      <ul>
+        <li data-en="On computer: browser extension. On phone: the wallet's app.">Sur ordinateur : l'extension navigateur. Sur téléphone : l'application du wallet.</li>
+        <li data-en="Write your <b>secret recovery phrase</b> on paper, keep it offline. Anyone who has it owns your funds — no support, no do-over.">Note ta <b>phrase secrète de récupération</b> sur papier, hors ligne. Qui la possède possède tes fonds — pas de SAV, pas de seconde chance.</li>
+        <li data-en="The game's wallet link is <b>non-custodial</b>: the game never holds your funds and linking requires no transaction approval.">La liaison avec le jeu est <b>non-custodiale</b> : le jeu ne détient jamais tes fonds, et lier le wallet ne demande d'approuver aucune transaction.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">02</span><h2 data-en="Fund it with SOL (or USDC)">L'alimenter en SOL (ou USDC)</h2></div>
+      <p data-en="To buy $WOC you first need something to swap. Two common routes:">Pour acheter du $WOC, il faut d'abord de quoi l'échanger. Deux chemins classiques :</p>
+      <ul>
+        <li data-en="<b>In-wallet purchase</b>: Phantom/Solflare/Backpack let you buy SOL or USDC by card directly in the wallet (via their payment partners — fees apply, identity check possible)."><b>Achat intégré au wallet</b> : Phantom/Solflare/Backpack permettent d'acheter du SOL ou de l'USDC par carte directement dans le wallet (via leurs partenaires de paiement — frais et vérification d'identité possibles).</li>
+        <li data-en="<b>Via an exchange</b> (Coinbase, Kraken, Binance…): buy SOL there, then withdraw it to your wallet's Solana address."><b>Via un exchange</b> (Coinbase, Kraken, Binance…) : achètes-y du SOL, puis retire-le vers l'adresse Solana de ton wallet.</li>
+        <li data-en="Keep a little <b>SOL for network fees</b> — they are tiny (fractions of a cent) but never zero.">Garde toujours un peu de <b>SOL pour les frais de réseau</b> — minuscules (des fractions de centime), mais jamais nuls.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">03</span><h2 data-en="Swap it for $WOC">L'échanger contre du $WOC</h2></div>
+      <p data-en="In your wallet, open the <b>Swap</b> tab, choose SOL (or USDC) as the source — and for the destination, <b>paste the official address above</b>. The wallet's built-in swap uses the big Solana exchanges under the hood; an aggregator like Jupiter works too, same rule: paste the address.">Dans ton wallet, ouvre l'onglet <b>Swap</b> (échanger), choisis SOL (ou USDC) comme source — et comme destination, <b>colle l'adresse officielle ci-dessus</b>. Le swap intégré du wallet passe par les grandes places d'échange de Solana ; un agrégateur comme Jupiter marche aussi, même règle : coller l'adresse.</p>
+      <ul>
+        <li data-en="Check the amount you'll receive before confirming; a huge « price impact » warning means something is off — stop.">Vérifie le montant reçu avant de confirmer ; un avertissement de « price impact » énorme veut dire que quelque chose cloche — arrête-toi.</li>
+        <li data-en="Start small the first time. A test swap costs almost nothing.">Commence petit la première fois. Un swap d'essai ne coûte presque rien.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">04</span><h2 data-en="Link the wallet in game">Lier le wallet en jeu</h2></div>
+      <p data-en="Since v0.27, the wallet connects <b>directly in the game</b> (shop / wallet settings):">Depuis la v0.27, le wallet se connecte <b>directement en jeu</b> (boutique / réglages wallet) :</p>
+      <ul>
+        <li data-en="<b>Browser</b>: your Wallet Standard extension (Phantom, Solflare, Backpack) pops up — approve the connection."><b>Navigateur</b> : ton extension (Phantom, Solflare, Backpack) s'ouvre — approuve la connexion.</li>
+        <li data-en="<b>Mobile</b>: encrypted deep links open Phantom or Solflare and come straight back to the game."><b>Mobile</b> : des liens directs chiffrés ouvrent Phantom ou Solflare et reviennent tout seuls dans le jeu.</li>
+        <li data-en="<b>Desktop app</b>: the game opens your browser with a one-time code; the signature returns to the app by itself."><b>Client desktop</b> : le jeu ouvre le navigateur avec un code éphémère ; la signature revient toute seule dans l'app.</li>
+        <li data-en="Not available on the native mobile app stores' builds and Steam — browser and desktop client are fine.">Indisponible sur les builds des stores mobiles et Steam — navigateur et client desktop, eux, y ont droit.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-num">05</span><h2 data-en="Pay your Claudium in $WOC (~20% off)">Payer son Claudium en $WOC (~20 % de remise)</h2></div>
+      <p data-en="In the Claudium shop, the purchase selector offers <b>Card, SOL, USDC and WOC</b>, with your wallet balance shown. Packs range from $4.99 to $99.99; the SOL/USDC/WOC amounts are quoted live from the USD price — and the <b>WOC rail carries the ~20% discount</b>. The buy button only lights up if your balance actually covers it.">Dans la boutique de Claudium, le sélecteur d'achat propose <b>Carte, SOL, USDC et WOC</b>, avec le solde de ton wallet affiché. Les packs vont de 4,99 $ à 99,99 $ ; les montants SOL/USDC/WOC sont cotés en direct depuis le prix en dollars — et le <b>paiement en WOC porte la remise d'environ 20 %</b>. Le bouton d'achat ne s'active que si ton solde couvre réellement l'achat.</p>
+      <div class="notice ok" style="margin-top:12px">
+        <span>💡</span>
+        <div data-en="Claudium is <b>one-way and cosmetic only</b>: skins, never combat power. Buy it for the look, not for an edge — there is none.">Le Claudium est <b>à sens unique et purement cosmétique</b> : des apparences, jamais de puissance. Achètes-en pour le style, pas pour un avantage — il n'y en a aucun.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <details>
+      <summary data-en="Do I need $WOC (or a wallet) to play?">Il me faut des $WOC (ou un wallet) pour jouer ?</summary>
+      <p data-en="No. The game is free, nothing here is required, and the card payment covers the shop without any crypto.">Non. Le jeu est gratuit, rien de tout ça n'est requis, et le paiement par carte couvre la boutique sans aucune crypto.</p>
+    </details>
+    <details>
+      <summary data-en="Is this pay-to-win?">C'est du pay-to-win ?</summary>
+      <p data-en="No — cosmetics never grant combat power. That's a hard rule of the game, not a promise.">Non — les cosmétiques ne donnent jamais de puissance en combat. C'est une règle dure du jeu, pas une promesse.</p>
+    </details>
+    <details>
+      <summary data-en="Someone in chat sent me a « WOC » link or asks for my recovery phrase…">Quelqu'un m'envoie un lien « WOC » en jeu ou me demande ma phrase de récupération…</summary>
+      <p data-en="Scam, 100% of the time. Nobody legitimate ever asks for your recovery phrase, and the only token address that counts is the one at the top of this page.">Arnaque, 100 % du temps. Personne de légitime ne demande jamais ta phrase de récupération, et la seule adresse de token qui compte est celle en haut de cette page.</p>
+    </details>
+    <details>
+      <summary data-en="Where does this info come from?">D'où viennent ces infos ?</summary>
+      <p data-en="From the game's official documentation and release notes (v0.27), checked at the time of writing. Crypto interfaces change fast — when in doubt, trust the game's own screens.">De la documentation officielle du jeu et des notes de version (v0.27), vérifiées au moment de la rédaction. Les interfaces crypto bougent vite — en cas de doute, fais confiance aux écrans du jeu lui-même.</p>
+    </details>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p data-en="Written for <strong>La Clauderie</strong> — not financial advice, just a guild helping its members.">Rédigé pour <strong>La Clauderie</strong> — pas un conseil financier, juste une guilde qui aide ses membres.</p>
+    <p style="margin-top:8px"><a href="index.html" data-en="Home">Accueil</a></p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("copyAddr").addEventListener("click", async () => {
+    const btn = document.getElementById("copyAddr");
+    const ok = (window.LANG === "en") ? "Copied!" : "Copié !";
+    const ko = (window.LANG === "en") ? "Copy failed" : "Échec de la copie";
+    try {
+      await navigator.clipboard.writeText(document.getElementById("wocAddr").textContent.trim());
+      btn.textContent = ok;
+    } catch (e) {
+      btn.textContent = ko;
+    }
+    setTimeout(() => { btn.textContent = (window.LANG === "en") ? "Copy" : "Copier"; }, 2000);
+  });
+</script>
+<script src="assets/nav.js"></script>
+<script src="assets/lang.js"></script>
+</body>
+</html>
