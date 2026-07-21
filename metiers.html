@@ -2589,8 +2589,8 @@ const CRAFT = {
         <div class="node fish">
           <h3><span class="ico">⚠️</span>${T('Métiers encore vides', 'Still-empty professions')}</h3>
           <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
-            '<b style="color:var(--text)">Inscription et Joaillerie n’ont toujours AUCUN contenu en v0.28</b> — pas une recette, pas un maître de métier dans les données du jeu, alors que la MAJ vient d’en distribuer partout ailleurs. Ils sont pourtant sélectionnables dans les paires : Arcanist (Inscription + Enchantement) n’a que l’enchantement de fonctionnel, Bladewright (Joaillerie + Armes) tourne à moitié. À savoir avant de s’engager — changer de paire coûte de plus en plus cher.',
-            '<b style="color:var(--text)">Inscription and Jewelcrafting STILL have no content in v0.28</b> — not one recipe, not one profession master in the game data, even though the patch just handed those out everywhere else. Yet they are selectable in pairs: Arcanist (Inscription + Enchanting) only has Enchanting working, Bladewright (Jewelcrafting + Weaponcrafting) runs at half power. Know this before committing — changing pairs gets ever more expensive.')}</p>
+            '<b style="color:var(--text)">Inscription et Joaillerie n’ont toujours AUCUN contenu en v0.28</b> — pas une recette, pas un maître de métier dans les données du jeu, alors que la MAJ vient d’en distribuer partout ailleurs. Ils sont pourtant sélectionnables dans les paires : Arcanist (Inscription + Enchantement) n’a que l’enchantement de doté de contenu — et encore, dans le moteur seulement (voir le guide plus bas) —, Bladewright (Joaillerie + Armes) tourne à moitié. À savoir avant de s’engager — changer de paire coûte de plus en plus cher.',
+            '<b style="color:var(--text)">Inscription and Jewelcrafting STILL have no content in v0.28</b> — not one recipe, not one profession master in the game data, even though the patch just handed those out everywhere else. Yet they are selectable in pairs: Arcanist (Inscription + Enchanting) only has Enchanting carrying content — and engine-side only at that (see the guide below) —, Bladewright (Jewelcrafting + Weaponcrafting) runs at half power. Know this before committing — changing pairs gets ever more expensive.')}</p>
         </div>
       </div>
     </div>`;
@@ -2601,14 +2601,22 @@ const CRAFT = {
   // le code du jeu, enchants connus d'office) : le pipeline build_craft.py ne
   // le voit pas. Ce guide est donc rédigé à la main, vérifié contre
   // data/ENCHANTS.json de la KB (identique de v0.27.2 à v0.28.0 — coûts et
-  // slots revérifiés au passage v0.28 ; la v0.28 n'ajoute ni formateur ni
-  // recette d'enchantement). À revérifier à chaque MAJ qui touche l'enchantement.
+  // slots revérifiés au passage v0.28). ATTENTION : en v0.28.0 le système
+  // n'est toujours PAS branché en jeu — enchanting.ts le dit (« not yet wired
+  // onto a server WS command or a dedicated UI window »), server/game.ts n'a
+  // aucun handler enchant/disenchant, src/ui/ n'a pas de fenêtre, et
+  // professions.ts exclut l'enchantement des stations physiques. Statut
+  // inchangé depuis la v0.24 (« construit dans le moteur, pas encore activé »).
+  // Retirer l'avertissement ci-dessous dès qu'une MAJ branche le système.
   function renderEnchant() {
     return `<div class="block">
       <div class="block-head"><h2>🪄 ${T('Enchantement', 'Enchanting')}</h2><span class="lvl">${T('guide v0.28', 'v0.28 guide')}</span><span class="sub">${T('pas de recettes : tout est connu d’office', 'no recipes: everything is known from the start')}</span></div>
+      <p style="color:var(--dim);font-size:0.93rem;margin:8px 0 0">⚠️ ${T(
+        '<b style="color:var(--text)">Toujours pas activé en jeu en v0.28</b> : le désenchantement et la pose d’enchants existent dans le moteur (règles ci-dessous, vérifiées dans le code) mais aucune interface, commande ni station ne les expose encore. Si « ça ne marche pas », c’est normal — personne ne peut enchanter pour l’instant. Statut inchangé depuis la v0.24 (« construit dans le moteur, pas encore activé »).',
+        '<b style="color:var(--text)">Still not activated in game as of v0.28</b>: disenchanting and applying enchants exist in the engine (rules below, verified in the code) but no interface, command or station exposes them yet. If “it doesn’t work”, that’s expected — nobody can enchant for now. Status unchanged since v0.24 (“built into the engine, not yet activated”).')}</p>
       <p style="color:var(--dim);font-size:0.93rem;margin:8px 0 0">${T(
-        'Le métier le plus simple à monter : rien à apprendre, pas de formateur — même en v0.28, où les recettes des autres métiers passent désormais par les maîtres. Désenchanter et enchanter donnent chacun <b style="color:var(--text)">+1 point par action</b> — pas de recettes grises, pas de gain dégressif. Se prend en majeur avec l’Inscription (titre Arcanist) via la quête de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook.',
-        'The easiest profession to level: nothing to learn, no trainer — even in v0.28, now that other professions’ recipes go through the masters. Disenchanting and enchanting each grant <b style="color:var(--text)">+1 point per action</b> — no grey recipes, no diminishing gains. Taken as a major alongside Inscription (Arcanist title) via <span data-codex="npc|Smith Haldren">Smith Haldren</span>’s quest in Eastbrook.')}</p>
+        'Une fois activé, ce sera le métier le plus simple à monter : rien à apprendre, pas de formateur — même en v0.28, où les recettes des autres métiers passent désormais par les maîtres. Désenchanter et enchanter donnent chacun <b style="color:var(--text)">+1 point par action</b> — pas de recettes grises, pas de gain dégressif. Se prend en majeur avec l’Inscription (titre Arcanist) via la quête de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook.',
+        'Once activated, it will be the easiest profession to level: nothing to learn, no trainer — even in v0.28, now that other professions’ recipes go through the masters. Disenchanting and enchanting each grant <b style="color:var(--text)">+1 point per action</b> — no grey recipes, no diminishing gains. Taken as a major alongside Inscription (Arcanist title) via <span data-codex="npc|Smith Haldren">Smith Haldren</span>’s quest in Eastbrook.')}</p>
       <div class="cols">
         <div class="node herb">
           <h3><span class="ico">✨</span>${T('Les matériaux', 'The materials')}</h3>
