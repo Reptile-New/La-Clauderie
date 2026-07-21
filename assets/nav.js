@@ -23,6 +23,7 @@
     { id: 'home',    file: 'index.html',       fr: 'Accueil',       en: 'Home' },
     { id: 'bis',     file: 'bis.html',         fr: '⚔️ Builds',      en: '⚔️ Builds' },
     { id: 'metiers', file: 'metiers.html',     fr: '🌿 Métiers',     en: '🌿 Professions' },
+    { id: 'pvp',     file: 'pvp.html',         fr: '🏆 PvP',         en: '🏆 PvP' },
     { id: 'news',    file: 'patch-notes.html', fr: '📜 Nouveautés',  en: "📜 What's new" },
     { id: 'codex',   file: null,               fr: '📚 Codex',       en: '📚 Codex' }
   ];

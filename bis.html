@@ -80,6 +80,17 @@
   .role-btn.on.r-dps { border-color: var(--dps); color: var(--dps); background: color-mix(in srgb, var(--dps) 12%, transparent); }
   .role-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
+  /* Sous-onglets de spécialisation (quand une classe a plusieurs spés pour un rôle) */
+  .spec-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin: 0 0 14px; }
+  .spec-btn {
+    border: 1px solid var(--line); background: var(--bg-card); color: var(--dim);
+    padding: 6px 14px; border-radius: 16px; cursor: pointer; font-weight: 600; font-size: 0.84rem;
+    font-family: inherit; transition: border-color .12s, color .12s;
+  }
+  .spec-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .spec-btn.on { border-color: var(--gold); color: var(--gold-bright); background: color-mix(in srgb, var(--gold) 12%, transparent); }
+  .spec-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
   /* Liste BiS */
   .bis { display: grid; gap: 9px; padding-bottom: 20px; }
   .slot-row {
@@ -179,7 +190,7 @@
   <header class="page">
     <p class="eyebrow" data-en="Class guide · Patch v0.28.0">Guide de classe · Patch v0.28.0</p>
     <h1>Builds</h1>
-    <p class="lede" data-en="Pick your class, then your role: the recommended specialisation and talents (with the why), the rotation, then the best gear in the game — set bonuses included, both rings covered. Click an item, talent or spell to open its sheet without leaving the page.">Choisis ta classe puis ton rôle : la spécialisation et les talents recommandés (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
+    <p class="lede" data-en="Pick your class, your role — and your specialisation when the class has several for that role: talents (with the why), the rotation, then the best gear in the game — set bonuses included, both rings covered. All 27 specs are covered. Click an item, talent or spell to open its sheet without leaving the page.">Choisis ta classe, ton rôle — et ta spécialisation quand la classe en a plusieurs pour ce rôle : les talents (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Les 27 spés sont couvertes. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
   </header>
 
   <div class="classes" id="clsTabs" role="tablist" aria-label="Classes"></div>
@@ -253,7 +264,8 @@ const BUILDS = {
    astuce: { fr: "Iron Bellow avant le pull (ça tient 30 min). Direhowl (−20 % dégâts ennemis 20 s) sur les gros packs, Valor Roar (+20 % PV max groupe 10 s) sur un burst annoncé, et Faultline pour un stun frontal 3 s quand ça déborde.",
              en: "Iron Bellow before the pull (it lasts 30 min). Direhowl (−20% enemy damage for 20s) on big packs, Valor Roar (+20% group max HP for 10s) on a telegraphed burst, and Faultline for a 3s frontal stun when things spill over." }
   },
-  dps: {
+  dps: [{
+   tag: "Bloodrush (fury)",
    spec: "Bloodrush (fury)",
    mastery: { fr: "Bloodletter (v0.27) : +5 % crit, +10 puissance d'attaque", en: "Bloodletter (v0.27): +5% crit, +10 attack power" },
    pourquoi: { fr: "Le double manche v0.27 tourne autour d'Enrage : Bloodletting et Red Harvest le déclenchent, Mayhem le convertit en +7 % dégâts et +25 % vitesse d'attaque.",
@@ -279,7 +291,40 @@ const BUILDS = {
    ],
    astuce: { fr: "Iron Bellow avant le pull (30 min, un seul guerrier le pose). Si le heal est sous l'eau, Furious Mending : pendant sa durée, Bloodletting te soigne 20 % PV max. Garde Valor Roar (+20 % PV max groupe) pour les phases de burst ennemi. Et depuis la v0.27.2, Titan's Grip coûte cher : deux armes à deux mains = −12 % de dégâts physiques — le double une-main (1,75× de budget de stats) est redevenu la référence.",
              en: "Iron Bellow before the pull (30 min, only one warrior needs to apply it). If the healer is drowning, Furious Mending: while it lasts, Bloodletting heals you for 20% max HP. Keep Valor Roar (+20% group max HP) for enemy burst phases. And since v0.27.2, Titan's Grip has a real price: two two-handers = −12% physical damage — dual one-handers (1.75× stat budget) are back as the baseline." }
-  }
+  },
+  {
+   tag: "Battlecraft (arms)",
+   spec: "Battlecraft (arms)",
+   mastery: { fr: "Master Armorer : +10 % à tous tes dégâts tant que tu portes une arme à deux mains",
+              en: "Master Armorer: +10% to all your damage while wielding a two-handed weapon" },
+   pourquoi: { fr: "Le duelliste à deux mains : moins frénétique que Bloodrush, plus lourd par coup — et Maiming Strike réduit de moitié les soins reçus par la cible, LE debuff qui change tout en PvP (voir l'onglet PvP du site).",
+               en: "The two-handed duelist: less frantic than Bloodrush, heavier per swing — and Maiming Strike halves the healing the target receives, THE debuff that changes everything in PvP (see the site's PvP tab)." },
+   stats: { fr: "Force > Crit > Hâte > Endurance", en: "Strength > Crit > Haste > Stamina" },
+   talents: [
+    ["Battle Stance", "posture", { fr: "la posture d'Armes : +10 % de génération de rage — avec une 2H lente, chaque point compte.", en: "the Arms stance: +10% rage generation — with a slow two-hander, every point counts." }],
+    ["Double Charge", "niv. 5", { fr: "Onrush stocke 2 utilisations : deux engages, 18 rage, zéro temps mort entre les cibles.", en: "Onrush stores 2 uses: two engages, 18 rage, zero downtime between targets." }],
+    ["Victory Rush", "niv. 8", { fr: "après chaque kill, ta prochaine frappe rend 20 % de tes PV max — le sustain des donjons.", en: "after every kill, your next strike restores 20% of your max HP — dungeon sustain." }],
+    ["Storm Bolt", "niv. 11", { fr: "le stun à distance qui lance ton arme — exempté des rendements décroissants PvP depuis la v0.27.", en: "the ranged stun that hurls your weapon — exempt from PvP diminishing returns since v0.27." }],
+    ["Combat Mastery", "niv. 14", { fr: "en Battle Stance, tes capacités critiques frappent 15 % plus fort — et tout ton kit passe par des capacités.", en: "in Battle Stance, your ability criticals hit 15% harder — and your whole kit runs through abilities." }],
+    ["Avatar", "niv. 17", { fr: "+20 % de dégâts pendant 20 s et brise tous les contrôles — à aligner avec Breachmaker.", en: "+20% damage for 20s and breaks all control — line it up with Breachmaker." }],
+    ["Colossal Might", "niv. 20", { fr: "chaque point de rage dépensé rabote le CD de tes grosses capacités (max 10 s par 30 s) : plus de Maiming Strike, plus de Breachmaker. Bladestorm les soirs de packs.", en: "each rage point spent shaves the CD of your big abilities (max 10s per 30s): more Maiming Strikes, more Breachmakers. Bladestorm on pack-heavy nights." }]
+   ],
+   rotation: [
+    ["Onrush", { fr: "l'engage — deux charges avec le talent, et 9 rage à chaque fois.", en: "the engage — two charges with the talent, 9 rage each time." }],
+    ["Redhand ×2", { fr: "2 charges, imparable, et chaque coup renforce ton prochain Maiming Strike de 20 % (cumulable ×2) — arme-le avant chaque Maiming.", en: "2 charges, cannot be dodged, and each hit empowers your next Maiming Strike by 20% (stacks twice) — load it before every Maiming." }],
+    ["Maiming Strike", { fr: "ton sort signature (CD 6 s) : arme + saignement (Gaping Wounds) et −50 % de soins reçus sur la cible.", en: "your signature spell (6s CD): weapon + bleed (Gaping Wounds) and −50% healing received on the target." }],
+    ["Breachmaker", { fr: "fissure la garde : +20 % de dégâts sur la cible pendant 8 s (CD 45 s) — ta fenêtre de burst.", en: "cracks the guard: +20% damage on the target for 8s (45s CD) — your burst window." }],
+    ["Brute Swing", { fr: "le filler : 50 % arme et 8 rage générés.", en: "the filler: 50% weapon damage and 8 rage generated." }],
+    ["Early Grave", { fr: "l'exécution sous 20 % PV — et gratuite à n'importe quel PV sur un proc de Sudden Death.", en: "the execute below 20% HP — and free at any HP on a Sudden Death proc." }],
+    ["Widening Arc", { fr: "12 s où tes frappes monocibles touchent un ennemi de plus — le cleave sans changer de rotation.", en: "12s where your single-target strikes hit one extra enemy — cleave without changing your rotation." }],
+    ["Reaping Arc", { fr: "la frappe en arc quand le pack est large.", en: "the sweeping strike when the pack is wide." }],
+    ["Jawcrack", { fr: "l'interrupt — 10 rage quand il coupe un cast.", en: "the interrupt — 10 rage when it stops a cast." }]
+   ],
+   astuce: { fr: "Master Armorer exige une arme à DEUX MAINS : la paire de une-main de Bloodrush ne l'active pas. Et garde Hobbling Cut sous la main — sous −50 % de vitesse, rien n'échappe ni à toi ni au groupe.",
+             en: "Master Armorer requires a TWO-HANDED weapon: Bloodrush's one-hander pair does not activate it. Keep Hobbling Cut handy — at −50% speed, nothing escapes you or the group." },
+   gearnote: { fr: "Le BiS ci-dessous est calculé pour Bloodrush (double une-main). En Battlecraft, remplace la paire par la meilleure arme à deux mains disponible — la maîtrise ne s'active qu'avec une 2H.",
+               en: "The BiS below is computed for Bloodrush (dual one-handers). As Battlecraft, swap the pair for the best two-hander available — the mastery only works with a 2H." }
+  }]
  },
  paladin: {
   tank: {
@@ -385,11 +430,12 @@ const BUILDS = {
    astuce: { fr: "Storm Chorus se garde pour LE moment critique — annonce-le avant de cliquer, un lust gâché ne revient pas de sitôt.",
              en: "Save Storm Chorus for THE critical moment — call it out before you click, a wasted lust doesn't come back anytime soon." }
   },
-  dps: {
+  dps: [{
+   tag: "Warspirit (enhancement)",
    spec: "Warspirit (enhancement)",
    mastery: { fr: "Skyrend (v0.25) : +10 % vitesse d'attaque, +10 % dégâts physiques", en: "Skyrend (v0.25): +10% attack speed, +10% physical damage" },
-   pourquoi: { fr: "Colle au BiS mêlée du site ; Thundercall (elemental) est l'alternative caster.",
-               en: "Matches the site's melee BiS; Thundercall (elemental) is the caster alternative." },
+   pourquoi: { fr: "Colle au BiS mêlée du site ; l'alternative caster est dans l'onglet Thundercall ci-dessus.",
+               en: "Matches the site's melee BiS; the caster alternative lives in the Thundercall tab above." },
    stats: { fr: "Force > Crit > Hâte > Intelligence", en: "Strength > Crit > Haste > Intellect" },
    talents: [
     ["Imbued Lifeblood", "niv. 5", { fr: "chaque coup blanc imbué te rend 8 PV : la survie passive du mêlée.", en: "every imbued auto-attack heals you for 8: passive melee sustain." }],
@@ -409,7 +455,37 @@ const BUILDS = {
    ],
    astuce: { fr: "Mending Waters dépanne le heal en urgence — et un /ready avant le pull pour vérifier imbues et buffs, c'est gratuit.",
              en: "Mending Waters can bail out the healer in a pinch — and a /ready before the pull to check imbues and buffs costs nothing." }
-  }
+  },
+  {
+   tag: "Thundercall (elemental)",
+   spec: "Thundercall (elemental)",
+   mastery: { fr: "Earthen Fury : +15 % de dégâts des sorts, +10 % de hâte des sorts",
+              en: "Earthen Fury: +15% spell damage, +10% spell haste" },
+   pourquoi: { fr: "Le chaman caster : Arc Bolt mitraille, les Jolts tombent gratuits, et Primal Mastery rend ton prochain sort instantané. La même utilité que Warspirit (kick, lust de secours, dépannage heal) — mais à 30 yards des ennuis.",
+               en: "The caster shaman: Arc Bolt machine-guns, Jolts come out free, and Primal Mastery makes your next spell instant. Same utility as Warspirit (kick, backup lust, spot heals) — from 30 yards away from trouble." },
+   stats: { fr: "Intelligence > Crit > Hâte (les crits nourrissent Sky Echo et Storm Recall)", en: "Intellect > Crit > Haste (crits feed Sky Echo and Storm Recall)" },
+   talents: [
+    ["Fault Line", "niv. 5", { fr: "1 Arc Bolt sur 3 rend ton prochain Jolt gratuit — le moteur de la spé.", en: "every 3rd Arc Bolt makes your next Jolt free — the spec's engine." }],
+    ["Fault Rebuke", "niv. 8", { fr: "Earthen Jolt interrompt les casts : ton kick, sans quitter ta distance.", en: "Earthen Jolt interrupts casts: your kick, without leaving your range." }],
+    ["Sky Echo", "niv. 11", { fr: "un crit d'Arc Bolt rend le suivant instantané — avec la hâte de la maîtrise, ça s'emballe vite.", en: "an Arc Bolt crit makes the next one instant — with the mastery's haste, it snowballs fast." }],
+    ["Cinder Rupture", "niv. 14", { fr: "Earthen Jolt fait détoner ton Cinder Jolt : tout le DoT restant, d'un coup — le combo burst de la spé.", en: "Earthen Jolt detonates your Cinder Jolt: all the remaining DoT, at once — the spec's burst combo." }],
+    ["Ancestral Mending", "niv. 17", { fr: "gros coup encaissé = soin instantané de 12 % PV max — la survie passive du caster.", en: "eat a big hit = an instant 12% max HP heal — the caster's passive survivability." }],
+    ["Storm Recall", "niv. 20", { fr: "un crit d'Arc Bolt réinitialise Earthen Jolt et le rend gratuit : encore plus de détonations. Storm Chorus si personne d'autre n'apporte le lust.", en: "an Arc Bolt crit finishes Earthen Jolt's cooldown and makes it free: even more detonations. Storm Chorus if nobody else brings the lust." }]
+   ],
+   rotation: [
+    ["Arc Bolt", { fr: "le spam : chaque 3e rend un Jolt gratuit, chaque crit nourrit Sky Echo et Storm Recall.", en: "the spam: every 3rd makes a Jolt free, every crit feeds Sky Echo and Storm Recall." }],
+    ["Cinder Jolt", { fr: "l'instant + DoT — pose-le avant de le faire détoner.", en: "the instant + DoT — apply it before you detonate it." }],
+    ["Earthen Jolt", { fr: "la détonation (Cinder Rupture) et l'interrupt (Fault Rebuke) : ton bouton à tout faire.", en: "the detonation (Cinder Rupture) and the interrupt (Fault Rebuke): your do-everything button." }],
+    ["Primal Mastery", { fr: "le sort signature (CD 120 s) : ton prochain sort devient instantané — garde-le pour caster en pleine mécanique.", en: "the signature spell (120s CD): your next spell becomes instant — save it to cast through a mechanic." }],
+    ["Earthquake", { fr: "l'AoE (niv. 18) : 6 s de secousses sous le pack.", en: "the AoE (lvl 18): 6s of tremors under the pack." }],
+    ["Rime Jolt", { fr: "le slow (−50 % pendant 8 s) sur ce qui court.", en: "the slow (−50% for 8s) on anything that runs." }],
+    ["Thunder Ward", { fr: "toujours actif — punit les mêlées qui te collent.", en: "always on — punishes melee that stick to you." }]
+   ],
+   astuce: { fr: "Tu restes un chaman : Mending Waters dépanne le heal entre deux Arc Bolt, et si tu as pris Storm Chorus, annonce-le avant de cliquer — un lust gâché ne revient pas de sitôt.",
+             en: "You're still a shaman: Mending Waters bails out the healer between two Arc Bolts, and if you took Storm Chorus, call it before you click — a wasted lust doesn't come back soon." },
+   gearnote: { fr: "Le BiS ci-dessous est optimisé pour Warspirit (mêlée, Force). En Thundercall, privilégie les pièces Intelligence / puissance des sorts du Codex — le recalcul automatique ne couvre pas encore la variante caster.",
+               en: "The BiS below is optimised for Warspirit (melee, Strength). As Thundercall, favor the Codex's Intellect / spell power pieces — the automatic recompute doesn't cover the caster variant yet." }
+  }]
  },
  druid: {
   tank: {
@@ -495,11 +571,12 @@ const BUILDS = {
   }
  },
  priest: {
-  heal: {
+  heal: [{
+   tag: "Benison (holy)",
    spec: "Benison (holy)",
    mastery: { fr: "Grave Mercy (v0.25) : +20 % à tous les soins", en: "Grave Mercy (v0.25): +20% to all your healing" },
-   pourquoi: { fr: "Le soigneur pur le plus puissant ; Doctrine (discipline) est l'alternative « boucliers ».",
-               en: "The most powerful pure healer; Doctrine (discipline) is the “shields” alternative." },
+   pourquoi: { fr: "Le soigneur pur le plus puissant ; l'alternative « boucliers » est dans l'onglet Doctrine ci-dessus.",
+               en: "The most powerful pure healer; the “shields” alternative lives in the Doctrine tab above." },
    stats: { fr: "Intelligence > Esprit > Hâte > Crit", en: "Intellect > Spirit > Haste > Crit" },
    talents: [
     ["Warding Refrain", "niv. 5", { fr: "1 Whispered Prayer sur 3 pose un bouclier de 40 en plus du soin.", en: "every 3rd Whispered Prayer adds a 40-absorb ward on top of the heal." }],
@@ -520,6 +597,34 @@ const BUILDS = {
    astuce: { fr: "Le bouclier profite deux fois : les dégâts absorbés, et le stress que tu n'as pas.",
              en: "The shield pays off twice: the damage absorbed, and the stress you never feel." }
   },
+  {
+   tag: "Doctrine (discipline)",
+   spec: "Doctrine (discipline)",
+   mastery: { fr: "Fixed Purpose : tes boucliers absorbent 30 % de plus, +8 % de PV max",
+              en: "Fixed Purpose: your shields absorb 30% more, +8% max health" },
+   pourquoi: { fr: "Le soin préventif : Doctrine blinde AVANT les dégâts. Un bouclier posé au bon moment est un soin que tu n'auras jamais à lancer — et Anointing accélère un allié de 20 %.",
+               en: "Preventive healing: Doctrine armors up BEFORE the damage. A well-timed shield is a heal you'll never have to cast — and Anointing speeds an ally up by 20%." },
+   stats: { fr: "Intelligence > Esprit > Crit > Hâte (le crit nourrit Halo Aftershock)", en: "Intellect > Spirit > Crit > Haste (crit feeds Halo Aftershock)" },
+   talents: [
+    ["Warding Refrain", "niv. 5", { fr: "1 Whispered Prayer sur 3 durcit sa cible en bouclier de 40 — que ta maîtrise monte à 52.", en: "every 3rd Whispered Prayer hardens its target into a 40 ward — which your mastery raises to 52." }],
+    ["Shattered Psalm", "niv. 8", { fr: "Psalm of Warding soigne 45 quand il est entièrement consommé : le bouclier rembourse.", en: "Psalm of Warding heals 45 when fully consumed: the shield pays you back." }],
+    ["Measured Mercy", "niv. 11", { fr: "1 soin sur 3 rend le suivant 50 % moins cher — la même économie de mana que Benison.", en: "every 3rd heal makes the next one 50% cheaper — the same mana economy as Benison." }],
+    ["Mercy Deferred", "niv. 14", { fr: "Solemn Prayer laisse un écho 10 s : soin instantané de 60 sous 35 % PV — le filet sous le filet.", en: "Solemn Prayer leaves a 10s echo: an instant 60 heal below 35% HP — the net under the net." }],
+    ["Resolve Unbroken", "niv. 17", { fr: "+7,5 % d'Endurance pour tout le groupe : des PV max, c'est de l'absorption qui n'expire jamais.", en: "+7.5% Stamina for the whole party: max HP is absorption that never expires." }],
+    ["Halo Aftershock", "niv. 20", { fr: "chaque soin critique pose un bouclier de 50 en plus : ton crit devient une seconde maîtrise.", en: "every critical heal also wards for 50: your crit becomes a second mastery." }]
+   ],
+   rotation: [
+    ["Psalm of Warding", { fr: "toutes les 6 s, sur celui qui va encaisser : +30 % d'absorption via la maîtrise, et Shattered Psalm le fait soigner en cédant.", en: "every 6s, on whoever is about to take the hit: +30% absorption from the mastery, and Shattered Psalm makes it heal when it breaks." }],
+    ["Anointing", { fr: "le sort signature (CD 120 s) : +20 % de hâte des sorts sur la cible 15 s — sur toi quand ça saigne, sur un DPS pour le burst.", en: "the signature spell (120s CD): +20% spell haste on the target for 15s — on yourself when things bleed, on a DPS for burst." }],
+    ["Whispered Prayer", { fr: "le filler — un bouclier gratuit tous les 3 casts avec Warding Refrain.", en: "the filler — a free ward every 3 casts with Warding Refrain." }],
+    ["Lingering Grace", { fr: "le HoT d'entretien sous les boucliers.", en: "the maintenance HoT beneath the shields." }],
+    ["Solemn Prayer", { fr: "le gros soin, écho de Mercy Deferred compris.", en: "the big heal, Mercy Deferred echo included." }],
+    ["Urgent Prayer", { fr: "l'urgence, quand l'absorption a déjà cédé.", en: "the emergency heal, once the absorption has already broken." }],
+    ["Litany of Resolve", { fr: "le buff d'Endurance (+7,5 % talenté), toujours actif.", en: "the Stamina buff (+7.5% talented), always on." }]
+   ],
+   astuce: { fr: "Pose Psalm of Warding sur le tank AVANT le pull, pas après le premier coup — un disci en retard n'est qu'un Benison en moins bien.",
+             en: "Shield the tank BEFORE the pull, not after the first hit — a late disc priest is just a worse Benison." }
+  }],
   dps: {
    spec: "Vespers (shadow)",
    mastery: { fr: "Gloamveil (v0.25) : +15 % dégâts périodiques, +10 % dégâts des sorts", en: "Gloamveil (v0.25): +15% damage-over-time, +10% spell damage" },
@@ -547,11 +652,12 @@ const BUILDS = {
   }
  },
  mage: {
-  dps: {
+  dps: [{
+   tag: "Pyromancy (fire)",
    spec: "Pyromancy (fire)",
    mastery: { fr: "Ignition (v0.27) : tes crits de sorts brûlent la cible pour 40 % des dégâts sur 6 s (cumulable), +2 % crit", en: "Ignition (v0.27): your spell crits burn the target for 40% of the damage over 6s (stacking), +2% crit" },
-   pourquoi: { fr: "La refonte v0.27 fait tout tourner autour du crit : chaque critique nourrit Ignition ET rapproche un Hot Streak (2 crits consécutifs = Pyrelance ou Flamestrike instant et gratuit). Cryomancie reste l'alternative contrôle (recalibrée v0.28 : ses procs ne s'empilent plus).",
-               en: "The v0.27 rework makes everything revolve around crit: every critical feeds Ignition AND brings a Hot Streak closer (2 consecutive crits = a free instant Pyrelance or Flamestrike). Cryomancy remains the control-focused alternative (recalibrated in v0.28: its procs no longer stack)." },
+   pourquoi: { fr: "La refonte v0.27 fait tout tourner autour du crit : chaque critique nourrit Ignition ET rapproche un Hot Streak (2 crits consécutifs = Pyrelance ou Flamestrike instant et gratuit). L'alternative contrôle est dans l'onglet Cryomancy ci-dessus.",
+               en: "The v0.27 rework makes everything revolve around crit: every critical feeds Ignition AND brings a Hot Streak closer (2 consecutive crits = a free instant Pyrelance or Flamestrike). The control-focused alternative lives in the Cryomancy tab above." },
    stats: { fr: "Intelligence > Crit > Hâte", en: "Intellect > Crit > Haste" },
    talents: [
     ["Ice Floes", "niv. 5", { fr: "tes deux prochains sorts à incantation se lancent en mouvement — Cinderbolt sans t'arrêter.", en: "your next two cast-time spells can be cast while moving — Cinderbolt without stopping." }],
@@ -573,6 +679,36 @@ const BUILDS = {
    astuce: { fr: "Sous 30 % des PV de la cible, Scald crit à tous les coups : en phase d'exécution, spam Scald pour enchaîner les Hot Streaks — des Pyrelance gratuites jusqu'au kill.",
              en: "Below 30% of the target's HP, Scald crits every time: in execute phase, spam Scald to chain Hot Streaks — free Pyrelances all the way to the kill." }
   },
+  {
+   tag: "Cryomancy (frost)",
+   spec: "Cryomancy (frost)",
+   mastery: { fr: "Brittlebreak : +25 % de dégâts de Givre, +10 % d'armure",
+              en: "Brittlebreak: +25% Frost spell damage, +10% armor" },
+   pourquoi: { fr: "Le mage contrôle : tout ce que tu touches ralentit, gèle ou s'arrête — et Ice Lance triple ses dégâts sur une cible gelée. La v0.28 a dégonflé la pile de multiplicateurs (Winterlash instantané sans bonus, Brittle Ruin sans bonus de dégâts critiques, Frozen Orb à 45 s), mais le cycle de procs reste intact.",
+               en: "The control mage: everything you touch slows, freezes or stops — and Ice Lance triples its damage on a frozen target. v0.28 deflated the multiplier stack (no bonus on instant Winterlash, Brittle Ruin lost its crit-damage bonus, Frozen Orb at 45s), but the proc cycle is intact." },
+   stats: { fr: "Intelligence > Hâte > Crit (la hâte multiplie les Rimelance donc les procs ; Brittle Ruin t'offre déjà +50 % de crit sur les cibles gelées)", en: "Intellect > Haste > Crit (haste multiplies Rimelances and therefore procs; Brittle Ruin already grants +50% crit against frozen targets)" },
+   talents: [
+    ["Ice Floes", "niv. 5", { fr: "tes deux prochains sorts à incantation se lancent en mouvement — Rimelance sans jamais t'arrêter.", en: "your next two cast-time spells can be cast on the move — Rimelance without ever stopping." }],
+    ["Warded", "niv. 8", { fr: "−15 % de dégâts subis sous ta barrière, et sa casse te soigne 10 % PV max — tu as déjà Frostveil toutes les 30 s, autant le rentabiliser.", en: "−15% damage taken while your barrier holds, and its break heals you for 10% max HP — you already have Frostveil every 30s, make it pay." }],
+    ["Twin Icebind", "niv. 11", { fr: "2 charges d'Icebind indépendantes : deux roots de zone d'avance — le luxe du contrôle.", en: "2 independent Icebind charges: two area roots in the bank — control luxury." }],
+    ["Racing Mind", "niv. 14", { fr: "un Glacial Spike (2,7 s de cast) instantané — le burst sans fenêtre de tir.", en: "an instant Glacial Spike (2.7s cast) — burst without needing a casting window." }],
+    ["Winter's Recall", "niv. 17", { fr: "réinitialise Flickerstep et Frostveil : double blink, double bouclier, à la demande.", en: "finishes Flickerstep's and Frostveil's cooldowns: double blink, double shield, on demand." }],
+    ["Rune of Power", "niv. 20", { fr: "+10 % de dégâts pour les alliés sur la rune — le choix altruiste, comme en Pyromancie.", en: "+10% damage for allies on the rune — the altruistic pick, same as in Pyromancy." }]
+   ],
+   rotation: [
+    ["Rimelance", { fr: "le spam : ralentit de 40 %, et proc Fingers of Frost (15 %) et Brain Freeze (20 %).", en: "the spam: 40% slow, and procs Fingers of Frost (15%) and Brain Freeze (20%)." }],
+    ["Ice Lance", { fr: "ton sort signature : dégâts triplés sur cible gelée — dépense chaque Fingers of Frost.", en: "your signature spell: tripled damage against a frozen target — spend every Fingers of Frost." }],
+    ["Winterlash", { fr: "instantané et gratuit sur proc Brain Freeze — et il pose Winter's Chill : les 2 sorts suivants traitent la cible comme gelée.", en: "instant and free on a Brain Freeze proc — and it plants Winter's Chill: the next 2 spells treat the target as frozen." }],
+    ["Frozen Orb", { fr: "à chaque cooldown (45 s) : dégâts de zone, slow, et un Icicle par pulsation.", en: "on every cooldown (45s): area damage, a slow, and one Icicle per pulse." }],
+    ["Glacial Spike", { fr: "à 5 Icicles : l'obus, qui gèle 4 s — enchaîne un Ice Lance dessus.", en: "at 5 Icicles: the artillery shell, freezing for 4s — follow up with an Ice Lance." }],
+    ["Blizzard", { fr: "l'AoE — chaque ennemi touché rabote le CD de Frozen Orb.", en: "the AoE — every enemy struck shaves Frozen Orb's cooldown." }],
+    ["Icy Veins", { fr: "+30 % de hâte 10 s, incoupable : ta fenêtre de burst.", en: "+30% haste for 10s, uninterruptible: your burst window." }],
+    ["Summon Water Elemental", { fr: "l'élémentaire, toujours dehors.", en: "the elemental, always out." }],
+    ["Aether Insight", { fr: "le buff +5 % Int du groupe.", en: "the group's +5% Int buff." }]
+   ],
+   astuce: { fr: "Brittle Ruin donne +50 % de chance de critique contre les cibles gelées : garde tes Ice Lance pour les fenêtres Winter's Chill au lieu de les lâcher au fil de l'eau — c'est là que les chiffres explosent. Et Cold Coffin (immunité 8 s) reste le meilleur « bouton pause » du jeu.",
+             en: "Brittle Ruin grants +50% crit chance against frozen targets: hold your Ice Lances for Winter's Chill windows instead of dribbling them out — that's where the numbers explode. And Cold Coffin (8s immunity) is still the best pause button in the game." }
+  }],
   heal: {
    spec: "Chronomancy (arcane)",
    mastery: { fr: "Maîtrise Chronomancie (v0.27) : +15 % à tous tes soins, +5 % de mana max, +20 % de régénération de mana", en: "Chronomancy mastery (v0.27): +15% to all your healing, +5% max mana, +20% mana regeneration" },
@@ -601,11 +737,12 @@ const BUILDS = {
   }
  },
  warlock: {
-  dps: {
+  dps: [{
+   tag: "Hexcraft (affliction)",
    spec: "Hexcraft (affliction)",
    mastery: { fr: "Creeping Rot (v0.25) : +20 % sur les dégâts périodiques", en: "Creeping Rot (v0.25): +20% damage-over-time" },
-   pourquoi: { fr: "Les DoTs font le gros du travail au niveau 20, et Consume te rend la vie que Hard Bargain dépense. Ruination (destruction) est l'alternative burst.",
-               en: "DoTs do the heavy lifting at level 20, and Consume gives back the life Hard Bargain spends. Ruination (destruction) is the burst alternative." },
+   pourquoi: { fr: "Les DoTs font le gros du travail au niveau 20, et Consume te rend la vie que Hard Bargain dépense. Les alternatives sont dans les onglets Ruination (burst) et Pactbound (démon) ci-dessus.",
+               en: "DoTs do the heavy lifting at level 20, and Consume gives back the life Hard Bargain spends. The alternatives live in the Ruination (burst) and Pactbound (demon) tabs above." },
    stats: { fr: "Intelligence > Hâte > Crit > Endurance", en: "Intellect > Haste > Crit > Stamina" },
    talents: [
     ["Pact Deepened", "niv. 5", { fr: "+20 % sur Burning Pact, ton DoT n°3.", en: "+20% on Burning Pact, your DoT #3." }],
@@ -628,14 +765,72 @@ const BUILDS = {
    ],
    astuce: { fr: "Sur un boss : les 3 DoTs + Consume en boucle = des dégâts que tu peux faire en bougeant pendant les mécaniques.",
              en: "On a boss: the 3 DoTs + Consume on loop = damage you can keep dealing while moving through mechanics." }
-  }
+  },
+  {
+   tag: "Ruination (destruction)",
+   spec: "Ruination (destruction)",
+   mastery: { fr: "Desolation : +20 % de dégâts sur Ruinbolt et Gloom Bolt",
+              en: "Desolation: +20% damage on Ruinbolt and Gloom Bolt" },
+   pourquoi: { fr: "Le burst : là où Hexcraft laisse ses DoTs travailler, Ruination brûle tout, tout de suite — Conflagrate consume ton Burning Pact en dégâts instantanés, et la maîtrise gonfle tes deux nukes de 20 %.",
+               en: "The burst spec: where Hexcraft lets its DoTs work, Ruination burns everything right now — Conflagrate consumes your Burning Pact into instant damage, and the mastery inflates both your nukes by 20%." },
+   stats: { fr: "Intelligence > Crit > Hâte > Endurance", en: "Intellect > Crit > Haste > Stamina" },
+   talents: [
+    ["Pact Deepened", "niv. 5", { fr: "+20 % sur Burning Pact — le carburant de Conflagrate.", en: "+20% on Burning Pact — Conflagrate's fuel." }],
+    ["Voidfeast", "niv. 8", { fr: "dévore un buff ennemi ou un debuff allié et te soigne (quand il dissipe vraiment — v0.27).", en: "devours an enemy buff or an ally's debuff and heals you (when it actually dispels — v0.27)." }],
+    ["Blood Credit", "niv. 11", { fr: "Hard Bargain rend 20 % de mana en plus : Sear brûle ta réserve, Hard Bargain la rembourse — avec intérêts.", en: "Hard Bargain grants 20% more mana: Sear burns your reserves, Hard Bargain refunds them — with interest." }],
+    ["Ashen Focus", "niv. 14", { fr: "Sear +25 % de dégâts et −25 % de coût : ton filler devient rentable.", en: "Sear +25% damage and −25% cost: your filler turns profitable." }],
+    ["Morrowlash", "niv. 17", { fr: "l'instant d'ombre + 3 s d'horreur (CD 120 s) : du burst qui contrôle en même temps.", en: "the Shadow instant + 3s horrify (120s CD): burst that controls at the same time." }],
+    ["Ruinbolt", "niv. 20", { fr: "le capstone : le bolt de feu chaotique (CD 12 s) — que Desolation booste déjà de 20 %.", en: "the capstone: the chaotic fire bolt (12s CD) — already boosted 20% by Desolation." }]
+   ],
+   rotation: [
+    ["Summon Warfiend", { fr: "(ou Gloomshade pour tanker en solo) — le démon d'abord.", en: "(or Gloomshade to tank when solo) — pet first." }],
+    ["Burning Pact", { fr: "pose-le… pour le consumer.", en: "apply it… so you can consume it." }],
+    ["Conflagrate", { fr: "ton sort signature (CD 6 s) : consume Burning Pact en dégâts instantanés — repose le Pact, reconsume, en boucle.", en: "your signature spell (6s CD): consumes Burning Pact into instant damage — re-Pact, re-Conflagrate, on loop." }],
+    ["Ruinbolt", { fr: "à chaque cooldown (12 s) : ta plus grosse frappe.", en: "on every cooldown (12s): your biggest hit." }],
+    ["Duskfire", { fr: "l'instant d'ombre toutes les 15 s.", en: "the Shadow instant every 15s." }],
+    ["Sear", { fr: "le filler rapide, taillé par Ashen Focus.", en: "the fast filler, sharpened by Ashen Focus." }],
+    ["Rain of Fire", { fr: "l'AoE sur les packs.", en: "the AoE on packs." }],
+    ["Gag Order", { fr: "l'interrupt : silence en pleine incantation, école coupée 5 s.", en: "the interrupt: silences mid-cast, school locked for 5s." }]
+   ],
+   astuce: { fr: "Le cycle Pact → Conflagrate te laisse plein de GCD mobiles : Conflagrate, Duskfire et Rain of Fire sont instantanés — Ruination perd très peu de dégâts en mouvement.",
+             en: "The Pact → Conflagrate cycle leaves you plenty of mobile GCDs: Conflagrate, Duskfire and Rain of Fire are instant — Ruination loses very little damage while moving." }
+  },
+  {
+   tag: "Pactbound (demonology)",
+   spec: "Pactbound (demonology)",
+   mastery: { fr: "Fiendlore : 20 % des dégâts que tu subis sont redirigés vers ton démon, +10 % d'Endurance",
+              en: "Fiendlore: 20% of the damage you take is redirected to your demon, +10% Stamina" },
+   pourquoi: { fr: "Le démoniste qui joue à deux : ton démon encaisse un cinquième de ce que tu prends, et Dread Aspect vous transforme tous les deux en monstres — +20 % de dégâts et de vitesse d'incantation pour toi, +50 % de dégâts pour lui. La spé la plus confortable du jeu en solo.",
+               en: "The warlock who plays as a duo: your demon soaks a fifth of what you take, and Dread Aspect turns you both into monsters — +20% spell damage and cast speed for you, +50% damage for it. The comfiest solo spec in the game." },
+   stats: { fr: "Intelligence > Hâte > Crit > Endurance", en: "Intellect > Haste > Crit > Stamina" },
+   talents: [
+    ["Grave Rhythm", "niv. 5", { fr: "1 Gloom Bolt sur 3 rend ton prochain Blackrot instantané : le DoT s'entretient tout seul.", en: "every 3rd Gloom Bolt makes your next Blackrot instant: the DoT maintains itself." }],
+    ["Dread Chorus", "niv. 8", { fr: "la peur de zone : le bouton panique quand un pack se retourne sur toi.", en: "the AoE fear: the panic button when a pack turns on you." }],
+    ["Fiendward", "niv. 11", { fr: "après un gros coup, ton démon te soigne 15 % PV max si tu tombes sous 35 % : l'assurance-vie de la spé.", en: "after a big hit, your demon heals you for 15% max HP if you drop below 35%: the spec's life insurance." }],
+    ["Deepened Hex", "niv. 14", { fr: "Gloom Bolt +20 % sur les cibles sous tes DoTs — tu en as toujours.", en: "Gloom Bolt +20% against targets under your DoTs — you always have some." }],
+    ["Snapdread", "niv. 17", { fr: "Harrow instantané (CD 16 s) : la peur mono-cible sans cast — du contrôle en boucle.", en: "instant Harrow (16s CD): the single-target fear with no cast — control on a loop." }],
+    ["Hellglass Ward", "niv. 20", { fr: "1 sort sur 3 lève un bouclier démoniaque de 90 : la maîtrise détourne, le capstone absorbe.", en: "every 3rd spell raises a 90-absorb demonic ward: the mastery redirects, the capstone absorbs." }]
+   ],
+   rotation: [
+    ["Summon Wraithborn", { fr: "l'élite à distance (niv. 20, CD 180 s) — ou Pyre Colossus en tank de siège ; Warfiend en attendant que le CD tourne.", en: "the ranged elite (lvl 20, 180s CD) — or Pyre Colossus as a siege tank; Warfiend while the CD turns." }],
+    ["Dread Aspect", { fr: "ta forme signature (CD 180 s) : 20 s de démon — aligne-la sur le burst, ton familier en profite aussi.", en: "your signature form (180s CD): 20s as a demon — line it up with burst, your pet benefits too." }],
+    ["Hex of Anguish + Blackrot", { fr: "les deux DoTs, toujours actifs — ils arment Deepened Hex.", en: "both DoTs, always up — they arm Deepened Hex." }],
+    ["Gloom Bolt", { fr: "le spam : +20 % sous DoTs, et chaque 3e rend Blackrot instantané.", en: "the spam: +20% under DoTs, and every 3rd makes Blackrot instant." }],
+    ["Duskfire", { fr: "l'instant toutes les 15 s.", en: "the instant every 15s." }],
+    ["Consume", { fr: "le filler-soin quand tu as pris des coups.", en: "the healing filler once you've taken hits." }],
+    ["Gag Order", { fr: "l'interrupt.", en: "the interrupt." }]
+   ],
+   astuce: { fr: "Ton démon est un vrai coéquipier : Fiendlore lui transfère tes dégâts, alors surveille SES PV aussi — un démon mort, et te voilà un Hexcraft sans talents.",
+             en: "Your demon is a real teammate: Fiendlore transfers your damage to it, so watch ITS health too — with a dead demon, you're just a Hexcraft with no talents." }
+  }]
  },
  hunter: {
-  dps: {
+  dps: [{
+   tag: "Coldsight (marksmanship)",
    spec: "Coldsight (marksmanship)",
    mastery: { fr: "Iron Aim (v0.25) : +20 % dégâts à distance, +3 % crit", en: "Iron Aim (v0.25): +20% ranged damage, +3% crit" },
-   pourquoi: { fr: "La plus grosse maîtrise DPS à distance ; Packlord (BM) est l'alternative confort pour le solo.",
-               en: "The biggest ranged DPS mastery; Packlord (BM) is the comfort option for solo play." },
+   pourquoi: { fr: "La plus grosse maîtrise DPS à distance ; les alternatives sont dans les onglets Packlord (familier) et Fieldcraft (terrain) ci-dessus.",
+               en: "The biggest ranged DPS mastery; the alternatives live in the Packlord (pet) and Fieldcraft (field) tabs above." },
    stats: { fr: "Agilité > Crit > Hâte > Endurance", en: "Agility > Crit > Haste > Stamina" },
    talents: [
     ["Deepvenom", "niv. 5", { fr: "+20 % sur le poison de Venom Barb, que tu entretiens déjà.", en: "+20% on Venom Barb's poison, which you keep up anyway." }],
@@ -658,14 +853,75 @@ const BUILDS = {
    ],
    astuce: { fr: "Garde tes 8 yards : en dessous de la portée minimale, la barre d'action te grise les tirs (nouveau en v0.24).",
              en: "Keep your 8 yards: below minimum range, the action bar greys out your shots (new in v0.24)." }
-  }
+  },
+  {
+   tag: "Packlord (beast mastery)",
+   spec: "Packlord (beast mastery)",
+   mastery: { fr: "Packbond : ton familier inflige +35 % de dégâts, et toi +8 % de PV max",
+              en: "Packbond: your pet deals +35% damage, and you gain +8% max health" },
+   pourquoi: { fr: "Le maître des bêtes : ton familier fait le gros du travail (et l'encaisse à ta place), Howling Rage double ses dégâts, et Wildfang Rally buffe tout le groupe. La spé confort — solo, leveling, et très honnête en donjon.",
+               en: "The beast master: your pet does the heavy lifting (and takes the hits for you), Howling Rage doubles its damage, and Wildfang Rally buffs the whole group. The comfort spec — solo, leveling, and perfectly honest in dungeons." },
+   stats: { fr: "Agilité > Crit > Hâte > Endurance", en: "Agility > Crit > Haste > Stamina" },
+   talents: [
+    ["Twin Fletching", "niv. 5", { fr: "Fell Shot stocke 2 charges : plus d'instants à tisser entre les autos.", en: "Fell Shot stores 2 charges: more instants to weave between autos." }],
+    ["Startle Shot", "niv. 8", { fr: "la désorientation à distance : sors une cible du pull le temps que le familier gère le reste.", en: "the ranged disorient: take one target out of the pull while the pet handles the rest." }],
+    ["Patch Up", "niv. 11", { fr: "+50 % sur le soin du familier : ton tank de poche mérite son heal.", en: "+50% on the pet heal: your pocket tank deserves its healer." }],
+    ["Viperfletch", "niv. 14", { fr: "Fell Shot envenime pour 50 % de ses dégâts sur 3 s — deux charges, deux venins.", en: "Fell Shot envenoms for 50% of its damage over 3s — two charges, two venoms." }],
+    ["Bloodbond", "niv. 17", { fr: "20 % des dégâts que tu subis partent sur le familier : avec Packbond, il a les épaules.", en: "20% of the damage you take goes to the pet: with Packbond, it has the shoulders for it." }],
+    ["Wildfang Rally", "niv. 20", { fr: "+45 PA et +5 % de vitesse d'attaque pour les alliés à 30 yd pendant 5 min : le capstone qui profite à tout le raid.", en: "+45 AP and +5% attack speed for allies within 30 yd for 5 min: the capstone the whole raid enjoys." }]
+   ],
+   rotation: [
+    ["Wildbond", { fr: "apprivoise une bête solide — c'est elle, ta spé.", en: "tame a sturdy beast — it IS your spec." }],
+    ["Harrier's Guise", { fr: "l'aspect PA, toujours actif.", en: "the AP aspect, always on." }],
+    ["Wildfang Rally", { fr: "le buff de groupe, à renouveler toutes les 5 min.", en: "the group buff, refresh every 5 min." }],
+    ["Howling Rage", { fr: "ton sort signature (CD 120 s) : +20 % PA pour toi, +100 % de dégâts pour le familier pendant 15 s.", en: "your signature spell (120s CD): +20% AP for you, +100% pet damage for 15s." }],
+    ["Venom Barb", { fr: "le DoT, à entretenir.", en: "the DoT, keep it up." }],
+    ["Fell Shot ×2", { fr: "les instants (+ venin de Viperfletch) entre deux autos.", en: "the instants (+ Viperfletch venom) between autos." }],
+    ["Long Draw", { fr: "quand tu es posé.", en: "when you can stand still." }],
+    ["Volley", { fr: "l'AoE sur les packs.", en: "the AoE on packs." }],
+    ["Patch Up", { fr: "soigne (ou relève) le familier entre deux packs.", en: "heal (or revive) the pet between packs." }],
+    ["Hushing Shot", { fr: "l'interrupt à distance.", en: "the ranged interrupt." }]
+   ],
+   astuce: { fr: "Aligne Howling Rage avec Fevered Draw (+40 % de hâte) : 15 s où le familier tape double pendant que tu mitrailles — le burst de boss de la spé.",
+             en: "Line Howling Rage up with Fevered Draw (+40% haste): 15s where the pet hits double while you machine-gun — the spec's boss burst." }
+  },
+  {
+   tag: "Fieldcraft (survival)",
+   spec: "Fieldcraft (survival)",
+   mastery: { fr: "Quickblood : +15 % d'Agilité, +4 % d'esquive",
+              en: "Quickblood: +15% Agility, +4% dodge chance" },
+   pourquoi: { fr: "Le chasseur de terrain : ça se joue près de la cible, ça esquive, et ça punit — Counterfang riposte après chaque attaque esquivée, Wyvern Sting neutralise 4 s à distance. Moins de débit brut que Coldsight en raid, mais un contrôle et une survie de duelliste.",
+               en: "The field hunter: it plays close to the target, it dodges, and it punishes — Counterfang strikes back after every dodged attack, Wyvern Sting incapacitates for 4s at range. Less raw throughput than Coldsight in raids, but a duelist's control and survivability." },
+   stats: { fr: "Agilité > Crit > Hâte (la maîtrise convertit déjà ton Agi en esquive)", en: "Agility > Crit > Haste (the mastery already converts your Agi into dodge)" },
+   talents: [
+    ["Deepvenom", "niv. 5", { fr: "+20 % sur le poison de Venom Barb : tes DoTs portent la spé.", en: "+20% on Venom Barb's poison: your DoTs carry the spec." }],
+    ["Pinning Barb", "niv. 8", { fr: "le slow de Rattling Shot passe à 70 % : rien ne te colle, rien ne t'échappe.", en: "Rattling Shot's slow deepens to 70%: nothing sticks to you, nothing escapes you." }],
+    ["Deathless Will", "niv. 11", { fr: "un coup ≥ 30 % de tes PV max = +40 % de vitesse pendant 4 s : encaisser, c'est repartir.", en: "a hit ≥ 30% of your max HP = +40% speed for 4s: taking a hit means getting away." }],
+    ["Viperfletch", "niv. 14", { fr: "Fell Shot envenime pour 50 % de ses dégâts : encore du poison.", en: "Fell Shot envenoms for 50% of its damage: more poison." }],
+    ["Bristleguard", "niv. 17", { fr: "+25 points d'esquive et −30 % de dégâts subis pendant 10 s : couplé à Quickblood et Marten's Guise, on ne te touche plus.", en: "+25 points of dodge and −30% damage taken for 10s: stacked with Quickblood and Marten's Guise, nothing lands on you." }],
+    ["Redline Draw", "niv. 20", { fr: "1 tir sur 3 rend 5 s à Fevered Draw : ton burst revient sans arrêt.", en: "every 3rd shot refunds 5s of Fevered Draw: your burst keeps coming back." }]
+   ],
+   rotation: [
+    ["Venom Barb", { fr: "le DoT boosté par Deepvenom, à entretenir partout.", en: "the Deepvenom-boosted DoT, keep it up everywhere." }],
+    ["Fell Shot", { fr: "l'instant + venin de Viperfletch.", en: "the instant + Viperfletch venom." }],
+    ["Wyvern Sting", { fr: "ton sort signature (CD 60 s) : neutralise une cible 4 s à distance — le CC du groupe.", en: "your signature spell (60s CD): incapacitates a target for 4s at range — the group's CC." }],
+    ["Gutting Strike + Counterfang", { fr: "au corps à corps : la frappe chargée, et la riposte imparable après chaque esquive.", en: "in melee: the loaded strike, and the undodgeable counter after every dodge." }],
+    ["Fettering Slash / Rattling Shot", { fr: "les slows (jusqu'à −70 % avec Pinning Barb) : le kite permanent.", en: "the slows (down to −70% with Pinning Barb): permanent kiting." }],
+    ["Volley", { fr: "l'AoE.", en: "the AoE." }],
+    ["Hushing Shot", { fr: "l'interrupt.", en: "the interrupt." }],
+    ["Fevered Draw", { fr: "le burst — en boucle grâce à Redline Draw.", en: "the burst — on a loop thanks to Redline Draw." }]
+   ],
+   astuce: { fr: "Wyvern Sting casse au moindre dégât : pique la cible encore « propre » (sans ton Venom Barb) — un CC cassé par ton propre DoT, c'est un CC offert à l'ennemi.",
+             en: "Wyvern Sting breaks on any damage: sting the target that's still 'clean' (no Venom Barb of yours on it) — a CC broken by your own DoT is a CC gifted to the enemy." }
+  }]
  },
  rogue: {
-  dps: {
+  dps: [{
+   tag: "Thuggery (combat)",
    spec: "Thuggery (combat)",
    mastery: { fr: "Scrapper's Edge (v0.27) : +10 % vitesse d'attaque + Sword Specialization (5 % de chance d'un coup bonus sur les autos)", en: "Scrapper's Edge (v0.27): +10% attack speed + Sword Specialization (5% chance of a bonus swing on autos)" },
-   pourquoi: { fr: "Le DPS soutenu le plus régulier — et depuis la v0.27, la maîtrise n'a plus de malus : que du gain. Skulduggery (subtlety), +25 % de dégâts critiques via False Face, reste l'alternative burst.",
-               en: "The steadiest sustained DPS — and since v0.27, the mastery has no downside anymore: pure gain. Skulduggery (subtlety), +25% crit damage via False Face, is still the burst alternative." },
+   pourquoi: { fr: "Le DPS soutenu le plus régulier — et depuis la v0.27, la maîtrise n'a plus de malus : que du gain. Les alternatives sont dans les onglets Knifework (dagues) et Skulduggery (ombres) ci-dessus.",
+               en: "The steadiest sustained DPS — and since v0.27, the mastery has no downside anymore: pure gain. The alternatives live in the Knifework (daggers) and Skulduggery (shadows) tabs above." },
    stats: { fr: "Agilité > Crit > Hâte > Force", en: "Agility > Crit > Haste > Strength" },
    talents: [
     ["Ceaseless Cuts", "niv. 5", { fr: "1 Wicked Slash sur 3 rend 30 énergie — ton générateur se paie tout seul.", en: "every 3rd Wicked Slash restores 30 energy — your generator pays for itself." }],
@@ -687,7 +943,65 @@ const BUILDS = {
    ],
    astuce: { fr: "Armor Breach (−10 % d'armure en un cast depuis la v0.23) profite à toute la mêlée : pose-le en début de boss.",
              en: "Armor Breach (−10% armor in one cast since v0.23) benefits every melee: apply it at the start of a boss." }
-  }
+  },
+  {
+   tag: "Knifework (assassination)",
+   spec: "Knifework (assassination)",
+   mastery: { fr: "Redhanded : +30 % de chance de critique sur Craven Thrust, +10 % de dégâts de poison",
+              en: "Redhanded: +30% critical strike chance on Craven Thrust, +10% poison damage" },
+   pourquoi: { fr: "L'assassin à dagues : tout est affaire de placement — Craven Thrust exige d'être dans le dos, et la maîtrise le fait critiquer presque un coup sur deux. Le plus gros burst d'ouverture du jeu.",
+               en: "The dagger assassin: it's all about positioning — Craven Thrust demands you stay behind the target, and the mastery makes it crit nearly every other hit. The biggest opener burst in the game." },
+   stats: { fr: "Agilité > Crit > Hâte > Force", en: "Agility > Crit > Haste > Strength" },
+   talents: [
+    ["Knife's Dividend", "niv. 5", { fr: "Craven Thrust rend ton prochain Dirt Nap 50 % moins cher : builder et finisher se paient l'un l'autre.", en: "Craven Thrust makes your next Dirt Nap 50% cheaper: builder and finisher pay for each other." }],
+    ["Blindside Opening", "niv. 8", { fr: "Eye Jab rend ton prochain Craven Thrust gratuit — sur un boss, l'incapacité perdue ne coûte rien.", en: "Eye Jab makes your next Craven Thrust free — on a boss, the wasted incapacitate costs nothing." }],
+    ["Borrowed Tempo", "niv. 11", { fr: "1 builder sur 3 rend Cutthroat Tempo gratuit — le buff que tu entretiens de toute façon.", en: "every 3rd builder makes Cutthroat Tempo free — the buff you maintain anyway." }],
+    ["Venom Dividend", "niv. 14", { fr: "autos + poison = 20 % de chance de rendre 10 énergie : la maîtrise booste tes poisons, ce talent les rentabilise.", en: "autos + poison = 20% chance to restore 10 energy: the mastery boosts your poisons, this talent makes them pay." }],
+    ["Borrowed Breath", "niv. 17", { fr: "le coup fatal te laisse à 1 PV (1×/120 s) : l'anti-mort du cuir.", en: "the killing blow leaves you at 1 HP (once per 120s): leather's cheat-death." }],
+    ["First Cut, Last Word", "niv. 20", { fr: "chaque ouverture furtive rend ton prochain finisher 50 % moins cher : Lurker's Strike → Dirt Nap à moitié prix, sur chaque pack.", en: "each stealth opener makes your next finisher 50% cheaper: Lurker's Strike → half-price Dirt Nap, on every pack." }]
+   ],
+   rotation: [
+    ["Festering Venom", { fr: "le poison sur l'arme (14 dégâts par coup), gonflé de 10 % par la maîtrise — toujours actif.", en: "the weapon poison (14 damage per swing), inflated 10% by the mastery — always on." }],
+    ["Duskveil → Lurker's Strike", { fr: "l'ouverture : 250 % de dégâts d'arme depuis la furtivité, dans le dos.", en: "the opener: 250% weapon damage from stealth, from behind." }],
+    ["Killer's Calm", { fr: "ton sort signature (CD 120 s) : le prochain coup crit à coup sûr — colle-le à un Lurker's Strike.", en: "your signature spell (120s CD): the next attack is a guaranteed crit — glue it to a Lurker's Strike." }],
+    ["Craven Thrust", { fr: "le builder : 150 % arme, +30 % de crit via Redhanded — reste dans le dos.", en: "the builder: 150% weapon damage, +30% crit from Redhanded — stay behind the target." }],
+    ["Cutthroat Tempo", { fr: "à 2-3 points : +30 % de hâte, à entretenir.", en: "at 2–3 points: +30% haste, keep it rolling." }],
+    ["Dirt Nap / Bleed Out", { fr: "les finishers à 5 points — remisés par Knife's Dividend.", en: "the 5-point finishers — discounted by Knife's Dividend." }],
+    ["Boot", { fr: "l'interrupt — Eye Jab en secours, qui rend en plus le Thrust suivant gratuit.", en: "the interrupt — Eye Jab as backup, which also makes the next Thrust free." }],
+    ["Quickened Blood", { fr: "+60 énergie : le burst.", en: "+60 energy: the burst." }]
+   ],
+   astuce: { fr: "Une dague est OBLIGATOIRE pour Lurker's Strike et Craven Thrust — et le dos de la cible aussi. En donjon, laisse le tank stabiliser le pack deux secondes avant d'ouvrir : un Craven raté de face, c'est la moitié de ton DPS envolée.",
+             en: "A dagger is MANDATORY for Lurker's Strike and Craven Thrust — and so is the target's back. In dungeons, give the tank two seconds to settle the pack before you open: a Craven whiffed face-on is half your DPS gone." }
+  },
+  {
+   tag: "Skulduggery (subtlety)",
+   spec: "Skulduggery (subtlety)",
+   mastery: { fr: "False Face : +25 % de dégâts sur tes coups critiques, +50 % de vitesse de déplacement en Duskveil",
+              en: "False Face: +25% damage on your critical strikes, +50% movement speed while in Duskveil" },
+   pourquoi: { fr: "Le voleur des ombres : des saignements amplifiés par Red Ribbon (+40 % de dégâts de saignement subis par la cible), des critiques 25 % plus lourds, et une mobilité que rien n'égale entre Duskveil accéléré, Shadeslip et Smokestep. La spé la plus riche en outils — et la reine du PvP (voir l'onglet PvP du site).",
+               en: "The shadow rogue: bleeds amplified by Red Ribbon (target takes +40% bleed damage), crits 25% heavier, and mobility nothing matches between accelerated Duskveil, Shadeslip and Smokestep. The most tool-rich spec — and the queen of PvP (see the site's PvP tab)." },
+   stats: { fr: "Agilité > Crit > Hâte", en: "Agility > Crit > Haste" },
+   talents: [
+    ["Dusk Dividend", "niv. 5", { fr: "Lurker's Strike et Throat Wire rendent 20 énergie : ouvrir ne coûte (presque) rien.", en: "Lurker's Strike and Throat Wire restore 20 energy: opening costs (almost) nothing." }],
+    ["Smoke Screen", "niv. 8", { fr: "+30 % d'esquive pendant 8 s : la survie de la mêlée.", en: "+30% dodge for 8s: melee's survival button." }],
+    ["Borrowed Tempo", "niv. 11", { fr: "1 builder sur 3 rend Cutthroat Tempo gratuit.", en: "every 3rd builder makes Cutthroat Tempo free." }],
+    ["Final Notice", "niv. 14", { fr: "chaque finisher rend le builder suivant 50 % moins cher : la boucle à saignements s'auto-alimente.", en: "each finisher makes the next builder 50% cheaper: the bleed loop feeds itself." }],
+    ["Shadecloak", "niv. 17", { fr: "420 d'absorption pendant 5 s (CD 90 s) : le bouclier d'ombre pour traverser une mécanique.", en: "a 420 absorb for 5s (90s CD): the shadow shield to walk through a mechanic." }],
+    ["Shadeslip", "niv. 20", { fr: "le pas d'ombre vers ta cible SANS casser Duskveil (CD 24 s) : l'ouverture parfaite, à volonté.", en: "the shadow-step to your target WITHOUT breaking Duskveil (24s CD): the perfect opener, on tap." }]
+   ],
+   rotation: [
+    ["Adder's Bite / Festering Venom", { fr: "le poison sur l'arme, toujours.", en: "poison on the weapon, always." }],
+    ["Duskveil → Shadeslip → Throat Wire", { fr: "l'ouverture : arrive dans le dos sans être vu et pose le premier saignement (+20 énergie via Dusk Dividend).", en: "the opener: arrive behind the target unseen and land the first bleed (+20 energy from Dusk Dividend)." }],
+    ["Red Ribbon", { fr: "ton sort signature : saignement + la cible subit +40 % de dégâts de saignement — le multiplicateur de toute la spé.", en: "your signature spell: a bleed + the target takes +40% bleed damage — the whole spec's multiplier." }],
+    ["Bleed Out", { fr: "LE finisher : 16 s de saignement, amplifié par Red Ribbon.", en: "THE finisher: a 16s bleed, amplified by Red Ribbon." }],
+    ["Cutthroat Tempo", { fr: "l'autre finisher à entretenir (+30 % de hâte).", en: "the other finisher to maintain (+30% haste)." }],
+    ["Wicked Slash", { fr: "le builder hors ouverture.", en: "the builder outside openers." }],
+    ["Smokestep", { fr: "la re-furtivité en combat (niv. 18) : un Gut Punch (stun 4 s) ou un Throat Wire de plus.", en: "the in-combat re-stealth (lvl 18): one more Gut Punch (4s stun) or Throat Wire." }],
+    ["Boot", { fr: "l'interrupt.", en: "the interrupt." }]
+   ],
+   astuce: { fr: "Tes saignements continuent de ticker pendant que tu es furtif ou en fuite : pose Red Ribbon + Bleed Out, disparais, laisse saigner — c'est du DPS que personne ne peut interrompre.",
+             en: "Your bleeds keep ticking while you're stealthed or running: land Red Ribbon + Bleed Out, vanish, let it bleed — that's DPS nobody can interrupt." }
+  }]
  }
 };
 
@@ -9737,14 +10051,31 @@ function cxNames(raw) {
   }).join("");
 }
 
+// Une entrée de BUILDS peut être un build unique (objet) ou une liste de
+// builds — un par spécialisation — quand la classe a plusieurs spés pour le
+// même rôle. curSpec = l'index du build affiché dans cette liste.
+let curSpec = 0;
+const buildList = (cls, role) => {
+  const raw = (BUILDS[cls] || {})[role];
+  return Array.isArray(raw) ? raw : raw ? [raw] : [];
+};
+
 function renderBuild() {
   const box = document.getElementById("buildBox");
-  const b = (BUILDS[curCls] || {})[curRole];
-  if (!b) { box.innerHTML = ""; return; }
+  const list = buildList(curCls, curRole);
+  if (!list.length) { box.innerHTML = ""; return; }
+  if (curSpec >= list.length) curSpec = 0;
+  const b = list[curSpec];
+  const specTabs = list.length > 1
+    ? `<div class="spec-tabs" role="tablist" aria-label="${T({ fr: "Spécialisations", en: "Specialisations" })}">` +
+      list.map((v, i) => `<button class="spec-btn${i === curSpec ? " on" : ""}" data-spec="${i}" role="tab" aria-selected="${i === curSpec}">${loc(v.tag) || loc(v.spec)}</button>`).join("") +
+      `</div>`
+    : "";
   const spec = loc(b.spec);
   const talents = b.talents.map(t => `<li><b>${cxNames(t[0])}</b> <span class="bt-tree">${TREE_LBL(t[1])}</span> — ${loc(t[2])}</li>`).join("");
   const rota = b.rotation.map(r => `<li><b>${cxNames(r[0])}</b> — ${loc(r[1])}</li>`).join("");
   box.innerHTML = `
+    ${specTabs}
     <div class="bsec">
       <h2 class="bsec-h">🧠 ${T({ fr: "Spé & talents", en: "Spec & talents" })}</h2>
       <div class="bspec"><b><span data-codex="spec|${spec.split(" — ")[0].replace(/"/g, "&quot;")}">${spec}</span></b><span class="bmastery">${loc(b.mastery)}</span><p>${loc(b.pourquoi)}</p></div>
@@ -9760,7 +10091,11 @@ function renderBuild() {
       <ol class="brota">${rota}</ol>
       ${b.astuce ? `<p class="bastuce">💡 ${loc(b.astuce)}</p>` : ""}
     </div>
-    <h2 class="bsec-h">⚔️ ${T({ fr: "Le stuff", en: "The gear" })} (<span data-codex="term|bis">best in slot</span>)</h2>`;
+    <h2 class="bsec-h">⚔️ ${T({ fr: "Le stuff", en: "The gear" })} (<span data-codex="term|bis">best in slot</span>)</h2>
+    ${b.gearnote ? `<p class="bt-cap">⚠️ ${loc(b.gearnote)}</p>` : ""}`;
+  box.querySelectorAll("[data-spec]").forEach(btn => btn.addEventListener("click", () => {
+    curSpec = +btn.dataset.spec; renderBuild();
+  }));
   if (window.CodexPopup) CodexPopup.enhance(box);
 }
 
@@ -9811,8 +10146,8 @@ function render() {
     return html;
   }).join("");
 
-  document.querySelectorAll("[data-cls]").forEach(b => b.addEventListener("click", () => { curCls = b.dataset.cls; render(); }));
-  document.querySelectorAll("[data-role]").forEach(b => b.addEventListener("click", () => { curRole = b.dataset.role; render(); }));
+  document.querySelectorAll("[data-cls]").forEach(b => b.addEventListener("click", () => { curCls = b.dataset.cls; curSpec = 0; render(); }));
+  document.querySelectorAll("[data-role]").forEach(b => b.addEventListener("click", () => { curRole = b.dataset.role; curSpec = 0; render(); }));
 }
 render();
 </script>
