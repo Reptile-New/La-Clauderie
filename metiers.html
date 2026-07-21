@@ -2562,14 +2562,16 @@ const CRAFT = {
   // Paires, quête et Masterwork (v0.27.0) vivent dans le code du jeu
   // (src/sim/professions/archetype.ts, masterwork.ts) sans export KB. Les
   // recettes combo, elles, SONT dans ALL_RECIPES depuis la v0.27.2 (champ
-  // comboRequirement, badge 🤝 dans la liste générée).
+  // comboRequirement, badge 🤝 dans la liste générée) — toujours les 3 mêmes
+  // en v0.28.0. Maîtres de métier v0.28 : NPCS.json (« Master of… »),
+  // apprentissage par paliers : champ acquisition + skillReq d'ALL_RECIPES.
   // Rédigé à la main — à revérifier à chaque MAJ qui touche les métiers.
   function renderArchetypes() {
     return `<div class="block">
-      <div class="block-head"><h2>🧭 ${T('Métiers 2.0 — choisir son archétype', 'Professions 2.0 — picking your archetype')}</h2><span class="lvl">${T('guide v0.27', 'v0.27 guide')}</span></div>
+      <div class="block-head"><h2>🧭 ${T('Métiers 2.0 — choisir son archétype', 'Professions 2.0 — picking your archetype')}</h2><span class="lvl">${T('guide v0.28', 'v0.28 guide')}</span></div>
       <p style="color:var(--dim);font-size:0.93rem;margin:8px 0 0">${T(
-        'Depuis la v0.27, on ne monte plus ses métiers librement : la quête « A Craft to Call Your Own » de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook (récolter 3 filons de minerai) fait choisir une <b style="color:var(--text)">paire de métiers voisins</b> qui deviennent tes deux majeurs — et donnent ton titre d’artisan (Smith, Bladewright, Arcanist…). L’opposé de chaque majeur devient automatiquement un <b style="color:var(--text)">hobby</b>, plafonné à rare. On peut changer plus tard via les quêtes « Making Amends » et « A Different Pastime » (coût croissant à chaque changement).',
-        'Since v0.27 you no longer level professions freely: Smith Haldren’s quest “A Craft to Call Your Own” in Eastbrook (harvest 3 ore veins) has you pick a <b style="color:var(--text)">pair of adjacent professions</b> that become your two majors — and grant your artisan title (Smith, Bladewright, Arcanist…). The opposite of each major automatically becomes a <b style="color:var(--text)">hobby</b>, capped at rare. You can change later via the “Making Amends” and “A Different Pastime” quests (cost grows with each change).')}</p>
+        'Depuis la v0.27, on ne monte plus ses métiers librement : la quête « A Craft to Call Your Own » de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook (récolter 3 filons de minerai) fait choisir une <b style="color:var(--text)">paire de métiers voisins</b> qui deviennent tes deux majeurs — et donnent ton titre d’artisan (Smith, Bladewright, Arcanist…). L’opposé de chaque majeur devient automatiquement un <b style="color:var(--text)">hobby</b>, plafonné à rare. On peut changer plus tard via les quêtes « Making Amends » et « A Different Pastime » (coût croissant à chaque changement). Depuis la v0.28, les recettes s’apprennent auprès des <b style="color:var(--text)">maîtres de métier</b> installés dans le monde, par paliers de compétence (9 recettes par métier, étagées de 0 à 50 — la compétence requise est affichée dans la liste plus bas) ; les recettes déjà connues restent acquises.',
+        'Since v0.27 you no longer level professions freely: Smith Haldren’s quest “A Craft to Call Your Own” in Eastbrook (harvest 3 ore veins) has you pick a <b style="color:var(--text)">pair of adjacent professions</b> that become your two majors — and grant your artisan title (Smith, Bladewright, Arcanist…). The opposite of each major automatically becomes a <b style="color:var(--text)">hobby</b>, capped at rare. You can change later via the “Making Amends” and “A Different Pastime” quests (cost grows with each change). Since v0.28, recipes are taught by the <b style="color:var(--text)">profession masters</b> placed in the world, in skill tiers (9 recipes per profession, spread from 0 to 50 — the required skill shows in the list below); recipes you already knew stay learned.')}</p>
       <div class="cols">
         <div class="node wood">
           <h3><span class="ico">🎯</span>${T('Qualité & Masterwork', 'Quality & Masterwork')}</h3>
@@ -2587,8 +2589,8 @@ const CRAFT = {
         <div class="node fish">
           <h3><span class="ico">⚠️</span>${T('Métiers encore vides', 'Still-empty professions')}</h3>
           <p style="margin:0;color:var(--dim);font-size:0.9rem">${T(
-            '<b style="color:var(--text)">Inscription et Joaillerie n’ont AUCUN contenu en v0.27</b> — pas une recette, pas une mécanique dans le code du jeu. Ils sont pourtant sélectionnables dans les paires : Arcanist (Inscription + Enchantement) n’a que l’enchantement de fonctionnel, Bladewright (Joaillerie + Armes) tourne à moitié. À savoir avant de s’engager — changer de paire coûte de plus en plus cher.',
-            '<b style="color:var(--text)">Inscription and Jewelcrafting have NO content in v0.27</b> — not one recipe, not one mechanic in the game code. Yet they are selectable in pairs: Arcanist (Inscription + Enchanting) only has Enchanting working, Bladewright (Jewelcrafting + Weaponcrafting) runs at half power. Know this before committing — changing pairs gets ever more expensive.')}</p>
+            '<b style="color:var(--text)">Inscription et Joaillerie n’ont toujours AUCUN contenu en v0.28</b> — pas une recette, pas un maître de métier dans les données du jeu, alors que la MAJ vient d’en distribuer partout ailleurs. Ils sont pourtant sélectionnables dans les paires : Arcanist (Inscription + Enchantement) n’a que l’enchantement de fonctionnel, Bladewright (Joaillerie + Armes) tourne à moitié. À savoir avant de s’engager — changer de paire coûte de plus en plus cher.',
+            '<b style="color:var(--text)">Inscription and Jewelcrafting STILL have no content in v0.28</b> — not one recipe, not one profession master in the game data, even though the patch just handed those out everywhere else. Yet they are selectable in pairs: Arcanist (Inscription + Enchanting) only has Enchanting working, Bladewright (Jewelcrafting + Weaponcrafting) runs at half power. Know this before committing — changing pairs gets ever more expensive.')}</p>
         </div>
       </div>
     </div>`;
@@ -2597,15 +2599,16 @@ const CRAFT = {
   // --- Guide Enchantement — section ÉDITORIALE -------------------------------
   // L'enchantement n'a aucune recette dans ALL_RECIPES de la KB (tout est dans
   // le code du jeu, enchants connus d'office) : le pipeline build_craft.py ne
-  // le voit pas. Ce guide est donc rédigé à la main, vérifié dans le code du
-  // jeu (src/sim/professions/enchanting.ts, tag v0.27.0). À revérifier à
-  // chaque MAJ qui touche l'enchantement.
+  // le voit pas. Ce guide est donc rédigé à la main, vérifié contre
+  // data/ENCHANTS.json de la KB (identique de v0.27.2 à v0.28.0 — coûts et
+  // slots revérifiés au passage v0.28 ; la v0.28 n'ajoute ni formateur ni
+  // recette d'enchantement). À revérifier à chaque MAJ qui touche l'enchantement.
   function renderEnchant() {
     return `<div class="block">
-      <div class="block-head"><h2>🪄 ${T('Enchantement', 'Enchanting')}</h2><span class="lvl">${T('guide v0.27', 'v0.27 guide')}</span><span class="sub">${T('pas de recettes : tout est connu d’office', 'no recipes: everything is known from the start')}</span></div>
+      <div class="block-head"><h2>🪄 ${T('Enchantement', 'Enchanting')}</h2><span class="lvl">${T('guide v0.28', 'v0.28 guide')}</span><span class="sub">${T('pas de recettes : tout est connu d’office', 'no recipes: everything is known from the start')}</span></div>
       <p style="color:var(--dim);font-size:0.93rem;margin:8px 0 0">${T(
-        'Le métier le plus simple à monter : rien à apprendre, pas de formateur. Désenchanter et enchanter donnent chacun <b style="color:var(--text)">+1 point par action</b> — pas de recettes grises, pas de gain dégressif. Se prend en majeur avec l’Inscription (titre Arcanist) via la quête de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook.',
-        'The easiest profession to level: nothing to learn, no trainer. Disenchanting and enchanting each grant <b style="color:var(--text)">+1 point per action</b> — no grey recipes, no diminishing gains. Taken as a major alongside Inscription (Arcanist title) via <span data-codex="npc|Smith Haldren">Smith Haldren</span>’s quest in Eastbrook.')}</p>
+        'Le métier le plus simple à monter : rien à apprendre, pas de formateur — même en v0.28, où les recettes des autres métiers passent désormais par les maîtres. Désenchanter et enchanter donnent chacun <b style="color:var(--text)">+1 point par action</b> — pas de recettes grises, pas de gain dégressif. Se prend en majeur avec l’Inscription (titre Arcanist) via la quête de <span data-codex="npc|Smith Haldren">Smith Haldren</span> à Eastbrook.',
+        'The easiest profession to level: nothing to learn, no trainer — even in v0.28, now that other professions’ recipes go through the masters. Disenchanting and enchanting each grant <b style="color:var(--text)">+1 point per action</b> — no grey recipes, no diminishing gains. Taken as a major alongside Inscription (Arcanist title) via <span data-codex="npc|Smith Haldren">Smith Haldren</span>’s quest in Eastbrook.')}</p>
       <div class="cols">
         <div class="node herb">
           <h3><span class="ico">✨</span>${T('Les matériaux', 'The materials')}</h3>
