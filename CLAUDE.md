@@ -1,5 +1,8 @@
 # Runbook — site de La Clauderie
 
+> **Style de réponse** : l'utilisateur veut des réponses COURTES. Aller à
+> l'essentiel, pas de longs exposés ni de listes exhaustives.
+
 Site statique de guilde pour *World of ClaudeCraft*. Déployé sur
 **laclauderie.fr** (OVH) et GitHub Pages **à chaque push sur `main`**.
 
