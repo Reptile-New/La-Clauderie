@@ -106,6 +106,23 @@ liste. Pour ajouter / renommer / réordonner un onglet : **modifier uniquement
   seule copie, servie par le déploiement du site) — donc il ne peut plus « rater »
   un nouvel onglet.
 
+## 📖 Code source du jeu — disponible dans chaque session
+
+Un hook SessionStart (`.claude/hooks/session-start.sh`, présent dans ce repo
+et dans la KB) clone le code du jeu en lecture seule dans
+`../world-of-claudecraft`, au **dernier tag publié**. Clone partiel : `src`,
+`server`, `scripts`, `tests`, `mediawiki` + fichiers racine — les assets
+(`docs/`, `public/`, ~1,4 Go) sont exclus. Le dépôt
+(`levy-street/world-of-claudecraft`) est public mais externe : il ne peut pas
+être attaché comme source de session (`add_repo` échouera — ne pas réessayer),
+ce clone est la façon officielle d'y accéder.
+
+- S'en servir pour vérifier le contenu du jeu à la source quand les JSON de la
+  KB ne suffisent pas (ex. enchantements : `src/sim/content/enchants.ts`).
+- Vérifier le tag du clone avant de s'y fier :
+  `git -C ../world-of-claudecraft describe --tags`.
+- Lecture seule : ne jamais commiter ni pousser dans ce clone.
+
 ## Branche & déploiement
 - Développer sur `claude/site-update-6uhdmv`, merger sur `main` (source du déploiement).
 - La knowledge base (`Reptile-New/wocc-knowledge-base`, repo public) fournit `data/`
