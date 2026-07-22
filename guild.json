@@ -2,63 +2,63 @@
   "guilde": {
     "classementServeur": 5,
     "classement": {
-      "releveLe": "2026-07-22T11:15:15Z",
+      "releveLe": "2026-07-22T16:38:12Z",
       "metric": "guildLifetimeXp",
       "top": [
         {
           "rank": 1,
           "name": "Monarchs",
           "memberCount": 99,
-          "totalLifetimeXp": 39945490,
+          "totalLifetimeXp": 40103832,
           "topLevel": 20
         },
         {
           "rank": 2,
           "name": "HUMANITY",
           "memberCount": 100,
-          "totalLifetimeXp": 31651220,
+          "totalLifetimeXp": 31771452,
           "topLevel": 20
         },
         {
           "rank": 3,
           "name": "Look Good Play Good",
           "memberCount": 69,
-          "totalLifetimeXp": 21680429,
+          "totalLifetimeXp": 21799495,
           "topLevel": 20
         },
         {
           "rank": 4,
           "name": "Ehren Nuggets",
           "memberCount": 91,
-          "totalLifetimeXp": 11677879,
+          "totalLifetimeXp": 11722333,
           "topLevel": 20
         },
         {
           "rank": 5,
           "name": "La Clauderie",
-          "memberCount": 37,
-          "totalLifetimeXp": 9423978,
+          "memberCount": 39,
+          "totalLifetimeXp": 10008771,
           "topLevel": 20
         },
         {
           "rank": 6,
           "name": "OTUKEN",
           "memberCount": 27,
-          "totalLifetimeXp": 6568045,
+          "totalLifetimeXp": 6645044,
           "topLevel": 20
         },
         {
           "rank": 7,
           "name": "Peasants",
           "memberCount": 28,
-          "totalLifetimeXp": 6397523,
+          "totalLifetimeXp": 6434048,
           "topLevel": 20
         },
         {
           "rank": 8,
           "name": "Glorious",
           "memberCount": 28,
-          "totalLifetimeXp": 6363088,
+          "totalLifetimeXp": 6363849,
           "topLevel": 20
         },
         {
@@ -72,15 +72,15 @@
           "rank": 10,
           "name": "Cool People",
           "memberCount": 42,
-          "totalLifetimeXp": 4461184,
+          "totalLifetimeXp": 4466421,
           "topLevel": 20
         }
       ],
       "laClauderie": {
         "rank": 5,
         "name": "La Clauderie",
-        "memberCount": 37,
-        "totalLifetimeXp": 9423978,
+        "memberCount": 39,
+        "totalLifetimeXp": 10008771,
         "topLevel": 20
       }
     }
