@@ -86,6 +86,28 @@
   .hero .sub { display: block; margin-top: 12px; font-size: 0.82rem; color: var(--faint); }
   .honors { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
   .honor { font-size: 0.84rem; font-weight: 600; color: var(--gold-bright); background: color-mix(in srgb, var(--gold) 9%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent); padding: 6px 14px; border-radius: 999px; }
+  button.honor { cursor: pointer; font-family: inherit; transition: border-color .12s, background .12s; }
+  button.honor:hover { border-color: var(--gold-bright); background: color-mix(in srgb, var(--gold) 16%, transparent); }
+  button.honor:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Bulle « classement des guildes » (au clic sur la pastille) */
+  dialog#rankModal { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: #12161f; color: var(--text); max-width: 440px; width: calc(100% - 28px); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog#rankModal::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .rm-head { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px 12px; border-bottom: 1px solid var(--line-soft); }
+  .rm-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0; line-height: 1.2; }
+  .rm-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; line-height: 1; }
+  .rm-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .rm-body { padding: 10px 20px 16px; }
+  .rm-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .rm-table th { text-align: left; font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--faint); padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .rm-table td { padding: 7px 8px; border-bottom: 1px solid var(--line-soft); color: var(--dim); }
+  .rm-table td.rk { font-family: var(--font-mono); color: var(--faint); white-space: nowrap; }
+  .rm-table td.nm { color: var(--text); font-weight: 600; }
+  .rm-table td.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+  .rm-table tr.us td { color: var(--gold-bright); background: color-mix(in srgb, var(--gold) 8%, transparent); }
+  .rm-table tr.us td.nm, .rm-table tr.us td.rk { color: var(--gold-bright); font-weight: 700; }
+  .rm-table tr.dots td { text-align: center; color: var(--faint); border-bottom: none; padding: 2px 8px; }
+  .rm-note { margin: 12px 0 0; font-size: 0.78rem; color: var(--faint); }
 
   /* Cartes de navigation (les guides) */
   .guides { padding: 0 0 clamp(26px, 4vw, 38px); }
@@ -222,7 +244,7 @@
     <span class="sub" data-en="The guild doesn’t have its own Discord yet — this is the official World of ClaudeCraft server, where we hang out in the #france channel. Mention “La Clauderie” to join us!">La guilde n’a pas encore de Discord attitré — ce lien mène au serveur officiel de World of ClaudeCraft, où on se retrouve dans le salon #france. Mentionne « La Clauderie » pour nous rejoindre !</span>
     <div class="honors">
       <span class="honor" data-en="🇫🇷 First French guild">🇫🇷 Première guilde française</span>
-      <span class="honor" id="rankBadge" style="display:none"></span>
+      <button class="honor" id="rankBadge" type="button" style="display:none" title="Voir le classement des guildes" data-en-title="See the guild leaderboard"></button>
     </div>
   </header>
 
@@ -304,6 +326,14 @@
     <p><a href="admin.html" data-en="Officers’ area">Espace officiers</a></p>
   </div>
 </footer>
+
+<dialog id="rankModal" aria-labelledby="rmTitle">
+  <div class="rm-head">
+    <h3 id="rmTitle" data-en="Server guild leaderboard">Classement des guildes du serveur</h3>
+    <button class="close" id="rmClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="rm-body" id="rmBody"></div>
+</dialog>
 
 <script src="assets/nav.js"></script>
 <script src="assets/lang.js"></script>
@@ -390,14 +420,55 @@
   });
 
   // ---- Distinctions : classement serveur (relevé automatiquement par le
-  // workflow update-guild-rank.yml, toutes les 3 h) ----
+  // workflow update-guild-rank.yml, toutes les 3 h). Un clic sur la pastille
+  // ouvre la bulle avec le top 10 (stocké dans guild.json par le même
+  // workflow — même origine, pas besoin de l'API du jeu côté navigateur). ----
   getJson("guild.json", { guilde: {} }).then(data => {
-    const n = (data.guilde || {}).classementServeur;
+    const g = data.guilde || {};
+    const n = g.classementServeur;
     if (!n || n < 1) return;
     $("rankBadge").textContent = LANG === "en"
       ? "🏆 #" + n + " guild on the server"
       : "🏆 " + (n === 1 ? "1ʳᵉ" : n + "ᵉ") + " guilde du serveur";
     $("rankBadge").style.display = "";
+
+    const modal = $("rankModal");
+    const fmt = x => (x == null ? "—" : Number(x).toLocaleString(LANG === "en" ? "en-US" : "fr-FR"));
+    const isUs = name => String(name || "").toLowerCase() === "la clauderie";
+    $("rankBadge").addEventListener("click", () => {
+      const c = g.classement;
+      let html;
+      if (c && Array.isArray(c.top) && c.top.length) {
+        const rows = c.top.map(e =>
+          `<tr${isUs(e.name) ? ' class="us"' : ""}><td class="rk">${e.rank}</td><td class="nm">${e.name}</td><td class="num">${fmt(e.memberCount)}</td><td class="num">${fmt(e.totalLifetimeXp)}</td></tr>`);
+        // Si La Clauderie est au-delà du top affiché, on l'ajoute après « … ».
+        if (c.laClauderie && !c.top.some(e => e.rank === c.laClauderie.rank)) {
+          rows.push('<tr class="dots"><td colspan="4">…</td></tr>');
+          const e = c.laClauderie;
+          rows.push(`<tr class="us"><td class="rk">${e.rank}</td><td class="nm">${e.name}</td><td class="num">${fmt(e.memberCount)}</td><td class="num">${fmt(e.totalLifetimeXp)}</td></tr>`);
+        }
+        const date = c.releveLe ? new Date(c.releveLe).toLocaleString(LANG === "en" ? "en-GB" : "fr-FR", { dateStyle: "short", timeStyle: "short" }) : "";
+        html = `<table class="rm-table"><thead><tr>` +
+          (LANG === "en"
+            ? "<th>#</th><th>Guild</th><th>Members</th><th>Total XP</th>"
+            : "<th>#</th><th>Guilde</th><th>Membres</th><th>XP totale</th>") +
+          `</tr></thead><tbody>${rows.join("")}</tbody></table>` +
+          `<p class="rm-note">${LANG === "en"
+            ? "Metric: lifetime guild XP · surveyed " + date + " · auto-refreshed every 3 h from the game's leaderboard."
+            : "Métrique : XP de guilde cumulée · relevé le " + date + " · rafraîchi automatiquement toutes les 3 h depuis le classement du jeu."}</p>`;
+      } else {
+        // guild.json d'avant l'enrichissement : le prochain passage du
+        // workflow (toutes les 3 h) remplira le top 10.
+        html = `<p class="rm-note" style="font-size:0.88rem">${LANG === "en"
+          ? "La Clauderie is <b>#" + n + "</b> on the server. The full top 10 will appear here after the next automatic survey (every 3 h)."
+          : "La Clauderie est <b>" + (n === 1 ? "1ʳᵉ" : n + "ᵉ") + "</b> du serveur. Le top 10 complet apparaîtra ici au prochain relevé automatique (toutes les 3 h)."}</p>`;
+      }
+      $("rmBody").innerHTML = html;
+      if (typeof modal.showModal === "function") modal.showModal();
+      else modal.setAttribute("open", "");
+    });
+    $("rmClose").addEventListener("click", () => modal.close());
+    modal.addEventListener("click", e => { if (e.target === modal) modal.close(); });
   });
 
   // ---- Membres + Faits d'armes (chargés ensemble : les cartes membres
