@@ -1,5 +1,88 @@
 {
   "guilde": {
-    "classementServeur": 5
+    "classementServeur": 5,
+    "classement": {
+      "releveLe": "2026-07-22T08:40:30Z",
+      "metric": "guildLifetimeXp",
+      "top": [
+        {
+          "rank": 1,
+          "name": "Monarchs",
+          "memberCount": 98,
+          "totalLifetimeXp": 36520414,
+          "topLevel": 20
+        },
+        {
+          "rank": 2,
+          "name": "HUMANITY",
+          "memberCount": 100,
+          "totalLifetimeXp": 31586550,
+          "topLevel": 20
+        },
+        {
+          "rank": 3,
+          "name": "Look Good Play Good",
+          "memberCount": 69,
+          "totalLifetimeXp": 21644612,
+          "topLevel": 20
+        },
+        {
+          "rank": 4,
+          "name": "Ehren Nuggets",
+          "memberCount": 91,
+          "totalLifetimeXp": 11675008,
+          "topLevel": 20
+        },
+        {
+          "rank": 5,
+          "name": "La Clauderie",
+          "memberCount": 37,
+          "totalLifetimeXp": 9416580,
+          "topLevel": 20
+        },
+        {
+          "rank": 6,
+          "name": "OTUKEN",
+          "memberCount": 27,
+          "totalLifetimeXp": 6540885,
+          "topLevel": 20
+        },
+        {
+          "rank": 7,
+          "name": "Glorious",
+          "memberCount": 28,
+          "totalLifetimeXp": 6363088,
+          "topLevel": 20
+        },
+        {
+          "rank": 8,
+          "name": "Peasants",
+          "memberCount": 26,
+          "totalLifetimeXp": 5854417,
+          "topLevel": 20
+        },
+        {
+          "rank": 9,
+          "name": "OFP",
+          "memberCount": 65,
+          "totalLifetimeXp": 5702318,
+          "topLevel": 20
+        },
+        {
+          "rank": 10,
+          "name": "Cool People",
+          "memberCount": 42,
+          "totalLifetimeXp": 4461184,
+          "topLevel": 20
+        }
+      ],
+      "laClauderie": {
+        "rank": 5,
+        "name": "La Clauderie",
+        "memberCount": 37,
+        "totalLifetimeXp": 9416580,
+        "topLevel": 20
+      }
+    }
   }
 }
