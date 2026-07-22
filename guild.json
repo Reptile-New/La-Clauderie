@@ -2,56 +2,56 @@
   "guilde": {
     "classementServeur": 5,
     "classement": {
-      "releveLe": "2026-07-22T19:38:42Z",
+      "releveLe": "2026-07-22T22:12:23Z",
       "metric": "guildLifetimeXp",
       "top": [
         {
           "rank": 1,
           "name": "Monarchs",
           "memberCount": 99,
-          "totalLifetimeXp": 40245075,
+          "totalLifetimeXp": 40366962,
           "topLevel": 20
         },
         {
           "rank": 2,
           "name": "HUMANITY",
           "memberCount": 100,
-          "totalLifetimeXp": 31964419,
+          "totalLifetimeXp": 32034021,
           "topLevel": 20
         },
         {
           "rank": 3,
           "name": "Look Good Play Good",
           "memberCount": 69,
-          "totalLifetimeXp": 21853112,
+          "totalLifetimeXp": 21977283,
           "topLevel": 20
         },
         {
           "rank": 4,
           "name": "Ehren Nuggets",
-          "memberCount": 91,
-          "totalLifetimeXp": 11785641,
+          "memberCount": 90,
+          "totalLifetimeXp": 11582324,
           "topLevel": 20
         },
         {
           "rank": 5,
           "name": "La Clauderie",
           "memberCount": 39,
-          "totalLifetimeXp": 10020072,
+          "totalLifetimeXp": 10042332,
           "topLevel": 20
         },
         {
           "rank": 6,
-          "name": "OTUKEN",
-          "memberCount": 29,
-          "totalLifetimeXp": 7224750,
+          "name": "Peasants",
+          "memberCount": 32,
+          "totalLifetimeXp": 7484968,
           "topLevel": 20
         },
         {
           "rank": 7,
-          "name": "Peasants",
-          "memberCount": 28,
-          "totalLifetimeXp": 6442658,
+          "name": "OTUKEN",
+          "memberCount": 29,
+          "totalLifetimeXp": 7263720,
           "topLevel": 20
         },
         {
@@ -80,7 +80,7 @@
         "rank": 5,
         "name": "La Clauderie",
         "memberCount": 39,
-        "totalLifetimeXp": 10020072,
+        "totalLifetimeXp": 10042332,
         "topLevel": 20
       }
     }
