@@ -2,56 +2,56 @@
   "guilde": {
     "classementServeur": 5,
     "classement": {
-      "releveLe": "2026-07-22T16:38:12Z",
+      "releveLe": "2026-07-22T19:38:42Z",
       "metric": "guildLifetimeXp",
       "top": [
         {
           "rank": 1,
           "name": "Monarchs",
           "memberCount": 99,
-          "totalLifetimeXp": 40103832,
+          "totalLifetimeXp": 40245075,
           "topLevel": 20
         },
         {
           "rank": 2,
           "name": "HUMANITY",
           "memberCount": 100,
-          "totalLifetimeXp": 31771452,
+          "totalLifetimeXp": 31964419,
           "topLevel": 20
         },
         {
           "rank": 3,
           "name": "Look Good Play Good",
           "memberCount": 69,
-          "totalLifetimeXp": 21799495,
+          "totalLifetimeXp": 21853112,
           "topLevel": 20
         },
         {
           "rank": 4,
           "name": "Ehren Nuggets",
           "memberCount": 91,
-          "totalLifetimeXp": 11722333,
+          "totalLifetimeXp": 11785641,
           "topLevel": 20
         },
         {
           "rank": 5,
           "name": "La Clauderie",
           "memberCount": 39,
-          "totalLifetimeXp": 10008771,
+          "totalLifetimeXp": 10020072,
           "topLevel": 20
         },
         {
           "rank": 6,
           "name": "OTUKEN",
-          "memberCount": 27,
-          "totalLifetimeXp": 6645044,
+          "memberCount": 29,
+          "totalLifetimeXp": 7224750,
           "topLevel": 20
         },
         {
           "rank": 7,
           "name": "Peasants",
           "memberCount": 28,
-          "totalLifetimeXp": 6434048,
+          "totalLifetimeXp": 6442658,
           "topLevel": 20
         },
         {
@@ -65,7 +65,7 @@
           "rank": 9,
           "name": "OFP",
           "memberCount": 65,
-          "totalLifetimeXp": 5713410,
+          "totalLifetimeXp": 5713970,
           "topLevel": 20
         },
         {
@@ -80,7 +80,7 @@
         "rank": 5,
         "name": "La Clauderie",
         "memberCount": 39,
-        "totalLifetimeXp": 10008771,
+        "totalLifetimeXp": 10020072,
         "topLevel": 20
       }
     }
