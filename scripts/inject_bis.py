@@ -41,6 +41,9 @@ head_end = next((i for i, l in enumerate(out_lines) if l.startswith("const BUILD
 for i in range(head_end):
     out_lines[i] = re.sub(r"Patch v\d+\.\d+\.\d+", f"Patch {tag}", out_lines[i])
     out_lines[i] = re.sub(r"tag v\d+\.\d+\.\d+", f"tag {tag}", out_lines[i])
+    # Badge « à jour de la version » (assets/version.js) : le BiS étant
+    # recalculé sur les nouvelles données, on date la page du nouveau tag.
+    out_lines[i] = re.sub(r'data-version="v\d+\.\d+\.\d+"', f'data-version="{tag}"', out_lines[i])
 
 open(html_path, "w", encoding="utf-8").write("\n".join(out_lines))
 print(f"inject_bis: bis.html mis à jour sur {tag}")

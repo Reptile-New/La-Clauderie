@@ -31,7 +31,17 @@ se limite à la partie rédactionnelle des « Nouveautés » :
 3. **Ajouter une entrée en tête de `patch-notes.json`** (version, date, titre,
    resume, temps_forts, page + variantes `_en` et `page_en`). L'accueil et la
    page Nouveautés se mettent à jour tout seuls à partir de ce fichier.
-3bis. **Mettre à jour le guide « Spé & talents » (`const BUILDS` de `bis.html`)**
+3bis. **Mettre à jour les badges « à jour de la version »** : `pvp.html` et
+   `metiers.html` portent `data-version="vX.Y.Z"` sur leur inclusion de
+   `assets/version.js` — passer cet attribut à la nouvelle version APRÈS avoir
+   relu la page concernée (guide PvP si la MAJ touche talents/sorts/PvP,
+   partie éditoriale des Métiers sinon elle reste à l'ancienne version et le
+   badge affichera honnêtement « relecture en cours »). `bis.html` est bumpé
+   automatiquement par `inject_bis.py`. Le badge compare ce `data-version` à
+   la dernière entrée de `patch-notes.json` : tant que l'étape 3 n'est pas
+   faite, tous les badges restent verts — c'est l'ajout de la nouvelle entrée
+   qui les fait basculer.
+3ter. **Mettre à jour le guide « Spé & talents » (`const BUILDS` de `bis.html`)**
    pour les classes touchées par la MAJ : choix par rangée de talents (format
    `["Option", "niv. X", {fr, en}]`), maîtrise, rotation, astuce — en vérifiant
    chaque nom contre `TALENTS.json` / `ABILITIES.json` de la KB. C'est la
