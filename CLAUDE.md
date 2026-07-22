@@ -120,6 +120,9 @@ et dans la KB) clone le code du jeu en lecture seule dans
 être attaché comme source de session (`add_repo` échouera — ne pas réessayer),
 ce clone est la façon officielle d'y accéder.
 
+- **Session multi-repos** (racine = dossier parent, pas un repo) : le hook ne
+  se déclenche pas tout seul. Si `../world-of-claudecraft` est absent, le
+  lancer à la main : `bash .claude/hooks/session-start.sh` (depuis ce repo).
 - S'en servir pour vérifier le contenu du jeu à la source quand les JSON de la
   KB ne suffisent pas (ex. enchantements : `src/sim/content/enchants.ts`).
 - Vérifier le tag du clone avant de s'y fier :
