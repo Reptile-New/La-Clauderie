@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>What's new in v0.29.1 — La Clauderie</title>
+<meta name="description" content="Everything new in World of ClaudeCraft v0.29.1: a balance hotfix — healers keep up, tanks stop dying to dice, the raid and heroic dungeons retuned.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="What&#39;s new in v0.29.1 — La Clauderie">
+<meta property="og:description" content="Everything new in World of ClaudeCraft v0.29.1: a balance hotfix — healers keep up, tanks stop dying to dice, the raid and heroic dungeons retuned.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.29.1.en.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.29.1.en.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') !== 'en') location.replace('v0.29.1.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" data-guild-nav data-current="news" aria-label="Site navigation"></nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Patch notes</p>
+    <h1>What's new in <span class="v">v0.29.1</span></h1>
+    <p class="lede">A balance hotfix for the v0.29.0 heroic retune: healers can keep up again, tanks stop dying to a bad dice roll, and the fights that overshot are brought back to reason. Click a bubble for the detailed rules.</p>
+    <div class="meta">
+      <span><b>Released</b> July 23, 2026</span>
+      <span><b>Since</b> v0.29.0</span>
+      <span><b>Balance</b> · raid &amp; dungeons</span>
+    </div>
+    <div class="hint">💡 Click a card to open its detailed rules — and the <span data-codex="term|proc">underlined words</span> for their definition.</div>
+  </header>
+  <!-- 1 HEALERS & TANKS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Healers &amp; tanks find their footing</h2></div>
+    <p class="sec-sub">The v0.29.0 heroic retune doubled target health without touching healing — and left a tank dying to an unlucky critical. Two targeted fixes put each role back on its feet.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="healers" tabindex="0" role="button" aria-label="Details: healing rebalanced">
+        <h3>Healers keep up <span class="chip c-bal">Balance</span></h3>
+        <p>Every healing spell gains a new or stronger top rank at <strong class="hl">level 20</strong> (leveling ranks unchanged), and healing now benefits from <strong class="hl">double Spell Power</strong>: every point of Intellect adds 1 healing.</p>
+        <span class="more-link">The healing details</span>
+      </div>
+      <div class="card more" data-detail="tanks" tabindex="0" role="button" aria-label="Details: tanks immune to crits">
+        <h3>No more dying to dice <span class="chip c-bal">Balance</span></h3>
+        <p>Monsters can no longer land a <span data-codex="term|crit">critical strike</span> on a committed tank — <strong class="hl">Protection warrior</strong>, <strong class="hl">Protection paladin</strong> and <strong class="hl">Feral druid in Sloth Form</strong>. And Prot paladin and Sloth Form durability rises to stand alongside the warrior.</p>
+        <span class="more-link">Who, and how</span>
+      </div>
+      <div class="card">
+        <h3>At a glance</h3>
+        <ul>
+          <li>Healing goes from a ×1 to a <strong class="hl">×2 Spell Power</strong> factor — Intellect is the <span data-codex="term|heal">healer</span>'s king stat again.</li>
+          <li>The new level-20 rank touches <strong class="hl">only the top</strong>: leveling stays identical.</li>
+          <li>The three committed <span data-codex="term|tank">tanks</span> covered: Protection warrior, Protection paladin, Feral druid in Sloth Form.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 NYTHRAXIS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Nythraxis: the opener no longer stuns</h2></div>
+    <p class="sec-sub">The raid boss opened on an instant, unavoidable Gravebreaker. It becomes a charged, telegraphed attack — and heroic loses its bite across the board.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="gravebreaker" tabindex="0" role="button" aria-label="Details: the charged Gravebreaker">
+        <h3>Gravebreaker charges up <span class="chip c-bal">Balance</span></h3>
+        <p>Gravebreaker is now a <strong class="hl">charged attack</strong>, released on his next landed melee swing: no more instant opener, and it can no longer stack with a melee hit. <strong class="hl">Dodging</strong> his swing delays it.</p>
+        <span class="more-link">The new timing</span>
+      </div>
+      <div class="card more" data-detail="nyth-hero" tabindex="0" role="button" aria-label="Details: heroic raid eased">
+        <h3>Heroic breathes <span class="chip c-raid">Raid</span></h3>
+        <p>On heroic, <span data-codex="mob|Nythraxis, Scourge of Thornpeak">Nythraxis</span> swings for less, his <strong class="hl">skeleton waves</strong> have far less health and all court adds hit much softer. <strong class="hl">Voss</strong> can finally be realistically slowed and kited.</p>
+        <span class="more-link">What comes down</span>
+      </div>
+      <div class="card">
+        <h3>At a glance</h3>
+        <ul>
+          <li>Boss-summoned adds now <strong class="hl">stick to the tank</strong> instead of chasing the first heal cast.</li>
+          <li>No more unavoidable stun at the pull: dodging and positioning take back control.</li>
+          <li>The rest of the fight is unchanged — only the opener and heroic toughness move.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 GRAVEWYRM SANCTUM & QUALITY OF LIFE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Gravewyrm Sanctum retuned</h2></div>
+    <p class="sec-sub">The dungeon adjusts for groups that just hit max level, without ever dropping back into solo reach — and its boss gains a clearly telegraphed mechanic.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="korzul" tabindex="0" role="button" aria-label="Details: Korzul and Grave Inferno">
+        <h3>Korzul and Grave Inferno <span class="chip c-mob">Mechanic</span></h3>
+        <p><span data-codex="mob|Korzul the Gravewyrm">Korzul</span> channels the new <strong class="hl">Grave Inferno</strong>: an escalating fire ring he roots himself to cast. <strong class="hl">Move out of the ring.</strong></p>
+        <span class="more-link">The mechanic</span>
+      </div>
+      <div class="card more" data-detail="sanctum-tune" tabindex="0" role="button" aria-label="Details: difficulty re-centered">
+        <h3>Difficulty re-centered <span class="chip c-bal">Balance</span></h3>
+        <p>Normal <span data-codex="dungeon|Gravewyrm Sanctum">Gravewyrm Sanctum</span> is retuned for <strong class="hl">freshly capped groups in quest gear</strong> — while staying out of solo reach. On heroic, boss-summoned adds hit much less hard.</p>
+        <span class="more-link">The difficulty targeting</span>
+      </div>
+      <div class="card">
+        <h3>Quality of life &amp; notes</h3>
+        <ul>
+          <li>The crafting window now shows the <strong class="hl">discounted reagent cost</strong> the sim actually charges — no more displayed mismatch.</li>
+          <li>All new and changed text is <strong class="hl">localized</strong> across every supported language.</li>
+          <li>A targeted hotfix: no other game mechanic changes.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compiled for <strong>La Clauderie</strong> — data and rules from the official v0.29.1 release notes.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← All updates</a> · <a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Close">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    healers: {
+      title: "Healers can finally keep up",
+      summary: "The v0.29.0 heroic retune doubled target health without touching healing. Two levers restore the balance.",
+      body: `
+        <h4>A stronger top rank at level 20</h4>
+        <ul>
+          <li>Every healing spell gains a <b>new or stronger top rank</b>, unlocked at level 20 — the current cap.</li>
+          <li>The <b>leveling ranks</b> (low levels) don't change: it's purely the top that climbs.</li>
+        </ul>
+        <h4>Double Spell Power on healing</h4>
+        <ul>
+          <li>Healing now benefits from <b>double</b> <span data-codex="term|spell power">Spell Power</span>: every point of <b>Intellect</b> adds 1 healing.</li>
+          <li>Intellect is therefore the <span data-codex="term|heal">healer</span>'s king stat again, its weight restored against doubled target health.</li>
+        </ul>`
+    },
+    tanks: {
+      title: "Tanks no longer die to a dice roll",
+      summary: "An unlucky crit from a big pack could kill a tank before the next heal. Committed tanks become immune to it.",
+      body: `
+        <h4>No crit on a committed tank</h4>
+        <ul>
+          <li>Monsters can no longer land a <span data-codex="term|crit">critical strike</span> on a tank filling their role: <b>Protection warrior</b>, <b>Protection paladin</b> and <b>Feral druid in Sloth Form</b>.</li>
+          <li>No more random damage spikes slipping through the healing window.</li>
+        </ul>
+        <h4>Durability harmonized</h4>
+        <ul>
+          <li>The toughness of the <b>Protection paladin</b> and <b>Sloth Form</b> rises to stand <b>alongside the Protection warrior</b>: all three <span data-codex="term|tank">tanks</span> now take hits in the same range.</li>
+        </ul>`
+    },
+    "gravebreaker": {
+      title: "Gravebreaker charges up — the opener no longer stuns",
+      summary: "Nythraxis fired his Gravebreaker instantly at the pull, with no counterplay. It becomes a charged attack, telegraphed by his next swing.",
+      body: `
+        <h4>A charged attack</h4>
+        <ul>
+          <li>Gravebreaker is now <b>charged</b> and then released on his <b>next landed melee swing</b> — no more instant opener at engagement.</li>
+          <li>It can no longer <b>stack</b> with a melee hit: the two no longer land in the same instant.</li>
+        </ul>
+        <h4>Dodging takes back control</h4>
+        <ul>
+          <li><b>Dodging</b> <span data-codex="mob|Nythraxis, Scourge of Thornpeak">Nythraxis</span>'s swing <b>delays</b> the Gravebreaker's release — the tank's positioning and parry finally matter.</li>
+        </ul>`
+    },
+    "nyth-hero": {
+      title: "Heroic Nythraxis: the toughness comes down",
+      summary: "Heroic raid hit too hard on every front. Every damage source drops, and the adds stop chasing the healer.",
+      body: `
+        <h4>Less hard, everywhere</h4>
+        <ul>
+          <li><span data-codex="mob|Nythraxis, Scourge of Thornpeak">Nythraxis</span> <b>swings for less</b> on heroic.</li>
+          <li>His <b>skeleton waves</b> have <b>far less health</b>, and all <b>court adds</b> hit much softer.</li>
+          <li><b>Voss</b> can now be <b>realistically slowed and kited</b> — the control strategy is viable again.</li>
+        </ul>
+        <h4>Adds stick to the tank</h4>
+        <ul>
+          <li><b>Boss-summoned adds</b> now stick to the <b>tank</b>, instead of chasing the first heal cast.</li>
+        </ul>`
+    },
+    "korzul": {
+      title: "Korzul channels Grave Inferno",
+      summary: "The Gravewyrm Sanctum boss gains a new, clearly telegraphed mechanic — a fire ring you have to leave.",
+      body: `
+        <h4>Grave Inferno</h4>
+        <ul>
+          <li><span data-codex="mob|Korzul the Gravewyrm">Korzul</span> <b>roots himself</b> to channel <b>Grave Inferno</b>: a fire ring that <b>escalates</b> for as long as the cast runs.</li>
+          <li>The counterplay is simple: <b>move out of the ring</b> before it reaches you.</li>
+        </ul>`
+    },
+    "sanctum-tune": {
+      title: "Gravewyrm Sanctum: difficulty re-centered",
+      summary: "The dungeon now targets groups that just reached max level in quest gear — without ever becoming soloable again.",
+      body: `
+        <h4>Normal retuned</h4>
+        <ul>
+          <li>Normal <span data-codex="dungeon|Gravewyrm Sanctum">Gravewyrm Sanctum</span> is retuned for <b>freshly capped groups in quest gear</b>.</li>
+          <li>It stays <b>out of solo reach</b>: the re-centering doesn't open the door to solo farming.</li>
+        </ul>
+        <h4>Heroic</h4>
+        <ul>
+          <li><b>Boss-summoned adds</b> on heroic hit <b>much less hard</b>.</li>
+        </ul>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Codex-based embedded cards (glossary, mobs, spells…) -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/nav.js"></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>

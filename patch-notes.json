@@ -2,6 +2,28 @@
   "_aide": "Une entrée par mise à jour du jeu, la plus récente EN PREMIER. Pour ajouter une mise à jour : 1) créer notes/vX.Y.Z.html sur le modèle de la version précédente, 2) ajouter une entrée ici. L'accueil et la page « Nouveautés » se mettent à jour tout seuls. Champs optionnels titre_en / resume_en / temps_forts_en : la version anglaise du site les utilise s'ils existent (sinon elle affiche le français). Champ page_en : la page de notes en anglais (notes/vX.Y.Z.en.html) ; la version anglaise du site l'utilise.",
   "versions": [
     {
+      "version": "v0.29.1",
+      "date": "2026-07-23",
+      "titre": "Hotfix d'équilibrage : soigneurs, tanks et héroïque recalibrés",
+      "resume": "Un hotfix cible le grand recalibrage héroïque de la v0.29.0. Les soins reprennent le rythme : chaque sort gagne un rang supérieur au niveau 20 et profite d'une double puissance des sorts (1 point d'Intelligence = 1 point de soin). Les tanks engagés — guerrier Protection, paladin Protection, druide en Forme de Paresse — deviennent immunisés aux critiques, et la robustesse du paladin et de la Forme de Paresse remonte au niveau du guerrier. Côté PvE, le Gravebreaker de Nythraxis devient une attaque chargée qui n'assomme plus à l'ouverture, l'héroïque du raid comme les adds de Gravewyrm Sanctum tapent bien moins fort, et Korzul gagne le Grave Inferno, un anneau de feu dont il faut sortir.",
+      "temps_forts": [
+        "Soins rééquilibrés : rang supérieur au niveau 20 pour chaque sort et double puissance des sorts (1 Intelligence = 1 soin)",
+        "Les tanks engagés ne peuvent plus être critiqués — guerrier Prot, paladin Prot et druide en Forme de Paresse, robustesse harmonisée",
+        "Nythraxis : le Gravebreaker se charge et n'assomme plus au pull, l'esquive le retarde ; héroïque et adds de cour nettement allégés",
+        "Gravewyrm Sanctum recentré pour les groupes fraîchement au niveau ; Korzul canalise le Grave Inferno, un anneau de feu à fuir"
+      ],
+      "page": "notes/v0.29.1.html",
+      "titre_en": "Balance hotfix: healers, tanks and heroic retuned",
+      "resume_en": "A hotfix targets the v0.29.0 heroic retune. Healing keeps up again: every spell gains a stronger top rank at level 20 and now benefits from double Spell Power (1 Intellect = 1 healing). Committed tanks — Protection warrior, Protection paladin, Feral druid in Sloth Form — become immune to critical strikes, and paladin and Sloth Form durability rises to the warrior's level. On the PvE side, Nythraxis's Gravebreaker becomes a charged attack that no longer stuns at the opener, the heroic raid and Gravewyrm Sanctum adds hit far softer, and Korzul gains Grave Inferno, a fire ring you have to leave.",
+      "temps_forts_en": [
+        "Healing rebalanced: a stronger top rank at level 20 for every spell and double Spell Power (1 Intellect = 1 healing)",
+        "Committed tanks can no longer be crit — Prot warrior, Prot paladin and Feral in Sloth Form, durability harmonized",
+        "Nythraxis: Gravebreaker charges up and no longer stuns at the pull, dodging delays it; heroic and court adds much softer",
+        "Gravewyrm Sanctum re-centered for freshly capped groups; Korzul channels Grave Inferno, a fire ring to escape"
+      ],
+      "page_en": "notes/v0.29.1.en.html"
+    },
+    {
       "version": "v0.29.0",
       "date": "2026-07-23",
       "titre": "La grande remise à zéro des métiers — et l'enchantement s'active",
