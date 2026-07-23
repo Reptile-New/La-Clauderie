@@ -2,56 +2,56 @@
   "guilde": {
     "classementServeur": 5,
     "classement": {
-      "releveLe": "2026-07-23T14:24:59Z",
+      "releveLe": "2026-07-23T16:41:01Z",
       "metric": "guildLifetimeXp",
       "top": [
         {
           "rank": 1,
           "name": "Monarchs",
           "memberCount": 99,
-          "totalLifetimeXp": 41126603,
+          "totalLifetimeXp": 41205944,
           "topLevel": 20
         },
         {
           "rank": 2,
           "name": "HUMANITY",
-          "memberCount": 100,
-          "totalLifetimeXp": 32499578,
+          "memberCount": 92,
+          "totalLifetimeXp": 30485627,
           "topLevel": 20
         },
         {
           "rank": 3,
           "name": "Look Good Play Good",
           "memberCount": 70,
-          "totalLifetimeXp": 22503906,
+          "totalLifetimeXp": 22533280,
           "topLevel": 20
         },
         {
           "rank": 4,
           "name": "Ehren Nuggets",
-          "memberCount": 91,
-          "totalLifetimeXp": 11915560,
+          "memberCount": 92,
+          "totalLifetimeXp": 12139297,
           "topLevel": 20
         },
         {
           "rank": 5,
           "name": "La Clauderie",
           "memberCount": 39,
-          "totalLifetimeXp": 10083294,
+          "totalLifetimeXp": 10103053,
           "topLevel": 20
         },
         {
           "rank": 6,
           "name": "Peasants",
           "memberCount": 34,
-          "totalLifetimeXp": 7643689,
+          "totalLifetimeXp": 7684709,
           "topLevel": 20
         },
         {
           "rank": 7,
           "name": "OTUKEN",
-          "memberCount": 29,
-          "totalLifetimeXp": 7304883,
+          "memberCount": 30,
+          "totalLifetimeXp": 7344408,
           "topLevel": 20
         },
         {
@@ -80,7 +80,7 @@
         "rank": 5,
         "name": "La Clauderie",
         "memberCount": 39,
-        "totalLifetimeXp": 10083294,
+        "totalLifetimeXp": 10103053,
         "topLevel": 20
       }
     }
