@@ -163,6 +163,9 @@
   .item .alt b { font-weight: 600; }
   .alt.q-epic b { color: var(--q-epic); } .alt.q-legendary b { color: var(--q-legendary); }
   .alt.q-rare b { color: var(--q-rare); } .alt.q-uncommon b { color: var(--q-uncommon); }
+  .item .ench { margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--line-soft); font-size: 0.82rem; color: var(--faint); }
+  .item .ench b { font-weight: 600; color: var(--q-uncommon); }
+  .item .ench .mats { opacity: 0.85; }
   @media (max-width: 480px) {
     .slot-row { grid-template-columns: 54px 1fr; }
     .slot-name { grid-column: 2; padding-top: 0; }
@@ -190,7 +193,7 @@
   <header class="page">
     <p class="eyebrow" data-en="Class guide · Patch v0.29.0">Guide de classe · Patch v0.29.0</p>
     <h1>Builds</h1>
-    <p class="lede" data-en="Pick your class, your role — and your specialisation when the class has several for that role: talents (with the why), the rotation, then the best gear in the game — set bonuses included, both rings covered. All 27 specs are covered. Click an item, talent or spell to open its sheet without leaving the page.">Choisis ta classe, ton rôle — et ta spécialisation quand la classe en a plusieurs pour ce rôle : les talents (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus. Les 27 spés sont couvertes. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
+    <p class="lede" data-en="Pick your class, your role — and your specialisation when the class has several for that role: talents (with the why), the rotation, then the best gear in the game — set bonuses included, both rings covered, plus the recommended enchant for every piece (v0.29). All 27 specs are covered. Click an item, talent or spell to open its sheet without leaving the page.">Choisis ta classe, ton rôle — et ta spécialisation quand la classe en a plusieurs pour ce rôle : les talents (avec le pourquoi), la rotation, puis le meilleur équipement du jeu — bonus de sets compris, 2 anneaux inclus, avec l'enchantement recommandé pour chaque pièce (v0.29). Les 27 spés sont couvertes. Clique sur un objet, un talent ou un sort pour ouvrir sa fiche sans quitter la page.</p>
   </header>
 
   <div class="classes" id="clsTabs" role="tablist" aria-label="Classes"></div>
@@ -10106,6 +10109,16 @@ function render() {
         <div class="nm">${ilink(b)}${heroChip(b)}${b.xclass ? ` <span class="xnote" title="${T({ fr: "Le tooltip mentionne d'autres classes, mais le jeu ne restreint les armures que par leur type (tissu/cuir/mailles) : cette pièce est bien équipable.", en: "The tooltip lists other classes, but the game only restricts armor by its type (cloth/leather/mail): this piece really is equippable." })}">${T({ fr: "équipable*", en: "equippable*" })}</span>` : ""}</div>
         <div class="meta">${fmtStats(b)}${b.set ? ` · <span class="set">${T({ fr: "Set : ", en: "Set: " })}${b.set}</span>` : ""}</div>`;
     if (p.alt) html += `<div class="alt q-${p.alt.q}">${T({ fr: "Alt. : ", en: "Alt.: " })}<b>${ilink(p.alt)}</b>${heroChip(p.alt)} — ${fmtStats(p.alt)}</div>`;
+    // Enchantement recommandé (v0.29) : choisi par compute_bis.py sur le même
+    // objectif que le BiS ; « fallback » = aucun enchant du slot ne sert le
+    // rôle, on prend la survie (End/armure).
+    const en = (build.enchants || {})[s];
+    if (en) {
+      const bonus = Object.entries(en.bonus).map(([k,v]) => "+" + v + " " + (STAT_FR[k]||k)).join(" · ");
+      const mats = en.reagents.map(r => r.count + "× " + r.name).join(" + ");
+      const fb = en.fallback ? ` <span class="xnote" title="${T({ fr: "Aucun enchantement de ce slot n'améliore le rôle : on prend le plus utile à la survie.", en: "No enchant on this slot improves the role: we pick the best survival one." })}">${T({ fr: "confort", en: "comfort" })}</span>` : "";
+      html += `<div class="ench">✨ ${T({ fr: "Enchant : ", en: "Enchant: " })}<b>${en.name}</b>${fb} — ${bonus} <span class="mats">· ${mats}</span></div>`;
+    }
     html += `</div></div>`;
     return html;
   }).join("");

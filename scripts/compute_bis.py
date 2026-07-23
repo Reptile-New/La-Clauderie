@@ -41,6 +41,10 @@ _NPCS = _load('NPCS', {})
 _QUESTS = _load('QUESTS', {})
 _HEROIC = _load('HEROIC_BOSS_LOOT', {})
 _DUNGEONS = _load('DUNGEONS', {})
+# Enchantements (v0.29 : l'enchantement est en jeu ; KB : data/ENCHANTS.json,
+# source src/sim/content/enchants.ts). statBonus ne contient que des clés de la
+# feuille de stats (str/agi/sta/int/spi/armor) — vérifié sur les données.
+ENCHANTS = _load('ENCHANTS', {})
 
 # --- obtenabilité des jumelles héroïques (port de loot/loot_roll.ts) ----------
 # Le jeu n'échange un drop contre sa variante « heroic_<id> » que si :
@@ -226,7 +230,10 @@ def slot_key(it):
     return it.get('slot')
 
 # --- feuille de personnage complète (port de recalcPlayerStats) --------------
-def sheet(cls, role, equip):
+# extra : stats additives hors objets (les enchantements) — fusionnées comme des
+# stats d'équipement (donc AVANT l'armure d'Agi et les formes druide, comme le
+# fait le jeu : l'enchant s'ajoute au rolled.stats de la copie instanciée).
+def sheet(cls, role, equip, extra=None):
     cd = CLASSES[cls]
     s = {k: cd['base'][k] + cd['per'][k]*(LVL-1) for k in ('str','agi','sta','int','spi','armor')}
     sp_flat = 0; crit_r = 0; haste_r = 0; hit_r = 0
@@ -239,6 +246,8 @@ def sheet(cls, role, equip):
         hit_r += it.get('hitRating',0)
         for k,v in (it.get('stats') or {}).items():
             if k in s: s[k] += v
+    for k,v in (extra or {}).items():
+        if k in s: s[k] += v
     ap_bonus = 0; procs = []
     for sid, n in counts.items():
         for b in SETS[sid]['bonuses']:
@@ -525,6 +534,55 @@ def optimize(cls, role):
         if bs: alts[sl]=bs[1]
     return score, equip, alts
 
+# --- enchantements recommandés (v0.29) ----------------------------------------
+# Un seul enchant par pièce (professions/enchanting.ts : le double-enchant est
+# bloqué, pas de remplacement). Le jeu exige slot de l'objet = itemSlot de
+# l'enchant (resolveApplyEnchant) : la main gauche n'a donc AUCUN enchant
+# (aucune entrée « offhand » dans ENCHANTS)… sauf une arme une-main portée à
+# gauche (voleur/guerrier Fureur), dont le def reste slot 'mainhand' — le jeu
+# l'enchante comme n'importe quelle arme, et le modèle aussi.
+# Choix par slot : l'enchant qui maximise l'objectif du rôle (même critère que
+# le BiS), cumulé slot après slot. Si aucun n'améliore l'objectif (ex. torse
+# d'un DPS caster : il n'existe que End/Esprit/armure), repli « survie » :
+# End maxi, puis armure, puis total de stats — marqué fallback pour l'afficher
+# honnêtement côté page.
+def pick_enchants(cls, role, equip):
+    def merged(a, b):
+        m = dict(a)
+        for k, v in b.items(): m[k] = m.get(k, 0) + v
+        return m
+    chosen = {}
+    extra = {}
+    for sl in SLOTS:
+        iid = equip.get(sl)
+        if not iid: continue
+        cands = [e for e in ENCHANTS.values() if e['itemSlot'] == ITEMS[iid].get('slot')]
+        if not cands: continue
+        base = objective(cls, role, sheet(cls, role, equip, extra))
+        best = None  # ((valeur, somme des bonus, id), enchant)
+        for e in cands:
+            v = objective(cls, role, sheet(cls, role, equip, merged(extra, e['statBonus'])))
+            if v <= base + 1e-9: continue
+            key = (round(v, 9), sum(e['statBonus'].values()), e['id'])
+            if best is None or key > best[0]: best = (key, e)
+        fallback = best is None
+        if fallback:
+            e = max(cands, key=lambda e: (e['statBonus'].get('sta', 0),
+                                          e['statBonus'].get('armor', 0),
+                                          sum(e['statBonus'].values()), e['id']))
+        else:
+            e = best[1]
+        extra = merged(extra, e['statBonus'])
+        entry = {
+            'id': e['id'], 'name': e['name'], 'bonus': e['statBonus'],
+            'reagents': [{'id': r['itemId'], 'count': r['count'],
+                          'name': ITEMS.get(r['itemId'], {}).get('name', r['itemId'])}
+                         for r in e['reagents']],
+        }
+        if fallback: entry['fallback'] = True
+        chosen[sl] = entry
+    return chosen
+
 def item_export(iid, cls):
     it=ITEMS[iid]
     # itemScore du jeu (item_level.ts) : stats primaires + armure/12 + DPS×0.5
@@ -570,5 +628,7 @@ for cls in ROLES:
                 entry["alt"]=item_export(alts[sl], cls)
             picks[sl]=entry
         out[cls]['roles'][role]={'picks':picks,'sets':setline,'score':round(score,1)}
+        ench = pick_enchants(cls, role, equip)
+        if ench: out[cls]['roles'][role]['enchants'] = ench
         print(f"{cls}/{role}: score={score:.1f} sets={[(s['name'],s['pieces']) for s in setline]}", file=sys.stderr)
 json.dump(out, sys.stdout, ensure_ascii=False, indent=1)
