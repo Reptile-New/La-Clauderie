@@ -25,7 +25,13 @@
 #
 # Usage :  python3 compute_bis.py <dossier data de la knowledge base> > bis.json
 # -----------------------------------------------------------------------------
-import json, sys, itertools, copy
+import json, sys, itertools, copy, math
+
+# Math.round de JS (x,5 arrondi vers le haut) — le round() de Python arrondit
+# au pair (49,5 → 50 mais 50,5 → 50), ce qui crée de faux plateaux : un +2 Int
+# pouvait valoir 0 puis 2 de puissance des sorts au lieu de toujours 1 comme en
+# jeu (entity.ts : Math.round(int × 0.5)). Utilisé partout où le jeu arrondit.
+def jround(x): return math.floor(x + 0.5)
 
 DATA = sys.argv[1] if len(sys.argv) > 1 else '../wocc-knowledge-base/data'
 ITEMS = json.load(open(f'{DATA}/ITEMS.json'))
@@ -262,14 +268,14 @@ def sheet(cls, role, equip, extra=None):
     s['armor'] += 2*s['agi']
     bear = (cls=='druid' and role=='tank'); cat = (cls=='druid' and role=='dps')
     if bear:
-        s['armor'] = round(s['armor']*1.9); ap_bonus += 15 + round(s['agi']*1.5)
+        s['armor'] = jround(s['armor']*1.9); ap_bonus += 15 + jround(s['agi']*1.5)
     if cat:
         ap_bonus += 8 + 2*LVL; s['agi'] += max(2, LVL//2)
     ap_stats = (2*s['str'] if cls in ('warrior','paladin','shaman','druid')
                 else s['str']+s['agi'] if cls in ('rogue','hunter') else s['str'])
     ap = max(0, ap_stats + ap_bonus)
     rap = max(0, 2*s['agi'] + ap_bonus) if cls=='hunter' else 0
-    sp = max(0, round(s['int']*0.5 + sp_flat))
+    sp = max(0, jround(s['int']*0.5 + sp_flat))
     crit = 0.05 + s['agi']*0.0005 + crit_r/1000
     haste = haste_r/1000
     # Hit (v0.26, port de types.ts/entity.ts) : hitFractionFromRating = rating /
@@ -278,7 +284,7 @@ def sheet(cls, role, equip, extra=None):
     # ratent jamais. Le hit n'a pas de suppression au-dessus du niveau (contrairement au crit).
     hit = hit_r/1000
     hp = cd['hp'][0] + cd['hp'][1]*(LVL-1) + min(s['sta'],20) + max(0,s['sta']-20)*10
-    if bear: hp = round(hp*1.15)
+    if bear: hp = jround(hp*1.15)
     mana = cd['mana'][0] + cd['mana'][1]*(LVL-1) + min(s['int'],20) + max(0,s['int']-20)*15
     w = ITEMS[equip['mainhand']]['weapon'] if equip.get('mainhand') and ITEMS[equip['mainhand']].get('weapon') else {'min':1,'max':2,'speed':2}
     return dict(stats=s, ap=ap, rap=rap, sp=sp, crit=crit, haste=haste, hit=hit, hp=hp, mana=mana, w=w, procs=procs, counts=counts)
