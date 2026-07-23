@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Nouveautés v0.29.0 — La Clauderie</title>
+<meta name="description" content="Toutes les nouveautés de la v0.29.0 de World of ClaudeCraft : métiers remis à zéro, enchantement activé en jeu, donjons recalibrés — avec les règles exactes.">
+<meta name="theme-color" content="#c8a04b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Clauderie">
+<meta property="og:title" content="Nouveautés v0.29.0 — La Clauderie">
+<meta property="og:description" content="Toutes les nouveautés de la v0.29.0 de World of ClaudeCraft : métiers remis à zéro, enchantement activé en jeu, donjons recalibrés — avec les règles exactes.">
+<meta property="og:url" content="https://laclauderie.fr/notes/v0.29.0.html">
+<link rel="canonical" href="https://laclauderie.fr/notes/v0.29.0.html">
+<meta property="og:image" content="https://laclauderie.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><polygon points=%2750,0 100,16 100,60 50,100 0,60 0,16%27 fill=%27%23c8a04b%27/><text x=%2750%27 y=%2772%27 font-size=%2758%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-weight=%27bold%27 fill=%27%231a130a%27>C</text></svg>">
+<script>if (localStorage.getItem('lang') === 'en') location.replace('v0.29.0.en.html' + location.hash);</script>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-card: #161a24; --bg-card-hover: #1a1f2b; --bg-modal: #12161f;
+    --line: #262c3a; --line-soft: #1e2431;
+    --gold: #c8a04b; --gold-bright: #e6c37a;
+    --text: #dfe3ea; --dim: #8b93a3; --faint: #5b6272;
+    --q-rare: #2f8bff; --q-epic: #a335ee; --q-legendary: #ff8000;
+    --dps: #e5544a; --heal: #58c46a; --arcane: #58b6c9; --discord: #5865f2;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(200,160,75,0.09), transparent 70%),
+      radial-gradient(ellipse 760px 400px at 88% -4%, rgba(47,139,255,0.06), transparent 70%);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 28px); }
+
+  /* Topbar */
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft); }
+  .topbar .row { max-width: 960px; margin: 0 auto; padding: 0 clamp(16px,4vw,28px); display: flex; align-items: center; gap: 14px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .sigil { width: 26px; height: 30px; flex: none; background: linear-gradient(160deg, var(--gold-bright), var(--gold) 55%, #8a6d2e); clip-path: polygon(50% 0,100% 18%,100% 62%,50% 100%,0 62%,0 18%); display: grid; place-items: center; color: #1a130a; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; }
+  .brand b { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .topnav { margin-left: auto; display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap; font-size: 0.88rem; }
+  .topnav a { color: var(--dim); text-decoration: none; }
+  .topnav a:hover { color: var(--gold-bright); }
+  .topnav .cur { color: var(--gold-bright); font-weight: 600; }
+  @media (max-width: 620px) { .brand b { display: none; } .topnav { gap: 4px 11px; font-size: 0.82rem; } }
+
+  /* Hero */
+  .hero { padding: clamp(40px, 7vw, 72px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1; margin: 0 0 12px; }
+  h1 .v { color: var(--gold-bright); }
+  .lede { color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.2rem); max-width: 58ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+  .meta b { color: var(--dim); }
+  .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; background: color-mix(in srgb, var(--gold) 10%, transparent); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); color: var(--gold-bright); padding: 8px 14px; border-radius: 8px; font-size: 0.86rem; }
+
+  /* Sections */
+  section { padding: clamp(26px, 4vw, 40px) 0; border-top: 1px solid var(--line-soft); }
+  section:first-of-type { border-top: none; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-family: var(--font-mono); color: var(--gold); font-size: 0.82rem; }
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 3.6vw, 2.1rem); margin: 0; }
+  .sec-sub { color: var(--dim); margin: -8px 0 20px; max-width: 66ch; }
+
+  .grid { display: grid; gap: 13px; }
+  .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); }
+
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: 11px; padding: 19px; }
+  .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.14rem; margin: 0 0 6px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .card p { margin: 6px 0 0; color: var(--dim); font-size: 0.93rem; }
+  .card ul { margin: 10px 0 0; padding-left: 1.05em; color: var(--dim); font-size: 0.9rem; }
+  .card ul li { margin: 4px 0; }
+  .card ul li::marker { color: var(--gold); }
+
+  /* Clickable cards */
+  .card.more { cursor: pointer; transition: border-color .15s, transform .15s, background .15s; position: relative; }
+  .card.more:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--bg-card-hover); }
+  .card.more:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .more-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; color: var(--gold-bright); font-size: 0.82rem; font-weight: 600; }
+  .more-link::after { content: "→"; transition: transform .15s; }
+  .card.more:hover .more-link::after { transform: translateX(3px); }
+
+  /* Chips */
+  .chip { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid currentColor; font-weight: 600; white-space: nowrap; }
+  .c-new { color: var(--heal); } .c-raid { color: var(--gold); } .c-pvp { color: var(--dps); }
+  .c-bal { color: var(--q-legendary); } .c-mob { color: var(--arcane); } .c-epic { color: var(--q-epic); }
+  .c-plate { color: var(--dps); } .c-leather { color: var(--heal); } .c-cloth { color: var(--arcane); } .c-util { color: var(--q-rare); }
+
+  .statline { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--dim); }
+  .statline b { color: var(--text); }
+  .grp-title { font-family: var(--font-display); font-size: 1rem; color: var(--dim); margin: 22px 0 12px; }
+  .compact { columns: 2; column-gap: 34px; }
+  .compact li { margin: 5px 0; }
+  @media (max-width: 560px) { .compact { columns: 1; } }
+  strong.hl { color: var(--text); font-weight: 600; }
+
+  /* Modal */
+  dialog { padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-modal); color: var(--text); max-width: 640px; width: calc(100% - 28px); max-height: 86vh; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  dialog::backdrop { background: rgba(4,6,10,0.72); backdrop-filter: blur(3px); }
+  .modal-head { position: sticky; top: 0; background: linear-gradient(180deg, var(--bg-modal), color-mix(in srgb, var(--bg-modal) 88%, transparent)); border-bottom: 1px solid var(--line-soft); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .modal-head h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+  .modal-head .close { margin-left: auto; flex: none; background: var(--bg-card); border: 1px solid var(--line); color: var(--dim); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
+  .modal-head .close:hover { color: var(--text); border-color: var(--gold); }
+  .modal-body { padding: 20px 22px 26px; overflow-y: auto; }
+  .modal-body .summary { color: var(--dim); font-style: italic; margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .modal-body h4 { font-family: var(--font); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-bright); margin: 22px 0 8px; }
+  .modal-body h4:first-of-type { margin-top: 0; }
+  .modal-body p { margin: 0 0 10px; font-size: 0.94rem; color: var(--text); }
+  .modal-body ul { margin: 0 0 10px; padding-left: 1.15em; }
+  .modal-body li { margin: 6px 0; font-size: 0.93rem; }
+  .modal-body li::marker { color: var(--gold); }
+  .modal-body b { color: var(--gold-bright); font-weight: 600; }
+  .kbd { font-family: var(--font-mono); background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--text); }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 28px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; }
+  footer a { color: var(--dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-bright); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <a href="../index.html" class="brand"><span class="sigil">C</span><b>La Clauderie</b></a>
+    <nav class="topnav" data-guild-nav data-current="news" aria-label="Navigation du site"></nav>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">World of ClaudeCraft · Notes de version</p>
+    <h1>Nouveautés <span class="v">v0.29.0</span></h1>
+    <p class="lede">Les Métiers 2.0 s'achèvent sur une remise à zéro générale des compétences, une vraie courbe de maîtrise — et l'enchantement enfin activé en jeu. Pendant ce temps, donjons et raid doublent leur santé, les élites héroïques chargent et 41 objets bouchent les trous d'équipement. Clique sur une bulle pour les règles détaillées.</p>
+    <div class="meta">
+      <span><b>Publiée</b> le 23 juil. 2026</span>
+      <span><b>Depuis</b> la v0.28.0</span>
+      <span><b>Métiers, donjons</b> &amp; interface</span>
+    </div>
+    <div class="hint">💡 Clique sur une nouveauté pour ouvrir ses règles détaillées — et sur les <span data-codex="term|proc">mots soulignés</span> pour leur définition.</div>
+  </header>
+  <!-- 1 REMISE À ZÉRO -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Métiers 2.0 : la grande remise à zéro</h2></div>
+    <p class="sec-sub">La refonte des métiers touche à sa fin — et repart de zéro, littéralement : toutes les compétences sont réinitialisées une seule fois, la montée suit une courbe de maîtrise à quatre états avec plafonds par métier, la récolte se lance comme un sort et la pêche gagne son minijeu.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="reset" tabindex="0" role="button" aria-label="Détails : la remise à zéro des compétences">
+        <h3>Tout le monde à zéro <span class="chip c-bal">Reset</span></h3>
+        <p>À ta première connexion en v0.29.0, <strong class="hl">toutes tes compétences de métier</strong> — artisanat comme récolte — repartent de 0. Objets, recettes, outils, or : tout le reste est conservé, et une lettre l'explique en jeu.</p>
+        <span class="more-link">Ce qui saute, ce qui reste</span>
+      </div>
+      <div class="card more" data-detail="curve" tabindex="0" role="button" aria-label="Détails : courbe de maîtrise, plafonds, récolte et pêche">
+        <h3>La montée se mérite <span class="chip c-new">Nouveau</span></h3>
+        <p>Chaque action est notée <strong class="hl">orange, jaune, verte ou grise</strong> selon sa difficulté : gain plein, moitié, quart ou rien. Plafonds par métier (<strong class="hl">100 / 125 / 200</strong>), récolte incantée, nœuds verrouillés par outil et minijeu de pêche.</p>
+        <span class="more-link">Courbe, plafonds, récolte et pêche</span>
+      </div>
+      <div class="card">
+        <h3>À retenir</h3>
+        <ul>
+          <li><strong class="hl">26 hauts faits de métier</strong> : titres Guildsworn, Masterwright, Master Angler — et Grandmaster par métier au plafond.</li>
+          <li>Matériaux, enchants et outils reçoivent des <strong class="hl">noms originaux</strong> — <span data-codex="item|Sheenleaf Herb">Sheenleaf</span>, <span data-codex="item|Glyphsteel Bar">Glyphsteel</span>, <span data-codex="item|Skysilver Mining Pick">Skysilver</span>, <span data-codex="item|Chime Essence">Chime Essence</span> — avec un set d'art commandé pour toutes les icônes.</li>
+          <li>Les objets fabriqués et récoltés portent la <strong class="hl">provenance</strong> (artisan et récolteur) sur leur infobulle.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 ENCHANTEMENT & ARCHÉTYPES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>L'enchantement s'active — l'archétype se gagne en quête</h2></div>
+    <p class="sec-sub">Construit dans le moteur depuis la v0.24 sans jamais être branché, l'enchantement passe enfin en jeu — avec des valeurs revues à la baisse pour l'occasion. Et le choix de sa paire de métiers passe désormais par de vraies quêtes chez les maîtres.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="enchant" tabindex="0" role="button" aria-label="Détails : l'enchantement activé en jeu">
+        <h3>Enchanter, pour de vrai <span class="chip c-new">Nouveau</span></h3>
+        <p>Désenchantement et pose d'enchants passent par le <strong class="hl">menu d'objet du sac</strong>, avec un sélecteur dédié. Trois paliers d'enchants — dont les nouveaux <strong class="hl">Runed</strong> — et des magnitudes <strong class="hl">divisées par deux</strong> avant le lancement.</p>
+        <span class="more-link">Paliers, matériaux et gains</span>
+      </div>
+      <div class="card more" data-detail="attune" tabindex="0" role="button" aria-label="Détails : l'attunement d'archétype par quêtes">
+        <h3>Quatre quêtes, quatre paires <span class="chip c-new">Nouveau</span></h3>
+        <p>Chaque maître propose <strong class="hl">sa</strong> quête d'attunement — « The Smith's Promise » chez <span data-codex="npc|Forgemistress Darva">Forgemistress Darva</span>, etc. Revenir à une ancienne paire coûte <strong class="hl">de plus en plus cher</strong>, et les stations affichent des quêtes de commande régulières.</p>
+        <span class="more-link">Quêtes, amends et work orders</span>
+      </div>
+      <div class="card">
+        <h3>À retenir</h3>
+        <ul>
+          <li><strong class="hl">Artisanat à commission</strong> : une pièce fabriquée pour quelqu'un se <strong class="hl">lie à son premier destinataire</strong> (équipement uniquement).</li>
+          <li>Les maîtres de station vendent la déliaison <strong class="hl">Maker's Bond</strong> : 25 pa (inhabituel), 1 po (rare), 4 po (épique et au-delà).</li>
+          <li>Les copies liées sont <strong class="hl">protégées</strong> du « vendre toute la camelote » et des ventes partielles de pile.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 DONJONS & COMBAT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Donjons &amp; raid : la difficulté remonte</h2></div>
+    <p class="sec-sub">Le Sanctum normal se fermait en solo pour 6 po par run — la retouche d'économie double la santé partout et garantit que chaque coup fait mal. En héroïque, les élites apprennent à charger.</p>
+    <div class="grid cols-3">
+      <div class="card more" data-detail="retune" tabindex="0" role="button" aria-label="Détails : le recalibrage des donjons et du raid">
+        <h3>Santé doublée, coups planchers <span class="chip c-bal">Équilibrage</span></h3>
+        <p><span data-codex="dungeon|Gravewyrm Sanctum">Gravewyrm Sanctum</span> en normal, les <strong class="hl">quatre donjons héroïques</strong> et <span data-codex="mob|Nythraxis, Scourge of Thornpeak">Nythraxis</span> (<strong class="hl">120 000 PV</strong> en héroïque) : santé ×2 et des planchers de dégâts par coup — 300 à 1 200 selon la cible.</p>
+        <span class="more-link">Les chiffres, dont Onrush</span>
+      </div>
+      <div class="card more" data-detail="loot" tabindex="0" role="button" aria-label="Détails : les 41 nouveaux objets et les fixes de classe">
+        <h3>41 objets pour boucher les trous <span class="chip c-epic">Butin</span></h3>
+        <p>Armes pour le Druide féral, <strong class="hl">maille de caster</strong> pour Chaman et Paladin, le premier bouclier d'intelligence du jeu — <span data-codex="item|Pearlward Aegis">Pearlward Aegis</span> — et de nouveaux butins sur <span data-codex="mob|Korzul the Gravewyrm">Korzul</span> et Nythraxis.</p>
+        <span class="more-link">L'itemisation et les fixes de classe</span>
+      </div>
+      <div class="card">
+        <h3>À retenir</h3>
+        <ul>
+          <li><span data-codex="ability|Onrush">Onrush</span> (héroïque uniquement) : les guerriers et gardes d'élite <strong class="hl">chargent</strong> — 5-30 m, stun de 0,5 s. Fini le kite tranquille.</li>
+          <li>Boss finaux et mini-boss nommés : <strong class="hl">immunisés aux contrôles et aux ralentissements</strong> sur les deux difficultés.</li>
+          <li><span data-codex="ability|Avatar">Avatar</span> s'utilise désormais <strong class="hl">sous peur ou stun</strong> — mais ne brise plus les contrôles de boss.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 INTERFACE & SOCIAL -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Interface &amp; social</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>Fenêtres redessinées <span class="chip c-util">Interface</span></h3>
+        <ul>
+          <li>Feuille de personnage et inspection en <strong class="hl">vitrine 3D</strong> : lueur de qualité sur les slots, panneaux défense / attaque.</li>
+          <li>Le World Market passe en <strong class="hl">grille paysage</strong>, filtre cou / anneau / main gauche, et plafonne le prix suggéré à <strong class="hl">10× la valeur</strong>.</li>
+          <li>Journal de quêtes et marchands en paysage ; les options s'organisent en <strong class="hl">quatre onglets</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Confort au quotidien</h3>
+        <ul>
+          <li>Les barres d'action se sauvegardent <strong class="hl">côté serveur, par personnage</strong> — synchronisées entre appareils.</li>
+          <li>La barre d'XP descend <strong class="hl">sous les barres d'action</strong> ; la connexion arrive sur la sélection de personnage avec un fil « News and Updates ».</li>
+          <li>Nouvelle option pour <strong class="hl">masquer les nameplates</strong> des autres joueurs (sauf ta cible) ; les objets identiques s'empilent entre sacs, banque et échanges.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Social &amp; courrier</h3>
+        <ul>
+          <li><span class="kbd">/afk</span> affiche un badge sur les nameplates ; le roster de guilde se trie par <strong class="hl">statut en ligne</strong>.</li>
+          <li>Les colis expirent après <strong class="hl">30 jours</strong> et reviennent une fois à l'expéditeur ; le formulaire d'envoi gagne un champ quantité.</li>
+          <li>Couleurs de classe <strong class="hl">rafraîchies</strong> partout, et les badges Holder / Contributor deviennent les <strong class="hl">Ascendant Sigils</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 CAMÉRA, AUDIO & FIABILITÉ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Caméra, audio &amp; fiabilité</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>La caméra prend du poids</h3>
+        <ul>
+          <li>Nouvelle caméra-poursuite : <strong class="hl">ressort amorti</strong> sur sauts et atterrissages, regard anticipé, coups de FOV, panoramiques d'entrée de zone — chaque couche respecte la <strong class="hl">réduction de mouvement</strong>.</li>
+          <li>Une arme en main gauche du même type reflète enfin le <strong class="hl">skin Armory</strong> actif.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Audio remastérisé</h3>
+        <ul>
+          <li>Musiques de zone et de combat diffusées en <strong class="hl">fichiers remastérisés</strong> ; les signaux inaudibles se mettent en pause pour économiser la bande passante.</li>
+          <li>L'ambiance de la forge est un <strong class="hl">vrai enregistrement</strong> — fini le clic toutes les 8 secondes — et le vent de Thornpeak Heights se calme.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Serveur plus sobre</h3>
+        <ul>
+          <li>Sérialisation <strong class="hl">une fois par tic</strong>, caches en front des classements et <strong class="hl">trois points chauds</strong> de base de données corrigés.</li>
+          <li>Un balayage de rétention nocturne <strong class="hl">borne la base</strong> ; les tokens à portée réduite ne peuvent plus entrer en jeu ni en admin.</li>
+          <li>L'infrastructure passe à <strong class="hl">Node 26</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Compilé pour <strong>La Clauderie</strong> — données et règles issues des notes de version officielles v0.29.0.</p>
+    <p style="margin-top:8px"><a href="../patch-notes.html">← Toutes les mises à jour</a> · <a href="../index.html">Accueil</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="modal-head">
+    <h3 id="mTitle"></h3>
+    <button class="close" id="mClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</dialog>
+
+<script>
+  const DETAILS = {
+    reset: {
+      title: "La remise à zéro des métiers",
+      summary: "À la première connexion de chaque personnage en v0.29.0, toutes les compétences de métier repartent de 0. Une seule fois — et le jeu t'écrit pour l'expliquer.",
+      body: `
+        <h4>Ce qui est remis à zéro</h4>
+        <ul>
+          <li>Les <b>compétences d'artisanat</b> (forge, couture, alchimie…) et les <b>compétences de récolte</b> (minage, bûcheronnage, herboristerie, pêche) de chaque personnage existant.</li>
+        </ul>
+        <h4>Ce qui est conservé</h4>
+        <ul>
+          <li><b>Tout le reste</b> : objets possédés, recettes connues, outils, matériaux, banque, or, attunements d'archétype (et leur historique), titres, hauts faits, renommée, quêtes et courrier.</li>
+          <li>La réinitialisation s'exécute <b>exactement une fois par personnage</b> et ne se redéclenche jamais.</li>
+        </ul>
+        <h4>La lettre</h4>
+        <ul>
+          <li>Chaque personnage concerné reçoit une <b>lettre de la Guilde des Métiers</b> détaillant précisément ce qui a été remis à zéro.</li>
+          <li>La raison : l'ancien système donnait la compétence à l'infini sur les recettes les moins chères — la nouvelle courbe de maîtrise (bulle voisine) repart sur des bases saines.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Le guide des métiers en jeu a été réécrit page par page — frais d'entraînement, gains, niveaux de nœuds et probabilités y sont générés depuis les constantes réelles de la simulation.</p>`
+    },
+    curve: {
+      title: "Courbe de maîtrise, plafonds — et la récolte qui se lance",
+      summary: "Fini le gain de compétence infini sur la recette la moins chère : chaque action est notée selon sa difficulté face à ton niveau, et chaque métier a son plafond.",
+      body: `
+        <h4>Les quatre états</h4>
+        <ul>
+          <li><b>Orange</b> (recette à ton niveau ou au-dessus) : gain plein. <b>Jaune</b> (un palier en dessous) : moitié. <b>Vert</b> (deux paliers) : quart. <b>Gris</b> (trois ou plus) : plus rien.</li>
+          <li>Le gain est <b>déterministe</b> — même action, même progression. Pas de jet de « skill-up » : des fractions exactes.</li>
+        </ul>
+        <h4>Les plafonds par métier</h4>
+        <ul>
+          <li>Minage, bûcheronnage, herboristerie : <b>100</b>. Les métiers d'artisanat et l'enchantement : <b>125</b>. La pêche : <b>200</b>.</li>
+        </ul>
+        <h4>La récolte se lance</h4>
+        <ul>
+          <li>Récolter un nœud déclenche une <b>incantation</b> ; un meilleur outil et plus de compétence la raccourcissent.</li>
+          <li>Les nœuds sont verrouillés par <b>palier d'outil</b>, affiché sur l'infobulle et la minicarte.</li>
+        </ul>
+        <h4>La pêche a son minijeu</h4>
+        <ul>
+          <li>Attendre la <b>touche</b> du flotteur, puis ferrer dans la fenêtre — élargie par le niveau de la canne — sinon le poisson s'échappe.</li>
+          <li>La compétence fait glisser les prises du <b>rebut</b> vers les vrais poissons de cuisine.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">La page Récolte &amp; Métiers du site se régénère automatiquement sur ces données — nœuds, tables de pêche et recettes sont déjà à jour.</p>`
+    },
+    enchant: {
+      title: "L'enchantement s'active — les règles réelles",
+      summary: "Construit dans le moteur depuis la v0.24 sans jamais être branché, le métier est enfin jouable : désenchantement et pose d'enchants passent par le menu d'objet du sac.",
+      body: `
+        <h4>Comment ça marche</h4>
+        <ul>
+          <li>Clic sur un objet du sac → <b>désenchanter</b> (le détruit contre des matériaux arcaniques) ou <b>appliquer un enchant</b> via un sélecteur dédié. Plafond de compétence : <b>125</b>.</li>
+          <li>Les gains sont <b>échelonnés par la qualité</b> de l'entrée — désenchanter du commun rapporte vite plus rien, l'épique nourrit la montée — puis passés par la courbe de maîtrise. Fini le +1 fixe par action.</li>
+        </ul>
+        <h4>Trois paliers d'enchants</h4>
+        <ul>
+          <li><b>Base</b> : payés en <span data-codex="item|Chime Dust">Chime Dust</span> (désenchant commun / inhabituel) et <span data-codex="item|Chime Essence">Chime Essence</span> (rare) — tous les slots.</li>
+          <li><b>Runed</b> (nouveaux) : entre base et Greater, payés avec les matériaux <b>résonants typés</b> que rend un désenchant rare et mieux — <span data-codex="item|Resonant Thread">Resonant Thread</span> (tissu), <span data-codex="item|Resonant Hide">Resonant Hide</span> (cuir), <span data-codex="item|Resonant Links">Resonant Links</span> (mailles), <span data-codex="item|Resonant Steel">Resonant Steel</span> ou <span data-codex="item|Resonant Timber">Resonant Timber</span> (armes).</li>
+          <li><b>Greater</b> : 1 <span data-codex="item|Chime Shard">Chime Shard</span> (désenchant épique / légendaire) + 2 Essences, sur les 5 slots majeurs.</li>
+        </ul>
+        <h4>Des valeurs divisées par deux</h4>
+        <ul>
+          <li>Toutes les magnitudes sont réduites avant le lancement : un jeu complet d'enchants pèse désormais les <b>15-25 derniers %</b> au-dessus du meilleur équipement — un bonus de finition, pas un palier d'équipement à part entière.</li>
+          <li>Les enchants posés gravent leur bonus dans la pièce : les valeurs ne seront plus retouchées, l'équilibrage passera par le coût en matériaux.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:0.86rem">Le guide Enchantement de la page Métiers est réécrit en conséquence — boucle de montée comprise.</p>`
+    },
+    attune: {
+      title: "L'archétype se gagne en quête",
+      summary: "Choisir sa paire de métiers ne passe plus par une quête générique : chaque maître propose sa propre quête d'attunement, avec célébration, courrier d'étapes — et commandes régulières.",
+      body: `
+        <h4>Quatre quêtes, quatre paires</h4>
+        <ul>
+          <li>« <b>The Smith's Promise</b> » (<span data-codex="npc|Forgemistress Darva">Forgemistress Darva</span>) : Armes + Armures — titre <b>Smith</b>.</li>
+          <li>« <b>The Outfitter's Measure</b> » (<span data-codex="npc|Weaver Ottilie">Weaver Ottilie</span>) : Cuir + Couture — titre <b>Outfitter</b>.</li>
+          <li>« <b>A Recipe Worth Keeping</b> » (<span data-codex="npc|Cook Marlow">Cook Marlow</span>) : Alchimie + Cuisine — titre <b>Apothecary</b>.</li>
+          <li>« <b>A Volatile Arrangement</b> » (<span data-codex="npc|Tinker Gizzel">Tinker Gizzel</span>) : Ingénierie + Alchimie — titre <b>Bombardier</b>.</li>
+          <li>Ce sont les seules paires accessibles par quête en v0.29 — les paires sans contenu (Arcanist, Bladewright…) ne sont <b>plus un piège</b> dans lequel s'engager à l'aveugle.</li>
+        </ul>
+        <h4>Revenir coûte cher</h4>
+        <ul>
+          <li>Retourner à une paire déjà tenue passe par la quête d'<b>amends</b> de son maître : <b>5 ennemis</b> la première fois, puis 8, 11… <b>+3 à chaque infidélité</b>.</li>
+          <li>Le hobby se change toujours via « <b>A Different Pastime</b> ».</li>
+        </ul>
+        <h4>Commandes et célébrations</h4>
+        <ul>
+          <li>Chaque station affiche sa quête de commande « <b>Work Order</b> » sur cadence : Forge, Loom, Kitchens, Tannery, Toolworks et Apothecary.</li>
+          <li>L'attunement déclenche un <b>événement de célébration</b>, et les étapes clés arrivent par courrier.</li>
+        </ul>`
+    },
+    retune: {
+      title: "Donjons & raid : santé doublée, coups planchers",
+      summary: "Le Sanctum normal se fermait en solo pour jusqu'à 6 po par run. La retouche double la santé de tous les monstres et garantit un minimum de dégâts par coup — mesuré sur le guerrier le mieux blindé du jeu.",
+      body: `
+        <h4>En normal</h4>
+        <ul>
+          <li><span data-codex="dungeon|Gravewyrm Sanctum">Gravewyrm Sanctum</span> : santé <b>×2</b>, et chaque coup minimum inflige au moins <b>300</b> (trash) / <b>600</b> (boss) au tank de référence en mitigation maximale.</li>
+        </ul>
+        <h4>En héroïque</h4>
+        <ul>
+          <li>Les quatre donjons — <span data-codex="dungeon|Gravewyrm Sanctum">Gravewyrm Sanctum</span>, <span data-codex="dungeon|The Hollow Crypt">The Hollow Crypt</span>, <span data-codex="dungeon|The Sunken Bastion">The Sunken Bastion</span>, <span data-codex="dungeon|The Drowned Temple">The Drowned Temple</span> — : santé <b>×2</b>, plancher <b>500</b> par coup, tous les monstres épinglés <b>niveau 22</b>.</li>
+          <li><span data-codex="mob|Nythraxis, Scourge of Thornpeak">Nythraxis</span> : <b>60 000 PV</b> en normal, <b>120 000</b> en héroïque — planchers <b>600</b> / <b>1 200</b>.</li>
+        </ul>
+        <h4>Onrush : les élites chargent</h4>
+        <ul>
+          <li>En héroïque <b>uniquement</b>, les guerriers et gardes d'élite des donjons gagnent <span data-codex="ability|Onrush">Onrush</span> : une charge de <b>5 à 30 m</b> (cooldown 12 s) suivie d'un stun de <b>0,5 s</b>. Les mêmes monstres en normal ne chargent jamais.</li>
+        </ul>
+        <h4>Boss : plus de contrôle</h4>
+        <ul>
+          <li>Boss finaux et mini-boss nommés sont désormais <b>immunisés aux contrôles ET aux ralentissements</b> sur les deux difficultés — plus seulement en héroïque.</li>
+        </ul>`
+    },
+    loot: {
+      title: "41 objets — et trois fixes de classe",
+      summary: "Une passe d'itemisation comble les manques de classe et de spécialisation dans le monde ouvert, les donjons et le raid.",
+      body: `
+        <h4>Les manques comblés</h4>
+        <ul>
+          <li>Des <b>armes pour le Druide féral</b>, de la <b>maille de caster</b> pour Chaman et Paladin, et le premier bouclier d'intelligence du jeu : <span data-codex="item|Pearlward Aegis">Pearlward Aegis</span>.</li>
+          <li>De nouveaux butins sur <span data-codex="mob|Korzul the Gravewyrm">Korzul the Gravewyrm</span> et <span data-codex="mob|Nythraxis, Scourge of Thornpeak">Nythraxis</span>.</li>
+        </ul>
+        <h4>Les fixes de classe</h4>
+        <ul>
+          <li><span data-codex="ability|Avatar">Avatar</span> (Guerrier) : utilisable <b>sous peur ou stun</b> — il brise les contrôles des joueurs hostiles et du trash, mais <b>pas ceux des boss</b>.</li>
+          <li><span data-codex="talent|Hellglass Ward">Hellglass Ward</span> (Démoniste) : l'absorption s'applique enfin <b>au Démoniste</b>, plus à la cible ennemie.</li>
+          <li><span data-codex="item|Mistcaller's Fang">Mistcaller's Fang</span> : la seule dague qui refusait <span data-codex="ability|Craven Thrust">Craven Thrust</span> et <span data-codex="ability|Lurker's Strike">Lurker's Strike</span> accepte désormais les deux.</li>
+        </ul>
+        <h4>Garde-fous de combat</h4>
+        <ul>
+          <li>Une même pression <b>récolte et fouille</b> un cadavre sans que l'une bloque l'autre.</li>
+          <li>Les capacités à charges affichent un <b>badge doré</b> et une barre de recharge animée.</li>
+          <li>Les murs de couverture d'arène s'alignent sur leurs <b>boîtes de collision</b> — plus d'échappée par knockback — et les objets liés ne se blanchissent plus via le rachat vendeur.</li>
+        </ul>`
+    }
+  };
+
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("mTitle");
+  const mBody = document.getElementById("mBody");
+  let lastFocus = null;
+
+  function openModal(key) {
+    const d = DETAILS[key];
+    if (!d) return;
+    lastFocus = document.activeElement;
+    mTitle.textContent = d.title;
+    mBody.innerHTML = (d.summary ? `<p class="summary">${d.summary}</p>` : "") + d.body;
+    if (window.CodexPopup) CodexPopup.enhance(mBody);
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+    mBody.scrollTop = 0;
+  }
+  function closeModal() {
+    if (typeof modal.close === "function") modal.close();
+    else modal.removeAttribute("open");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll("[data-detail]").forEach(el => {
+    el.addEventListener("click", () => openModal(el.dataset.detail));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.detail); }
+    });
+  });
+  document.getElementById("mClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+  modal.addEventListener("cancel", () => { if (lastFocus) lastFocus.focus(); });
+</script>
+<!-- Fiches incrustées (glossaire, monstres, sorts…) basées sur les données du Codex -->
+<script src="../assets/codex-popup.js" defer></script>
+<script src="../assets/nav.js"></script>
+<script src="../assets/lang.js"></script>
+</body>
+</html>
