@@ -2,35 +2,35 @@
   "guilde": {
     "classementServeur": 5,
     "classement": {
-      "releveLe": "2026-07-24T03:34:10Z",
+      "releveLe": "2026-07-24T08:38:09Z",
       "metric": "guildLifetimeXp",
       "top": [
         {
           "rank": 1,
           "name": "Monarchs",
           "memberCount": 99,
-          "totalLifetimeXp": 41366445,
+          "totalLifetimeXp": 41538437,
           "topLevel": 20
         },
         {
           "rank": 2,
           "name": "HUMANITY",
           "memberCount": 92,
-          "totalLifetimeXp": 30688901,
+          "totalLifetimeXp": 30741363,
           "topLevel": 20
         },
         {
           "rank": 3,
           "name": "Look Good Play Good",
-          "memberCount": 75,
-          "totalLifetimeXp": 23520221,
+          "memberCount": 76,
+          "totalLifetimeXp": 23735376,
           "topLevel": 20
         },
         {
           "rank": 4,
           "name": "Ehren Nuggets",
           "memberCount": 91,
-          "totalLifetimeXp": 11947919,
+          "totalLifetimeXp": 11987920,
           "topLevel": 20
         },
         {
@@ -44,35 +44,35 @@
           "rank": 6,
           "name": "Peasants",
           "memberCount": 34,
-          "totalLifetimeXp": 7733787,
+          "totalLifetimeXp": 7742512,
           "topLevel": 20
         },
         {
           "rank": 7,
           "name": "OTUKEN",
           "memberCount": 30,
-          "totalLifetimeXp": 7362240,
+          "totalLifetimeXp": 7363788,
           "topLevel": 20
         },
         {
           "rank": 8,
           "name": "Glorious",
           "memberCount": 28,
-          "totalLifetimeXp": 6475134,
+          "totalLifetimeXp": 6475309,
           "topLevel": 20
         },
         {
           "rank": 9,
-          "name": "OFP",
-          "memberCount": 65,
-          "totalLifetimeXp": 5728885,
+          "name": "Holy Order",
+          "memberCount": 34,
+          "totalLifetimeXp": 5754122,
           "topLevel": 20
         },
         {
           "rank": 10,
-          "name": "Holy Order",
-          "memberCount": 31,
-          "totalLifetimeXp": 4813255,
+          "name": "OFP",
+          "memberCount": 65,
+          "totalLifetimeXp": 5728885,
           "topLevel": 20
         }
       ],
