@@ -108,6 +108,37 @@
   .q-common { color: var(--q-common); } .q-uncommon { color: var(--q-uncommon); }
   .q-rare { color: var(--q-rare); } .q-epic { color: var(--q-epic); } .q-legendary { color: var(--q-legendary); }
 
+  /* --- Tableau des enchantements ------------------------------------- */
+  .ench-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 12px; }
+  .ench-filters button { appearance: none; font-family: var(--font-mono); font-size: 0.74rem; color: var(--dim); background: var(--bg-modal); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; transition: color .12s, border-color .12s; }
+  .ench-filters button:hover { color: var(--text); }
+  .ench-filters button.on { color: var(--bg); background: var(--gold-bright); border-color: var(--gold-bright); font-weight: 600; }
+  .etable-wrap { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: 10px; }
+  table.etable { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 560px; }
+  table.etable th { text-align: left; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); font-weight: 600; padding: 9px 12px; background: var(--bg-modal); border-bottom: 1px solid var(--line); position: sticky; top: 0; }
+  table.etable td { padding: 8px 12px; border-top: 1px solid var(--line-soft); vertical-align: top; }
+  table.etable tbody tr:hover td { background: var(--bg-card-hover); }
+  table.etable .e-name { font-weight: 600; }
+  table.etable .e-slot, table.etable .e-mats { color: var(--dim); }
+  table.etable .e-mats { font-size: 0.83rem; }
+  table.etable .e-bonus { font-family: var(--font-mono); white-space: nowrap; font-weight: 600; }
+  .e-tier { font-family: var(--font-mono); font-size: 0.68rem; color: var(--dim); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
+  .e-tier.greater { color: var(--q-rare); border-color: color-mix(in srgb, var(--q-rare) 45%, var(--line)); }
+  .e-tier.runed { color: var(--gold-bright); border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+  .e-verdict { font-family: var(--font-mono); font-size: 0.72rem; white-space: nowrap; }
+  tr.rec .e-name, tr.rec .e-bonus { color: var(--q-uncommon); }
+  tr.rec .e-verdict { color: var(--q-uncommon); }
+  tr.sub .e-name, tr.sub .e-bonus { color: #d96a63; }
+  tr.sub .e-verdict { color: #d96a63; }
+  tr.sub td { opacity: .82; }
+  tr.avoid .e-name, tr.avoid .e-bonus, tr.avoid .e-verdict { color: var(--gold); }
+  tr.avoid td { opacity: .72; }
+  .ench-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 2px 0; font-size: 0.8rem; color: var(--dim); }
+  .ench-legend span::before { content: "●"; margin-right: 5px; }
+  .ench-legend .l-rec::before { color: var(--q-uncommon); }
+  .ench-legend .l-sub::before { color: #d96a63; }
+  .ench-legend .l-avoid::before { color: var(--gold); }
+
   .empty { color: var(--faint); font-style: italic; padding: 30px 0; }
   footer { border-top: 1px solid var(--line-soft); padding: 26px 0 54px; color: var(--faint); font-size: 0.82rem; text-align: center; margin-top: 10px; }
   footer a { color: var(--dim); text-decoration: none; }
@@ -2762,6 +2793,116 @@ const CRAFT = {
   // courbe de maîtrise (ENCHANTING_GAIN_TIER_BY_QUALITY), plafond 125,
   // matériaux renommés Chime Dust/Essence/Shard + secondaires typés Resonant
   // (disenchant_reagents.ts), nouveau palier Runed (2 Essences + 1 Resonant).
+  // Registre complet des enchantements — miroir de data/ENCHANTS.json de la KB
+  // (source jeu : src/sim/content/enchants.ts). Embarqué pour marcher aussi sur
+  // GitHub Pages (où /data/ n'est pas servi). Le verdict est CALCULÉ : pour un
+  // couple (emplacement, stat), le plus gros bonus = recommandé, les autres
+  // sont sous-optimaux ; l'Esprit (regen hors combat depuis v0.29) = à éviter.
+  const ENCH = [
+      {n:"Enchant Boots - Agility",slot:"feet",tier:"Base",stat:"agi",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Gloves - Greater Agility",slot:"gloves",tier:"Greater",stat:"agi",v:6,reg:[{id:"arcane_shard",n:"Chime Shard",c:1},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Gloves - Agility",slot:"gloves",tier:"Base",stat:"agi",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Legs - Runed Hide",slot:"legs",tier:"Runed",stat:"agi",v:4,reg:[{id:"arcane_essence",n:"Chime Essence",c:2},{id:"resonant_hide",n:"Resonant Hide",c:1}]},
+      {n:"Enchant Weapon - Agility",slot:"mainhand",tier:"Base",stat:"agi",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Necklace - Agility",slot:"neck",tier:"Base",stat:"agi",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Ring - Agility",slot:"ring",tier:"Base",stat:"agi",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Shoulders - Agility",slot:"shoulder",tier:"Base",stat:"agi",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Belt - Agility",slot:"waist",tier:"Base",stat:"agi",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Boots - Strength",slot:"feet",tier:"Base",stat:"str",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Gloves - Strength",slot:"gloves",tier:"Base",stat:"str",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Weapon - Greater Might",slot:"mainhand",tier:"Greater",stat:"str",v:5,reg:[{id:"arcane_shard",n:"Chime Shard",c:1},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Weapon - Runed Edge",slot:"mainhand",tier:"Runed",stat:"str",v:3,reg:[{id:"arcane_essence",n:"Chime Essence",c:2},{id:"resonant_steel",n:"Resonant Steel",c:1}]},
+      {n:"Enchant Weapon - Might",slot:"mainhand",tier:"Base",stat:"str",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Ring - Strength",slot:"ring",tier:"Base",stat:"str",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Shoulders - Strength",slot:"shoulder",tier:"Base",stat:"str",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Belt - Strength",slot:"waist",tier:"Base",stat:"str",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Gloves - Spellpower",slot:"gloves",tier:"Base",stat:"int",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Helmet - Intellect",slot:"helmet",tier:"Base",stat:"int",v:4,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Legs - Intellect",slot:"legs",tier:"Base",stat:"int",v:4,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Weapon - Greater Spellpower",slot:"mainhand",tier:"Greater",stat:"int",v:5,reg:[{id:"arcane_shard",n:"Chime Shard",c:1},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Weapon - Runed Sigil",slot:"mainhand",tier:"Runed",stat:"int",v:3,reg:[{id:"arcane_essence",n:"Chime Essence",c:2},{id:"resonant_timber",n:"Resonant Timber",c:1}]},
+      {n:"Enchant Weapon - Spellpower",slot:"mainhand",tier:"Base",stat:"int",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Necklace - Intellect",slot:"neck",tier:"Base",stat:"int",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Ring - Intellect",slot:"ring",tier:"Base",stat:"int",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Shoulders - Intellect",slot:"shoulder",tier:"Base",stat:"int",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Chest - Greater Stamina",slot:"chest",tier:"Greater",stat:"sta",v:7,reg:[{id:"arcane_shard",n:"Chime Shard",c:1},{id:"arcane_essence",n:"Chime Essence",c:3}]},
+      {n:"Enchant Chest - Stamina",slot:"chest",tier:"Base",stat:"sta",v:4,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Boots - Stamina",slot:"feet",tier:"Base",stat:"sta",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Helmet - Greater Fortitude",slot:"helmet",tier:"Greater",stat:"sta",v:6,reg:[{id:"arcane_shard",n:"Chime Shard",c:1},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Helmet - Runed Links",slot:"helmet",tier:"Runed",stat:"sta",v:5,reg:[{id:"arcane_essence",n:"Chime Essence",c:2},{id:"resonant_links",n:"Resonant Links",c:1}]},
+      {n:"Enchant Helmet - Fortitude",slot:"helmet",tier:"Base",stat:"sta",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Legs - Greater Stamina",slot:"legs",tier:"Greater",stat:"sta",v:6,reg:[{id:"arcane_shard",n:"Chime Shard",c:1},{id:"arcane_essence",n:"Chime Essence",c:3}]},
+      {n:"Enchant Legs - Stamina",slot:"legs",tier:"Base",stat:"sta",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Belt - Stamina",slot:"waist",tier:"Base",stat:"sta",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:5}]},
+      {n:"Enchant Chest - Reinforcement",slot:"chest",tier:"Base",stat:"armor",v:20,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Helmet - Reinforcement",slot:"helmet",tier:"Base",stat:"armor",v:15,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:1}]},
+      {n:"Enchant Chest - Runed Weave",slot:"chest",tier:"Runed",stat:"spi",v:5,reg:[{id:"arcane_essence",n:"Chime Essence",c:2},{id:"resonant_thread",n:"Resonant Thread",c:1}]},
+      {n:"Enchant Chest - Spirit",slot:"chest",tier:"Base",stat:"spi",v:4,reg:[{id:"arcane_dust",n:"Chime Dust",c:3},{id:"arcane_essence",n:"Chime Essence",c:2}]},
+      {n:"Enchant Necklace - Spirit",slot:"neck",tier:"Base",stat:"spi",v:3,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]},
+      {n:"Enchant Ring - Spirit",slot:"ring",tier:"Base",stat:"spi",v:2,reg:[{id:"arcane_dust",n:"Chime Dust",c:3}]}
+  ];
+  const ESLOT = { mainhand:['Arme','Main Hand'], helmet:['Casque','Helmet'], shoulder:['Épaules','Shoulder'], chest:['Torse','Chest'], waist:['Ceinture','Waist'], legs:['Jambes','Legs'], feet:['Pieds','Feet'], gloves:['Mains','Gloves'], neck:['Cou','Neck'], ring:['Doigt','Finger'] };
+  const ESTAT = { agi:['Agilité','Agility'], str:['Force','Strength'], int:['Intellect','Intellect'], sta:['Endurance','Stamina'], armor:['Armure','Armor'], spi:['Esprit','Spirit'] };
+  const ESTAT_ORDER = { agi:0, str:1, int:2, sta:3, armor:4, spi:5 };
+
+  window.enchFilter = function (btn, stat) {
+    btn.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+    document.querySelectorAll('table.etable tbody tr').forEach(tr => {
+      tr.style.display = (stat === 'all' || tr.dataset.stat === stat) ? '' : 'none';
+    });
+  };
+
+  function renderEnchantTable() {
+    // meilleur bonus par (emplacement + stat) = recommandé
+    const best = {};
+    ENCH.forEach(e => { const k = e.slot + '|' + e.stat; if (!(k in best) || e.v > best[k]) best[k] = e.v; });
+    const sorted = ENCH.slice().sort((a, b) =>
+      (ESTAT_ORDER[a.stat] - ESTAT_ORDER[b.stat]) || a.slot.localeCompare(b.slot) || (b.v - a.v));
+    const rows = sorted.map(e => {
+      let cls, verdict;
+      if (e.stat === 'spi') { cls = 'avoid'; verdict = T('à éviter', 'avoid'); }
+      else if (e.v === best[e.slot + '|' + e.stat]) { cls = 'rec'; verdict = T('★ meilleur', '★ best'); }
+      else { cls = 'sub'; verdict = T('sous-optimal', 'sub-optimal'); }
+      const mats = e.reg.map(r => `${r.c}× ${item({ id: r.id, name: r.n })}`).join(' + ');
+      const tierCls = e.tier === 'Greater' ? 'greater' : (e.tier === 'Runed' ? 'runed' : '');
+      const tierLbl = e.tier === 'Greater' ? T('Majeur', 'Greater') : (e.tier === 'Runed' ? 'Runed' : T('Base', 'Base'));
+      const statLbl = ESTAT[e.stat][window.LANG === 'en' ? 1 : 0];
+      return `<tr class="${cls}" data-stat="${e.stat}">
+        <td class="e-name">${esc(e.n)}</td>
+        <td class="e-slot">${ESLOT[e.slot][window.LANG === 'en' ? 1 : 0]}</td>
+        <td><span class="e-tier ${tierCls}">${tierLbl}</span></td>
+        <td class="e-mats">${mats}</td>
+        <td class="e-bonus">+${e.v} ${statLbl}</td>
+        <td class="e-verdict">${verdict}</td>
+      </tr>`;
+    }).join('');
+    const chip = (s, lbl) => `<button${s === 'all' ? ' class="on"' : ''} onclick="enchFilter(this,'${s}')">${lbl}</button>`;
+    return `<div class="block">
+      <div class="block-head"><h2>📜 ${T('Tous les enchants', 'Every enchant')}</h2><span class="lvl">${ENCH.length}</span><span class="sub">${T('recommandé vs sous-optimal, calculé sur les vrais bonus', 'best vs sub-optimal, computed from the real bonuses')}</span></div>
+      <div class="ench-filters">
+        ${chip('all', T('Tout', 'All'))}
+        ${chip('agi', T('Agilité', 'Agility'))}
+        ${chip('str', T('Force', 'Strength'))}
+        ${chip('int', 'Intellect')}
+        ${chip('sta', T('Endurance', 'Stamina'))}
+        ${chip('armor', T('Armure', 'Armor'))}
+        ${chip('spi', T('Esprit', 'Spirit'))}
+      </div>
+      <div class="etable-wrap"><table class="etable">
+        <thead><tr>
+          <th>${T('Enchant', 'Enchant')}</th><th>${T('Emplacement', 'Slot')}</th><th>${T('Palier', 'Tier')}</th>
+          <th>${T('Matériaux', 'Materials')}</th><th>${T('Bonus', 'Bonus')}</th><th>${T('Verdict', 'Verdict')}</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      <div class="ench-legend">
+        <span class="l-rec">${T('recommandé (meilleur pour ce stat + slot)', 'best for this stat + slot')}</span>
+        <span class="l-sub">${T('sous-optimal (mieux ailleurs pour ce stat)', 'sub-optimal (a better one exists)')}</span>
+        <span class="l-avoid">${T('Esprit — regen hors combat seulement, à éviter', 'Spirit — out-of-combat regen only, avoid')}</span>
+      </div>
+    </div>`;
+  }
+
   function renderEnchant() {
     return `<div class="block">
       <div class="block-head"><h2>🪄 ${T('Enchantement', 'Enchanting')}</h2><span class="lvl">${T('guide v0.29', 'v0.29 guide')}</span><span class="sub">${T('pas de recettes : tout est connu d’office', 'no recipes: everything is known from the start')}</span></div>
@@ -2801,7 +2942,7 @@ const CRAFT = {
   const vR = document.getElementById('view-recolte');
   const vM = document.getElementById('view-metiers');
   vR.innerHTML = renderRecolte();
-  vM.innerHTML = renderArchetypes() + renderMetiers() + renderEnchant();
+  vM.innerHTML = renderArchetypes() + renderMetiers() + renderEnchant() + renderEnchantTable();
 
   const tabR = document.getElementById('tab-recolte');
   const tabM = document.getElementById('tab-metiers');
